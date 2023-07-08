@@ -4,3 +4,6 @@ src/tests/*.o
 src/tools/*.o
 valgrind-out.txt
 callgrind.out.*
+
+vendor/wxWidgets-3.2.2.1/buildgtk/
+vendor/wxWidgets-3.2.2.1/config.log
