@@ -1,0 +1,6 @@
+bin/
+src/*.o
+src/tests/*.o
+src/tools/*.o
+valgrind-out.txt
+callgrind.out.*
