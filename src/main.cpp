@@ -26,16 +26,11 @@ public:
   virtual void OnClose(wxCloseEvent &event);
 
 private:
-  void OnNewRect(wxCommandEvent &event);
-  void OnNewConnector(wxCommandEvent &event);
-  void OnDeleteFigure(wxCommandEvent &event);
-
   void OnExit(wxCommandEvent &event);
   void OnAbout(wxCommandEvent &event);
   void OnOpen(wxCommandEvent &event);
   void OnSaveAs(wxCommandEvent &event);
   void OnRightDown(wxMouseEvent &event);
-  void OnFigureProperties(wxCommandEvent &event);
 
   void BindEvents();
 
@@ -45,12 +40,8 @@ private:
 };
 
 enum {
-  ID_NewRect = 1,
-  ID_Open,
+  ID_Open = 1,
   ID_SaveAs,
-  ID_NewConnector,
-  ID_FIGURE_PROPERTIES,
-  ID_DeleteFigure
 };
 
 wxIMPLEMENT_APP(MyApp);
@@ -75,21 +66,11 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Graph") {
   menuFile->AppendSeparator();
   menuFile->Append(wxID_EXIT);
 
-  wxMenu *menuShapes = new wxMenu();
-  menuShapes->Append(ID_NewRect, "&New Rect\tCtrl-R",
-                     "Creates a new Rect on the canvas");
-  menuShapes->Append(ID_NewConnector, "&New Connector\tCtrl-R",
-                     "Creates a new Connector on the canvas");
-  menuShapes->AppendSeparator();
-  menuShapes->Append(ID_DeleteFigure, "Delete Figure\tDEL",
-                     "Deletes the current figure");
-
   wxMenu *menuHelp = new wxMenu();
   menuHelp->Append(wxID_ABOUT);
 
   wxMenuBar *menuBar = new wxMenuBar();
   menuBar->Append(menuFile, "&File");
-  menuBar->Append(menuShapes, "&Shapes");
   menuBar->Append(menuHelp, "&Help");
 
   // _canvas = new KCanvas(&_document, this, wxID_ANY, wxDefaultPosition,
@@ -106,12 +87,8 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Graph") {
 void MyFrame::BindEvents() {
   Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
   Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
-  Bind(wxEVT_MENU, &MyFrame::OnNewRect, this, ID_NewRect);
-  Bind(wxEVT_MENU, &MyFrame::OnNewConnector, this, ID_NewConnector);
   Bind(wxEVT_MENU, &MyFrame::OnOpen, this, ID_Open);
   Bind(wxEVT_MENU, &MyFrame::OnSaveAs, this, ID_SaveAs);
-  Bind(wxEVT_MENU, &MyFrame::OnFigureProperties, this, ID_FIGURE_PROPERTIES);
-  Bind(wxEVT_MENU, &MyFrame::OnDeleteFigure, this, ID_DeleteFigure);
 
   Bind(wxEVT_RIGHT_DOWN, &MyFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &MyFrame::OnClose, this);
@@ -130,43 +107,10 @@ void MyFrame::OnRightDown(wxMouseEvent &event) {
   // }
 }
 
-void MyFrame::OnFigureProperties(wxCommandEvent &event) {
-  // TODO: Eigenschaftsdialog
-}
-
 void MyFrame::OnExit(wxCommandEvent &event) { Close(true); }
 
 void MyFrame::OnAbout(wxCommandEvent &event) {
   wxMessageBox("This is a sample!", "About", wxOK | wxICON_INFORMATION);
-}
-
-void MyFrame::OnNewConnector(wxCommandEvent &event) {
-  // KConnector *pConnector =
-  //     (KConnector *)_document.createFigure(FIGURETYPE_CONNECTOR, _canvas);
-  // pConnector->setStartX(10);
-  // pConnector->setStartY(10);
-  // pConnector->setEndX(10);
-  // pConnector->setEndY(100);
-  // pConnector->initializeAnfasserRects();
-  // _document.addFigure(pConnector);
-  // _document.setChanged();
-
-  Refresh();
-}
-
-void MyFrame::OnNewRect(wxCommandEvent &event) {
-  // KRectWithAnfasser *rect =
-  //     (KRectWithAnfasser *)_document.createFigure(FIGURETYPE_RECT, _canvas);
-  // rect->setX(10);
-  // rect->setY(10);
-  // rect->setWidth(100);
-  // rect->setHeight(200);
-  // rect->initializeAnfasserRects();
-  // rect->initializeCollectorAttachmentRects();
-  // _document.addFigure(rect);
-  // _document.setChanged();
-
-  Refresh();
 }
 
 void MyFrame::OnClose(wxCloseEvent &event) {
@@ -228,10 +172,4 @@ void MyFrame::OnSaveAs(wxCommandEvent &event) {
   //   wxLogError("Cannot save current contents in file '%s'.",
   //              saveFileDialog.GetPath());
   // }
-}
-
-void MyFrame::OnDeleteFigure(wxCommandEvent &event) {
-  //_document.deleteSelectedFigure();
-
-  Refresh();
 }

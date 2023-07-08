@@ -23,7 +23,7 @@ SRCS+=$(TOOLS_DIR)/tools.cpp
 SRCS+=$(TESTS_DIR)/tests.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
-TARGET=$(TARGET_DIR)/target
+TARGET=$(TARGET_DIR)/kalkulator
 
 .PHONY: all
 all: $(TARGET)
