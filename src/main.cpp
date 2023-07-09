@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "table_control.h"
+#include "workbook_document.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
@@ -39,8 +40,8 @@ private:
   void SetupUserInterface();
 
 private:
-  // KRectsDocument _document;
-  // KCanvas *_canvas;
+  WorkbookDocument _document;
+  TableControl *_table_control;
 };
 
 enum {
@@ -79,6 +80,8 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a") {
 
   // _canvas = new KCanvas(&_document, this, wxID_ANY, wxDefaultPosition,
   //                       wxDefaultSize, wxWANTS_CHARS);
+  _table_control = new TableControl(this, wxID_ANY, wxDefaultPosition,
+                                    wxDefaultSize, wxWANTS_CHARS);
 
   SetMenuBar(menuBar);
 
@@ -100,9 +103,7 @@ void MyFrame::SetupUserInterface() {
              0, wxEXPAND | wxALL, 5);
 
   // Table
-  sizer->Add(new TableControl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                              wxWANTS_CHARS),
-             1, wxEXPAND | wxALL, 5);
+  sizer->Add(_table_control, 1, wxEXPAND | wxALL, 5);
 
   SetSizerAndFit(sizer);
 
