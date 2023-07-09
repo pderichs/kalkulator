@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "table_control.h"
+
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
 #endif
@@ -34,6 +36,8 @@ private:
 
   void BindEvents();
 
+  void SetupUserInterface();
+
 private:
   // KRectsDocument _document;
   // KCanvas *_canvas;
@@ -58,7 +62,7 @@ bool MyApp::OnInit() {
   return true;
 }
 
-MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Graph") {
+MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a") {
   wxMenu *menuFile = new wxMenu();
   menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a figures file");
   menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-S",
@@ -82,6 +86,27 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Graph") {
   SetStatusText("Welcome to Kalkulator!");
 
   BindEvents();
+
+  SetupUserInterface();
+}
+
+void MyFrame::SetupUserInterface() {
+  wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+
+  // Textctrl for formula editing (normal text control for now)
+  // TODO Replace by e.g. a syntax highlighting supporting control
+  sizer->Add(new wxTextCtrl(this, -1, "Formulas etc.", wxDefaultPosition,
+                            wxDefaultSize),
+             0, wxEXPAND | wxALL, 5);
+
+  // Table
+  sizer->Add(new TableControl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                              wxWANTS_CHARS),
+             1, wxEXPAND | wxALL, 5);
+
+  SetSizerAndFit(sizer);
+
+  // TODO
 }
 
 void MyFrame::BindEvents() {

@@ -19,6 +19,7 @@ LDFLAGS=$(WX_LDFLAGS)
 LDLIBS=
 
 SRCS=$(SRC_DIR)/main.cpp
+SRCS+=$(SRC_DIR)/table_control.cpp
 SRCS+=$(TOOLS_DIR)/tools.cpp
 SRCS+=$(TESTS_DIR)/tests.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
