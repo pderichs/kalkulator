@@ -7,8 +7,8 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "table_control.h"
-#include "workbook_document.h"
+#include "view/table_control.h"
+#include "model/table/workbook_document.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>

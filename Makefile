@@ -19,7 +19,11 @@ LDFLAGS=$(WX_LDFLAGS)
 LDLIBS=
 
 SRCS=$(SRC_DIR)/main.cpp
-SRCS+=$(SRC_DIR)/table_control.cpp
+SRCS+=$(SRC_DIR)/view/table_control.cpp
+SRCS+=$(SRC_DIR)/model/table/table_sheet.cpp
+SRCS+=$(SRC_DIR)/model/table/table_cell.cpp
+SRCS+=$(SRC_DIR)/model/table/table_cell_formula.cpp
+SRCS+=$(SRC_DIR)/model/table/workbook_document.cpp
 SRCS+=$(TOOLS_DIR)/tools.cpp
 SRCS+=$(TESTS_DIR)/tests.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
