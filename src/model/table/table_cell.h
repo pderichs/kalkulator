@@ -15,5 +15,6 @@ private:
 
 typedef std::shared_ptr<TableCell> TableCellPtr;
 typedef std::vector<TableCellPtr> TableRow;
+typedef std::shared_ptr<TableRow> TableRowPtr;
 
 #endif
