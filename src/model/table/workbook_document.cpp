@@ -8,3 +8,13 @@ WorkbookDocument::WorkbookDocument() {
 
 WorkbookDocument::~WorkbookDocument() {
 }
+
+TableSheetPtr WorkbookDocument::table_sheet_by_name(const std::string& name) const {
+  for (auto sheet: _sheets) {
+    if (sheet->name() == name) {
+      return sheet;
+    }
+  }
+
+  return {};
+}

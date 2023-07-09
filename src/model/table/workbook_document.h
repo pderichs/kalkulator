@@ -13,6 +13,9 @@ public:
   bool changed() const { return _changed; }
 
 private:
+    TableSheetPtr table_sheet_by_name(const std::string& name) const;
+
+private:
   std::string _path;
   bool _changed;
   TableSheets _sheets;

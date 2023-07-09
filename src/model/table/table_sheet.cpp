@@ -24,4 +24,6 @@ TableSheet::TableSheet(const std::string &name) {
   }
 }
 
-TableSheet::~TableSheet() {}
+TableSheet::~TableSheet() {
+
+}

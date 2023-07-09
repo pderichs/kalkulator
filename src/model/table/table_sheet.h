@@ -14,6 +14,8 @@ public:
   TableSheet(const std::string &name);
   ~TableSheet();
 
+  std::string name() const { return _name; }
+
 private:
   TableRows _rows;
   std::string _name;
