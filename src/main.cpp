@@ -82,6 +82,7 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a") {
   //                       wxDefaultSize, wxWANTS_CHARS);
   _table_control = new TableControl(this, wxID_ANY, wxDefaultPosition,
                                     wxDefaultSize, wxWANTS_CHARS);
+  _table_control->SetSheet(_document.first_sheet());
 
   SetMenuBar(menuBar);
 

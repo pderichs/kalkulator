@@ -11,9 +11,16 @@ public:
   ~WorkbookDocument();
 
   bool changed() const { return _changed; }
+  TableSheetPtr first_sheet() const {
+    if (_sheets.empty()) {
+      return {};
+    }
+
+    return _sheets[0];
+  }
 
 private:
-    TableSheetPtr table_sheet_by_name(const std::string& name) const;
+  TableSheetPtr table_sheet_by_name(const std::string &name) const;
 
 private:
   std::string _path;

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "table_cell.h"
+#include "table_selections.h"
 
 typedef std::vector<TableRowPtr> TableRows;
 
@@ -19,6 +20,7 @@ public:
 private:
   TableRows _rows;
   std::string _name;
+  TableSelections _selections;
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;
