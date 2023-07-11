@@ -72,7 +72,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
   int x, y, c;
 
   dc->SetPen(*wxBLACK);
-  dc->SetBrush(*wxGREY_BRUSH);
+  dc->SetBrush(*wxLIGHT_GREY_BRUSH);
 
   // FIXME for now we are drawing all available columns and rows
 
@@ -89,6 +89,8 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
 
     dc->DrawRectangle(x, 2, x + coldef->width, 20);
     dc->DrawText(name, x + 2, 4);
+
+    x += coldef->width;
 
     c++;
   }

@@ -8,6 +8,8 @@
 struct TableColumnDefinition {
   std::string caption;
   size_t width;
+
+  TableColumnDefinition();
 };
 
 typedef std::shared_ptr<TableColumnDefinition> TableColumnDefinitionPtr;
