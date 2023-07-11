@@ -1,4 +1,5 @@
 #include "table_control.h"
+#include <cstddef>
 #include <iostream>
 #include <sstream>
 #include <wx/dcclient.h>
@@ -78,7 +79,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
   dc->SetPen(*wxBLACK);
   dc->SetBrush(*wxLIGHT_GREY_BRUSH);
 
-  // FIXME for now we are drawing all available columns and rows
+  // TODO for now we are drawing all available columns and rows
   // this can possibly be optimized
 
   // Columns
@@ -125,4 +126,29 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
 }
 
 void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
-                             int height) {}
+                             int height) {
+  // TODO Only draw visible ones
+
+  for (size_t r = 0; r < _sheet->row_count(); r++) {
+    for (size_t c = 0; c < _sheet->col_count(); c++) {
+      auto cell = _sheet->get_cell(r, c);
+      if (cell) {
+        auto unwrapped_cell = *cell;
+
+        //cell->visible_content;
+      }
+    }
+  }
+
+  // Draw cursor(s)
+  // TODO support multiple cursors?
+  for (auto& l : _sheet->cursors) {
+    TableRowDefinitionPtr rowdef;
+    TableColumnDefinitionPtr coldef;
+
+    std::tie(rowdef, coldef) = _sheet->get_definitions_for_location(l);
+
+    // TODO draw cursor
+  }
+
+}
