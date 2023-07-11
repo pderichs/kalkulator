@@ -34,9 +34,8 @@ void TableControl::DrawGrid(wxDC *dc) {
   dc->SetBrush(*wxBLUE);
   dc->SetPen(*wxRED);
 
-  dc->DrawRectangle(2000, 2000, 300, 300);
-
-  dc->DrawRectangle(20, 20, 300, 300);
+  DrawHeaders(dc);
+  DrawCells(dc);
 }
 
 void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
@@ -54,4 +53,25 @@ void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
 void TableControl::RefreshScrollbars() {
   // TODO
   SetScrollbars(1, 1, 10000, 200000, 0, 0);
+}
+
+Location TableControl::GetScrollPosition() const {
+  return Location(
+    GetScrollPos(wxHORIZONTAL),
+    GetScrollPos(wxVERTICAL));
+}
+
+void TableControl::DrawHeaders(wxDC* dc) {
+  Location scrollPos = GetScrollPosition();
+
+  int width;
+  int height;
+
+  GetSize(&width, &height);
+
+  // TODO: Column definitions and sizes are missing atm - must be added first
+}
+
+void TableControl::DrawCells(wxDC* dc) {
+
 }

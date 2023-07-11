@@ -6,6 +6,8 @@
 #include <vector>
 
 #include "table_cell.h"
+#include "table_column_definition.h"
+#include "table_row_definition.h"
 #include "table_selections.h"
 
 typedef std::vector<TableRowPtr> TableRows;
@@ -18,6 +20,8 @@ public:
   std::string name() const { return _name; }
 
 private:
+  TableColumnDefinitions _column_defs;
+  TableRowDefinitions _row_defs;
   TableRows _rows;
   std::string _name;
   TableSelections _selections;

@@ -4,6 +4,8 @@
 #include "../model/table/table_sheet.h"
 #include <wx/wx.h>
 
+#include "location.h"
+
 class TableControl : public wxScrolledWindow {
 public:
   TableControl(wxWindow *parent, wxWindowID id = wxID_ANY,
@@ -22,6 +24,13 @@ public:
     Refresh();
   }
   void DrawGrid(wxDC *dc);
+
+  Location GetScrollPosition() const;
+
+private:
+    void DrawHeaders(wxDC* dc);
+    void DrawCells(wxDC* dc);
+
 
 private:
   TableSheetPtr _sheet;
