@@ -12,19 +12,15 @@
 
 typedef std::vector<TableRowPtr> TableRows;
 
-class TableSheet {
-public:
+struct TableSheet {
   TableSheet(const std::string &name);
   ~TableSheet();
 
-  std::string name() const { return _name; }
-
-private:
-  TableColumnDefinitions _column_defs;
-  TableRowDefinitions _row_defs;
-  TableRows _rows;
-  std::string _name;
-  TableSelections _selections;
+  TableColumnDefinitions column_definitions;
+  TableRowDefinitions row_definitions;
+  TableRows rows;
+  std::string name;
+  TableSelections selections;
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

@@ -10,7 +10,7 @@ const size_t INITIAL_COL_COUNT = 100;
 TableSheet::TableSheet(const std::string &name) {
   std::cout << "Constructor table sheet" << std::endl;
 
-  _name = name;
+  this->name = name;
 
   // Create initial rows and cols
   for (size_t r = 0; r < INITIAL_ROW_COUNT; r++) {
@@ -20,7 +20,7 @@ TableSheet::TableSheet(const std::string &name) {
       row->push_back(std::make_shared<TableCell>());
     }
 
-    _rows.push_back(row);
+    rows.push_back(row);
   }
 }
 

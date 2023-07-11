@@ -28,9 +28,8 @@ public:
   Location GetScrollPosition() const;
 
 private:
-    void DrawHeaders(wxDC* dc);
-    void DrawCells(wxDC* dc);
-
+    void DrawHeaders(wxDC *dc, const Location& scrollPos, int width, int height);
+    void DrawCells(wxDC *dc, const Location& scrollPos, int width, int height);
 
 private:
   TableSheetPtr _sheet;

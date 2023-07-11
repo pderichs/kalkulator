@@ -1,5 +1,6 @@
 #include "table_control.h"
 #include <iostream>
+#include <sstream>
 #include <wx/dcclient.h>
 
 TableControl::TableControl(wxWindow *parent, wxWindowID id, const wxPoint &pos,
@@ -34,8 +35,15 @@ void TableControl::DrawGrid(wxDC *dc) {
   dc->SetBrush(*wxBLUE);
   dc->SetPen(*wxRED);
 
-  DrawHeaders(dc);
-  DrawCells(dc);
+  Location scrollPos = GetScrollPosition();
+  int width;
+  int height;
+  GetSize(&width, &height);
+
+  // TODO With the above information we could calculate the viewport
+  // contents and only draw these to avoid flickering?
+  DrawHeaders(dc, scrollPos, width, height);
+  DrawCells(dc, scrollPos, width, height);
 }
 
 void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
@@ -56,22 +64,38 @@ void TableControl::RefreshScrollbars() {
 }
 
 Location TableControl::GetScrollPosition() const {
-  return Location(
-    GetScrollPos(wxHORIZONTAL),
-    GetScrollPos(wxVERTICAL));
+  return Location(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void TableControl::DrawHeaders(wxDC* dc) {
-  Location scrollPos = GetScrollPosition();
+void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
+                               int height) {
+  int x, y, c;
 
-  int width;
-  int height;
+  dc->SetPen(*wxBLACK);
+  dc->SetBrush(*wxGREY_BRUSH);
 
-  GetSize(&width, &height);
+  // FIXME for now we are drawing all available columns and rows
 
-  // TODO: Column definitions and sizes are missing atm - must be added first
+  c = 1;
+  x = 0;
+  for (auto coldef : _sheet->column_definitions) {
+    auto name = coldef->caption;
+
+    if (name.empty()) {
+      std::stringstream ss;
+      ss << c;
+      name = ss.str();
+    }
+
+    dc->DrawRectangle(x, 2, x + coldef->width, 20);
+    dc->DrawText(name, x + 2, 4);
+
+    c++;
+  }
+
+  // for (auto rowdef : _sheet->row_definitions) {
+  // }
 }
 
-void TableControl::DrawCells(wxDC* dc) {
-
-}
+void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
+                             int height) {}

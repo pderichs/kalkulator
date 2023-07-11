@@ -6,7 +6,7 @@
 #include <vector>
 
 struct TableRowDefinition {
-    std::string name;
+    std::string caption;
     size_t height;
 };
 
