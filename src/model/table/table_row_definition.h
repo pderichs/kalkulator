@@ -8,6 +8,8 @@
 struct TableRowDefinition {
     std::string caption;
     size_t height;
+
+  TableRowDefinition();
 };
 
 typedef std::shared_ptr<TableRowDefinition> TableRowDefinitionPtr;

@@ -1,6 +1,7 @@
 #include "table_sheet.h"
 #include "table_cell.h"
 #include "table_column_definition.h"
+#include "table_row_definition.h"
 #include <cstddef>
 #include <iostream>
 #include <memory>
@@ -16,6 +17,11 @@ TableSheet::TableSheet(const std::string &name) {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     column_definitions.push_back(
       std::make_shared<TableColumnDefinition>());
+  }
+
+  for (size_t c = 0; c < INITIAL_ROW_COUNT; c++) {
+    row_definitions.push_back(
+      std::make_shared<TableRowDefinition>());
   }
 
   // Create initial rows and cols

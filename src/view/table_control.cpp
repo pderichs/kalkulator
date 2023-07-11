@@ -3,6 +3,9 @@
 #include <sstream>
 #include <wx/dcclient.h>
 
+const int ROW_HEADER_WIDTH = 50;
+const int COLUMN_HEADER_HEIGHT = 30;
+
 TableControl::TableControl(wxWindow *parent, wxWindowID id, const wxPoint &pos,
                            const wxSize &size, long style)
     : wxScrolledWindow(parent, id, pos, size, style) {
@@ -71,13 +74,18 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
                                int height) {
   int x, y, c;
 
+  // Set pen and brushes for headers of columns and rows
   dc->SetPen(*wxBLACK);
   dc->SetBrush(*wxLIGHT_GREY_BRUSH);
 
   // FIXME for now we are drawing all available columns and rows
+  // this can possibly be optimized
 
+  // Columns
   c = 1;
-  x = 0;
+  x = ROW_HEADER_WIDTH; // Use row header width as offset
+                        // for columns to leave some space
+                        // from left
   for (auto coldef : _sheet->column_definitions) {
     auto name = coldef->caption;
 
@@ -87,7 +95,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
       name = ss.str();
     }
 
-    dc->DrawRectangle(x, 2, x + coldef->width, 20);
+    dc->DrawRectangle(x, 2, x + coldef->width, COLUMN_HEADER_HEIGHT);
     dc->DrawText(name, x + 2, 4);
 
     x += coldef->width;
@@ -95,8 +103,25 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
     c++;
   }
 
-  // for (auto rowdef : _sheet->row_definitions) {
-  // }
+  // Rows
+  c = 1;
+  y = COLUMN_HEADER_HEIGHT + 2;
+  for (auto rowdef : _sheet->row_definitions) {
+    auto name = rowdef->caption;
+
+    if (name.empty()) {
+      std::stringstream ss;
+      ss << c;
+      name = ss.str();
+    }
+
+    dc->DrawRectangle(0, y, ROW_HEADER_WIDTH, rowdef->height);
+    dc->DrawText(name, 2, y + 4);
+
+    c++;
+
+    y += rowdef->height;
+  }
 }
 
 void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
