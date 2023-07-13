@@ -23,7 +23,7 @@ struct TableSheet {
   TableRows rows;
   std::string name;
   TableSelections selections;
-  LocationVector cursors;
+  Location current_cell;
 
   size_t row_count() const;
   size_t col_count() const;

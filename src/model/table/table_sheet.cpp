@@ -9,9 +9,7 @@
 const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
 
-TableSheet::TableSheet(const std::string &name) {
-  std::cout << "Constructor table sheet" << std::endl;
-
+TableSheet::TableSheet(const std::string &name): current_cell(0, 0) {
   this->name = name;
 
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {

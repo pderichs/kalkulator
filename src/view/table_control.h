@@ -13,6 +13,8 @@ public:
                const wxSize &size = wxDefaultSize,
                long style = wxTAB_TRAVERSAL);
 
+  virtual ~TableControl();
+
   void OnDraw(wxDC &dc);
   void OnScroll(wxScrollWinEvent &scrollEvent);
 
@@ -28,11 +30,14 @@ public:
   Location GetScrollPosition() const;
 
 private:
-    void DrawHeaders(wxDC *dc, const Location& scrollPos, int width, int height);
-    void DrawCells(wxDC *dc, const Location& scrollPos, int width, int height);
+  void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height);
+  void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height);
 
 private:
   TableSheetPtr _sheet;
+  wxPen* _caption_grid_pen;
+  wxPen *_grid_pen;
+  wxPen *_current_cell_pen;
 };
 
 #endif
