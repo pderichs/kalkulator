@@ -59,7 +59,7 @@ void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
 
   std::cout << "Scroll: x: " << x << ", y: " << y << std::endl;
 
-  scrollEvent.Skip();
+  //scrollEvent.Skip();
 }
 
 void TableControl::RefreshScrollbars() {
