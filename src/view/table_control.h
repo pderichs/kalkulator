@@ -25,13 +25,15 @@ public:
     RefreshScrollbars();
     Refresh();
   }
-  void DrawGrid(wxDC *dc);
+  void DrawTable(wxDC *dc);
 
   Location GetScrollPosition() const;
 
 private:
   void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height);
   void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height);
+  wxRect GetCellRectByLocation(const Location& cell);
+  wxRect GetCurrentScrollArea() const;
 
 private:
   TableSheetPtr _sheet;

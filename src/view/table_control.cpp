@@ -34,15 +34,10 @@ void TableControl::OnDraw(wxDC &dc) {
   // wxClientDC dc(this);
 
   // DrawHeaders();
-  DrawGrid(&dc);
+  DrawTable(&dc);
 }
 
-void TableControl::DrawGrid(wxDC *dc) {
-  // TODO HBI
-
-  dc->SetBrush(*wxBLUE);
-  dc->SetPen(*wxRED);
-
+void TableControl::DrawTable(wxDC *dc) {
   Location scrollPos = GetScrollPosition();
   int width;
   int height;
@@ -61,7 +56,7 @@ void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
   // Not needed here, but can be useful later (e.g. search for specific cell)
   // Scroll(x, y);
 
-  std::cout << "Scroll: x: " << x << ", y: " << y << std::endl;
+  //std::cout << "Scroll: x: " << x << ", y: " << y << std::endl;
 
   // scrollEvent.Skip();
 }
@@ -135,15 +130,12 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
 
     y += rowdef->height;
   }
-
-  // Current cell
-  wxRect current_cell_rect;
-  GetCellRectByLocation(_sheet.current_cell, &current_cell_rect);
-  dc->DrawRectangle(current_cell_rect);
 }
 
 void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
                              int height) {
+  wxRect scrollArea = GetCurrentScrollArea();
+
   // TODO Only draw visible ones
 
   for (size_t r = 0; r < _sheet->row_count(); r++) {
@@ -159,13 +151,21 @@ void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
 
   // Draw cursor(s)
   // TODO support multiple cursors?
-  for (auto &l : _sheet->cursors) {
-    TableRowDefinitionPtr rowdef;
-    TableColumnDefinitionPtr coldef;
+  // for (auto &l : _sheet->cursors) {
+  //   TableRowDefinitionPtr rowdef;
+  //   TableColumnDefinitionPtr coldef;
 
-    std::tie(rowdef, coldef) = _sheet->get_definitions_for_location(l);
+  //   std::tie(rowdef, coldef) = _sheet->get_definitions_for_location(l);
 
-    // TODO draw cursor
+  //   // TODO draw cursor
+  // }
+
+  // Current cell
+  wxRect current_cell_rect = GetCellRectByLocation(_sheet->current_cell);
+
+  if (!current_cell_rect.IsEmpty() && scrollArea.Contains(current_cell_rect)) {
+    dc->SetPen(*_current_cell_pen);
+    dc->DrawRectangle(current_cell_rect);
   }
 }
 
@@ -184,4 +184,64 @@ TableControl::~TableControl() {
     delete _current_cell_pen;
     _current_cell_pen = NULL;
   }
+}
+
+wxRect TableControl::GetCellRectByLocation(const Location &cell) {
+  int x = ROW_HEADER_WIDTH;
+  int y = COLUMN_HEADER_HEIGHT + 2;
+  int n;
+
+  wxRect result;
+
+  TableColumnDefinitionPtr cell_coldef;
+  TableRowDefinitionPtr cell_rowdef;
+
+  n = 0;
+  for (const auto& coldef : _sheet->column_definitions) {
+    if (n == cell.x()) {
+      cell_coldef = coldef;
+      break;
+    }
+
+    x += coldef->width;
+
+    n++;
+  }
+
+  n = 0;
+  for (const auto& rowdef : _sheet->row_definitions) {
+    if (n == cell.y()) {
+      cell_rowdef = rowdef;
+      break;
+    }
+
+    y += rowdef->height;
+
+    n++;
+  }
+
+  assert(cell_rowdef);
+  assert(cell_coldef);
+
+  result.x = x;
+  result.y = y;
+  result.width = cell_coldef->width;
+  result.height = cell_rowdef->height;
+
+  return result;
+}
+
+wxRect TableControl::GetCurrentScrollArea() const {
+  wxRect clientRect = GetClientRect();
+
+  int scrollX, scrollY;
+  GetViewStart(&scrollX, &scrollY);
+
+  wxRect scrollArea;
+  scrollArea.x = scrollX;
+  scrollArea.y = scrollY;
+  scrollArea.width = clientRect.width;
+  scrollArea.height = clientRect.height;
+
+  return scrollArea;
 }
