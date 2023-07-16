@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <wx/dcclient.h>
+#include <wx/defs.h>
 
 const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
@@ -255,6 +256,30 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
 
   // Example: Print the keycode to the console
   wxPrintf("Key pressed: %d\n", keyCode);
+
+  bool refresh = true;
+
+  switch (keyCode) {
+  case WXK_UP:
+    _sheet->move_cursor_up();
+    break;
+  case WXK_DOWN:
+    _sheet->move_cursor_down();
+    break;
+  case WXK_LEFT:
+    _sheet->move_cursor_left();
+    break;
+  case WXK_RIGHT:
+    _sheet->move_cursor_right();
+    break;
+  default:
+    refresh = false;
+    break;
+  }
+
+  if (refresh) {
+    Refresh();
+  }
 
   event.Skip(); // Allow further event handling
 }

@@ -109,6 +109,8 @@ void MyFrame::SetupUserInterface() {
   SetSizerAndFit(sizer);
 
   // TODO
+
+  _table_control->SetFocus();
 }
 
 void MyFrame::BindEvents() {

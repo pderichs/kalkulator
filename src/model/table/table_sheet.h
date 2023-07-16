@@ -30,6 +30,11 @@ struct TableSheet {
   std::optional<TableCellPtr> get_cell(size_t row, size_t col);
   std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
   get_definitions_for_location(const Location &location);
+
+  void move_cursor_left();
+  void move_cursor_right();
+  void move_cursor_down();
+  void move_cursor_up();
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

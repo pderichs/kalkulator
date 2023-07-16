@@ -54,3 +54,37 @@ std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
 TableSheet::get_definitions_for_location(const Location &location) {
   return {};
 }
+
+void TableSheet::move_cursor_left() {
+  if (current_cell.x() == 0) {
+    return;
+  }
+
+  current_cell.moveLeft();
+}
+
+void TableSheet::move_cursor_right() {
+  // TODO
+  // if (current_cell.x() == MAX) {
+  //   return;
+  // }
+
+  current_cell.moveRight();
+}
+
+void TableSheet::move_cursor_down() {
+  // TODO
+  // if (current_cell.y() == MAX) {
+  //   return;
+  // }
+
+  current_cell.moveDown();
+}
+
+void TableSheet::move_cursor_up() {
+  if (current_cell.y() == 0) {
+    return;
+  }
+
+  current_cell.moveUp();
+}
