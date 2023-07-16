@@ -1,7 +1,7 @@
 #ifndef TABLECONTROL_INCLUDED
 #define TABLECONTROL_INCLUDED
 
-#include "../model/table/workbook_document.h"
+#include "../model/table/table_workbook_document.h"
 #include "../model/table/table_sheet.h"
 #include <wx/wx.h>
 
@@ -10,7 +10,7 @@
 
 class TableControl : public wxScrolledWindow {
 public:
-  TableControl(WorkbookDocument* document, EventSink *event_sink, wxWindow *parent, wxWindowID id = wxID_ANY,
+  TableControl(TableWorkbookDocument* document, EventSink *event_sink, wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
                long style = wxTAB_TRAVERSAL);
@@ -39,7 +39,7 @@ private:
   }
 
 private:
-  WorkbookDocument* _document;
+  TableWorkbookDocument* _document;
   wxPen* _caption_grid_pen;
   wxPen *_grid_pen;
   wxPen *_current_cell_pen;

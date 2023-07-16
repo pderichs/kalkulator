@@ -6,10 +6,10 @@
 #include <vector>
 #include "event_sink.h"
 
-class WorkbookDocument {
+class TableWorkbookDocument {
 public:
-  WorkbookDocument(EventSink *event_sink);
-  ~WorkbookDocument() = default;
+  TableWorkbookDocument(EventSink *event_sink);
+  ~TableWorkbookDocument() = default;
 
   bool changed() const { return _changed; }
 

@@ -7,7 +7,7 @@
 const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
 
-TableControl::TableControl(WorkbookDocument* document, EventSink *event_sink, wxWindow *parent,
+TableControl::TableControl(TableWorkbookDocument* document, EventSink *event_sink, wxWindow *parent,
                            wxWindowID id, const wxPoint &pos,
                            const wxSize &size, long style)
     : wxScrolledWindow(parent, id, pos, size, style) {

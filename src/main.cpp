@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "model/event_sink.h"
-#include "model/table/workbook_document.h"
+#include "model/table/table_workbook_document.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
 
@@ -45,7 +45,7 @@ private:
   virtual void send_event(TableEvent event_id, std::any param);
 
 private:
-  WorkbookDocument _document;
+  TableWorkbookDocument _document;
   TableControl *_table_control;
   wxTextCtrl *_text_control_formula;
 };
