@@ -2,8 +2,12 @@
 #include "table_sheet.h"
 #include <memory>
 
-WorkbookDocument::WorkbookDocument() {
+WorkbookDocument::WorkbookDocument(EventSink *event_sink) {
+  _event_sink = event_sink;
+
   _sheets.push_back(std::make_shared<TableSheet>("Sheet 1"));
+
+  _current_sheet = _sheets[0];
 }
 
 WorkbookDocument::~WorkbookDocument() {

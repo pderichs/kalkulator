@@ -4,10 +4,11 @@
 #include "table_sheet.h"
 #include <string>
 #include <vector>
+#include "event_sink.h"
 
 class WorkbookDocument {
 public:
-  WorkbookDocument();
+  WorkbookDocument(EventSink *event_sink);
   ~WorkbookDocument();
 
   bool changed() const { return _changed; }
@@ -19,13 +20,16 @@ public:
     return _sheets[0];
   }
 
-private:
+public:
   TableSheetPtr table_sheet_by_name(const std::string &name) const;
+  TableSheetPtr current_sheet() const { return _current_sheet; }
 
 private:
   std::string _path;
   bool _changed;
   TableSheets _sheets;
+  EventSink *_event_sink;
+  TableSheetPtr _current_sheet;
 };
 
 #endif
