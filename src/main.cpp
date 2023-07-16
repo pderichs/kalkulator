@@ -224,5 +224,16 @@ void MyFrame::OnKeyPress(wxKeyEvent &event) {
 }
 
 void MyFrame::send_event(TableEvent event_id, void *param) {
+  wxPrintf("* EVENT: ");
+
+  switch (event_id) {
+    case FORMULA_UPDATE:
+      wxPrintf("FORMULA UPDATE\n");
+
+      _table_control->SetFocus();
+
+      break;
+  }
+
   // TODO
 }

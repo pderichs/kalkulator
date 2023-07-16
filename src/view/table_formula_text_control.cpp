@@ -1,4 +1,5 @@
 #include "table_formula_text_control.h"
+#include "event_sink.h"
 
 TableFormulaTextControl::TableFormulaTextControl(
     EventSink *event_sink, wxWindow *parent, wxWindowID id,
@@ -16,6 +17,12 @@ void TableFormulaTextControl::OnKeyPress(wxKeyEvent &event) {
 
   // Example: Print the keycode to the console
   wxPrintf("Formula control: Key pressed: %d\n", keyCode);
+
+  switch (keyCode) {
+    case WXK_RETURN:
+      _event_sink->send_event(FORMULA_UPDATE, NULL);
+      break;
+  }
 
   event.Skip();
 }
