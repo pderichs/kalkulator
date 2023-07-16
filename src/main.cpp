@@ -8,9 +8,9 @@
 #include <iostream>
 
 #include "model/table/workbook_document.h"
+#include "view/event_sink.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
-#include "view/event_sink.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
@@ -27,7 +27,7 @@ public:
 class MyFrame : public wxFrame, public EventSink {
 public:
   MyFrame();
-  virtual ~MyFrame() {}
+  virtual ~MyFrame() = default;
 
   virtual void OnClose(wxCloseEvent &event);
 
@@ -42,7 +42,7 @@ private:
   void BindEvents();
 
   void SetupUserInterface();
-  virtual void send_event(TableEvent event_id, void *param);
+  virtual void send_event(TableEvent event_id, std::any param);
 
 private:
   WorkbookDocument _document;
@@ -223,16 +223,29 @@ void MyFrame::OnKeyPress(wxKeyEvent &event) {
   event.Skip();
 }
 
-void MyFrame::send_event(TableEvent event_id, void *param) {
+void MyFrame::send_event(TableEvent event_id, std::any param) {
   wxPrintf("* EVENT: ");
 
   switch (event_id) {
-    case FORMULA_UPDATE:
-      wxPrintf("FORMULA UPDATE\n");
+  case FORMULA_UPDATE:
+    wxPrintf("FORMULA UPDATE\n");
 
-      _table_control->SetFocus();
+    _table_control->SetFocus();
 
-      break;
+    std::string new_content;
+
+    try {
+      new_content = std::any_cast<std::string>(param);
+
+      wxPrintf("   Formula update content: %s\n", new_content);
+
+      // TODO: Apply new content to cell
+    } catch (const std::bad_any_cast &e) {
+      wxPrintf("*** EVENT: bad any cast for formula update. Event will be "
+               "ignored.\n");
+    }
+
+    break;
   }
 
   // TODO

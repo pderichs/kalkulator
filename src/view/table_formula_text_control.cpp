@@ -19,9 +19,14 @@ void TableFormulaTextControl::OnKeyPress(wxKeyEvent &event) {
   wxPrintf("Formula control: Key pressed: %d\n", keyCode);
 
   switch (keyCode) {
-    case WXK_RETURN:
-      _event_sink->send_event(FORMULA_UPDATE, NULL);
-      break;
+  case WXK_RETURN:
+    if (IsModified()) {
+      std::string content = (const char *)GetValue();
+      wxPrintf("Sending update event: %s\n", content);
+
+      _event_sink->send_event(FORMULA_UPDATE, content);
+    }
+    break;
   }
 
   event.Skip();
