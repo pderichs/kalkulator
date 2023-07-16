@@ -140,7 +140,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
 
     c++;
 
-    y += rowdef->height - 1;
+    y += rowdef->height;
   }
 }
 
@@ -201,7 +201,7 @@ TableControl::~TableControl() {
 
 wxRect TableControl::GetCellRectByLocation(const Location &cell) {
   int x = ROW_HEADER_WIDTH + 1;
-  int y = COLUMN_HEADER_HEIGHT + 3;
+  int y = COLUMN_HEADER_HEIGHT + 2;
   int n;
 
   wxRect result;
