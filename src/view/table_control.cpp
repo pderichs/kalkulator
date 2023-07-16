@@ -31,8 +31,6 @@ TableControl::TableControl(TableWorkbookDocument* document, EventSink *event_sin
   _caption_grid_pen = new wxPen(wxColour(145, 145, 145));
   _grid_pen = new wxPen(wxColour(100, 100, 100));
   _current_cell_pen = new wxPen(wxColour(47, 65, 163), 2);
-
-  UpdateSheet();
 }
 
 void TableControl::OnDraw(wxDC &dc) {
@@ -162,10 +160,8 @@ void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
           break;
         }
 
-        auto unwrapped_cell = *cell;
-
-        // TODO HBI (Draw Text in middle)
-        // cell->visible_content;
+        auto unwrapped_cell = *cell; // unwrap optional
+        DrawTextInCenter(dc, unwrapped_cell->visible_content(), cellRect);
       }
     }
   }

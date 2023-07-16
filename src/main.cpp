@@ -90,7 +90,7 @@ MyFrame::MyFrame()
                        wxDefaultSize, wxWANTS_CHARS);
 
   _text_control_formula = new TableFormulaTextControl(
-      this, this, -1, "Formulas etc.", wxDefaultPosition, wxDefaultSize);
+      this, this, -1, "", wxDefaultPosition, wxDefaultSize);
 
   SetMenuBar(menuBar);
 

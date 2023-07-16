@@ -35,9 +35,9 @@ private:
   wxRect GetCellRectByLocation(const Location& cell);
   wxRect GetCurrentScrollArea() const;
   void UpdateSheet() {
-    auto sheet = _document->current_sheet();
-    RefreshScrollbars();
-    Refresh();
+    // auto sheet = _document->current_sheet();
+    // RefreshScrollbars();
+    // Refresh();
   }
 
   void DrawTextInCenter(wxDC* dc, const wxString& s, const wxRect& rect);
