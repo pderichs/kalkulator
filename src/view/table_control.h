@@ -17,6 +17,7 @@ public:
 
   void OnDraw(wxDC &dc);
   void OnScroll(wxScrollWinEvent &scrollEvent);
+  void OnKeyPress(wxKeyEvent &event);
 
   void RefreshScrollbars();
 

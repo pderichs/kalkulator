@@ -15,6 +15,7 @@ TableControl::TableControl(wxWindow *parent, wxWindowID id, const wxPoint &pos,
   Bind(wxEVT_SCROLLWIN_THUMBRELEASE, &TableControl::OnScroll, this);
   Bind(wxEVT_SCROLLWIN_LINEUP, &TableControl::OnScroll, this);
   Bind(wxEVT_SCROLLWIN_LINEDOWN, &TableControl::OnScroll, this);
+  Bind(wxEVT_CHAR_HOOK, &TableControl::OnKeyPress, this);
 
   SetBackgroundColour(wxColour(*wxWHITE));
 
@@ -22,7 +23,7 @@ TableControl::TableControl(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
   _caption_grid_pen = new wxPen(wxColour(145, 145, 145));
   _grid_pen = new wxPen(wxColour(100, 100, 100));
-  _current_cell_pen = new wxPen(wxColour(47, 65, 163));
+  _current_cell_pen = new wxPen(wxColour(47, 65, 163), 2);
 }
 
 void TableControl::OnDraw(wxDC &dc) {
@@ -56,13 +57,13 @@ void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
   // Not needed here, but can be useful later (e.g. search for specific cell)
   // Scroll(x, y);
 
-  //std::cout << "Scroll: x: " << x << ", y: " << y << std::endl;
+  // std::cout << "Scroll: x: " << x << ", y: " << y << std::endl;
 
   // scrollEvent.Skip();
 }
 
 void TableControl::RefreshScrollbars() {
-  // TODO
+  // TODO Align scroll area with actual content
   SetScrollbars(1, 1, 10000, 200000, 0, 0);
 }
 
@@ -93,6 +94,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
 
     auto name = coldef->caption;
 
+    // TODO Move to tools
     if (name.empty()) {
       std::stringstream ss;
       ss << c;
@@ -100,7 +102,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
     }
 
     dc->DrawRectangle(x, 2, x + coldef->width, COLUMN_HEADER_HEIGHT);
-    dc->DrawText(name, x + 2, 4);
+    dc->DrawText(name, x + 2, 4); // TODO Create method to center text in rect
 
     x += coldef->width;
 
@@ -124,11 +126,11 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
     }
 
     dc->DrawRectangle(0, y, ROW_HEADER_WIDTH, rowdef->height);
-    dc->DrawText(name, 2, y + 4);
+    dc->DrawText(name, 2, y + 4); // TODO Create method to center text in rect
 
     c++;
 
-    y += rowdef->height;
+    y += rowdef->height - 1;
   }
 }
 
@@ -165,6 +167,7 @@ void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
 
   if (!current_cell_rect.IsEmpty() && scrollArea.Contains(current_cell_rect)) {
     dc->SetPen(*_current_cell_pen);
+    dc->SetBrush(*wxWHITE_BRUSH);
     dc->DrawRectangle(current_cell_rect);
   }
 }
@@ -187,8 +190,8 @@ TableControl::~TableControl() {
 }
 
 wxRect TableControl::GetCellRectByLocation(const Location &cell) {
-  int x = ROW_HEADER_WIDTH;
-  int y = COLUMN_HEADER_HEIGHT + 2;
+  int x = ROW_HEADER_WIDTH + 1;
+  int y = COLUMN_HEADER_HEIGHT + 3;
   int n;
 
   wxRect result;
@@ -197,7 +200,7 @@ wxRect TableControl::GetCellRectByLocation(const Location &cell) {
   TableRowDefinitionPtr cell_rowdef;
 
   n = 0;
-  for (const auto& coldef : _sheet->column_definitions) {
+  for (const auto &coldef : _sheet->column_definitions) {
     if (n == cell.x()) {
       cell_coldef = coldef;
       break;
@@ -209,7 +212,7 @@ wxRect TableControl::GetCellRectByLocation(const Location &cell) {
   }
 
   n = 0;
-  for (const auto& rowdef : _sheet->row_definitions) {
+  for (const auto &rowdef : _sheet->row_definitions) {
     if (n == cell.y()) {
       cell_rowdef = rowdef;
       break;
@@ -244,4 +247,14 @@ wxRect TableControl::GetCurrentScrollArea() const {
   scrollArea.height = clientRect.height;
 
   return scrollArea;
+}
+
+void TableControl::OnKeyPress(wxKeyEvent &event) {
+  // Handle the keypress event here
+  int keyCode = event.GetKeyCode();
+
+  // Example: Print the keycode to the console
+  wxPrintf("Key pressed: %d\n", keyCode);
+
+  event.Skip(); // Allow further event handling
 }
