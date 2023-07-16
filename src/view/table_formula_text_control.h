@@ -3,7 +3,7 @@
 
 #include <wx/wx.h>
 
-#include "event_sink.h"
+#include "../model/event_sink.h"
 
 class TableFormulaTextControl : public wxTextCtrl {
 public:

@@ -1,5 +1,5 @@
 #include "table_formula_text_control.h"
-#include "event_sink.h"
+#include "../model/event_sink.h"
 
 TableFormulaTextControl::TableFormulaTextControl(
     EventSink *event_sink, wxWindow *parent, wxWindowID id,

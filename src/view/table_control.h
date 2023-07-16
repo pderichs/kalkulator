@@ -5,7 +5,7 @@
 #include "../model/table/table_sheet.h"
 #include <wx/wx.h>
 
-#include "event_sink.h"
+#include "../model/event_sink.h"
 #include "location.h"
 
 class TableControl : public wxScrolledWindow {

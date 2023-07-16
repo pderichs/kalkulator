@@ -4,7 +4,7 @@
 #include "table_sheet.h"
 #include <string>
 #include <vector>
-#include "event_sink.h"
+#include "../event_sink.h"
 
 class TableWorkbookDocument {
 public:
