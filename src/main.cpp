@@ -7,8 +7,9 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "view/table_control.h"
 #include "model/table/workbook_document.h"
+#include "view/table_control.h"
+#include "view/table_formula_text_control.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
@@ -43,7 +44,7 @@ private:
 private:
   WorkbookDocument _document;
   TableControl *_table_control;
-  wxTextCtrl* _text_control_formula;
+  wxTextCtrl *_text_control_formula;
 };
 
 enum {
@@ -84,8 +85,8 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a") {
                                     wxDefaultSize, wxWANTS_CHARS);
   _table_control->SetSheet(_document.first_sheet());
 
-  _text_control_formula = new wxTextCtrl(this, -1, "Formulas etc.", wxDefaultPosition,
-                            wxDefaultSize);
+  _text_control_formula = new TableFormulaTextControl(
+      this, -1, "Formulas etc.", wxDefaultPosition, wxDefaultSize);
 
   SetMenuBar(menuBar);
 
@@ -211,9 +212,9 @@ void MyFrame::OnKeyPress(wxKeyEvent &event) {
   wxPrintf("MyFrame: Key pressed: %d\n", keyCode);
 
   switch (keyCode) {
-    case WXK_F2:
-      _text_control_formula->SetFocus();
-      break;
+  case WXK_F2:
+    _text_control_formula->SetFocus();
+    break;
   }
 
   event.Skip();
