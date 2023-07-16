@@ -3,7 +3,10 @@
 
 #include <any>
 
-enum TableEvent { FORMULA_UPDATE = 0 };
+enum TableEvent {
+  FORMULA_UPDATE = 0,
+  CELL_UPDATED,
+};
 
 class EventSink {
 public:

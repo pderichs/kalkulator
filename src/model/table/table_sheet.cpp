@@ -2,9 +2,11 @@
 #include "table_cell.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
+#include <cassert>
 #include <cstddef>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 
 const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
@@ -38,11 +40,11 @@ size_t TableSheet::row_count() const { return INITIAL_ROW_COUNT; }
 
 size_t TableSheet::col_count() const { return INITIAL_COL_COUNT; }
 
-std::optional<TableCellPtr> TableSheet::get_cell(size_t row, size_t col) {
-  if (rows.size() < row) {
-    TableRowPtr &table_row = rows[row];
+std::optional<TableCellPtr> TableSheet::get_cell(size_t row, size_t col) const {
+  if (row < rows.size()) {
+    auto &table_row = rows[row];
 
-    if (table_row && table_row->size() < col) {
+    if (table_row && col < table_row->size()) {
       return (*table_row)[col];
     }
   }
@@ -95,4 +97,19 @@ size_t TableSheet::num_rows() const {
 
 size_t TableSheet::num_cols() const  {
   return column_definitions.size();
+}
+
+TableCellPtr TableSheet::get_current_cell() const {
+  auto cell = get_cell_by_location(current_cell);
+
+  //assert(cell);
+  if (!cell) {
+    throw std::runtime_error("Fatal: Current cell is invalid.");
+  }
+
+  return *cell;
+}
+
+std::optional<TableCellPtr> TableSheet::get_cell_by_location(const Location& location) const {
+  return get_cell(location.y(), location.x());
 }

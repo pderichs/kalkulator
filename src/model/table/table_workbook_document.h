@@ -17,6 +17,8 @@ public:
   TableSheetPtr table_sheet_by_name(const std::string &name) const;
   TableSheetPtr current_sheet() const { return _current_sheet; }
 
+  void update_content_current_cell(const std::string& content);
+
 private:
   std::string _path;
   bool _changed;

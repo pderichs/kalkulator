@@ -27,6 +27,8 @@ public:
 
   Location GetScrollPosition() const;
 
+  void OnCellUpdate(const Location& location);
+
 private:
   void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height, TableSheetPtr sheet);
   void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height, TableSheetPtr sheet);

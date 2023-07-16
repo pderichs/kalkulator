@@ -85,8 +85,9 @@ MyFrame::MyFrame()
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuHelp, "&Help");
 
-  _table_control = new TableControl(&_document, this, this, wxID_ANY, wxDefaultPosition,
-                                    wxDefaultSize, wxWANTS_CHARS);
+  _table_control =
+      new TableControl(&_document, this, this, wxID_ANY, wxDefaultPosition,
+                       wxDefaultSize, wxWANTS_CHARS);
 
   _text_control_formula = new TableFormulaTextControl(
       this, this, -1, "Formulas etc.", wxDefaultPosition, wxDefaultSize);
@@ -226,22 +227,36 @@ void MyFrame::OnKeyPress(wxKeyEvent &event) {
 void MyFrame::send_event(TableEvent event_id, std::any param) {
   wxPrintf("* EVENT: ");
 
+  std::string new_content;
+  std::pair<int, int> location;
+
   switch (event_id) {
   case FORMULA_UPDATE:
     wxPrintf("FORMULA UPDATE\n");
 
     _table_control->SetFocus();
 
-    std::string new_content;
-
     try {
       new_content = std::any_cast<std::string>(param);
 
       wxPrintf("  Formula update content: %s\n", new_content);
 
-      // TODO: Apply new content to cell
+      // Apply new content to cell
+      _document.update_content_current_cell(new_content);
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for formula update. Event will be "
+               "ignored.\n");
+    }
+
+    break;
+
+  case CELL_UPDATED:
+    try {
+      location = std::any_cast<std::pair<int, int>>(param);
+
+      _table_control->OnCellUpdate(Location(std::get<0>(location), std::get<1>(location)));
+    } catch (const std::bad_any_cast &e) {
+      wxPrintf("*** EVENT: bad any cast for cell update. Event will be "
                "ignored.\n");
     }
 

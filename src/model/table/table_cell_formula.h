@@ -1,10 +1,13 @@
 #ifndef TABLE_CELL_FORMULA_INCLUDED
 #define TABLE_CELL_FORMULA_INCLUDED
 
-#include <string>
 #include <memory>
+#include <string>
 
 class TableCellFormula {
+public:
+  static bool is_formula(const std::string &content);
+
 private:
   std::string _content;
 };

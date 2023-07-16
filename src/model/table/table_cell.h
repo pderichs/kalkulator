@@ -9,8 +9,11 @@
 
 class TableCell {
 public:
-  void update_visible_content(const std::string &content);
   std::string visible_content() const { return _visible_content; }
+  void update_content(const std::string& content);
+
+private:
+  void update_visible_content(const std::string &content);
 
 private:
   TableCellFormulaPtr _formula;

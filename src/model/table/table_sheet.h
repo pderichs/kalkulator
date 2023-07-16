@@ -28,7 +28,9 @@ struct TableSheet {
 
   size_t row_count() const;
   size_t col_count() const;
-  std::optional<TableCellPtr> get_cell(size_t row, size_t col);
+  std::optional<TableCellPtr> get_cell(size_t row, size_t col) const;
+  std::optional<TableCellPtr> get_cell_by_location(const Location& location) const;
+  TableCellPtr get_current_cell() const;
   std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
   get_definitions_for_location(const Location &location);
 

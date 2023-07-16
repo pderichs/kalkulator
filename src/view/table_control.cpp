@@ -296,3 +296,11 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
 
   event.Skip(); // Allow further event handling
 }
+
+void TableControl::OnCellUpdate(const Location& location) {
+  wxRect rect = GetCurrentScrollArea();
+
+  if (rect.Contains(location.x(), location.y())) {
+    Refresh();
+  }
+}
