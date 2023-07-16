@@ -7,8 +7,8 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "model/table/workbook_document.h"
 #include "model/event_sink.h"
+#include "model/table/workbook_document.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
 
@@ -69,7 +69,8 @@ bool MyApp::OnInit() {
   return true;
 }
 
-MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a"), _document(this) {
+MyFrame::MyFrame()
+    : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a"), _document(this) {
   wxMenu *menuFile = new wxMenu();
   menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a figures file");
   menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-S",
@@ -84,9 +85,8 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a"), _document(this)
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuHelp, "&Help");
 
-  _table_control = new TableControl(this, this, wxID_ANY, wxDefaultPosition,
+  _table_control = new TableControl(&_document, this, this, wxID_ANY, wxDefaultPosition,
                                     wxDefaultSize, wxWANTS_CHARS);
-  _table_control->SetSheet(_document.current_sheet());
 
   _text_control_formula = new TableFormulaTextControl(
       this, this, -1, "Formulas etc.", wxDefaultPosition, wxDefaultSize);

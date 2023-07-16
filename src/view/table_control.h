@@ -1,6 +1,7 @@
 #ifndef TABLECONTROL_INCLUDED
 #define TABLECONTROL_INCLUDED
 
+#include "../model/table/workbook_document.h"
 #include "../model/table/table_sheet.h"
 #include <wx/wx.h>
 
@@ -9,7 +10,7 @@
 
 class TableControl : public wxScrolledWindow {
 public:
-  TableControl(EventSink *event_sink, wxWindow *parent, wxWindowID id = wxID_ANY,
+  TableControl(WorkbookDocument* document, EventSink *event_sink, wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
                long style = wxTAB_TRAVERSAL);
@@ -22,23 +23,23 @@ public:
 
   void RefreshScrollbars();
 
-  void SetSheet(TableSheetPtr sheet) {
-    _sheet = sheet;
-    RefreshScrollbars();
-    Refresh();
-  }
-  void DrawTable(wxDC *dc);
+  void DrawTable(wxDC *dc, TableSheetPtr sheet);
 
   Location GetScrollPosition() const;
 
 private:
-  void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height);
-  void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height);
+  void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height, TableSheetPtr sheet);
+  void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height, TableSheetPtr sheet);
   wxRect GetCellRectByLocation(const Location& cell);
   wxRect GetCurrentScrollArea() const;
+  void UpdateSheet() {
+    auto sheet = _document->current_sheet();
+    RefreshScrollbars();
+    Refresh();
+  }
 
 private:
-  TableSheetPtr _sheet;
+  WorkbookDocument* _document;
   wxPen* _caption_grid_pen;
   wxPen *_grid_pen;
   wxPen *_current_cell_pen;

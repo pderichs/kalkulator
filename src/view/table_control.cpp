@@ -7,11 +7,15 @@
 const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
 
-TableControl::TableControl(EventSink *event_sink, wxWindow *parent,
+TableControl::TableControl(WorkbookDocument* document, EventSink *event_sink, wxWindow *parent,
                            wxWindowID id, const wxPoint &pos,
                            const wxSize &size, long style)
     : wxScrolledWindow(parent, id, pos, size, style) {
+  assert(event_sink);
+  assert(document);
+
   _event_sink = event_sink;
+  _document = document;
 
   // Bind(wxEVT_PAINT, &TableControl::OnPaint, this);
   Bind(wxEVT_SCROLLWIN_THUMBTRACK, &TableControl::OnScroll, this);
@@ -27,10 +31,13 @@ TableControl::TableControl(EventSink *event_sink, wxWindow *parent,
   _caption_grid_pen = new wxPen(wxColour(145, 145, 145));
   _grid_pen = new wxPen(wxColour(100, 100, 100));
   _current_cell_pen = new wxPen(wxColour(47, 65, 163), 2);
+
+  UpdateSheet();
 }
 
 void TableControl::OnDraw(wxDC &dc) {
-  if (!_sheet) {
+  TableSheetPtr sheet = _document->current_sheet();
+  if (!sheet) {
     // TODO Clear?
     return;
   }
@@ -38,10 +45,10 @@ void TableControl::OnDraw(wxDC &dc) {
   // wxClientDC dc(this);
 
   // DrawHeaders();
-  DrawTable(&dc);
+  DrawTable(&dc, sheet);
 }
 
-void TableControl::DrawTable(wxDC *dc) {
+void TableControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
   Location scrollPos = GetScrollPosition();
   int width;
   int height;
@@ -49,8 +56,8 @@ void TableControl::DrawTable(wxDC *dc) {
 
   // TODO With the above information we could calculate the viewport
   // contents and only draw these to avoid flickering?
-  DrawHeaders(dc, scrollPos, width, height);
-  DrawCells(dc, scrollPos, width, height);
+  DrawHeaders(dc, scrollPos, width, height, sheet);
+  DrawCells(dc, scrollPos, width, height, sheet);
 }
 
 void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
@@ -75,7 +82,7 @@ Location TableControl::GetScrollPosition() const {
 }
 
 void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
-                               int height) {
+                               int height, TableSheetPtr sheet) {
   int x, y, c;
 
   // Set pen and brushes for headers of columns and rows
@@ -90,7 +97,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
   x = ROW_HEADER_WIDTH; // Use row header width as offset
                         // for columns to leave some space
                         // from left
-  for (auto coldef : _sheet->column_definitions) {
+  for (auto coldef : sheet->column_definitions) {
     if (x > width) {
       break;
     }
@@ -115,7 +122,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
   // Rows
   c = 1;
   y = COLUMN_HEADER_HEIGHT + 2;
-  for (auto rowdef : _sheet->row_definitions) {
+  for (auto rowdef : sheet->row_definitions) {
     if (y > height) {
       break;
     }
@@ -138,14 +145,14 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
 }
 
 void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
-                             int height) {
+                             int height, TableSheetPtr sheet) {
   wxRect scrollArea = GetCurrentScrollArea();
 
   // TODO Only draw visible ones
 
-  for (size_t r = 0; r < _sheet->row_count(); r++) {
-    for (size_t c = 0; c < _sheet->col_count(); c++) {
-      auto cell = _sheet->get_cell(r, c);
+  for (size_t r = 0; r < sheet->row_count(); r++) {
+    for (size_t c = 0; c < sheet->col_count(); c++) {
+      auto cell = sheet->get_cell(r, c);
       if (cell) {
         auto unwrapped_cell = *cell;
 
@@ -156,17 +163,17 @@ void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
 
   // Draw cursor(s)
   // TODO support multiple cursors?
-  // for (auto &l : _sheet->cursors) {
+  // for (auto &l : sheet->cursors) {
   //   TableRowDefinitionPtr rowdef;
   //   TableColumnDefinitionPtr coldef;
 
-  //   std::tie(rowdef, coldef) = _sheet->get_definitions_for_location(l);
+  //   std::tie(rowdef, coldef) = sheet->get_definitions_for_location(l);
 
   //   // TODO draw cursor
   // }
 
   // Current cell
-  wxRect current_cell_rect = GetCellRectByLocation(_sheet->current_cell);
+  wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell);
 
   if (!current_cell_rect.IsEmpty() && scrollArea.Contains(current_cell_rect)) {
     dc->SetPen(*_current_cell_pen);
@@ -202,8 +209,10 @@ wxRect TableControl::GetCellRectByLocation(const Location &cell) {
   TableColumnDefinitionPtr cell_coldef;
   TableRowDefinitionPtr cell_rowdef;
 
+  TableSheetPtr sheet = _document->current_sheet();
+
   n = 0;
-  for (const auto &coldef : _sheet->column_definitions) {
+  for (const auto &coldef : sheet->column_definitions) {
     if (n == cell.x()) {
       cell_coldef = coldef;
       break;
@@ -215,7 +224,7 @@ wxRect TableControl::GetCellRectByLocation(const Location &cell) {
   }
 
   n = 0;
-  for (const auto &rowdef : _sheet->row_definitions) {
+  for (const auto &rowdef : sheet->row_definitions) {
     if (n == cell.y()) {
       cell_rowdef = rowdef;
       break;
@@ -259,20 +268,22 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
   // Example: Print the keycode to the console
   wxPrintf("Key pressed: %d\n", keyCode);
 
+  TableSheetPtr sheet = _document->current_sheet();
+
   bool handled = true;
 
   switch (keyCode) {
   case WXK_UP:
-    _sheet->move_cursor_up();
+    sheet->move_cursor_up();
     break;
   case WXK_DOWN:
-    _sheet->move_cursor_down();
+    sheet->move_cursor_down();
     break;
   case WXK_LEFT:
-    _sheet->move_cursor_left();
+    sheet->move_cursor_left();
     break;
   case WXK_RIGHT:
-    _sheet->move_cursor_right();
+    sheet->move_cursor_right();
     break;
   default:
     handled = false;

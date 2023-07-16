@@ -9,16 +9,9 @@
 class WorkbookDocument {
 public:
   WorkbookDocument(EventSink *event_sink);
-  ~WorkbookDocument();
+  ~WorkbookDocument() = default;
 
   bool changed() const { return _changed; }
-  TableSheetPtr first_sheet() const {
-    if (_sheets.empty()) {
-      return {};
-    }
-
-    return _sheets[0];
-  }
 
 public:
   TableSheetPtr table_sheet_by_name(const std::string &name) const;
