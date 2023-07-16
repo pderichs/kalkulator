@@ -111,8 +111,9 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
       name = ss.str();
     }
 
-    dc->DrawRectangle(x, 2, x + coldef->width, COLUMN_HEADER_HEIGHT);
-    dc->DrawText(name, x + 2, 4); // TODO Create method to center text in rect
+    wxRect rect(x, 2, coldef->width, COLUMN_HEADER_HEIGHT);
+    dc->DrawRectangle(rect);
+    DrawTextInCenter(dc, name, rect);
 
     x += coldef->width;
 
@@ -135,8 +136,9 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
       name = ss.str();
     }
 
-    dc->DrawRectangle(0, y, ROW_HEADER_WIDTH, rowdef->height);
-    dc->DrawText(name, 2, y + 4); // TODO Create method to center text in rect
+    wxRect rect(0, y, ROW_HEADER_WIDTH, rowdef->height);
+    dc->DrawRectangle(rect);
+    DrawTextInCenter(dc, name, rect);
 
     y += rowdef->height;
 
@@ -154,6 +156,12 @@ void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
     for (size_t c = 0; c < sheet->col_count(); c++) {
       auto cell = sheet->get_cell(r, c);
       if (cell) {
+
+        wxRect cellRect = GetCellRectByLocation(Location(c, r));
+        if (!scrollArea.Contains(cellRect)) {
+          break;
+        }
+
         auto unwrapped_cell = *cell;
 
         // TODO HBI (Draw Text in middle)
@@ -304,4 +312,18 @@ void TableControl::OnCellUpdate(const Location& location) {
   if (rect.Contains(location.x(), location.y())) {
     Refresh();
   }
+}
+
+void TableControl::DrawTextInCenter(wxDC* dc, const wxString& s, const wxRect& rect) {
+  // Calculate the center coordinates of the wxRect
+    int centerX = rect.GetX() + rect.GetWidth() / 2;
+    int centerY = rect.GetY() + rect.GetHeight() / 2;
+
+    // Draw the text at the center coordinates
+    int textWidth, textHeight;
+    dc->GetTextExtent(s, &textWidth, &textHeight);
+
+    int textX = centerX - textWidth / 2;
+    int textY = centerY - textHeight / 2;
+    dc->DrawText(s, textX, textY);
 }

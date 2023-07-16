@@ -40,6 +40,8 @@ private:
     Refresh();
   }
 
+  void DrawTextInCenter(wxDC* dc, const wxString& s, const wxRect& rect);
+
 private:
   TableWorkbookDocument* _document;
   wxPen* _caption_grid_pen;
