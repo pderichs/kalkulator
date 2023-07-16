@@ -3,14 +3,16 @@
 #include <iostream>
 #include <sstream>
 #include <wx/dcclient.h>
-#include <wx/defs.h>
 
 const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
 
-TableControl::TableControl(wxWindow *parent, wxWindowID id, const wxPoint &pos,
+TableControl::TableControl(EventSink *event_sink, wxWindow *parent,
+                           wxWindowID id, const wxPoint &pos,
                            const wxSize &size, long style)
     : wxScrolledWindow(parent, id, pos, size, style) {
+  _event_sink = event_sink;
+
   // Bind(wxEVT_PAINT, &TableControl::OnPaint, this);
   Bind(wxEVT_SCROLLWIN_THUMBTRACK, &TableControl::OnScroll, this);
   Bind(wxEVT_SCROLLWIN_THUMBRELEASE, &TableControl::OnScroll, this);

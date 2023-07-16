@@ -10,6 +10,7 @@
 #include "model/table/workbook_document.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
+#include "view/event_sink.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
@@ -23,9 +24,10 @@ public:
   virtual bool OnInit();
 };
 
-class MyFrame : public wxFrame {
+class MyFrame : public wxFrame, public EventSink {
 public:
   MyFrame();
+  virtual ~MyFrame() {}
 
   virtual void OnClose(wxCloseEvent &event);
 
@@ -40,6 +42,7 @@ private:
   void BindEvents();
 
   void SetupUserInterface();
+  virtual void send_event(TableEvent event_id, void *param);
 
 private:
   WorkbookDocument _document;
@@ -81,12 +84,12 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a") {
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuHelp, "&Help");
 
-  _table_control = new TableControl(this, wxID_ANY, wxDefaultPosition,
+  _table_control = new TableControl(this, this, wxID_ANY, wxDefaultPosition,
                                     wxDefaultSize, wxWANTS_CHARS);
   _table_control->SetSheet(_document.first_sheet());
 
   _text_control_formula = new TableFormulaTextControl(
-      this, -1, "Formulas etc.", wxDefaultPosition, wxDefaultSize);
+      this, this, -1, "Formulas etc.", wxDefaultPosition, wxDefaultSize);
 
   SetMenuBar(menuBar);
 
@@ -218,4 +221,8 @@ void MyFrame::OnKeyPress(wxKeyEvent &event) {
   }
 
   event.Skip();
+}
+
+void MyFrame::send_event(TableEvent event_id, void *param) {
+  // TODO
 }

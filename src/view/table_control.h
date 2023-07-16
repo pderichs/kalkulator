@@ -4,11 +4,12 @@
 #include "../model/table/table_sheet.h"
 #include <wx/wx.h>
 
+#include "event_sink.h"
 #include "location.h"
 
 class TableControl : public wxScrolledWindow {
 public:
-  TableControl(wxWindow *parent, wxWindowID id = wxID_ANY,
+  TableControl(EventSink *event_sink, wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
                long style = wxTAB_TRAVERSAL);
@@ -41,6 +42,7 @@ private:
   wxPen* _caption_grid_pen;
   wxPen *_grid_pen;
   wxPen *_current_cell_pen;
+  EventSink *_event_sink;
 };
 
 #endif
