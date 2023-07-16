@@ -88,3 +88,11 @@ void TableSheet::move_cursor_up() {
 
   current_cell.moveUp();
 }
+
+size_t TableSheet::num_rows() const {
+  return row_definitions.size();
+}
+
+size_t TableSheet::num_cols() const  {
+  return column_definitions.size();
+}

@@ -1,6 +1,7 @@
 #ifndef TABLE_SHEET_INCLUDED
 #define TABLE_SHEET_INCLUDED
 
+#include <cstddef>
 #include <memory>
 #include <optional>
 #include <string>
@@ -30,6 +31,9 @@ struct TableSheet {
   std::optional<TableCellPtr> get_cell(size_t row, size_t col);
   std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
   get_definitions_for_location(const Location &location);
+
+  size_t num_rows() const;
+  size_t num_cols() const;
 
   void move_cursor_left();
   void move_cursor_right();

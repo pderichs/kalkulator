@@ -34,6 +34,7 @@ private:
   void OnOpen(wxCommandEvent &event);
   void OnSaveAs(wxCommandEvent &event);
   void OnRightDown(wxMouseEvent &event);
+  void OnKeyPress(wxKeyEvent &event);
 
   void BindEvents();
 
@@ -42,6 +43,7 @@ private:
 private:
   WorkbookDocument _document;
   TableControl *_table_control;
+  wxTextCtrl* _text_control_formula;
 };
 
 enum {
@@ -78,11 +80,12 @@ MyFrame::MyFrame() : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a") {
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuHelp, "&Help");
 
-  // _canvas = new KCanvas(&_document, this, wxID_ANY, wxDefaultPosition,
-  //                       wxDefaultSize, wxWANTS_CHARS);
   _table_control = new TableControl(this, wxID_ANY, wxDefaultPosition,
                                     wxDefaultSize, wxWANTS_CHARS);
   _table_control->SetSheet(_document.first_sheet());
+
+  _text_control_formula = new wxTextCtrl(this, -1, "Formulas etc.", wxDefaultPosition,
+                            wxDefaultSize);
 
   SetMenuBar(menuBar);
 
@@ -99,16 +102,12 @@ void MyFrame::SetupUserInterface() {
 
   // Textctrl for formula editing (normal text control for now)
   // TODO Replace by e.g. a syntax highlighting supporting control
-  sizer->Add(new wxTextCtrl(this, -1, "Formulas etc.", wxDefaultPosition,
-                            wxDefaultSize),
-             0, wxEXPAND | wxALL, 5);
+  sizer->Add(_text_control_formula, 0, wxEXPAND | wxALL, 5);
 
   // Table
   sizer->Add(_table_control, 1, wxEXPAND | wxALL, 5);
 
   SetSizerAndFit(sizer);
-
-  // TODO
 
   _table_control->SetFocus();
 }
@@ -121,6 +120,7 @@ void MyFrame::BindEvents() {
 
   Bind(wxEVT_RIGHT_DOWN, &MyFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &MyFrame::OnClose, this);
+  Bind(wxEVT_CHAR_HOOK, &MyFrame::OnKeyPress, this);
 }
 
 void MyFrame::OnRightDown(wxMouseEvent &event) {
@@ -201,4 +201,20 @@ void MyFrame::OnSaveAs(wxCommandEvent &event) {
   //   wxLogError("Cannot save current contents in file '%s'.",
   //              saveFileDialog.GetPath());
   // }
+}
+
+void MyFrame::OnKeyPress(wxKeyEvent &event) {
+  // Handle the keypress event here
+  int keyCode = event.GetKeyCode();
+
+  // Example: Print the keycode to the console
+  wxPrintf("MyFrame: Key pressed: %d\n", keyCode);
+
+  switch (keyCode) {
+    case WXK_F2:
+      _text_control_formula->SetFocus();
+      break;
+  }
+
+  event.Skip();
 }

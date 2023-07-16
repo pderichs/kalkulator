@@ -257,7 +257,7 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
   // Example: Print the keycode to the console
   wxPrintf("Key pressed: %d\n", keyCode);
 
-  bool refresh = true;
+  bool handled = true;
 
   switch (keyCode) {
   case WXK_UP:
@@ -273,11 +273,11 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
     _sheet->move_cursor_right();
     break;
   default:
-    refresh = false;
+    handled = false;
     break;
   }
 
-  if (refresh) {
+  if (handled) {
     Refresh();
   }
 
