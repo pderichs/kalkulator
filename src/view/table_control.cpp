@@ -154,7 +154,6 @@ void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
     for (size_t c = 0; c < sheet->col_count(); c++) {
       auto cell = sheet->get_cell(r, c);
       if (cell) {
-
         wxRect cellRect = GetCellRectByLocation(Location(c, r));
         if (!scrollArea.Contains(cellRect)) {
           break;
@@ -179,11 +178,15 @@ void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
 
   // Current cell
   wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell);
-
   if (!current_cell_rect.IsEmpty() && scrollArea.Contains(current_cell_rect)) {
     dc->SetPen(*_current_cell_pen);
     dc->SetBrush(*wxWHITE_BRUSH);
     dc->DrawRectangle(current_cell_rect);
+
+    auto cell = _document->get_current_cell();
+    if (cell) {
+      DrawTextInCenter(dc, cell->visible_content(), current_cell_rect);
+    }
   }
 }
 

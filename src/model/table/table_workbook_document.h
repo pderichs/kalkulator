@@ -24,6 +24,7 @@ public:
   void move_cursor_right();
 
   std::optional<TableCellPtr> get_cell(const Location& location);
+  TableCellPtr get_current_cell() const;
 
   void update_content_current_cell(const std::string& content);
 

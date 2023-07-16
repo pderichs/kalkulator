@@ -67,3 +67,8 @@ std::optional<TableCellPtr> TableWorkbookDocument::get_cell(const Location& loca
   TableSheetPtr sheet = _current_sheet;
   return sheet->get_cell_by_location(location);
 }
+
+TableCellPtr TableWorkbookDocument::get_current_cell() const {
+  TableSheetPtr sheet = _current_sheet;
+  return sheet->get_current_cell();
+}
