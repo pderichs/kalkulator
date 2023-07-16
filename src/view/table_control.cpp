@@ -138,9 +138,9 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
     dc->DrawRectangle(0, y, ROW_HEADER_WIDTH, rowdef->height);
     dc->DrawText(name, 2, y + 4); // TODO Create method to center text in rect
 
-    c++;
-
     y += rowdef->height;
+
+    c++;
   }
 }
 
@@ -156,6 +156,7 @@ void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
       if (cell) {
         auto unwrapped_cell = *cell;
 
+        // TODO HBI (Draw Text in middle)
         // cell->visible_content;
       }
     }

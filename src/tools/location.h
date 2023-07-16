@@ -11,6 +11,16 @@ private:
   long x_, y_;
 
 public:
+  Location() {
+    x_ = 0;
+    y_ = 0;
+  }
+
+  Location(const Location &other) {
+    x_ = other.x_;
+    y_ = other.y_;
+  }
+
   explicit Location(long x, long y) {
     x_ = x;
     y_ = y;

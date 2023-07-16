@@ -31,7 +31,6 @@ void TableWorkbookDocument::update_content_current_cell(const std::string& conte
 
   cell->update_content(content);
 
-  // TODO
-  // std::any param = std::pair<int, int>(sheet->current_cell.x(), sheet->current_cell.y());
-  // _event_sink->send_event(CELL_UPDATED, param);
+  std::any param = sheet->current_cell;
+  _event_sink->send_event(CELL_UPDATED, param);
 }

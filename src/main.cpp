@@ -228,7 +228,6 @@ void MyFrame::send_event(TableEvent event_id, std::any param) {
   wxPrintf("* EVENT: ");
 
   std::string new_content;
-  std::pair<int, int> location;
 
   switch (event_id) {
   case FORMULA_UPDATE:
@@ -252,9 +251,9 @@ void MyFrame::send_event(TableEvent event_id, std::any param) {
 
   case CELL_UPDATED:
     try {
-      location = std::any_cast<std::pair<int, int>>(param);
+      Location location(std::any_cast<Location>(param));
 
-      _table_control->OnCellUpdate(Location(std::get<0>(location), std::get<1>(location)));
+      _table_control->OnCellUpdate(location);
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for cell update. Event will be "
                "ignored.\n");
