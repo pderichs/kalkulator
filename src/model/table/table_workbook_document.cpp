@@ -24,7 +24,7 @@ TableSheetPtr TableWorkbookDocument::table_sheet_by_name(const std::string& name
 }
 
 void TableWorkbookDocument::update_content_current_cell(const std::string& content) {
-  TableSheetPtr sheet = current_sheet();
+  TableSheetPtr sheet = _current_sheet;
   TableCellPtr cell = sheet->get_current_cell();
 
   assert(cell);
@@ -33,4 +33,37 @@ void TableWorkbookDocument::update_content_current_cell(const std::string& conte
 
   std::any param = sheet->current_cell;
   _event_sink->send_event(CELL_UPDATED, param);
+}
+
+void TableWorkbookDocument::move_cursor_up() {
+  TableSheetPtr sheet = _current_sheet;
+  if (sheet->move_cursor_up()) {
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+  }
+}
+
+void TableWorkbookDocument::move_cursor_down() {
+  TableSheetPtr sheet = _current_sheet;
+  if (sheet->move_cursor_down()) {
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+  }
+}
+
+void TableWorkbookDocument::move_cursor_left() {
+  TableSheetPtr sheet = _current_sheet;
+  if (sheet->move_cursor_left()) {
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+  }
+}
+
+void TableWorkbookDocument::move_cursor_right() {
+  TableSheetPtr sheet = _current_sheet;
+  if (sheet->move_cursor_right()) {
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+  }
+}
+
+std::optional<TableCellPtr> TableWorkbookDocument::get_cell(const Location& location) {
+  TableSheetPtr sheet = _current_sheet;
+  return sheet->get_cell_by_location(location);
 }

@@ -12,6 +12,14 @@ public:
   std::string visible_content() const { return _visible_content; }
   void update_content(const std::string& content);
 
+    std::string get_formula_content() const {
+      if (!_formula) {
+        return visible_content();
+      }
+
+      return _formula->raw_content();
+    }
+
 private:
   void update_visible_content(const std::string &content);
 

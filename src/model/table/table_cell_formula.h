@@ -8,6 +8,8 @@ class TableCellFormula {
 public:
   static bool is_formula(const std::string &content);
 
+  std::string raw_content() { return _content; }
+
 private:
   std::string _content;
 };

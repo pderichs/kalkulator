@@ -1,6 +1,7 @@
 #ifndef WORKBOOK_DOCUMENT_INCLUDED
 #define WORKBOOK_DOCUMENT_INCLUDED
 
+#include "table_cell.h"
 #include "table_sheet.h"
 #include <string>
 #include <vector>
@@ -16,6 +17,13 @@ public:
 public:
   TableSheetPtr table_sheet_by_name(const std::string &name) const;
   TableSheetPtr current_sheet() const { return _current_sheet; }
+
+  void move_cursor_up();
+  void move_cursor_down();
+  void move_cursor_left();
+  void move_cursor_right();
+
+  std::optional<TableCellPtr> get_cell(const Location& location);
 
   void update_content_current_cell(const std::string& content);
 

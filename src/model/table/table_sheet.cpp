@@ -57,38 +57,46 @@ TableSheet::get_definitions_for_location(const Location &location) {
   return {};
 }
 
-void TableSheet::move_cursor_left() {
+bool TableSheet::move_cursor_left() {
   if (current_cell.x() == 0) {
-    return;
+    return false;
   }
 
   current_cell.moveLeft();
+
+  return true;
 }
 
-void TableSheet::move_cursor_right() {
+bool TableSheet::move_cursor_right() {
   // TODO
   // if (current_cell.x() == MAX) {
   //   return;
   // }
 
   current_cell.moveRight();
+
+  return true;
 }
 
-void TableSheet::move_cursor_down() {
+bool TableSheet::move_cursor_down() {
   // TODO
   // if (current_cell.y() == MAX) {
   //   return;
   // }
 
   current_cell.moveDown();
+
+  return true;
 }
 
-void TableSheet::move_cursor_up() {
+bool TableSheet::move_cursor_up() {
   if (current_cell.y() == 0) {
-    return;
+    return false;
   }
 
   current_cell.moveUp();
+
+  return true;
 }
 
 size_t TableSheet::num_rows() const {

@@ -6,6 +6,7 @@
 enum TableEvent {
   FORMULA_UPDATE = 0,
   CELL_UPDATED,
+  CURRENT_CELL_LOCATION_UPDATED,
 };
 
 class EventSink {

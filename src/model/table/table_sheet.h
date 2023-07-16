@@ -37,10 +37,10 @@ struct TableSheet {
   size_t num_rows() const;
   size_t num_cols() const;
 
-  void move_cursor_left();
-  void move_cursor_right();
-  void move_cursor_down();
-  void move_cursor_up();
+  bool move_cursor_left();
+  bool move_cursor_right();
+  bool move_cursor_down();
+  bool move_cursor_up();
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

@@ -273,22 +273,20 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
   // Example: Print the keycode to the console
   wxPrintf("Key pressed: %d\n", keyCode);
 
-  TableSheetPtr sheet = _document->current_sheet();
-
   bool handled = true;
 
   switch (keyCode) {
   case WXK_UP:
-    sheet->move_cursor_up();
+    _document->move_cursor_up();
     break;
   case WXK_DOWN:
-    sheet->move_cursor_down();
+    _document->move_cursor_down();
     break;
   case WXK_LEFT:
-    sheet->move_cursor_left();
+    _document->move_cursor_left();
     break;
   case WXK_RIGHT:
-    sheet->move_cursor_right();
+    _document->move_cursor_right();
     break;
   default:
     handled = false;

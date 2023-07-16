@@ -260,6 +260,27 @@ void MyFrame::send_event(TableEvent event_id, std::any param) {
     }
 
     break;
+
+  case CURRENT_CELL_LOCATION_UPDATED:
+    try {
+      Location location(std::any_cast<Location>(param));
+
+      auto cell = _document.get_cell(location);
+
+      if (cell) {
+        auto unwrapped_cell = *cell;
+
+        // Update formula text
+        std::string formula = unwrapped_cell->get_formula_content();
+        _text_control_formula->SetValue(formula);
+      }
+
+    } catch (const std::bad_any_cast &e) {
+      wxPrintf("*** EVENT: bad any cast for cell update. Event will be "
+               "ignored.\n");
+    }
+
+    break;
   }
 
   // TODO
