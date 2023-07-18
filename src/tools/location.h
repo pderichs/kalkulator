@@ -34,6 +34,9 @@ public:
   void moveDown() { y_++; }
   void moveUp() { y_--; }
 
+  void moveUp(int amount) { y_ -= amount; }
+  void moveDown(int amount) { y_ += amount; }
+
   bool operator==(const Location &other) const {
     return x_ == other.x_ && y_ == other.y_;
   }

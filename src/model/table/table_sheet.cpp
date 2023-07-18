@@ -10,6 +10,7 @@
 
 const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
+const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
 TableSheet::TableSheet(const std::string &name): current_cell(0, 0) {
   this->name = name;
@@ -120,4 +121,30 @@ TableCellPtr TableSheet::get_current_cell() const {
 
 std::optional<TableCellPtr> TableSheet::get_cell_by_location(const Location& location) const {
   return get_cell(location.y(), location.x());
+}
+
+bool TableSheet::move_cursor_page_up() {
+  if (current_cell.y() == 0) {
+    return false;
+  }
+
+  int amount = ROW_PAGE_MOVE_AMOUNT;
+  if (current_cell.y() - amount < 0) {
+    amount = current_cell.y();
+  }
+
+  current_cell.moveUp(amount);
+
+  return true;
+}
+
+bool TableSheet::move_cursor_page_down() {
+  // TODO Check max row
+  int amount = ROW_PAGE_MOVE_AMOUNT;
+  // if (current_cell.y() - amount < 0) {
+  //   amount = current_cell.y();
+  // }
+
+  current_cell.moveDown(amount);
+  return true;
 }

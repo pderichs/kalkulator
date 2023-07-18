@@ -41,6 +41,8 @@ struct TableSheet {
   bool move_cursor_right();
   bool move_cursor_down();
   bool move_cursor_up();
+  bool move_cursor_page_up();
+  bool move_cursor_page_down();
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

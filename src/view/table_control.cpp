@@ -7,7 +7,8 @@
 const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
 
-TableControl::TableControl(TableWorkbookDocument* document, EventSink *event_sink, wxWindow *parent,
+TableControl::TableControl(TableWorkbookDocument *document,
+                           EventSink *event_sink, wxWindow *parent,
                            wxWindowID id, const wxPoint &pos,
                            const wxSize &size, long style)
     : wxScrolledWindow(parent, id, pos, size, style) {
@@ -289,6 +290,12 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
   case WXK_RIGHT:
     _document->move_cursor_right();
     break;
+  case WXK_PAGEUP:
+    _document->move_cursor_page_up();
+    break;
+  case WXK_PAGEDOWN:
+    _document->move_cursor_page_down();
+    break;
   default:
     handled = false;
     break;
@@ -301,7 +308,7 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
   event.Skip(); // Allow further event handling
 }
 
-void TableControl::OnCellUpdate(const Location& location) {
+void TableControl::OnCellUpdate(const Location &location) {
   wxRect rect = GetCurrentScrollArea();
 
   if (rect.Contains(location.x(), location.y())) {
@@ -309,24 +316,32 @@ void TableControl::OnCellUpdate(const Location& location) {
   }
 }
 
-void TableControl::DrawTextInCenter(wxDC* dc, const wxString& s, const wxRect& rect) {
+void TableControl::DrawTextInCenter(wxDC *dc, const wxString &s,
+                                    const wxRect &rect) {
   // Calculate the center coordinates of the wxRect
-    int centerX = rect.GetX() + rect.GetWidth() / 2;
-    int centerY = rect.GetY() + rect.GetHeight() / 2;
+  int centerX = rect.GetX() + rect.GetWidth() / 2;
+  int centerY = rect.GetY() + rect.GetHeight() / 2;
 
-    // Draw the text at the center coordinates
-    int textWidth, textHeight;
-    dc->GetTextExtent(s, &textWidth, &textHeight);
+  // Draw the text at the center coordinates
+  int textWidth, textHeight;
+  dc->GetTextExtent(s, &textWidth, &textHeight);
 
-    int textX = centerX - textWidth / 2;
-    int textY = centerY - textHeight / 2;
-    dc->DrawText(s, textX, textY);
+  int textX = centerX - textWidth / 2;
+  int textY = centerY - textHeight / 2;
+  dc->DrawText(s, textX, textY);
 }
 
 void TableControl::OnLeftDown(wxMouseEvent &event) {
-  wxPrintf("Mouse Left Down!\n");
+  Location scrollPos = GetScrollPosition();
+  wxPoint pos = ClientToScreen(event.GetPosition());
+  wxPoint origin = GetPosition();
+  int dx = pos.x - origin.x;
+  int dy = pos.y - origin.y;
+  wxPoint delta(dx + scrollPos.x(), dy + scrollPos.y());
 
-  wxPoint point = event.GetLogicalPosition();
+  wxPrintf("Mouse Left Down! %d, %d\n", delta.x, delta.y);
+
+  // TODO
 
   event.Skip();
 }

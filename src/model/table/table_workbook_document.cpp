@@ -72,3 +72,17 @@ TableCellPtr TableWorkbookDocument::get_current_cell() const {
   TableSheetPtr sheet = _current_sheet;
   return sheet->get_current_cell();
 }
+
+void TableWorkbookDocument::move_cursor_page_up() {
+  TableSheetPtr sheet = _current_sheet;
+  if (sheet->move_cursor_page_up()) {
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+  }
+}
+
+void TableWorkbookDocument::move_cursor_page_down() {
+  TableSheetPtr sheet = _current_sheet;
+  if (sheet->move_cursor_page_down()) {
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+  }
+}
