@@ -53,10 +53,10 @@ std::optional<TableCellPtr> TableSheet::get_cell(size_t row, size_t col) const {
   return {};
 }
 
-std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
-TableSheet::get_definitions_for_location(const Location &location) {
-  return {};
-}
+// std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
+// TableSheet::get_definitions_for_location(const Location &location) {
+//   return {};
+// }
 
 bool TableSheet::move_cursor_left() {
   if (current_cell.x() == 0) {
@@ -146,5 +146,20 @@ bool TableSheet::move_cursor_page_down() {
   // }
 
   current_cell.moveDown(amount);
+  return true;
+}
+
+bool TableSheet::is_in_bounds(const Location& cell) const {
+  return cell.x() >= 0 && cell.x() < num_cols() &&
+    cell.y() >= 0 && cell.y() < num_rows();
+}
+
+bool TableSheet::select_cell(const Location& cell) {
+  if (!is_in_bounds(cell)) {
+    return false;
+  }
+
+  current_cell = cell;
+
   return true;
 }

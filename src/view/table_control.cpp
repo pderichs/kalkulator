@@ -333,15 +333,15 @@ void TableControl::DrawTextInCenter(wxDC *dc, const wxString &s,
 
 void TableControl::OnLeftDown(wxMouseEvent &event) {
   Location scrollPos = GetScrollPosition();
-  wxPoint pos = ClientToScreen(event.GetPosition());
-  wxPoint origin = GetPosition();
-  int dx = pos.x - origin.x;
-  int dy = pos.y - origin.y;
-  wxPoint delta(dx + scrollPos.x(), dy + scrollPos.y());
+  wxPoint pos = event.GetPosition();
+  wxPoint delta(pos.x + scrollPos.x() - ROW_HEADER_WIDTH, pos.y + scrollPos.y() - COLUMN_HEADER_HEIGHT);
 
   wxPrintf("Mouse Left Down! %d, %d\n", delta.x, delta.y);
 
   Location cell = GetTableCellByClickPosition(delta);
+
+  wxPrintf("Selected cell: %ld, %ld\n", cell.x(), cell.y());
+
   _document->select_cell(cell);
 
   event.Skip();

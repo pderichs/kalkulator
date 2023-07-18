@@ -29,10 +29,11 @@ struct TableSheet {
   size_t row_count() const;
   size_t col_count() const;
   std::optional<TableCellPtr> get_cell(size_t row, size_t col) const;
-  std::optional<TableCellPtr> get_cell_by_location(const Location& location) const;
+  std::optional<TableCellPtr>
+  get_cell_by_location(const Location &location) const;
   TableCellPtr get_current_cell() const;
-  std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
-  get_definitions_for_location(const Location &location);
+  // std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
+  // get_definitions_for_location(const Location &location);
 
   size_t num_rows() const;
   size_t num_cols() const;
@@ -43,6 +44,10 @@ struct TableSheet {
   bool move_cursor_up();
   bool move_cursor_page_up();
   bool move_cursor_page_down();
+
+  bool select_cell(const Location &cell);
+
+  bool is_in_bounds(const Location &cell) const;
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

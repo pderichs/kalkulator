@@ -1,5 +1,7 @@
 #include "table_workbook_document.h"
 #include "table_cell.h"
+#include "table_column_definition.h"
+#include "table_row_definition.h"
 #include "table_sheet.h"
 #include <memory>
 #include <tuple>
@@ -88,9 +90,43 @@ void TableWorkbookDocument::move_cursor_page_down() {
 }
 
 Location TableWorkbookDocument::get_cell_by_pos(const Location& position) const {
-  return Location();
+  int row = 0;
+  int col = 0;
+
+  int height = 0;
+  int width = 0;
+
+  int n;
+
+  n = 0;
+  for (const auto& rowdef : _current_sheet->row_definitions) {
+    height += rowdef->height;
+
+    if (height > position.y()) {
+      row = n;
+      break;
+    }
+
+    n++;
+  }
+
+  n = 0;
+  for (const auto& coldef : _current_sheet->column_definitions) {
+    width += coldef->width;
+
+    if (width > position.x()) {
+      col = n;
+      break;
+    }
+
+    n++;
+  }
+
+  return Location(col, row);
 }
 
 void TableWorkbookDocument::select_cell(const Location& cell) {
-  // TODO
+  if (_current_sheet->select_cell(cell)) {
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, _current_sheet->current_cell);
+  }
 }

@@ -273,6 +273,8 @@ void MyFrame::send_event(TableEvent event_id, std::any param) {
         // Update formula text
         std::string formula = unwrapped_cell->get_formula_content();
         _text_control_formula->SetValue(formula);
+
+        _table_control->Refresh();
       }
 
     } catch (const std::bad_any_cast &e) {
