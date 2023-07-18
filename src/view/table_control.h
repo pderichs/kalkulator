@@ -1,8 +1,8 @@
 #ifndef TABLECONTROL_INCLUDED
 #define TABLECONTROL_INCLUDED
 
-#include "../model/table/table_workbook_document.h"
 #include "../model/table/table_sheet.h"
+#include "../model/table/table_workbook_document.h"
 #include <wx/wx.h>
 
 #include "../model/event_sink.h"
@@ -10,7 +10,8 @@
 
 class TableControl : public wxScrolledWindow {
 public:
-  TableControl(TableWorkbookDocument* document, EventSink *event_sink, wxWindow *parent, wxWindowID id = wxID_ANY,
+  TableControl(TableWorkbookDocument *document, EventSink *event_sink,
+               wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
                long style = wxTAB_TRAVERSAL);
@@ -20,6 +21,7 @@ public:
   void OnDraw(wxDC &dc);
   void OnScroll(wxScrollWinEvent &scrollEvent);
   void OnKeyPress(wxKeyEvent &event);
+  void OnLeftDown(wxMouseEvent &event);
 
   void RefreshScrollbars();
 
@@ -27,12 +29,14 @@ public:
 
   Location GetScrollPosition() const;
 
-  void OnCellUpdate(const Location& location);
+  void OnCellUpdate(const Location &location);
 
 private:
-  void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height, TableSheetPtr sheet);
-  void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height, TableSheetPtr sheet);
-  wxRect GetCellRectByLocation(const Location& cell);
+  void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height,
+                   TableSheetPtr sheet);
+  void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height,
+                 TableSheetPtr sheet);
+  wxRect GetCellRectByLocation(const Location &cell);
   wxRect GetCurrentScrollArea() const;
   void UpdateSheet() {
     // auto sheet = _document->current_sheet();
@@ -40,11 +44,11 @@ private:
     // Refresh();
   }
 
-  void DrawTextInCenter(wxDC* dc, const wxString& s, const wxRect& rect);
+  void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);
 
 private:
-  TableWorkbookDocument* _document;
-  wxPen* _caption_grid_pen;
+  TableWorkbookDocument *_document;
+  wxPen *_caption_grid_pen;
   wxPen *_grid_pen;
   wxPen *_current_cell_pen;
   EventSink *_event_sink;

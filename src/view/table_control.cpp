@@ -23,6 +23,7 @@ TableControl::TableControl(TableWorkbookDocument* document, EventSink *event_sin
   Bind(wxEVT_SCROLLWIN_LINEUP, &TableControl::OnScroll, this);
   Bind(wxEVT_SCROLLWIN_LINEDOWN, &TableControl::OnScroll, this);
   Bind(wxEVT_CHAR_HOOK, &TableControl::OnKeyPress, this);
+  Bind(wxEVT_LEFT_DOWN, &TableControl::OnLeftDown, this);
 
   SetBackgroundColour(wxColour(*wxWHITE));
 
@@ -40,9 +41,6 @@ void TableControl::OnDraw(wxDC &dc) {
     return;
   }
 
-  // wxClientDC dc(this);
-
-  // DrawHeaders();
   DrawTable(&dc, sheet);
 }
 
@@ -323,4 +321,12 @@ void TableControl::DrawTextInCenter(wxDC* dc, const wxString& s, const wxRect& r
     int textX = centerX - textWidth / 2;
     int textY = centerY - textHeight / 2;
     dc->DrawText(s, textX, textY);
+}
+
+void TableControl::OnLeftDown(wxMouseEvent &event) {
+  wxPrintf("Mouse Left Down!\n");
+
+  wxPoint point = event.GetLogicalPosition();
+
+  event.Skip();
 }
