@@ -70,8 +70,10 @@ void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
 }
 
 void TableControl::RefreshScrollbars() {
-  // TODO Align scroll area with actual content
-  SetScrollbars(1, 1, 10000, 200000, 0, 0);
+  int width = _document->get_current_sheet_width();
+  int height = _document->get_current_sheet_height();
+
+  SetScrollbars(1, 1, width, height, 0, 0);
 }
 
 Location TableControl::GetScrollPosition() const {

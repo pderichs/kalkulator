@@ -130,3 +130,23 @@ void TableWorkbookDocument::select_cell(const Location& cell) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, _current_sheet->current_cell);
   }
 }
+
+int TableWorkbookDocument::get_current_sheet_width() const {
+  int width = 0;
+
+  for (const auto& coldef : _current_sheet->column_definitions) {
+    width += coldef->width;
+  }
+
+  return width;
+}
+
+int TableWorkbookDocument::get_current_sheet_height() const {
+  int height = 0;
+
+  for (const auto& rowdef : _current_sheet->row_definitions) {
+    height += rowdef->height;
+  }
+
+  return height;
+}

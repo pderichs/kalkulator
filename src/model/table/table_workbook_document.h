@@ -33,6 +33,9 @@ public:
 
   void update_content_current_cell(const std::string& content);
 
+  int get_current_sheet_width() const;
+  int get_current_sheet_height() const;
+
 private:
   std::string _path;
   bool _changed;
