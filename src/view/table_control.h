@@ -45,6 +45,7 @@ private:
   }
 
   void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);
+  Location GetTableCellByClickPosition(const wxPoint& pos) const;
 
 private:
   TableWorkbookDocument *_document;

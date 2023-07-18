@@ -341,7 +341,12 @@ void TableControl::OnLeftDown(wxMouseEvent &event) {
 
   wxPrintf("Mouse Left Down! %d, %d\n", delta.x, delta.y);
 
-  // TODO
+  Location cell = GetTableCellByClickPosition(delta);
+  _document->select_cell(cell);
 
   event.Skip();
+}
+
+Location TableControl::GetTableCellByClickPosition(const wxPoint &pos) const {
+  return _document->get_cell_by_pos(Location(pos.x, pos.y));
 }

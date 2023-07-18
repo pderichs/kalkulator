@@ -86,3 +86,11 @@ void TableWorkbookDocument::move_cursor_page_down() {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
   }
 }
+
+Location TableWorkbookDocument::get_cell_by_pos(const Location& position) const {
+  return Location();
+}
+
+void TableWorkbookDocument::select_cell(const Location& cell) {
+  // TODO
+}

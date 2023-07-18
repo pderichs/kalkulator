@@ -25,6 +25,9 @@ public:
   void move_cursor_page_up();
   void move_cursor_page_down();
 
+  Location get_cell_by_pos(const Location& position) const;
+  void select_cell(const Location& cell);
+
   std::optional<TableCellPtr> get_cell(const Location& location);
   TableCellPtr get_current_cell() const;
 
