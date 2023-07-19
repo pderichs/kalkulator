@@ -72,7 +72,10 @@ bool MyApp::OnInit() {
     if (argv[1] == "unittests") {
       wxPrintf("Running tests...\n");
 
-      run_tests();
+      if (run_tests() != 0) {
+        wxPrintf("TESTS FAILED!\n");
+        return false;
+      }
     }
   }
 
