@@ -28,8 +28,11 @@ SRCS+=$(SRC_DIR)/model/table/table_cell_formula.cpp
 SRCS+=$(SRC_DIR)/model/table/table_workbook_document.cpp
 SRCS+=$(SRC_DIR)/model/table/table_column_definition.cpp
 SRCS+=$(SRC_DIR)/model/table/table_row_definition.cpp
+SRCS+=$(SRC_DIR)/model/lisp/lisp_parser.cpp
+SRCS+=$(SRC_DIR)/model/lisp/lisp_tokens.cpp
 SRCS+=$(TOOLS_DIR)/tools.cpp
 SRCS+=$(TESTS_DIR)/tests.cpp
+SRCS+=$(TESTS_DIR)/lisp/lisp_tests.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 TARGET=$(TARGET_DIR)/kalkulator

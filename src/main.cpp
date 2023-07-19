@@ -11,6 +11,7 @@
 #include "model/table/table_workbook_document.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
+#include "tests.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
@@ -66,6 +67,15 @@ bool MyApp::OnInit() {
   MyFrame *frame = new MyFrame();
   frame->SetSize(WIDTH, HEIGHT);
   frame->Show();
+
+  if (argc > 1) {
+    if (argv[1] == "unittests") {
+      wxPrintf("Running tests...\n");
+
+      run_tests();
+    }
+  }
+
   return true;
 }
 

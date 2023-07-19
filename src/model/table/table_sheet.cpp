@@ -12,11 +12,19 @@ const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
 const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
-TableSheet::TableSheet(const std::string &name): current_cell(0, 0) {
+TableSheet::TableSheet(const std::string &name) : current_cell(0, 0) {
   this->name = name;
 
+  int n = 0;
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
-    column_definitions.push_back(std::make_shared<TableColumnDefinition>());
+    auto col = std::make_shared<TableColumnDefinition>();
+
+    if (n == 2) {
+      col->width = 200;
+    }
+
+    column_definitions.push_back(col);
+    n++;
   }
 
   for (size_t c = 0; c < INITIAL_ROW_COUNT; c++) {
@@ -100,18 +108,14 @@ bool TableSheet::move_cursor_up() {
   return true;
 }
 
-size_t TableSheet::num_rows() const {
-  return row_definitions.size();
-}
+size_t TableSheet::num_rows() const { return row_definitions.size(); }
 
-size_t TableSheet::num_cols() const  {
-  return column_definitions.size();
-}
+size_t TableSheet::num_cols() const { return column_definitions.size(); }
 
 TableCellPtr TableSheet::get_current_cell() const {
   auto cell = get_cell_by_location(current_cell);
 
-  //assert(cell);
+  // assert(cell);
   if (!cell) {
     throw std::runtime_error("Fatal: Current cell is invalid.");
   }
@@ -119,7 +123,8 @@ TableCellPtr TableSheet::get_current_cell() const {
   return *cell;
 }
 
-std::optional<TableCellPtr> TableSheet::get_cell_by_location(const Location& location) const {
+std::optional<TableCellPtr>
+TableSheet::get_cell_by_location(const Location &location) const {
   return get_cell(location.y(), location.x());
 }
 
@@ -149,12 +154,12 @@ bool TableSheet::move_cursor_page_down() {
   return true;
 }
 
-bool TableSheet::is_in_bounds(const Location& cell) const {
-  return cell.x() >= 0 && cell.x() < num_cols() &&
-    cell.y() >= 0 && cell.y() < num_rows();
+bool TableSheet::is_in_bounds(const Location &cell) const {
+  return cell.x() >= 0 && cell.x() < num_cols() && cell.y() >= 0 &&
+         cell.y() < num_rows();
 }
 
-bool TableSheet::select_cell(const Location& cell) {
+bool TableSheet::select_cell(const Location &cell) {
   if (!is_in_bounds(cell)) {
     return false;
   }
