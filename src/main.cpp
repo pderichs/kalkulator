@@ -64,10 +64,6 @@ wxIMPLEMENT_APP(MyApp);
 ///
 
 bool MyApp::OnInit() {
-  MyFrame *frame = new MyFrame();
-  frame->SetSize(WIDTH, HEIGHT);
-  frame->Show();
-
   if (argc > 1) {
     if (argv[1] == "unittests") {
       wxPrintf("Running tests...\n");
@@ -75,9 +71,15 @@ bool MyApp::OnInit() {
       if (run_tests() != 0) {
         wxPrintf("TESTS FAILED!\n");
         return false;
+      } else {
+        wxPrintf("TESTS OK.\n");
       }
     }
   }
+
+  MyFrame *frame = new MyFrame();
+  frame->SetSize(WIDTH, HEIGHT);
+  frame->Show();
 
   return true;
 }
