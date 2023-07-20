@@ -157,9 +157,9 @@ void MyFrame::OnRightDown(wxMouseEvent &event) {
   // }
 }
 
-void MyFrame::OnExit(wxCommandEvent &event) { Close(true); }
+void MyFrame::OnExit(wxCommandEvent &WXUNUSED(event)) { Close(true); }
 
-void MyFrame::OnAbout(wxCommandEvent &event) {
+void MyFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
   wxMessageBox("This is a sample!", "About", wxOK | wxICON_INFORMATION);
 }
 
@@ -176,7 +176,7 @@ void MyFrame::OnClose(wxCloseEvent &event) {
   event.Skip();
 }
 
-void MyFrame::OnOpen(wxCommandEvent &event) {
+void MyFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   // https://docs.wxwidgets.org/3.0/classwx_file_dialog.html
 
   // if (_document.changed()) {
@@ -205,7 +205,7 @@ void MyFrame::OnOpen(wxCommandEvent &event) {
   Refresh();
 }
 
-void MyFrame::OnSaveAs(wxCommandEvent &event) {
+void MyFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
   // wxString startFolder;
   // if (!_document.currentFile().empty()) {
   //   startFolder = wxPathOnly(_document.currentFile());

@@ -57,7 +57,7 @@ void TableControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
   DrawCells(dc, scrollPos, width, height, sheet);
 }
 
-void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
+void TableControl::OnScroll(wxScrollWinEvent &WXUNUSED(scrollEvent)) {
   int x = GetScrollPos(wxHORIZONTAL);
   int y = GetScrollPos(wxVERTICAL);
 
@@ -80,7 +80,7 @@ Location TableControl::GetScrollPosition() const {
   return Location(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
+void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos), int width,
                                int height, TableSheetPtr sheet) {
   int x, y, c;
 
@@ -145,8 +145,8 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &scrollPos, int width,
   }
 }
 
-void TableControl::DrawCells(wxDC *dc, const Location &scrollPos, int width,
-                             int height, TableSheetPtr sheet) {
+void TableControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos), int WXUNUSED(width),
+                             int WXUNUSED(height), TableSheetPtr sheet) {
   wxRect scrollArea = GetCurrentScrollArea();
 
   // TODO Only draw visible ones
