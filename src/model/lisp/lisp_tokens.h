@@ -16,6 +16,22 @@ enum TokenID {
 struct LispToken {
   TokenID id;
   std::any content;
+
+  bool is_space() const {
+    return id == SPACE;
+  }
+
+  bool is_identifier() const {
+    return id == IDENTIFIER;
+  }
+
+  bool is_string() const {
+    return id == STRING;
+  }
+
+  bool is_number() const {
+    return id == NUMBER;
+  }
 };
 
 class LispTokens : public std::vector<LispToken> {

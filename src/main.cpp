@@ -9,9 +9,9 @@
 
 #include "model/event_sink.h"
 #include "model/table/table_workbook_document.h"
+#include "tests.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
-#include "tests.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
