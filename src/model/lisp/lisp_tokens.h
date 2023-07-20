@@ -11,9 +11,7 @@ enum TokenID {
   STRING,
   NUMBER,
   SPACE,
-  DASH,
-  DOT,
-  CHAR
+  DASH
 };
 
 struct LispToken {
