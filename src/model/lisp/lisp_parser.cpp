@@ -60,7 +60,13 @@ LispToken LispParser::read_number() {
 }
 
 bool LispParser::walk() {
+  if (_pos >= _lisp.size()) {
+    return false;
+  }
+
   _pos++;
+
+  return true;
 }
 
 char LispParser::current_char() const {

@@ -3,7 +3,7 @@
 #include "tools.h"
 
 int run_tests() {
-  TEST_ASSERT(run_lisp_tests);
+  RUN_TEST(run_lisp_tests);
 
   return 0;
 }
