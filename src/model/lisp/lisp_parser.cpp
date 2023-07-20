@@ -1,37 +1,20 @@
 #include "lisp_parser.h"
+#include "lisp_parser_error.h"
 #include "lisp_tokens.h"
+#include <cctype>
 
 LispParser::LispParser(const std::string &lisp) { _lisp = lisp; }
 
 LispTokens LispParser::parse() {
   LispTokens result;
 
-  std::string identifier;
-  std::string number;
+  start_parsing();
 
-  for (auto c : _lisp) {
-    switch (c) {
-    case '(':
-      result.push_back(create_open_bracket_token());
-      break;
-
-    case ')':
-      result.push_back(create_close_bracket_token());
-      break;
-
-    case ' ':
-    case '\t':
-      result.push_back(create_space_token());
-      break;
-    case '0' ... '9':
-      result.push_back(create_number_token(c));
-      break;
-    case '.':
-      result.push_back(create_dot_token());
-      break;
-    case '-':
-      result.push_back(create_dash_token());
-      break;
+  while (walk()) {
+    if (current_char() == '"') {
+      result.push_back(read_string());
+    } else if (std::isdigit(current_char())) {
+      result.push_back(read_number());
     }
   }
 
@@ -59,3 +42,23 @@ LispToken LispParser::create_close_bracket_token() {
 }
 
 LispToken LispParser::create_space_token() { return LispToken{SPACE}; }
+
+void LispParser::start_parsing() {
+  _pos = 0;
+}
+
+LispToken LispParser::read_string() {
+  return create_string_token("Hello"); // TODO
+}
+
+LispToken LispParser::read_number() {
+  return create_number_token(293);
+}
+
+bool LispParser::walk() {
+  _pos++;
+}
+
+char LispParser::current_char() const {
+  return _lisp[_pos];
+}

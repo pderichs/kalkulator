@@ -2,6 +2,7 @@
 #define LISP_PARSER_INCLUDED
 
 #include "lisp_tokens.h"
+#include <cstddef>
 #include <string>
 
 class LispParser {
@@ -15,6 +16,9 @@ public:
   LispTokens parse();
 
 private:
+  size_t _pos;
+
+private:
   LispToken create_dash_token();
   LispToken create_dot_token();
   LispToken create_number_token(double d);
@@ -22,6 +26,12 @@ private:
   LispToken create_open_bracket_token();
   LispToken create_close_bracket_token();
   LispToken create_space_token();
+
+  void start_parsing();
+  LispToken read_string();
+  LispToken read_number();
+  bool walk();
+  char current_char() const;
 };
 
 #endif
