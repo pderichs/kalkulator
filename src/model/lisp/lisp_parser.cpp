@@ -139,7 +139,7 @@ char LispParser::current_char() const { return _lisp[_pos]; }
 LispToken LispParser::read_identifier() {
   std::string s;
 
-  while (walk()) {
+  do {
     char c = current_char();
 
     if (std::isspace(c) || c == ')') {
@@ -148,7 +148,7 @@ LispToken LispParser::read_identifier() {
     } else {
       s += c;
     }
-  }
+  } while (walk());
 
   return create_identifier_token(s);
 }

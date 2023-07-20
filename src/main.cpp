@@ -70,10 +70,11 @@ bool MyApp::OnInit() {
 
       if (run_tests() != 0) {
         wxPrintf("TESTS FAILED!\n");
-        return false;
       } else {
         wxPrintf("TESTS OK.\n");
       }
+
+      exit(0);
     }
   }
 
