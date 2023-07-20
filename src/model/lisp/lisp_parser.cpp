@@ -12,21 +12,23 @@ LispTokens LispParser::parse() {
 
   start_parsing();
 
-  while (walk()) {
-    if (current_char() == '"') {
+  do {
+    char c = current_char();
+
+    if (c == '"') {
       result.push_back(read_string());
-    } else if (std::isdigit(current_char()) || current_char() == '-') {
+    } else if (std::isdigit(current_char()) || c == '-') {
       result.push_back(read_number());
     } else if (std::isspace(current_char())) {
       result.push_back(create_space_token());
-    } else if (current_char() == '(') {
+    } else if (c == '(') {
       result.push_back(create_open_bracket_token());
-    } else if (current_char() == ')') {
+    } else if (c == ')') {
       result.push_back(create_close_bracket_token());
     } else {
       result.push_back(read_identifier());
     }
-  }
+  } while (walk());
 
   return result;
 }
@@ -85,20 +87,20 @@ LispToken LispParser::read_number() {
   std::string s;
   bool dot = false;
 
-  while (walk()) {
+  do {
     char c = current_char();
 
     if (std::isdigit(c)) {
       s += c;
     } else if (c == '-') {
       if (s.size() > 0) {
-        throw LispParserError("Unexpected dash while parsing number");
+        throw LispParserError("Unexpected dash while parsing number", s);
       }
 
       s += c;
     } else if (c == '.') {
       if (dot) {
-        throw LispParserError("Second dot while parsing number");
+        throw LispParserError("Second dot while parsing number", s);
       }
 
       s += c;
@@ -107,16 +109,16 @@ LispToken LispParser::read_number() {
       _pos--;
       break;
     }
-  }
+  } while (walk());
 
   double n = 0.0;
 
   try {
     n = std::stod(s);
   } catch (std::invalid_argument &iarg) {
-    throw LispParserError("Unable to parse number (invalid argument)");
+    throw LispParserError("Unable to parse number (invalid argument)", s);
   } catch (std::out_of_range &oor) {
-    throw LispParserError("Unable to parse number (out of range)");
+    throw LispParserError("Unable to parse number (out of range)", s);
   }
 
   return create_number_token(n);
