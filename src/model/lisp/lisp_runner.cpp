@@ -1,5 +1,6 @@
 #include "lisp_runner.h"
 #include "lisp_value.h"
+#include "lisp_runtime_error.h"
 
 LispRunner::LispRunner(const LispTokens &tokens) { _tokens = tokens; }
 

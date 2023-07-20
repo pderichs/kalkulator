@@ -32,6 +32,14 @@ struct LispToken {
   bool is_number() const {
     return id == NUMBER;
   }
+
+  bool is_open_bracket() const {
+    return id == OPEN_BRACKET;
+  }
+
+  bool is_closed_bracket() const {
+    return id == CLOSE_BRACKET;
+  }
 };
 
 class LispTokens : public std::vector<LispToken> {
