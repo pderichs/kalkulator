@@ -25,7 +25,7 @@ LispTokens LispParser::parse() {
       result.push_back(create_open_bracket_token());
     } else if (c == ')') {
       result.push_back(create_close_bracket_token());
-    } else {
+    } else if (std::isprint(c)) {
       result.push_back(read_identifier());
     }
   } while (walk());

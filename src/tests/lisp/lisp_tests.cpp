@@ -19,7 +19,7 @@ int run_lisp_tests_parsing1() {
   try {
     LispTokens tokens = parser.parse();
 
-    std::cerr << "Tokens size: " << tokens.size() << std::endl;
+    //std::cerr << "Tokens size: " << tokens.size() << std::endl;
 
     TEST_ASSERT(tokens[0].id == OPEN_BRACKET);
     TEST_ASSERT(tokens[1].id == IDENTIFIER);
