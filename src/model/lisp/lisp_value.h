@@ -5,17 +5,15 @@
 #include <string>
 #include <vector>
 
-enum LispValueType { LVT_NONE, LVT_STRING, LVT_NUMBER };
+enum LispValueType { LVT_NONE, LVT_STRING, LVT_NUMBER, LVT_FUNCTION };
 
 class LispValue {
 private:
   LispValueType _type;
-  std::any _content;
+  std::any _content; // can be string, double, LispFunction
 
 public:
-  LispValue() {
-    _type = LVT_NONE;
-  }
+  LispValue() { _type = LVT_NONE; }
 
   LispValue(double number) {
     _type = LVT_NUMBER;

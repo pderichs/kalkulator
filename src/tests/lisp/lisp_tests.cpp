@@ -1,9 +1,10 @@
 #include "lisp_tests.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
+#include "../../model/lisp/lisp_function.h"
 #include "tools.h"
-#include <any>
 
+#include <any>
 #include <wx/wx.h>
 
 int run_lisp_tests_parsing1();
@@ -11,11 +12,14 @@ int run_lisp_tests_parsing2();
 int run_lisp_tests_parsing3();
 int run_lisp_tests_parsing4();
 
+int run_lisp_tests_expression1();
+
 int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_parsing1);
   RUN_TEST(run_lisp_tests_parsing2);
   RUN_TEST(run_lisp_tests_parsing3);
   RUN_TEST(run_lisp_tests_parsing4);
+  RUN_TEST(run_lisp_tests_expression1);
 
   return 0;
 }
@@ -139,6 +143,26 @@ int run_lisp_tests_parsing4() {
     TEST_ASSERT(s == ")");
     TEST_ASSERT(tokens[6].id == CLOSE_BRACKET);
     TEST_ASSERT(tokens.size() == 7);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_expression1() {
+  LispParser parser("(hello \"8282\" -484.32)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispFunction expr(tokens);
+
+    TEST_ASSERT(expr.identifier() == "hello");
+    TEST_ASSERT(expr.param_count() == 2);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
