@@ -3,6 +3,7 @@
 
 #include <any>
 #include <string>
+#include <vector>
 
 enum LispValueType { LVT_NONE, LVT_STRING, LVT_NUMBER };
 
@@ -30,5 +31,7 @@ public:
   bool is_string() const { return _type == LVT_STRING; }
   bool is_number() const { return _type == LVT_NUMBER; }
 };
+
+typedef std::vector<LispValue> LispValueVector;
 
 #endif
