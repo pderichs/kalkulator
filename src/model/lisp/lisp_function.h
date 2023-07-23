@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <optional>
 
 #include "lisp_tokens.h"
 
@@ -24,9 +25,11 @@ public:
   std::string identifier() const { return _identifier; }
   size_t param_count() const { return _params.size(); }
 
+  std::optional<std::shared_ptr<LispValue>> param_at(size_t t) const;
+
 private:
-    void read_params(LispTokens::iterator it);
-    void overread_spaces(LispTokens::iterator& it) const;
+  void read_params(LispTokens::iterator it);
+  void overread_spaces(LispTokens::iterator &it) const;
 };
 
 #endif

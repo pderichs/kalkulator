@@ -36,6 +36,12 @@ public:
   bool is_string() const { return _type == LVT_STRING; }
   bool is_number() const { return _type == LVT_NUMBER; }
   bool is_function() const { return _type == LVT_FUNCTION; }
+
+  std::string string() const { return std::any_cast<std::string>(_content); }
+  double number() const { return std::any_cast<double>(_content); }
+  LispFunction function() const {
+    return std::any_cast<LispFunction>(_content);
+  }
 };
 
 typedef std::vector<LispValue> LispValueVector;

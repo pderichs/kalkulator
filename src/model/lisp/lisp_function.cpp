@@ -102,3 +102,15 @@ void LispFunction::overread_spaces(LispTokens::iterator &it) const {
     it++;
   }
 }
+
+std::optional<std::shared_ptr<LispValue>> LispFunction::param_at(size_t t) const {
+  std::optional<std::shared_ptr<LispValue>> result;
+
+  if (t >= _params.size()) {
+    return {};
+  }
+
+  result = _params[t];
+
+  return result;
+}
