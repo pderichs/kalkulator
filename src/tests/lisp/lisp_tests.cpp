@@ -199,24 +199,21 @@ int run_lisp_tests_expression1() {
 }
 
 int run_lisp_tests_expression2() {
-  // TODO
+  LispParser parser("(hello (- 100 2 30) -484.32)");
 
-  // LispParser parser("(hello (- 100 2 30) -484.32)");
+  try {
+    LispTokens tokens = parser.parse();
 
-  // try {
-  //   LispTokens tokens = parser.parse();
+    LispFunction expr(tokens);
 
-  //   LispFunction expr(tokens);
+    TEST_ASSERT(expr.identifier() == "hello");
+    TEST_ASSERT(expr.param_count() == 2);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
 
-  //   TEST_ASSERT(expr.identifier() == "hello");
-  //   TEST_ASSERT(expr.param_count() == 2);
-  // } catch (LispParserError &lpe) {
-  //   std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item:
-  //   \""
-  //             << lpe.item() << "\")" << std::endl;
-
-  //   TEST_ASSERT(false);
-  // }
+    TEST_ASSERT(false);
+  }
 
   return 0;
 }
