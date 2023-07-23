@@ -2,17 +2,18 @@
 #define LISP_FUNCTION_INCLUDED
 
 #include <cstddef>
+#include <memory>
 #include <string>
 
 #include "lisp_tokens.h"
 
-class LispValueVector;
+class LispValue;
 
 class LispFunction {
 private:
   LispTokens _tokens;
   std::string _identifier;
-  LispValueVector _params;
+  std::vector<std::shared_ptr<LispValue>> _params;
 
 public:
   LispFunction(const LispTokens &tokens);
