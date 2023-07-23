@@ -22,8 +22,7 @@ public:
     _content = number;
   }
 
-
-  LispValue(const LispFunction& function) {
+  LispValue(const LispFunction &function) {
     _type = LVT_FUNCTION;
     _content = function;
   }
