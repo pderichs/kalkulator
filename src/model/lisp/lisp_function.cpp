@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <any>
+#include <memory>
 
 #include "lisp_function.h"
 #include "lisp_tokens.h"
@@ -41,15 +42,63 @@ LispFunction::LispFunction(const LispTokens &tokens) {
     throw LispFunctionError(bad_cast_exception.what());
   }
 
+  it++;
+
   // Parameters
-
-
-  parse_function(it);
+  read_params(it);
 }
 
-void LispFunction::parse_function(LispTokens::iterator it) {
-  const auto &func_token = *it;
-  if (func_token.id != IDENTIFIER) {
-    // TODO: Error!
+void LispFunction::read_params(LispTokens::iterator it) {
+  _params.clear();
+
+  bool end_bracket_reached = false;
+  int bracket_level = 0;
+
+  while (!end_bracket_reached) {
+    overread_spaces(it);
+
+    const auto &token = *it;
+    double d;
+    std::string s;
+
+    try {
+      switch (token.id) {
+      case NUMBER:
+        d = std::any_cast<double>(token.content);
+        _params.push_back(std::make_shared<LispValue>(d));
+        break;
+      case STRING:
+        s = std::any_cast<std::string>(token.content);
+        _params.push_back(std::make_shared<LispValue>(s));
+        break;
+      case OPEN_BRACKET:
+        bracket_level++;
+        // TODO: Parse function
+        break;
+
+      case CLOSE_BRACKET:
+        bracket_level--;
+        end_bracket_reached = bracket_level < 0;
+        break;
+      default:
+        throw LispFunctionError("Syntax error.");
+      }
+    } catch (std::bad_any_cast &bac) {
+      throw LispFunctionError(bac.what());
+    }
+
+    it++;
+  }
+}
+
+void LispFunction::overread_spaces(LispTokens::iterator &it) const {
+  while (true) {
+    const auto &token = *it;
+
+    if (token.id != SPACE) {
+      break;
+    }
+
+    it++;
   }
 }

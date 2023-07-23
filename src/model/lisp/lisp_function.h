@@ -4,8 +4,11 @@
 #include <cstddef>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "lisp_tokens.h"
+
+typedef std::vector<LispTokens> LispTokensVector;
 
 class LispValue;
 
@@ -20,7 +23,10 @@ public:
 
   std::string identifier() const { return _identifier; }
   size_t param_count() const { return _params.size(); }
-  void parse_function(LispTokens::iterator it);
+
+private:
+    void read_params(LispTokens::iterator it);
+    void overread_spaces(LispTokens::iterator& it) const;
 };
 
 #endif

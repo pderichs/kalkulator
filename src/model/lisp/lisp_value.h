@@ -17,6 +17,11 @@ private:
 public:
   LispValue() { _type = LVT_NONE; }
 
+  LispValue(const std::string &s) {
+    _type = LVT_STRING;
+    _content = s;
+  }
+
   LispValue(double number) {
     _type = LVT_NUMBER;
     _content = number;
