@@ -5,12 +5,14 @@
 #include <string>
 #include <vector>
 
+#include "lisp_function.h"
+
 enum LispValueType { LVT_NONE, LVT_STRING, LVT_NUMBER, LVT_FUNCTION };
 
 class LispValue {
 private:
   LispValueType _type;
-  std::any _content; // can be string, double, LispFunction
+  std::any _content; // can be one of string, double, LispFunction
 
 public:
   LispValue() { _type = LVT_NONE; }
@@ -23,6 +25,11 @@ public:
   LispValue(std::string s) {
     _type = LVT_STRING;
     _content = s;
+  }
+
+  LispValue(const LispFunction& function) {
+    _type = LVT_FUNCTION;
+    _content = function;
   }
 
   bool is_none() const { return _type == LVT_NONE; }

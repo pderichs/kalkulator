@@ -1,11 +1,12 @@
-#ifndef LISP_EXPRESSION_INCLUDED
-#define LISP_EXPRESSION_INCLUDED
+#ifndef LISP_FUNCTION_INCLUDED
+#define LISP_FUNCTION_INCLUDED
 
 #include <cstddef>
 #include <string>
 
 #include "lisp_tokens.h"
-#include "lisp_value.h"
+
+class LispValueVector;
 
 class LispFunction {
 private:

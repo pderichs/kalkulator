@@ -2,6 +2,7 @@
 
 #include "lisp_function.h"
 #include "lisp_tokens.h"
+#include "lisp_value.h"
 
 LispFunction::LispFunction(const LispTokens& tokens) {
   _tokens = tokens;
