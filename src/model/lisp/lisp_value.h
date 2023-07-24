@@ -2,6 +2,7 @@
 #define LISP_VALUE_INCLUDED
 
 #include <any>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -43,7 +44,5 @@ public:
     return std::any_cast<LispFunction>(_content);
   }
 };
-
-typedef std::vector<LispValue> LispValueVector;
 
 #endif

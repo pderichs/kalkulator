@@ -11,7 +11,8 @@
 
 class LispValue;
 
-typedef std::vector<std::shared_ptr<LispValue>> LispValuePtrVector;
+typedef std::shared_ptr<LispValue> LispValuePtr;
+typedef std::vector<LispValuePtr> LispValuePtrVector;
 
 class LispFunction {
 private:
@@ -25,7 +26,7 @@ public:
   std::string identifier() const { return _identifier; }
   size_t param_count() const { return _params.size(); }
 
-  std::optional<std::shared_ptr<LispValue>> param_at(size_t t) const;
+  std::optional<LispValuePtr> param_at(size_t t) const;
 };
 
 #endif
