@@ -4,6 +4,7 @@
 #include "lisp_tokens.h"
 #include "lisp_value.h"
 #include <any>
+#include <iostream>
 #include <memory>
 #include <sstream>
 
@@ -47,9 +48,14 @@ void LispValueParser::skip_spaces() {
 LispValue LispValueParser::parse_function() {
   LispTokens function_tokens = collect_current_function_tokens();
 
+  std::cerr << "Function tokens:" << std::endl;
+  function_tokens.debug_print(std::cerr);
+
   bool identifier_search = false;
   bool first_bracket_found = false;
   bool in_params = false;
+
+  int in_param_bracket_level = 0;
 
   std::string identifier;
 
@@ -74,6 +80,7 @@ LispValue LispValueParser::parse_function() {
       if (token.is_identifier()) {
         identifier_search = false;
         in_params = true;
+        in_param_bracket_level = 0;
 
         identifier = std::any_cast<std::string>(token.content);
 
@@ -87,9 +94,24 @@ LispValue LispValueParser::parse_function() {
     }
 
     if (in_params) {
+      if (token.is_open_bracket()) {
+        in_param_bracket_level++;
+      }
+
+      if (token.is_closed_bracket()) {
+        in_param_bracket_level--;
+
+        if (in_param_bracket_level < 0) {
+          break;
+        }
+      }
+
       param_tokens.push_back(token);
     }
   }
+
+  std::cerr << "Param tokens:" << std::endl;
+  param_tokens.debug_print(std::cerr);
 
   LispValueParser params_parser(param_tokens);
   std::vector<std::shared_ptr<LispValue>> params;
@@ -112,7 +134,7 @@ LispTokens LispValueParser::collect_current_function_tokens() {
 
   int bracket_level = 0;
 
-  while (true) {
+  while (has_next()) {
     LispToken token = current_token();
 
     if (token.is_open_bracket()) {
@@ -122,6 +144,7 @@ LispTokens LispValueParser::collect_current_function_tokens() {
       bracket_level--;
       result.push_back(token);
       if (bracket_level == 0) {
+        _pos++;
         break;
       }
     } else {

@@ -69,7 +69,6 @@ int run_lisp_tests_parsing2() {
     TEST_ASSERT(tokens[2].id == SPACE);
     TEST_ASSERT(tokens[3].id == STRING);
     s = std::any_cast<std::string>(tokens[3].content);
-    std::cerr << s << std::endl;
     TEST_ASSERT(s == "Hello \\\"World\\\"");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == NUMBER);
@@ -106,7 +105,6 @@ int run_lisp_tests_parsing3() {
     TEST_ASSERT(tokens[2].id == SPACE);
     TEST_ASSERT(tokens[3].id == STRING);
     s = std::any_cast<std::string>(tokens[3].content);
-    std::cerr << s << std::endl;
     TEST_ASSERT(s == "8282");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == NUMBER);
@@ -139,7 +137,6 @@ int run_lisp_tests_parsing4() {
     TEST_ASSERT(tokens[2].id == SPACE);
     TEST_ASSERT(tokens[3].id == STRING);
     s = std::any_cast<std::string>(tokens[3].content);
-    std::cerr << s << std::endl;
     TEST_ASSERT(s == "(* 5.344 22)");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == STRING);
@@ -224,17 +221,22 @@ int run_lisp_tests_expression2() {
     LispFunction expr = val.function();
 
     TEST_ASSERT(expr.identifier() == "hello");
-    std::cerr << expr.param_count() << std::endl;
+    //std::cerr << expr.param_count() << std::endl;
     TEST_ASSERT(expr.param_count() == 2);
 
-    // std::optional<LispValuePtr> optparam = expr.param_at(0);
-    // TEST_ASSERT(optparam);
+    std::optional<LispValuePtr> optparam = expr.param_at(0);
+    TEST_ASSERT(optparam);
 
-    // auto param = *optparam;
-    // TEST_ASSERT(param->is_function());
+    auto param = *optparam;
+    TEST_ASSERT(param->is_function());
+    TEST_ASSERT(param->function().identifier() == "-");
 
-    // TEST_ASSERT(param->function().identifier() == "-");
+    optparam = expr.param_at(1);
+    TEST_ASSERT(optparam);
 
+    param = *optparam;
+    TEST_ASSERT(param->is_number());
+    TEST_ASSERT(param->number() == -484.32);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;

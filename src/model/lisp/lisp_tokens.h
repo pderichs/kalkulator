@@ -2,6 +2,7 @@
 #define LISP_TOKENS_INCLUDED
 
 #include <any>
+#include <ostream>
 #include <vector>
 
 enum TokenID {
@@ -47,6 +48,11 @@ private:
 public:
   LispTokens();
   ~LispTokens() = default;
+
+  void debug_print(std::ostream& oss) const;
 };
+
+std::string token_id_to_string(TokenID token_id);
+std::string printable_content_of_token(const LispToken& token);
 
 #endif
