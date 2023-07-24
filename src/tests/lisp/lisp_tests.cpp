@@ -205,6 +205,7 @@ int run_lisp_tests_expression2() {
   try {
     LispTokens tokens = parser.parse();
 
+    std::cerr << "HIER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
     LispFunction expr(tokens);
 
     // TEST_ASSERT(expr.identifier() == "hello");

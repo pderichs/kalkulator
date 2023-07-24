@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <any>
 #include <memory>
+#include <iostream>
 
 #include "lisp_function.h"
 #include "lisp_tokens.h"
@@ -74,6 +75,7 @@ void LispFunction::read_params(LispTokens::const_iterator it) {
         break;
       case OPEN_BRACKET: {
         bracket_level++;
+        std::cerr << "   ----> FUNCTION PARAM" << std::endl;
         auto func_param_tokens = read_function_param_tokens(it);
         LispFunction func(func_param_tokens);
         _params.push_back(std::make_shared<LispValue>(func));
@@ -133,20 +135,33 @@ LispFunction::read_function_param_tokens(LispTokens::const_iterator &it) const {
 
     if (token.is_open_bracket()) {
       bracket_level++;
+      std::cerr << "OPEN_BRACKET ";
       result.push_back(token);
     } else if (token.is_closed_bracket()) {
       bracket_level--;
+      std::cerr << "CLOSED_BRACKET ";
       result.push_back(token);
 
       if (bracket_level == 0) {
         break;
       }
     } else {
+      std::cerr << "OTHER ";
       result.push_back(token);
     }
 
     it++;
+
+    if (it == _tokens.end()) {
+      break;
+    }
   }
+
+  if (bracket_level != 0) {
+    throw LispFunctionError("Syntax error: Brackets do not match.");
+  }
+
+  std::cerr << std::endl;
 
   return result;
 }
