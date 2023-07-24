@@ -23,6 +23,8 @@ private:
   bool has_next() const { return _pos < _tokens.size(); }
   LispToken current_token() const { return _tokens[_pos]; }
   void skip_spaces();
+  LispValue parse_function();
+  LispTokens collect_current_function_tokens();
 };
 
 #endif

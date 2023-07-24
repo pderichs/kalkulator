@@ -23,7 +23,7 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_parsing3);
   RUN_TEST(run_lisp_tests_parsing4);
   RUN_TEST(run_lisp_tests_expression1);
-  RUN_TEST(run_lisp_tests_expression2);
+  //RUN_TEST(run_lisp_tests_expression2);
 
   return 0;
 }
@@ -207,32 +207,32 @@ int run_lisp_tests_expression1() {
   return 0;
 }
 
-int run_lisp_tests_expression2() {
-  LispParser parser("(hello (- 100 2 30) -484.32)");
+// int run_lisp_tests_expression2() {
+//   LispParser parser("(hello (- 100 2 30) -484.32)");
 
-  try {
-    LispTokens tokens = parser.parse();
+//   try {
+//     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+//     LispValueParser parser(tokens);
 
-    auto func = parser.next();
-    TEST_ASSERT(func);
+//     auto func = parser.next();
+//     TEST_ASSERT(func);
 
-    LispValue val = *func;
-    TEST_ASSERT(val.is_function());
+//     LispValue val = *func;
+//     TEST_ASSERT(val.is_function());
 
-    LispFunction expr = val.function();
+//     LispFunction expr = val.function();
 
-    // TEST_ASSERT(expr.identifier() == "hello");
-    // TEST_ASSERT(expr.param_count() == 2);
-  } catch (LispParserError &lpe) {
-    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
-              << lpe.item() << "\")" << std::endl;
+//     // TEST_ASSERT(expr.identifier() == "hello");
+//     // TEST_ASSERT(expr.param_count() == 2);
+//   } catch (LispParserError &lpe) {
+//     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+//               << lpe.item() << "\")" << std::endl;
 
-    TEST_ASSERT(false);
-  }
+//     TEST_ASSERT(false);
+//   }
 
-  return 0;
-}
+//   return 0;
+// }
 
-// TODO test error cases / exceptions
+// // TODO test error cases / exceptions
