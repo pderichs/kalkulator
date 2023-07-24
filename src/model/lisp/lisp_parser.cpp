@@ -12,21 +12,33 @@ LispTokens LispParser::parse() {
 
   start_parsing();
 
+  bool identifier_expected = false;
+
   do {
     char c = current_char();
 
-    if (c == '"') {
-      result.push_back(read_string());
-    } else if (std::isdigit(current_char()) || c == '-') {
-      result.push_back(read_number());
-    } else if (std::isspace(current_char())) {
-      result.push_back(create_space_token());
-    } else if (c == '(') {
-      result.push_back(create_open_bracket_token());
-    } else if (c == ')') {
-      result.push_back(create_close_bracket_token());
-    } else if (std::isprint(c)) {
-      result.push_back(read_identifier());
+    if (!identifier_expected) {
+      if (c == '"') {
+        result.push_back(read_string());
+      } else if (std::isdigit(current_char()) || c == '-') {
+        result.push_back(read_number());
+      } else if (std::isspace(current_char())) {
+        result.push_back(create_space_token());
+      } else if (c == '(') {
+        result.push_back(create_open_bracket_token());
+        identifier_expected = true;
+      } else if (c == ')') {
+        result.push_back(create_close_bracket_token());
+      } else if (std::isprint(c)) {
+        result.push_back(read_identifier());
+      }
+    } else {
+      if (std::isprint(c)) {
+        result.push_back(read_identifier());
+        identifier_expected = false;
+      } else {
+        throw LispParserError("Expected printable character for identifier.");
+      }
     }
   } while (walk());
 

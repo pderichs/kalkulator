@@ -28,8 +28,9 @@ public:
   std::optional<std::shared_ptr<LispValue>> param_at(size_t t) const;
 
 private:
-  void read_params(LispTokens::iterator it);
-  void overread_spaces(LispTokens::iterator &it) const;
+  void read_params(LispTokens::const_iterator it);
+  void overread_spaces(LispTokens::const_iterator &it) const;
+  LispTokens read_function_param_tokens(LispTokens::const_iterator &it) const;
 };
 
 #endif

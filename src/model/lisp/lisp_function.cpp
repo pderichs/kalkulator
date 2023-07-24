@@ -9,12 +9,13 @@
 #include "lisp_value.h"
 
 LispFunction::LispFunction(const LispTokens &tokens) {
-  _tokens = tokens;
+  LispTokens::const_iterator tokens_it = tokens.begin();
+  _tokens = read_function_param_tokens(tokens_it);
 
   // Parse identifier
 
   // Find first open bracket token
-  auto it =
+  LispTokens::const_iterator it =
       std::find_if(_tokens.begin(), _tokens.end(), [](const LispToken &token) {
         return token.id == OPEN_BRACKET;
       });
@@ -48,13 +49,13 @@ LispFunction::LispFunction(const LispTokens &tokens) {
   read_params(it);
 }
 
-void LispFunction::read_params(LispTokens::iterator it) {
+void LispFunction::read_params(LispTokens::const_iterator it) {
   _params.clear();
 
   bool end_bracket_reached = false;
-  int bracket_level = 0;
+  int bracket_level = 1;
 
-  while (!end_bracket_reached) {
+  while (it != _tokens.end() && !end_bracket_reached) {
     overread_spaces(it);
 
     const auto &token = *it;
@@ -71,14 +72,15 @@ void LispFunction::read_params(LispTokens::iterator it) {
         s = std::any_cast<std::string>(token.content);
         _params.push_back(std::make_shared<LispValue>(s));
         break;
-      case OPEN_BRACKET:
+      case OPEN_BRACKET: {
         bracket_level++;
-        // TODO: Parse function
-        break;
-
+        auto func_param_tokens = read_function_param_tokens(it);
+        LispFunction func(func_param_tokens);
+        _params.push_back(std::make_shared<LispValue>(func));
+      } break;
       case CLOSE_BRACKET:
         bracket_level--;
-        end_bracket_reached = bracket_level < 0;
+        end_bracket_reached = bracket_level == 0;
         break;
       default:
         throw LispFunctionError("Syntax error.");
@@ -89,9 +91,13 @@ void LispFunction::read_params(LispTokens::iterator it) {
 
     it++;
   }
+
+  if (!end_bracket_reached) {
+    throw LispFunctionError("Syntax error: closing bracket is missing.");
+  }
 }
 
-void LispFunction::overread_spaces(LispTokens::iterator &it) const {
+void LispFunction::overread_spaces(LispTokens::const_iterator &it) const {
   while (true) {
     const auto &token = *it;
 
@@ -103,7 +109,8 @@ void LispFunction::overread_spaces(LispTokens::iterator &it) const {
   }
 }
 
-std::optional<std::shared_ptr<LispValue>> LispFunction::param_at(size_t t) const {
+std::optional<std::shared_ptr<LispValue>>
+LispFunction::param_at(size_t t) const {
   std::optional<std::shared_ptr<LispValue>> result;
 
   if (t >= _params.size()) {
@@ -111,6 +118,35 @@ std::optional<std::shared_ptr<LispValue>> LispFunction::param_at(size_t t) const
   }
 
   result = _params[t];
+
+  return result;
+}
+
+LispTokens
+LispFunction::read_function_param_tokens(LispTokens::const_iterator &it) const {
+  LispTokens result;
+
+  int bracket_level = 0;
+
+  while (true) {
+    auto token = *it;
+
+    if (token.is_open_bracket()) {
+      bracket_level++;
+      result.push_back(token);
+    } else if (token.is_closed_bracket()) {
+      bracket_level--;
+      result.push_back(token);
+
+      if (bracket_level == 0) {
+        break;
+      }
+    } else {
+      result.push_back(token);
+    }
+
+    it++;
+  }
 
   return result;
 }
