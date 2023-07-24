@@ -9,28 +9,23 @@
 
 #include "lisp_tokens.h"
 
-typedef std::vector<LispTokens> LispTokensVector;
-
 class LispValue;
+
+typedef std::vector<std::shared_ptr<LispValue>> LispValuePtrVector;
 
 class LispFunction {
 private:
   LispTokens _tokens;
   std::string _identifier;
-  std::vector<std::shared_ptr<LispValue>> _params;
+  LispValuePtrVector _params;
 
 public:
-  LispFunction(const LispTokens &tokens);
+  LispFunction(const std::string& identifier, const LispValuePtrVector& params);
 
   std::string identifier() const { return _identifier; }
   size_t param_count() const { return _params.size(); }
 
   std::optional<std::shared_ptr<LispValue>> param_at(size_t t) const;
-
-private:
-  void read_params(LispTokens::const_iterator it);
-  void overread_spaces(LispTokens::const_iterator &it) const;
-  LispTokens read_function_param_tokens(LispTokens::const_iterator &it) const;
 };
 
 #endif
