@@ -257,7 +257,9 @@ int run_lisp_tests_expression2() {
 int run_lisp_tests_wrong_form1() {
 
   StringVector cases = {"(",
-      ")"
+      ")",
+      "(343 1)",
+      "(\"hello\" 1)"
       };
 
   for (auto c : cases) {

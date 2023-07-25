@@ -12,6 +12,7 @@ public:
 
 private:
   void check_matching_brackets() const;
+  void check_valid_functions() const;
 };
 
 #endif

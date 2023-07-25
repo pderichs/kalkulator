@@ -1,5 +1,6 @@
 #include "lisp_syntax_checker.h"
 #include "lisp_parser_error.h"
+#include <sstream>
 
 LispSyntaxChecker::LispSyntaxChecker(const LispTokens &tokens) {
   _tokens = tokens;
@@ -7,6 +8,7 @@ LispSyntaxChecker::LispSyntaxChecker(const LispTokens &tokens) {
 
 void LispSyntaxChecker::check() const {
   check_matching_brackets();
+  check_valid_functions();
 }
 
 void LispSyntaxChecker::check_matching_brackets() const {
@@ -27,12 +29,30 @@ void LispSyntaxChecker::check_matching_brackets() const {
       closed_brackets++;
 
       if (closed_brackets > open_brackets) {
-        throw LispParserError("Unexpected closing bracket");
+        throw LispParserError("Unexpected closing bracket (2)");
       }
     }
   }
 
   if (open_brackets != closed_brackets) {
-    throw LispParserError("Brackets count mismatch");
+    std::stringstream ss;
+    ss << "Brackets count mismatch: " << open_brackets << "/" << closed_brackets;
+    throw LispParserError(ss.str());
+  }
+}
+
+void LispSyntaxChecker::check_valid_functions() const {
+  bool next_identifier = false;
+
+  for (const auto& token : _tokens) {
+    if (token.is_open_bracket()) {
+      next_identifier = true;
+    } else if (next_identifier) {
+      if (!token.is_identifier()) {
+        throw LispParserError("Expected function call identifier");
+      }
+
+      next_identifier = false;
+    }
   }
 }

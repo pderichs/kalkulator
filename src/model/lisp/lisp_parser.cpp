@@ -1,10 +1,10 @@
 #include "lisp_parser.h"
 #include "lisp_parser_error.h"
+#include "lisp_syntax_checker.h"
 #include "lisp_tokens.h"
 #include <cctype>
 #include <stdexcept>
 #include <string>
-#include "lisp_syntax_checker.h"
 
 LispParser::LispParser(const std::string &lisp) { _lisp = lisp; }
 
@@ -18,28 +18,33 @@ LispTokens LispParser::parse() {
   do {
     char c = current_char();
 
-    if (!identifier_expected) {
-      if (c == '"') {
-        result.push_back(read_string());
-      } else if (std::isdigit(current_char()) || c == '-') {
+    // FIXME read_until_delimiter and then interpret reading with regexes
+
+    if (c == '"') {
+      result.push_back(read_string());
+    } else if (c == '-') {
+      bool is_number;
+
+      _pos++;
+      is_number = std::isdigit(current_char());
+      _pos--;
+
+      if (is_number) {
         result.push_back(read_number());
-      } else if (std::isspace(current_char())) {
-        result.push_back(create_space_token());
-      } else if (c == '(') {
-        result.push_back(create_open_bracket_token());
-        identifier_expected = true;
-      } else if (c == ')') {
-        result.push_back(create_close_bracket_token());
-      } else if (std::isprint(c)) {
-        result.push_back(read_identifier());
-      }
-    } else {
-      if (std::isprint(c)) {
-        result.push_back(read_identifier());
-        identifier_expected = false;
       } else {
-        throw LispParserError("Expected printable character for identifier.");
+        result.push_back(read_identifier());
       }
+    } else if (std::isdigit(current_char())) {
+      result.push_back(read_number());
+    } else if (std::isspace(current_char())) {
+      result.push_back(create_space_token());
+    } else if (c == '(') {
+      result.push_back(create_open_bracket_token());
+      identifier_expected = true;
+    } else if (c == ')') {
+      result.push_back(create_close_bracket_token());
+    } else if (std::isprint(c)) {
+      result.push_back(read_identifier());
     }
   } while (walk());
 
@@ -152,6 +157,7 @@ bool LispParser::walk() {
 
 char LispParser::current_char() const { return _lisp[_pos]; }
 
+// TODO Create function read_until_delimiter which returns a string.
 LispToken LispParser::read_identifier() {
   std::string s;
 
@@ -161,7 +167,7 @@ LispToken LispParser::read_identifier() {
     if (std::isspace(c) || c == ')') {
       _pos--;
       break;
-    } else {
+    } else { // TODO check std::isprint?
       s += c;
     }
   } while (walk());
