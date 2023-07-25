@@ -39,6 +39,10 @@ void LispSyntaxChecker::check_matching_brackets() const {
     ss << "Brackets count mismatch: " << open_brackets << "/" << closed_brackets;
     throw LispParserError(ss.str());
   }
+
+  if (open_brackets == 0 || closed_brackets == 0) {
+    throw LispParserError("Not a lisp expression");
+  }
 }
 
 void LispSyntaxChecker::check_valid_functions() const {

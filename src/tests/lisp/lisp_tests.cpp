@@ -256,11 +256,9 @@ int run_lisp_tests_expression2() {
 
 int run_lisp_tests_wrong_form1() {
 
-  StringVector cases = {"(",
-      ")",
-      "(343 1)",
-      "(\"hello\" 1)"
-      };
+  StringVector cases = {
+      "(", ")", "(343 1)", "(\"hello\" 1)", "123", "\"Hello\"",
+  };
 
   for (auto c : cases) {
     bool exception;
@@ -290,7 +288,4 @@ int run_lisp_tests_wrong_form1() {
   return 0;
 }
 
-int run_lisp_tests_wrong_form2() {
-
-  return 0;
-}
+int run_lisp_tests_wrong_form2() { return 0; }
