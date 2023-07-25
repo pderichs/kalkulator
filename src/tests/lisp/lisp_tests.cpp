@@ -2,8 +2,8 @@
 #include "../../model/lisp/lisp_function.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
-#include "../../model/lisp/lisp_value_parser.h"
 #include "../../model/lisp/lisp_value.h"
+#include "../../model/lisp/lisp_value_parser.h"
 #include "tools.h"
 
 #include <any>
@@ -17,6 +17,9 @@ int run_lisp_tests_parsing4();
 int run_lisp_tests_expression1();
 int run_lisp_tests_expression2();
 
+int run_lisp_tests_wrong_form1();
+int run_lisp_tests_wrong_form2();
+
 int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_parsing1);
   RUN_TEST(run_lisp_tests_parsing2);
@@ -24,6 +27,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_parsing4);
   RUN_TEST(run_lisp_tests_expression1);
   RUN_TEST(run_lisp_tests_expression2);
+  RUN_TEST(run_lisp_tests_wrong_form1);
+  RUN_TEST(run_lisp_tests_wrong_form2);
 
   return 0;
 }
@@ -221,7 +226,7 @@ int run_lisp_tests_expression2() {
     LispFunction expr = val.function();
 
     TEST_ASSERT(expr.identifier() == "hello");
-    //std::cerr << expr.param_count() << std::endl;
+    // std::cerr << expr.param_count() << std::endl;
     TEST_ASSERT(expr.param_count() == 2);
 
     std::optional<LispValuePtr> optparam = expr.param_at(0);
@@ -248,3 +253,42 @@ int run_lisp_tests_expression2() {
 }
 
 // TODO test error cases / exceptions
+
+int run_lisp_tests_wrong_form1() {
+
+  StringVector cases = {"(",
+      ")"
+      };
+
+  for (auto c : cases) {
+    bool exception;
+
+    std::cerr << "Testing wrong form: " << c << std::endl;
+    LispParser parser(c);
+
+    try {
+      LispTokens tokens = parser.parse();
+
+      LispValueParser parser(tokens);
+      exception = false;
+    } catch (LispParserError &lpe) {
+      // std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item:
+      // \""
+      //           << lpe.item() << "\")" << std::endl;
+
+      // We expect an exception for the given form.
+      exception = true;
+    }
+
+    if (!exception) {
+      TEST_ASSERT(false);
+    }
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_wrong_form2() {
+
+  return 0;
+}

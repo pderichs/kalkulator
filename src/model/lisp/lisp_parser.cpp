@@ -4,6 +4,7 @@
 #include <cctype>
 #include <stdexcept>
 #include <string>
+#include "lisp_syntax_checker.h"
 
 LispParser::LispParser(const std::string &lisp) { _lisp = lisp; }
 
@@ -41,6 +42,9 @@ LispTokens LispParser::parse() {
       }
     }
   } while (walk());
+
+  LispSyntaxChecker checker(result);
+  checker.check();
 
   return result;
 }
