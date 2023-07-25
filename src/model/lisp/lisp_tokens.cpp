@@ -54,6 +54,8 @@ std::string printable_content_of_token(const LispToken &token) {
     return "(";
   case CLOSE_BRACKET:
     return ")";
+  case SPACE:
+    return "";
   default:
     return "(other token content)";
   }
