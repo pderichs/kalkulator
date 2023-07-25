@@ -43,6 +43,22 @@ public:
   LispFunction function() const {
     return std::any_cast<LispFunction>(_content);
   }
+
+  bool operator==(const double &other) const {
+    if (!is_number()) {
+      return false;
+    }
+
+    return number() == other;
+  }
+
+  bool operator==(const std::string &other) const {
+    if (!is_string()) {
+      return false;
+    }
+
+    return string() == other;
+  }
 };
 
 #endif

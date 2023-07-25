@@ -1,4 +1,5 @@
 #include "lisp_tests.h"
+#include "../../model/lisp/lisp_executor.h"
 #include "../../model/lisp/lisp_function.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
@@ -18,7 +19,7 @@ int run_lisp_tests_expression1();
 int run_lisp_tests_expression2();
 
 int run_lisp_tests_wrong_form1();
-int run_lisp_tests_wrong_form2();
+int run_lisp_tests_executor1();
 
 int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_parsing1);
@@ -28,7 +29,7 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_expression1);
   RUN_TEST(run_lisp_tests_expression2);
   RUN_TEST(run_lisp_tests_wrong_form1);
-  RUN_TEST(run_lisp_tests_wrong_form2);
+  RUN_TEST(run_lisp_tests_executor1);
 
   return 0;
 }
@@ -252,16 +253,13 @@ int run_lisp_tests_expression2() {
   return 0;
 }
 
-// TODO test error cases / exceptions
-
 int run_lisp_tests_wrong_form1() {
-
   StringVector cases = {
       "(", ")", "(343 1)", "(\"hello\" 1)", "123", "\"Hello\"",
   };
 
   for (auto c : cases) {
-    bool exception;
+    bool exception = false;
 
     std::cerr << "Testing wrong form: " << c << std::endl;
     LispParser parser(c);
@@ -288,4 +286,29 @@ int run_lisp_tests_wrong_form1() {
   return 0;
 }
 
-int run_lisp_tests_wrong_form2() { return 0; }
+int run_lisp_tests_executor1() {
+  LispParser parser("(+ (- 100 2 30) -484.32)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto optvalue = parser.next();
+    TEST_ASSERT(optvalue);
+
+    auto value = *optvalue;
+
+    LispExecutor executor(value);
+    LispValue result = executor.execute();
+
+    TEST_ASSERT(result == -416.32);
+
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+  return 0;
+}

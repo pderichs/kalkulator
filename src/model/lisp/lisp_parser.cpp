@@ -18,13 +18,13 @@ LispTokens LispParser::parse() {
   do {
     char c = current_char();
 
-    // FIXME read_until_delimiter and then interpret reading with regexes
-
     if (c == '"') {
       result.push_back(read_string());
     } else if (c == '-') {
       bool is_number;
 
+      // Looking forward to check whether we have
+      // a negative number or an identifier here.
       _pos++;
       is_number = std::isdigit(current_char());
       _pos--;
@@ -157,7 +157,6 @@ bool LispParser::walk() {
 
 char LispParser::current_char() const { return _lisp[_pos]; }
 
-// TODO Create function read_until_delimiter which returns a string.
 LispToken LispParser::read_identifier() {
   std::string s;
 
