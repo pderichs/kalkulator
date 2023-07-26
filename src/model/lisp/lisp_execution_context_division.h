@@ -3,6 +3,7 @@
 
 #include "lisp_execution_context_error.h"
 #include "lisp_function_execution_context.h"
+#include "lisp_value.h"
 
 class LispExecutionContextDivision : public LispFunctionExecutionContext {
 public:
@@ -41,16 +42,21 @@ public:
       }
 
       const auto &param = *param_opt;
-      if (!param->is_number()) {
+      LispValue value;
+      if (param->is_function()) {
+        value = execute_function(param->function());
+      } else if (param->is_number()) {
+        value = *param;
+      } else {
         throw LispExecutionContextError(
             "Unable to perform division with this lisp value");
       }
 
-      if (param->number() == 0.0) {
+      if (value.number() == 0.0) {
         throw LispExecutionContextError("Division by zero");
       }
 
-      result /= param->number();
+      result /= value.number();
     }
 
     return LispValue(result);

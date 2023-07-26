@@ -21,6 +21,7 @@ int run_lisp_tests_expression2();
 
 int run_lisp_tests_wrong_form1();
 int run_lisp_tests_executor1();
+int run_lisp_tests_executor2();
 
 int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_parsing1);
@@ -31,6 +32,7 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_expression2);
   RUN_TEST(run_lisp_tests_wrong_form1);
   RUN_TEST(run_lisp_tests_executor1);
+  RUN_TEST(run_lisp_tests_executor2);
 
   return 0;
 }
@@ -304,6 +306,37 @@ int run_lisp_tests_executor1() {
     LispValue result = executor.execute();
 
     TEST_ASSERT(result == -416.32);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  } catch (LispExecutionContextError &lee) {
+    std::cerr << "*** Caught lisp execution context error: " << lee.what()
+              << std::endl;
+
+    TEST_ASSERT(false);
+  }
+  return 0;
+}
+
+int run_lisp_tests_executor2() {
+  LispParser parser("(* (/ (* 100 2) (+ 25 25)) 8)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto optvalue = parser.next();
+    TEST_ASSERT(optvalue);
+
+    auto value = *optvalue;
+
+    LispExecutionContext executor(value);
+    LispValue result = executor.execute();
+
+    TEST_ASSERT(result == 32.0);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
