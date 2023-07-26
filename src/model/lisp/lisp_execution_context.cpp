@@ -36,11 +36,12 @@ LispValue LispExecutionContext::eval_function() const {
     throw LispExecutionContextError("Unknown function identifier");
   }
 
-  const auto& execution_context = execution_context_it->second;
+  const auto &execution_context = execution_context_it->second;
   return execution_context->value(func);
 }
 
-void LispExecutionContext::add_function(const std::string& identifier, const LispFunctionExecutionContextPtr func) {
+void LispExecutionContext::add_function(
+    const std::string &identifier, const LispFunctionExecutionContextPtr func) {
   if (!func) {
     throw LispExecutionContextError("Invalid function pointer");
   }

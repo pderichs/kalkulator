@@ -32,6 +32,7 @@ SRCS+=$(SRC_DIR)/model/lisp/lisp_parser.cpp
 SRCS+=$(SRC_DIR)/model/lisp/lisp_tokens.cpp
 SRCS+=$(SRC_DIR)/model/lisp/lisp_function.cpp
 SRCS+=$(SRC_DIR)/model/lisp/lisp_execution_context.cpp
+SRCS+=$(SRC_DIR)/model/lisp/lisp_function_execution_context.cpp
 SRCS+=$(SRC_DIR)/model/lisp/lisp_value_parser.cpp
 SRCS+=$(SRC_DIR)/model/lisp/lisp_syntax_checker.cpp
 SRCS+=$(TOOLS_DIR)/tools.cpp

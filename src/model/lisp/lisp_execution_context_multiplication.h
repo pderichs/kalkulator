@@ -3,6 +3,7 @@
 
 #include "lisp_execution_context_error.h"
 #include "lisp_function_execution_context.h"
+#include "lisp_value.h"
 
 class LispExecutionContextMultiplication : public LispFunctionExecutionContext {
 public:
@@ -14,12 +15,19 @@ public:
 
     double result = 1.0;
 
-    for (const auto& param : func.params()) {
-      if (!param->is_number()) {
-        throw LispExecutionContextError("Unable to perform multiplication with this lisp value");
+    for (const auto &param : func.params()) {
+      LispValue value;
+
+      if (param->is_function()) {
+        value = execute_function(param->function());
+      } else if (param->is_number()) {
+        value = *param;
+      } else {
+        throw LispExecutionContextError(
+            "Unable to perform multiplication with this lisp value");
       }
 
-      result *= param->number();
+      result *= value.number();
     }
 
     return LispValue(result);

@@ -14,12 +14,19 @@ public:
 
     double result = 0.0;
 
-    for (const auto& param: func.params()) {
-      if (!param->is_number()) {
-        throw LispExecutionContextError("Unable to perform addition with this lisp value");
+    for (const auto &param : func.params()) {
+      LispValue value;
+
+      if (param->is_function()) {
+        value = execute_function(param->function());
+      } else if (param->is_number()) {
+        value = *param;
+      } else {
+        throw LispExecutionContextError(
+            "Unable to perform addition with this lisp value");
       }
 
-      result += param->number();
+      result += value.number();
     }
 
     return LispValue(result);
