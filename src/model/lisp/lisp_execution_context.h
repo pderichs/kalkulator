@@ -4,24 +4,27 @@
 #include <map>
 
 #include "lisp_function.h"
-#include "lisp_function_execution_context.h"
 #include "lisp_value.h"
+
+class LispFunctionExecutionContext;
+
+typedef std::shared_ptr<LispFunctionExecutionContext>
+    LispFunctionExecutionContextPtr;
 
 typedef std::map<std::string, LispFunctionExecutionContextPtr> LispFunctionMap;
 
 class LispExecutionContext {
 private:
-  LispValue _value;
   LispFunctionMap _functions;
 
 public:
-  LispExecutionContext(const LispValue &value);
-  LispValue execute() const;
+  LispExecutionContext();
+  LispValue execute(const LispValue &value) const;
   void add_function(const std::string &identifier,
                     const LispFunctionExecutionContextPtr func);
 
 private:
-  LispValue eval_function() const;
+  LispValue eval_function(const LispFunction& func) const;
 };
 
 #endif

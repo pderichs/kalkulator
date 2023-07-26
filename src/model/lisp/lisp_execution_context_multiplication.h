@@ -10,7 +10,7 @@ public:
   LispExecutionContextMultiplication() = default;
   virtual ~LispExecutionContextMultiplication() = default;
 
-  virtual LispValue value(const LispFunction &func) {
+  virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
     ensure_params(func);
 
     double result = 1.0;
@@ -19,7 +19,7 @@ public:
       LispValue value;
 
       if (param->is_function()) {
-        value = execute_function(param->function());
+        value = execution_context.execute(*param);
       } else if (param->is_number()) {
         value = *param;
       } else {

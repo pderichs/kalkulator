@@ -11,7 +11,7 @@ public:
   LispExecutionContextSubtraction() = default;
   virtual ~LispExecutionContextSubtraction() = default;
 
-  virtual LispValue value(const LispFunction &func) {
+  virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
     ensure_params(func);
 
     double result;
@@ -24,9 +24,7 @@ public:
 
     LispValue value;
     if (first_param->is_function()) {
-      LispExecutionContext execution_context(first_param->function());
-
-      value = execution_context.execute();
+      value = execution_context.execute(first_param->function());
     } else if (first_param->is_number()) {
       value = *first_param;
     } else {

@@ -10,7 +10,7 @@ public:
   LispExecutionContextDivision() = default;
   virtual ~LispExecutionContextDivision() = default;
 
-  virtual LispValue value(const LispFunction &func) {
+  virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
     ensure_params(func);
 
     double result;
@@ -23,7 +23,7 @@ public:
 
     LispValue value;
     if (first_param->is_function()) {
-      value = execute_function(first_param->function());
+      value = execution_context.execute(*first_param);
     } else if (first_param->is_number()) {
       value = *first_param;
     } else {
@@ -44,7 +44,7 @@ public:
       const auto &param = *param_opt;
       LispValue value;
       if (param->is_function()) {
-        value = execute_function(param->function());
+        value = execution_context.execute(*param);
       } else if (param->is_number()) {
         value = *param;
       } else {

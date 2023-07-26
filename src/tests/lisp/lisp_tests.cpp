@@ -302,8 +302,8 @@ int run_lisp_tests_executor1() {
 
     auto value = *optvalue;
 
-    LispExecutionContext executor(value);
-    LispValue result = executor.execute();
+    LispExecutionContext executor;
+    LispValue result = executor.execute(value);
 
     TEST_ASSERT(result == -416.32);
   } catch (LispParserError &lpe) {
@@ -333,8 +333,8 @@ int run_lisp_tests_executor2() {
 
     auto value = *optvalue;
 
-    LispExecutionContext executor(value);
-    LispValue result = executor.execute();
+    LispExecutionContext executor;
+    LispValue result = executor.execute(value);
 
     TEST_ASSERT(result == 32.0);
   } catch (LispParserError &lpe) {

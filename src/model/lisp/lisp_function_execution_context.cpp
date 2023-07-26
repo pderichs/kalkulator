@@ -8,9 +8,3 @@ void LispFunctionExecutionContext::ensure_params(
   }
 }
 
-LispValue
-LispFunctionExecutionContext::execute_function(const LispFunction &func) const {
-  LispExecutionContext execution_context(func);
-
-  return execution_context.execute();
-}
