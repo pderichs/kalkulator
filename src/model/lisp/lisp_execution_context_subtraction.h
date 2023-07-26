@@ -11,6 +11,8 @@ public:
   virtual ~LispExecutionContextSubtraction() = default;
 
   virtual LispValue value(const LispFunction &func) {
+    ensure_params(func);
+
     double result;
 
     const auto& first_param_opt = func.param_at(0);

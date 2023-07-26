@@ -10,6 +10,8 @@ public:
   virtual ~LispExecutionContextAddition() = default;
 
   virtual LispValue value(const LispFunction &func) {
+    ensure_params(func);
+
     double result = 0.0;
 
     for (const auto& param: func.params()) {

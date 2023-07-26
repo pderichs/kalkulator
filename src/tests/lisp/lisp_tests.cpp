@@ -1,5 +1,6 @@
 #include "lisp_tests.h"
 #include "../../model/lisp/lisp_execution_context.h"
+#include "../../model/lisp/lisp_execution_context_error.h"
 #include "../../model/lisp/lisp_function.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
@@ -306,6 +307,11 @@ int run_lisp_tests_executor1() {
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  } catch (LispExecutionContextError &lee) {
+    std::cerr << "*** Caught lisp execution context error: " << lee.what()
+              << std::endl;
 
     TEST_ASSERT(false);
   }
