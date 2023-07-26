@@ -1,5 +1,5 @@
 #include "lisp_tests.h"
-#include "../../model/lisp/lisp_executor.h"
+#include "../../model/lisp/lisp_execution_context.h"
 #include "../../model/lisp/lisp_function.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
@@ -299,11 +299,10 @@ int run_lisp_tests_executor1() {
 
     auto value = *optvalue;
 
-    LispExecutor executor(value);
+    LispExecutionContext executor(value);
     LispValue result = executor.execute();
 
     TEST_ASSERT(result == -416.32);
-
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;

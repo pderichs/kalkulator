@@ -14,6 +14,7 @@ class LispValue {
 private:
   LispValueType _type;
   std::any _content; // can be one of string, double, LispFunction
+  LispValuePtr _func_result; // cached result of function execution
 
 public:
   LispValue() { _type = LVT_NONE; }

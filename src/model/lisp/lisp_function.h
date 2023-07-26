@@ -3,9 +3,9 @@
 
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
-#include <optional>
 
 #include "lisp_tokens.h"
 
@@ -21,7 +21,9 @@ private:
   LispValuePtrVector _params;
 
 public:
-  LispFunction(const std::string& identifier, const LispValuePtrVector& params);
+  LispFunction(const std::string &identifier, const LispValuePtrVector &params);
+
+  LispValuePtrVector params() const { return _params; }
 
   std::string identifier() const { return _identifier; }
   size_t param_count() const { return _params.size(); }
