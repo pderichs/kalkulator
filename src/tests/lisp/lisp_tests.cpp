@@ -1,5 +1,6 @@
 #include "lisp_tests.h"
 #include "../../model/lisp/lisp_execution_context.h"
+#include "../../model/lisp/lisp_function_execution_context.h"
 #include "../../model/lisp/lisp_execution_context_error.h"
 #include "../../model/lisp/lisp_function.h"
 #include "../../model/lisp/lisp_parser.h"
@@ -9,6 +10,8 @@
 #include "tools.h"
 
 #include <any>
+#include <memory>
+#include <sstream>
 #include <wx/wx.h>
 
 int run_lisp_tests_parsing1();
@@ -20,19 +23,56 @@ int run_lisp_tests_expression1();
 int run_lisp_tests_expression2();
 
 int run_lisp_tests_wrong_form1();
+
 int run_lisp_tests_executor1();
 int run_lisp_tests_executor2();
+
+int run_lisp_tests_custom_function1();
+
+class TestLispFunctionExecutionContext: public LispFunctionExecutionContext {
+public:
+    virtual ~TestLispFunctionExecutionContext() = default;
+
+    // Adds "Hello " to the front of the provided string
+    virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
+      ensure_params(func);
+
+      if (func.param_count() != 1) {
+        throw LispExecutionContextError("Unexpected parameter count");
+      }
+
+      auto param_opt = func.param_at(0);
+      if (!param_opt) {
+        throw LispExecutionContextError("Unable to get first parameter");
+      }
+
+      auto param = *param_opt;
+      if (!param->is_string()) {
+        throw LispExecutionContextError("Parameter must be of type string");
+      }
+
+      std::stringstream ss;
+      ss << "Hello " << param->string() << "!";
+
+      return LispValue(ss.str());
+    }
+};
 
 int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_parsing1);
   RUN_TEST(run_lisp_tests_parsing2);
   RUN_TEST(run_lisp_tests_parsing3);
   RUN_TEST(run_lisp_tests_parsing4);
+
   RUN_TEST(run_lisp_tests_expression1);
   RUN_TEST(run_lisp_tests_expression2);
+
   RUN_TEST(run_lisp_tests_wrong_form1);
+
   RUN_TEST(run_lisp_tests_executor1);
   RUN_TEST(run_lisp_tests_executor2);
+
+  RUN_TEST(run_lisp_tests_custom_function1);
 
   return 0;
 }
@@ -317,6 +357,7 @@ int run_lisp_tests_executor1() {
 
     TEST_ASSERT(false);
   }
+
   return 0;
 }
 
@@ -348,5 +389,39 @@ int run_lisp_tests_executor2() {
 
     TEST_ASSERT(false);
   }
+
+  return 0;
+}
+
+int run_lisp_tests_custom_function1() {
+  LispParser parser("(say_hello_test \"Franzi\")");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto optvalue = parser.next();
+    TEST_ASSERT(optvalue);
+
+    auto value = *optvalue;
+
+    LispExecutionContext executor;
+    executor.add_function("say_hello_test", std::make_shared<TestLispFunctionExecutionContext>());
+    LispValue result = executor.execute(value);
+
+    TEST_ASSERT(result == "Hello Franzi!");
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  } catch (LispExecutionContextError &lee) {
+    std::cerr << "*** Caught lisp execution context error: " << lee.what()
+              << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
   return 0;
 }
