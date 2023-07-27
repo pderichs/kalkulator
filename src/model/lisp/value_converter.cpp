@@ -1,10 +1,11 @@
 #include "value_converter.h"
 #include "lisp_function.h"
 #include "lisp_parser.h"
-#include "lisp_parser_error.h"
 #include "lisp_tokens.h"
+#include "lisp_value.h"
 #include "lisp_value_parser.h"
 #include "tools.h"
+#include "value_conversion_error.h"
 #include <memory>
 #include <regex>
 #include <sstream>
@@ -27,13 +28,13 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
     if (!opt_value) {
       std::stringstream ss;
       ss << "Unable to parse function: " << formula;
-      throw LispParserError(ss.str());
+      throw ValueConversionError(ss.str());
     }
 
     result = std::make_shared<LispValue>(*opt_value);
 
     if (!result->is_function()) {
-      throw LispParserError("Expression is not a function");
+      throw ValueConversionError("Expression is not a function");
     }
   } else {
     // Check for number
@@ -55,7 +56,13 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 }
 
 std::string ValueConverter::to_string(const LispValuePtr &value) {
-  std::string result;
-
-  return result;
+  if (value->is_string()) {
+    return value->string();
+  } else if (value->is_number()) {
+    std::stringstream ss;
+    ss << value->number();
+    return ss.str();
+  } else {
+    throw ValueConversionError("Unable to convert LispValue");
+  }
 }
