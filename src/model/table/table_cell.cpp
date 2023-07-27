@@ -17,4 +17,6 @@ std::string TableCell::get_formula_content() const {
   return visible_content();
 }
 
-bool TableCell::is_formula() const { return _lisp_value && _lisp_value->is_function(); }
+bool TableCell::is_formula() const {
+  return _lisp_value && _lisp_value->is_function();
+}

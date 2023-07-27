@@ -13,7 +13,7 @@ enum LispValueType { LVT_NONE, LVT_STRING, LVT_NUMBER, LVT_FUNCTION };
 class LispValue {
 private:
   LispValueType _type;
-  std::any _content; // can be one of string, double, LispFunction
+  std::any _content;         // can be one of string, double, LispFunction
   LispValuePtr _func_result; // cached result of function execution
 
 public:
@@ -33,6 +33,8 @@ public:
     _type = LVT_FUNCTION;
     _content = function;
   }
+
+  LispValueType type() const { return _type; }
 
   bool is_none() const { return _type == LVT_NONE; }
   bool is_string() const { return _type == LVT_STRING; }

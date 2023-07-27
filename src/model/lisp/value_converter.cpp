@@ -67,6 +67,8 @@ std::string ValueConverter::to_string(const LispValuePtr &value) {
     ss << value->number();
     return ss.str();
   } else {
-    throw ValueConversionError("Unable to convert LispValue");
+    std::stringstream ss;
+    ss << "Unable to convert lisp value of type " << (int)value->type();
+    throw ValueConversionError(ss.str());
   }
 }
