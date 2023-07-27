@@ -24,7 +24,6 @@ SRCS+=$(SRC_DIR)/view/table_control.cpp
 SRCS+=$(SRC_DIR)/view/table_formula_text_control.cpp
 SRCS+=$(SRC_DIR)/model/table/table_sheet.cpp
 SRCS+=$(SRC_DIR)/model/table/table_cell.cpp
-SRCS+=$(SRC_DIR)/model/table/table_cell_formula.cpp
 SRCS+=$(SRC_DIR)/model/table/table_workbook_document.cpp
 SRCS+=$(SRC_DIR)/model/table/table_column_definition.cpp
 SRCS+=$(SRC_DIR)/model/table/table_row_definition.cpp

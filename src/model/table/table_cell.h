@@ -5,28 +5,19 @@
 #include <string>
 #include <vector>
 
-#include "table_cell_formula.h"
 #include "../lisp/lisp_function.h"
+#include "../lisp/value_converter.h"
 
 class TableCell {
 public:
-  std::string visible_content() const { return _visible_content; }
   void update_content(const std::string &content);
 
-  std::string get_formula_content() const {
-    if (!_formula) {
-      return visible_content();
-    }
-
-    return _formula->raw_content();
-  }
+  std::string visible_content() const;
+  std::string get_formula_content() const;
+  bool is_formula() const;
 
 private:
-  void update_visible_content(const std::string &content);
-
-private:
-  TableCellFormulaPtr _formula;
-  std::string _visible_content;
+  std::string _formula_content;
 
   LispValuePtr _lisp_value;
 };

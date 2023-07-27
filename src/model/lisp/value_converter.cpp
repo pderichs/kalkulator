@@ -56,6 +56,10 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 }
 
 std::string ValueConverter::to_string(const LispValuePtr &value) {
+  if (!value) {
+    return "";
+  }
+
   if (value->is_string()) {
     return value->string();
   } else if (value->is_number()) {
