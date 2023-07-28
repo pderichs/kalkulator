@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <wx/dcclient.h>
 #include <wx/event.h>
 #include <wx/rawbmp.h>
@@ -267,6 +268,11 @@ void MyFrame::send_event(TableEvent event_id, std::any param) {
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for formula update. Event will be "
                "ignored.\n");
+    } catch (const std::runtime_error &rte) {
+      wxPrintf("*** CAUGHT RUNTIME EXCEPTION: %s\n", rte.what());
+      wxMessageBox(
+          wxT("Cell content could not be updated - Please verify your input."),
+          wxT("Error"), wxICON_EXCLAMATION);
     }
 
     break;
