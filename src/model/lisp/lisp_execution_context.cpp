@@ -26,7 +26,7 @@ LispValue LispExecutionContext::execute(const LispValue &value) const {
   return execution_result;
 }
 
-LispValue LispExecutionContext::eval_function(const LispFunction& func) const {
+LispValue LispExecutionContext::eval_function(const LispFunction &func) const {
   const auto &execution_context_it = _functions.find(func.identifier());
   if (execution_context_it == _functions.end()) {
     throw LispExecutionContextError("Unknown function identifier");

@@ -43,7 +43,7 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
     }
   } else {
     // Check for number
-    std::regex exp_number("^(\\-?\\d+\\.?\\d+)$");
+    std::regex exp_number("^-?(0|[1-9]\\d*)(\\.\\d+)?$");
     std::smatch sm;
 
     if (std::regex_search(input, sm, exp_number)) {
