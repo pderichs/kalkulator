@@ -1,3 +1,4 @@
+#include <memory>
 #include <stdexcept>
 #include <wx/dcclient.h>
 #include <wx/event.h>
@@ -11,6 +12,7 @@
 #include "model/event_sink.h"
 #include "model/lisp/lisp_execution_context.h"
 #include "model/lisp/value_converter.h"
+#include "model/table/lisp_execution_context_cell_reference.h"
 #include "model/table/table_workbook_document.h"
 #include "tests.h"
 #include "view/table_control.h"
@@ -93,6 +95,9 @@ MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a"), _document(this) {
   // TODO: Add cell function to execution context
   ValueConverter::update_execution_context(&_execution_context);
+
+  _execution_context.add_function(
+      "cell", std::make_shared<LispExecutionContextCellReference>(&_document));
 
   wxMenu *menuFile = new wxMenu();
   menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a figures file");

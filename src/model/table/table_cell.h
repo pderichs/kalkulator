@@ -16,6 +16,8 @@ public:
   std::string get_formula_content() const;
   bool is_formula() const;
 
+  LispValuePtr lisp_value() const { return _lisp_value; }
+
 private:
   std::string _formula_content;
 

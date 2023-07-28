@@ -2,11 +2,17 @@
 #define LISP_EXECUTION_CONTEXT_CELL_REFERENCE_INCLUDED
 
 #include "../lisp/lisp_execution_context.h"
+#include "../lisp/lisp_function_execution_context.h"
 #include "../lisp/lisp_execution_context_error.h"
+#include "table_workbook_document.h"
 #include <sstream>
 
 class LispExecutionContextCellReference : public LispFunctionExecutionContext {
-  LispExecutionContextCellReference() = default;
+public:
+  LispExecutionContextCellReference(TableWorkbookDocument *pWorkbook) {
+    _workbook = pWorkbook;
+  }
+
   virtual ~LispExecutionContextCellReference() = default;
 
   virtual LispValue value(const LispFunction &func,
@@ -56,10 +62,22 @@ class LispExecutionContextCellReference : public LispFunctionExecutionContext {
     row = (int)row_value.number();
     col = (int)col_value.number();
 
-    // TODO retrieve value from cell
+    auto opt_cell = _workbook->get_cell(Location(col, row));
+    if (!opt_cell) {
+      return LispValue();
+    }
 
-    return LispValue();
+    auto cell = *opt_cell;
+
+    if (!cell) {
+      return LispValue();
+    }
+
+    return *(cell->lisp_value());
   }
+
+private:
+  TableWorkbookDocument *_workbook;
 };
 
 #endif
