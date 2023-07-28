@@ -43,7 +43,6 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
     }
   } else {
     // Check for number
-
     std::regex exp_number("^(\\-?\\d+\\.?\\d+)$");
     std::smatch sm;
 
@@ -52,7 +51,6 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
       result = std::make_shared<LispValue>(d);
     } else {
       // Must be a string
-
       result = std::make_shared<LispValue>(s);
     }
   }
@@ -79,6 +77,8 @@ std::string ValueConverter::to_string(const LispValue &value) {
     std::stringstream ss;
     ss << value.number();
     return ss.str();
+  } else if (value.is_none()) {
+    return "";
   } else if (value.is_function()) {
     try {
       // Execute function
