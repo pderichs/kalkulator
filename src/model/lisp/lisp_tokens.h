@@ -46,7 +46,7 @@ struct LispToken {
 class LispTokens : public std::vector<LispToken> {
 private:
 public:
-  LispTokens();
+  LispTokens() = default;
   ~LispTokens() = default;
 
   void debug_print(std::ostream& oss) const;

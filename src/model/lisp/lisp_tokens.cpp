@@ -1,8 +1,6 @@
 #include "lisp_tokens.h"
 #include <sstream>
 
-LispTokens::LispTokens() {}
-
 void LispTokens::debug_print(std::ostream &oss) const {
   std::string s;
 
