@@ -20,6 +20,8 @@ private:
   std::string _identifier;
   LispValuePtrVector _params;
 
+  // TODO: Evaluate cached result
+
 public:
   LispFunction(const std::string &identifier, const LispValuePtrVector &params);
 

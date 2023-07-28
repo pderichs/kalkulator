@@ -5,13 +5,15 @@
 #include "lisp_execution_context_error.h"
 #include "lisp_function_execution_context.h"
 #include <cstddef>
+#include <sstream>
 
 class LispExecutionContextSubtraction : public LispFunctionExecutionContext {
 public:
   LispExecutionContextSubtraction() = default;
   virtual ~LispExecutionContextSubtraction() = default;
 
-  virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
+  virtual LispValue value(const LispFunction &func,
+                          const LispExecutionContext &execution_context) {
     ensure_params(func);
 
     double result;
@@ -28,8 +30,10 @@ public:
     } else if (first_param->is_number()) {
       value = *first_param;
     } else {
-      throw LispExecutionContextError(
-          "Unable to perform subtraction with this lisp value");
+      std::stringstream ss;
+      ss << "Unable to perform subtraction with this lisp value "
+         << (int)first_param->type();
+      throw LispExecutionContextError(ss.str());
     }
 
     // First parameter of subtraction is base value
@@ -43,12 +47,20 @@ public:
       }
 
       const auto &param = *param_opt;
-      if (!param->is_number()) {
-        throw LispExecutionContextError(
-            "Unable to perform subtraction with this lisp value");
+
+      LispValue value;
+      if (param->is_function()) {
+        value = execution_context.execute(*param);
+      } else if (param->is_number()) {
+        value = *param;
+      } else {
+        std::stringstream ss;
+        ss << "Unable to perform subtraction with this lisp value "
+           << (int)param->type();
+        throw LispExecutionContextError(ss.str());
       }
 
-      result -= param->number();
+      result -= value.number();
     }
 
     return LispValue(result);

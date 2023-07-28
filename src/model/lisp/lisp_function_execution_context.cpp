@@ -7,4 +7,3 @@ void LispFunctionExecutionContext::ensure_params(
     throw LispExecutionContextError("Unexpected: No params given");
   }
 }
-

@@ -1,4 +1,5 @@
 #include "value_converter.h"
+#include "lisp_execution_context.h"
 #include "lisp_function.h"
 #include "lisp_parser.h"
 #include "lisp_tokens.h"
@@ -9,7 +10,9 @@
 #include <memory>
 #include <regex>
 #include <sstream>
+#include <stdexcept>
 #include <string>
+#include <iostream>
 
 LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
   LispValuePtr result;
@@ -60,15 +63,31 @@ std::string ValueConverter::to_string(const LispValuePtr &value) {
     return "";
   }
 
-  if (value->is_string()) {
-    return value->string();
-  } else if (value->is_number()) {
+  return ValueConverter::to_string(*value);
+}
+
+std::string ValueConverter::to_string(const LispValue &value) {
+  if (value.is_string()) {
+    return value.string();
+  } else if (value.is_number()) {
     std::stringstream ss;
-    ss << value->number();
+    ss << value.number();
     return ss.str();
+  } else if (value.is_function()) {
+    try {
+    // Execute function
+    LispExecutionContext executor; // TODO: Should be replaced with outer
+                                   // context since we need to provide
+                                   // application defined functions.
+    LispValue result = executor.execute(value);
+    return ValueConverter::to_string(result);
+    } catch(const std::runtime_error& e) {
+      std::cerr << "*** CAUGHT EXCEPTION: " << e.what() << std::endl;
+      exit(255);
+    }
   } else {
     std::stringstream ss;
-    ss << "Unable to convert lisp value of type " << (int)value->type();
+    ss << "Unable to convert lisp value of type " << (int)value.type();
     throw ValueConversionError(ss.str());
   }
 }
