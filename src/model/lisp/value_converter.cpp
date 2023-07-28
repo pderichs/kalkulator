@@ -7,12 +7,14 @@
 #include "lisp_value_parser.h"
 #include "tools.h"
 #include "value_conversion_error.h"
+#include <iostream>
 #include <memory>
 #include <regex>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <iostream>
+
+LispExecutionContext *ValueConverter::execution_context = nullptr;
 
 LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
   LispValuePtr result;
@@ -67,6 +69,10 @@ std::string ValueConverter::to_string(const LispValuePtr &value) {
 }
 
 std::string ValueConverter::to_string(const LispValue &value) {
+  if (!execution_context) {
+    throw std::runtime_error("to_string: Execution context is NULL");
+  }
+
   if (value.is_string()) {
     return value.string();
   } else if (value.is_number()) {
@@ -75,13 +81,10 @@ std::string ValueConverter::to_string(const LispValue &value) {
     return ss.str();
   } else if (value.is_function()) {
     try {
-    // Execute function
-    LispExecutionContext executor; // TODO: Should be replaced with outer
-                                   // context since we need to provide
-                                   // application defined functions.
-    LispValue result = executor.execute(value);
-    return ValueConverter::to_string(result);
-    } catch(const std::runtime_error& e) {
+      // Execute function
+      LispValue result = execution_context->execute(value);
+      return ValueConverter::to_string(result);
+    } catch (const std::runtime_error &e) {
       std::cerr << "*** CAUGHT EXCEPTION: " << e.what() << std::endl;
       exit(255);
     }
@@ -90,4 +93,12 @@ std::string ValueConverter::to_string(const LispValue &value) {
     ss << "Unable to convert lisp value of type " << (int)value.type();
     throw ValueConversionError(ss.str());
   }
+}
+
+void ValueConverter::update_execution_context(LispExecutionContext *context) {
+  if (!context) {
+    throw std::runtime_error("Execution context is NULL");
+  }
+
+  ValueConverter::execution_context = context;
 }

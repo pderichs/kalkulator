@@ -8,6 +8,8 @@
 #include <iostream>
 
 #include "model/event_sink.h"
+#include "model/lisp/lisp_execution_context.h"
+#include "model/lisp/value_converter.h"
 #include "model/table/table_workbook_document.h"
 #include "tests.h"
 #include "view/table_control.h"
@@ -49,6 +51,7 @@ private:
   TableWorkbookDocument _document;
   TableControl *_table_control;
   wxTextCtrl *_text_control_formula;
+  LispExecutionContext _execution_context;
 };
 
 enum {
@@ -87,6 +90,9 @@ bool MyApp::OnInit() {
 
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a"), _document(this) {
+  // TODO: Add cell function to execution context
+  ValueConverter::update_execution_context(&_execution_context);
+
   wxMenu *menuFile = new wxMenu();
   menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a figures file");
   menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-S",

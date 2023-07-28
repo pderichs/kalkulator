@@ -10,7 +10,8 @@ public:
   LispExecutionContextDivision() = default;
   virtual ~LispExecutionContextDivision() = default;
 
-  virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
+  virtual LispValue value(const LispFunction &func,
+                          const LispExecutionContext &execution_context) {
     ensure_params(func);
 
     double result;
