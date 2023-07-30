@@ -10,22 +10,26 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- Add lists: (list 3 556 "Hello")
-- Add cell_range function which returns lists of values of cells
-- add sum function
-- Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
+- BUG: LispValue does not support IDENTIFIERS - could be useful for variables
+- FEAT: Support lists for mathematical operations: This helps later with cell_ranges
+- FEAT_ Add cell_range function which returns lists of values of cells
+- REFA: There are functionalities in LispFunctionExecutionContext derived classes which principally just say "I want a number or a function which returns a number" - introduce function which streamlines this process
+- FEAT: Add sum function
+- FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - first
   - rest
   - cons
-  - quote
-  - eq
-  - cond (if?)
+  - DONE quote (DONE with "list")
+  - eq (see prepared lisp_eq on LispValue)
+  - cond (use "if" as identifier)
   - lambda
-- Cache function results
-- Save (sqlite)
-- Open (sqlite)
-- Fix circular formula bug
-- Support lists for mathematical operations
-- Refactoring: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
+- MAYB: Cache function results (see field _func_result on LispValue)
+- FEAT: Save (sqlite)
+- FEAT: Open (sqlite)
+- BUG: Fix circular formula bug: Referencing the same cell in a formula with "cell" causes the app to crash
+- REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
 
 # DONE
+
+- Change numbers in UI to be zero based (helps with reference of cells)
+- Add lists: (list 3 556 "Hello")

@@ -92,7 +92,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos), in
   // this can possibly be optimized
 
   // Columns
-  c = 1;
+  c = 0;
   x = ROW_HEADER_WIDTH; // Use row header width as offset
                         // for columns to leave some space
                         // from left
@@ -120,7 +120,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos), in
   }
 
   // Rows
-  c = 1;
+  c = 0;
   y = COLUMN_HEADER_HEIGHT + 2;
   for (auto rowdef : sheet->row_definitions) {
     if (y > height) {
