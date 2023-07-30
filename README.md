@@ -10,8 +10,6 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- FEAT: Save (sqlite)
-- FEAT: Open (sqlite)
 - FEAT: Add avg function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - first
@@ -27,6 +25,8 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- FEAT: Save (sqlite)
+- FEAT: Open (sqlite)
 - BUG: Clearing cell content is crashing the app
 - FEAT_ Add cell_range function which returns lists of values of cells
 - FEAT: Support lists for mathematical operations: This helps later with cell_ranges

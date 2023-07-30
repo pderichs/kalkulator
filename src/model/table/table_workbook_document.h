@@ -1,11 +1,11 @@
 #ifndef WORKBOOK_DOCUMENT_INCLUDED
 #define WORKBOOK_DOCUMENT_INCLUDED
 
+#include "../event_sink.h"
 #include "table_cell.h"
 #include "table_sheet.h"
 #include <string>
 #include <vector>
-#include "../event_sink.h"
 
 typedef std::vector<TableCellPtr> TableCellPtrVector;
 
@@ -21,10 +21,13 @@ public:
   TableSheetPtr current_sheet() const { return _current_sheet; }
 
   void clear();
-  void add_sheet(const std::string& name);
+  void add_sheet(const std::string &name);
   void clear_changed_flag() { _changed = false; }
-  void set_active_sheet(const std::string& name);
-  void set_current_cell(const std::string& sheet_name, const Location& current_cell);
+  void set_active_sheet(const std::string &name);
+  void set_current_cell(const std::string &sheet_name,
+                        const Location &current_cell);
+  void update_cell_content(TableSheetPtr sheet, TableCellPtr cell,
+                           const std::string &content);
 
   void move_cursor_up();
   void move_cursor_down();
@@ -33,14 +36,14 @@ public:
   void move_cursor_page_up();
   void move_cursor_page_down();
 
-  Location get_cell_by_pos(const Location& position) const;
-  void select_cell(const Location& cell);
+  Location get_cell_by_pos(const Location &position) const;
+  void select_cell(const Location &cell);
 
-  std::optional<TableCellPtr> get_cell(const Location& location) const;
+  std::optional<TableCellPtr> get_cell(const Location &location) const;
   TableCellPtr get_current_cell() const;
-  TableCellPtrVector get_range(const Location& from, const Location& to) const;
+  TableCellPtrVector get_range(const Location &from, const Location &to) const;
 
-  void update_content_current_cell(const std::string& content);
+  void update_content_current_cell(const std::string &content);
 
   int get_current_sheet_width() const;
   int get_current_sheet_height() const;
