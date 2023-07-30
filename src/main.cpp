@@ -15,6 +15,8 @@
 #include "model/table/lisp_execution_context_cell_range.h"
 #include "model/table/lisp_execution_context_cell_reference.h"
 #include "model/table/table_workbook_document.h"
+#include "model/table/table_workbook_file.h"
+#include "model/table/table_workbook_file_error.h"
 #include "tests.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
@@ -99,7 +101,8 @@ MyFrame::MyFrame()
   _execution_context.add_function(
       "cell", std::make_shared<LispExecutionContextCellReference>(&_document));
   _execution_context.add_function(
-      "cell_range", std::make_shared<LispExecutionContextCellRange>(&_document));
+      "cell_range",
+      std::make_shared<LispExecutionContextCellRange>(&_document));
 
   wxMenu *menuFile = new wxMenu();
   menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a figures file");
@@ -220,22 +223,28 @@ void MyFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void MyFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
-  // wxString startFolder;
-  // if (!_document.currentFile().empty()) {
-  //   startFolder = wxPathOnly(_document.currentFile());
-  // }
+  wxString startFolder;
 
-  // wxFileDialog saveFileDialog(this, _("Save Figures file"), startFolder, "",
-  //                             "Figures files (*.fig)|*.fig",
-  //                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-  // if (saveFileDialog.ShowModal() == wxID_CANCEL) {
-  //   return;
-  // }
+  if (!_document.file_path().empty()) {
+    startFolder = wxPathOnly(_document.file_path());
+  }
 
-  // if (!_document.save(saveFileDialog.GetPath())) {
-  //   wxLogError("Cannot save current contents in file '%s'.",
-  //              saveFileDialog.GetPath());
-  // }
+  wxFileDialog saveFileDialog(this, _("Save Kalkulator file"), startFolder, "",
+                              "Kalkulator files (*.kal)|*.kal",
+                              wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+  if (saveFileDialog.ShowModal() == wxID_CANCEL) {
+    return;
+  }
+
+  TableWorkbookFile file;
+
+  try {
+    file.open((const char*)saveFileDialog.GetPath());
+    file.write(_document);
+  } catch (TableWorkbookFileError &twfe) {
+    wxLogError("Cannot save current contents in file '%s'.",
+               saveFileDialog.GetPath());
+  }
 }
 
 void MyFrame::OnKeyPress(wxKeyEvent &event) {

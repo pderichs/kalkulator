@@ -39,6 +39,10 @@ public:
   int get_current_sheet_width() const;
   int get_current_sheet_height() const;
 
+  TableSheets sheets() const { return _sheets; }
+
+  std::string file_path() const { return _path; }
+
 private:
   std::string _path;
   bool _changed;

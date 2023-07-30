@@ -15,7 +15,7 @@ WX_DEFINES=-D_FILE_OFFSET_BITS=64 -DWXUSINGDLL -D__WXGTK__
 WX_LDFLAGS=-L$(WX_DIR)/buildgtk/lib -pthread -Wl,-rpath,$(WX_DIR)/buildgtk/lib -lwx_gtk3u_xrc-3.2 -lwx_gtk3u_html-3.2 -lwx_gtk3u_qa-3.2 -lwx_gtk3u_core-3.2 -lwx_baseu_xml-3.2 -lwx_baseu_net-3.2 -lwx_baseu-3.2
 
 #CPPFLAGS=-std=c++17 -O3 -Wall -Wpedantic -Wextra -Weffc++ -I$(TOOLS_DIR) -I$(TESTS_DIR) $(WX_INCLUDES) $(WX_DEFINES)
-CPPFLAGS=-std=c++17 -g -Wall -Wpedantic -Wextra -Weffc++ -I$(TOOLS_DIR) -I$(TESTS_DIR) $(WX_INCLUDES) $(WX_DEFINES)
+CPPFLAGS=-std=c++17 -g -Wall -Wpedantic -Wextra -Weffc++ -I$(TOOLS_DIR) -I$(TESTS_DIR) -Ivendor/sqlite3 $(WX_INCLUDES) $(WX_DEFINES)
 CFLAGS=-g -Wall -Wpedantic -Wextra -I$(TOOLS_DIR) -I$(TESTS_DIR) $(WX_INCLUDES) $(WX_DEFINES)
 LDFLAGS=$(WX_LDFLAGS)
 LDLIBS=
