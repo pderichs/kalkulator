@@ -27,6 +27,7 @@ SRCS+=$(SRC_DIR)/model/table/table_cell.cpp
 SRCS+=$(SRC_DIR)/model/table/table_workbook_document.cpp
 SRCS+=$(SRC_DIR)/model/table/table_column_definition.cpp
 SRCS+=$(SRC_DIR)/model/table/table_row_definition.cpp
+SRCS+=$(SRC_DIR)/model/table/table_workbook_file.cpp
 SRCS+=$(SRC_DIR)/model/lisp/lisp_parser.cpp
 SRCS+=$(SRC_DIR)/model/lisp/lisp_tokens.cpp
 SRCS+=$(SRC_DIR)/model/lisp/lisp_function.cpp

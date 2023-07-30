@@ -10,6 +10,8 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- FEAT: Save (sqlite)
+- FEAT: Open (sqlite)
 - FEAT: Add avg function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - first
@@ -20,8 +22,6 @@ This is one item of the "applications every software engineer should implement o
   - cond (use "if" as identifier)
   - lambda
 - MAYB: Cache function results (see field _func_result on LispValue)
-- FEAT: Save (sqlite)
-- FEAT: Open (sqlite)
 - BUG: Fix circular formula bug: Referencing the same cell in a formula with "cell" causes the app to crash
 - REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
 
