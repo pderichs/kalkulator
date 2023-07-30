@@ -26,3 +26,7 @@ std::string TableCell::get_formula_content() const {
 bool TableCell::is_formula() const {
   return _lisp_value && _lisp_value->is_function();
 }
+
+bool TableCell::has_content() const {
+  return _lisp_value && !_lisp_value->is_none();
+}

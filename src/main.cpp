@@ -95,7 +95,7 @@ bool MyApp::OnInit() {
 }
 
 MyFrame::MyFrame()
-    : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a"), _document(this) {
+    : wxFrame(NULL, wxID_ANY, "Kalkulator 0.0.1a"), _document(this) {
   ValueConverter::update_execution_context(&_execution_context);
 
   _execution_context.add_function(
@@ -196,28 +196,34 @@ void MyFrame::OnClose(wxCloseEvent &event) {
 void MyFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   // https://docs.wxwidgets.org/3.0/classwx_file_dialog.html
 
-  // if (_document.changed()) {
-  //   if (wxMessageBox(_("Current content has not been saved! Proceed?"),
-  //                    _("Please confirm"), wxICON_QUESTION | wxYES_NO,
-  //                    this) == wxNO)
-  //     return;
-  // }
+  if (_document.changed()) {
+    if (wxMessageBox(_("Current content has not been saved. Your changes will "
+                       "be lost. Proceed?"),
+                     _("Please confirm"), wxICON_QUESTION | wxYES_NO,
+                     this) == wxNO)
+      return;
+  }
 
-  // wxString startFolder;
-  // if (!_document.currentFile().empty()) {
-  //   startFolder = wxPathOnly(_document.currentFile());
-  // }
+  wxString startFolder;
+  if (!_document.file_path().empty()) {
+    startFolder = wxPathOnly(_document.file_path());
+  }
 
-  // wxFileDialog openFileDialog(this, _("Open Figures file"), startFolder, "",
-  //                             "Figures files (*.fig)|*.fig",
-  //                             wxFD_OPEN | wxFD_FILE_MUST_EXIST);
-  // if (openFileDialog.ShowModal() == wxID_CANCEL) {
-  //   return;
-  // }
+  wxFileDialog openFileDialog(this, _("Open Kalkulator file"), startFolder, "",
+                              "Kalkulator files (*.kal)|*.kal",
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+  if (openFileDialog.ShowModal() == wxID_CANCEL) {
+    return;
+  }
 
-  // if (!_document.open(openFileDialog.GetPath(), _canvas)) {
-  //   wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
-  // }
+  TableWorkbookFile file;
+
+  try {
+    file.open((const char *)openFileDialog.GetPath());
+    file.read(_document);
+  } catch (TableWorkbookFileError &twfe) {
+    wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
+  }
 
   Refresh();
 }
@@ -239,11 +245,12 @@ void MyFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
   TableWorkbookFile file;
 
   try {
-    file.open((const char*)saveFileDialog.GetPath());
+    file.open((const char *)saveFileDialog.GetPath());
     file.write(_document);
   } catch (TableWorkbookFileError &twfe) {
-    wxLogError("Cannot save current contents in file '%s'.",
-               saveFileDialog.GetPath());
+      wxMessageBox(
+          twfe.what(),
+          wxT("Error"), wxICON_EXCLAMATION);
   }
 }
 
@@ -251,8 +258,7 @@ void MyFrame::OnKeyPress(wxKeyEvent &event) {
   // Handle the keypress event here
   int keyCode = event.GetKeyCode();
 
-  // Example: Print the keycode to the console
-  wxPrintf("MyFrame: Key pressed: %d\n", keyCode);
+  // wxPrintf("MyFrame: Key pressed: %d\n", keyCode);
 
   switch (keyCode) {
   case WXK_F2:

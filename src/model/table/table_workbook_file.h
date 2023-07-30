@@ -2,6 +2,7 @@
 #define TABLE_WORKBOOK_FILE_INCLUDED
 
 #include "sqlite3.h"
+#include "table_sheet.h"
 #include "table_workbook_document.h"
 #include <string>
 
@@ -19,11 +20,14 @@ public:
 
 private:
   void create_tables();
+  void save_sheet(int id, const TableSheetPtr &sheet);
+  std::string quote(const std::string& s) const;
+  void execute_sql(const std::string& sql);
 
 private:
   std::string _filename;
   sqlite3 *_db;
-  bool _needs_setup;
+  // bool _needs_setup;
 };
 
 #endif

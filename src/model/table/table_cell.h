@@ -18,6 +18,8 @@ public:
 
   LispValuePtr lisp_value() const { return _lisp_value; }
 
+  bool has_content() const;
+
 private:
   std::string _formula_content;
 
