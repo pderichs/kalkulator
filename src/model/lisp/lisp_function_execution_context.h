@@ -16,6 +16,8 @@ public:
                           const LispExecutionContext &execution_context) = 0;
 
   void ensure_params(const LispFunction &func) const;
+  LispValue expect_number(const LispValuePtr &value,
+                          const LispExecutionContext &execution_context) const;
 };
 
 #endif

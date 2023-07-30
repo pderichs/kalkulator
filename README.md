@@ -10,10 +10,9 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: LispValue does not support IDENTIFIERS - could be useful for variables
+- REFA: There are functionalities in LispFunctionExecutionContext derived classes which principally just say "I want a number or a function which returns a number" - introduce function which streamlines this process
 - FEAT: Support lists for mathematical operations: This helps later with cell_ranges
 - FEAT_ Add cell_range function which returns lists of values of cells
-- REFA: There are functionalities in LispFunctionExecutionContext derived classes which principally just say "I want a number or a function which returns a number" - introduce function which streamlines this process
 - FEAT: Add sum function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - first
@@ -31,5 +30,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- BUG: Add tests for function contexts
+- BUG: LispValue does not support IDENTIFIERS - could be useful for variables
 - Change numbers in UI to be zero based (helps with reference of cells)
 - Add lists: (list 3 556 "Hello")
