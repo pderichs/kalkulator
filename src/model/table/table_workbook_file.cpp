@@ -1,5 +1,7 @@
 #include "table_workbook_file.h"
+#include "table_cell.h"
 #include "table_workbook_file_error.h"
+#include <cstddef>
 #include <filesystem>
 #include <sstream>
 
@@ -41,8 +43,8 @@ void TableWorkbookFile::write(const TableWorkbookDocument &workbook) {
   execute_sql("DELETE FROM cells;");
 
   int id = 1;
-  const auto& sheets = workbook.sheets();
-  for (const auto& sheet : sheets) {
+  const auto &sheets = workbook.sheets();
+  for (const auto &sheet : sheets) {
     save_sheet(id, sheet);
     id++;
   }
@@ -52,24 +54,30 @@ void TableWorkbookFile::create_tables() {
   char *err_msg = nullptr;
 
   const std::string sql =
-      "create table if not exists meta ("
-      "    property text primary key not null,"
-      "    value text not null );"
+      "CREATE TABLE IF NOT EXISTS meta ("
+      "    property TEXT PRIMARY KEY NOT NULL,"
+      "    value TEXT NOT NULL);"
       ""
-      "create table if not exists sheets ("
-      "    id int primary key not null,"
-      "    name text not null );"
+      "CREATE TABLE IF NOT EXISTS sheets ("
+      "    id INT PRIMARY KEY NOT NULL,"
+      "    name TEXT NOT NULL,"
+      "    current_cell_row INT NOT NULL,"
+      "    current_cell_col INT NOT NULL);"
       ""
-      "create table if not exists cells ("
-      "    sheet_id int not null,"
-      "    row int not null,"
-      "    col int not null,"
-      "    visible_content text not null,"
-      "    formula text not null );"
+      "CREATE TABLE IF NOT EXISTS cells ("
+      "    sheet_id INT NOT NULL,"
+      "    row INT NOT NULL,"
+      "    col INT NOT NULL,"
+      "    content TEXT NOT NULL,"
       ""
-      "create unique index if not exists idx_unique_cells on cells(sheet_id, "
+      "    FOREIGN KEY (sheet_id)"
+      "    REFERENCES sheets (id)"
+      "    ON DELETE CASCADE);"
+      ""
+      "CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_cells ON cells(sheet_id, "
       "row, col);"
       ""
+      "DELETE FROM meta;"
       "INSERT INTO meta (property, value) VALUES ('version', '0.0.1a');";
 
   int rc = sqlite3_exec(_db, sql.c_str(), nullptr, nullptr, &err_msg);
@@ -91,15 +99,17 @@ void TableWorkbookFile::save_sheet(int id, const TableSheetPtr &sheet) {
   sql << sheet->current_cell.y() << "," << sheet->current_cell.x() << ");";
 
   execute_sql(sql.str());
+
+  save_cells(id, sheet);
 }
 
-std::string TableWorkbookFile::quote(const std::string& s) const {
+std::string TableWorkbookFile::quote(const std::string &s) const {
   std::stringstream ss;
   ss << "'" << s << "'";
   return ss.str();
 }
 
-void TableWorkbookFile::execute_sql(const std::string& sql) {
+void TableWorkbookFile::execute_sql(const std::string &sql) {
   char *err_msg = nullptr;
   int rc = sqlite3_exec(_db, sql.c_str(), nullptr, nullptr, &err_msg);
 
@@ -109,4 +119,33 @@ void TableWorkbookFile::execute_sql(const std::string& sql) {
     sqlite3_free(err_msg);
     throw TableWorkbookFileError(ss.str());
   }
+}
+
+void TableWorkbookFile::save_cells(int id, const TableSheetPtr &sheet) {
+  std::stringstream ss;
+
+  size_t rows = sheet->num_rows();
+  size_t cols = sheet->num_cols();
+
+  for (size_t r = 0; r < rows; r++) {
+    for (size_t c = 0; c < cols; c++) {
+      const auto &opt_cell = sheet->get_cell(r, c);
+      if (!opt_cell) {
+        continue;
+      }
+
+      const auto &cell = *opt_cell;
+
+      if (!cell || !cell->has_content()) {
+        continue;
+      }
+
+      ss << "INSERT INTO cells (sheet_id, row, col, content) "
+             << "VALUES (";
+      ss << id << ", " << r << ", " << c << ", ";
+        ss << quote(cell->get_formula_content()) << ");";
+    }
+  }
+
+  execute_sql(ss.str());
 }
