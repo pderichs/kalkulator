@@ -22,15 +22,7 @@ public:
     }
     const auto &first_param = *first_param_opt;
 
-    LispValue value;
-    if (first_param->is_function()) {
-      value = execution_context.execute(*first_param);
-    } else if (first_param->is_number()) {
-      value = *first_param;
-    } else {
-      throw LispExecutionContextError(
-          "Unable to perform division with this lisp value");
-    }
+    LispValue value(expect_number(first_param, execution_context));
 
     // First parameter of subtraction is base value
     result = value.number();
@@ -43,15 +35,7 @@ public:
       }
 
       const auto &param = *param_opt;
-      LispValue value;
-      if (param->is_function()) {
-        value = execution_context.execute(*param);
-      } else if (param->is_number()) {
-        value = *param;
-      } else {
-        throw LispExecutionContextError(
-            "Unable to perform division with this lisp value");
-      }
+      LispValue value(expect_number(param, execution_context));
 
       if (value.number() == 0.0) {
         throw LispExecutionContextError("Division by zero");

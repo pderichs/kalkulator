@@ -1,6 +1,7 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_execution_context.h"
 #include "lisp_function.h"
+#include <sstream>
 
 void LispFunctionExecutionContext::ensure_params(
     const LispFunction &func) const {
@@ -19,7 +20,10 @@ LispValue LispFunctionExecutionContext::expect_number(
   } else if (value->is_number()) {
     result = *value;
   } else {
-    throw LispExecutionContextError("Expected number or function");
+    std::stringstream ss;
+    ss << "Unable to perform subtraction with this lisp value "
+       << (int)value->type();
+    throw LispExecutionContextError(ss.str());
   }
 
   return result;

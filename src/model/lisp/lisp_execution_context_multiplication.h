@@ -16,17 +16,7 @@ public:
     double result = 1.0;
 
     for (const auto &param : func.params()) {
-      LispValue value;
-
-      if (param->is_function()) {
-        value = execution_context.execute(*param);
-      } else if (param->is_number()) {
-        value = *param;
-      } else {
-        throw LispExecutionContextError(
-            "Unable to perform multiplication with this lisp value");
-      }
-
+      LispValue value(expect_number(param, execution_context));
       result *= value.number();
     }
 

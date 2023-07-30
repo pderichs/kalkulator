@@ -24,17 +24,7 @@ public:
     }
     const auto &first_param = *first_param_opt;
 
-    LispValue value;
-    if (first_param->is_function()) {
-      value = execution_context.execute(first_param->function());
-    } else if (first_param->is_number()) {
-      value = *first_param;
-    } else {
-      std::stringstream ss;
-      ss << "Unable to perform subtraction with this lisp value "
-         << (int)first_param->type();
-      throw LispExecutionContextError(ss.str());
-    }
+    LispValue value(expect_number(first_param, execution_context));
 
     // First parameter of subtraction is base value
     result = value.number();
@@ -48,17 +38,7 @@ public:
 
       const auto &param = *param_opt;
 
-      LispValue value;
-      if (param->is_function()) {
-        value = execution_context.execute(*param);
-      } else if (param->is_number()) {
-        value = *param;
-      } else {
-        std::stringstream ss;
-        ss << "Unable to perform subtraction with this lisp value "
-           << (int)param->type();
-        throw LispExecutionContextError(ss.str());
-      }
+      LispValue value(expect_number(param, execution_context));
 
       result -= value.number();
     }
