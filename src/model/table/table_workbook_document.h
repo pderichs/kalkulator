@@ -20,6 +20,12 @@ public:
   TableSheetPtr table_sheet_by_name(const std::string &name) const;
   TableSheetPtr current_sheet() const { return _current_sheet; }
 
+  void clear();
+  void add_sheet(const std::string& name);
+  void clear_changed_flag() { _changed = false; }
+  void set_active_sheet(const std::string& name);
+  void set_current_cell(const std::string& sheet_name, const Location& current_cell);
+
   void move_cursor_up();
   void move_cursor_down();
   void move_cursor_left();

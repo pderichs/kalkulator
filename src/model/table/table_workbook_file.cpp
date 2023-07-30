@@ -1,9 +1,46 @@
 #include "table_workbook_file.h"
 #include "table_cell.h"
+#include "table_workbook_document.h"
 #include "table_workbook_file_error.h"
 #include <cstddef>
 #include <filesystem>
 #include <sstream>
+#include <string>
+
+static int read_sheet_callback(void *data, int argc, char **argv, char **col_names) {
+  TableWorkbookDocument* workbook = (TableWorkbookDocument*)data;
+
+  std::string curr_sheet;
+  std::string active_sheet;
+  int r;
+  int c;
+
+  for (int i = 0; i < argc; i++) {
+    std::string col(col_names[i]);
+    std::string content;
+
+    if (argv[i]) {
+      content = argv[i];
+    }
+
+    if (col == "name") {
+      workbook->add_sheet(content);
+      curr_sheet = content;
+    } else if (col == "active" && content == "1") {
+      active_sheet = curr_sheet;
+    } else if (col == "current_cell_row") {
+      r = std::stoi(content);
+    } else if (col == "current_cell_col") {
+      c = std::stoi(content);
+    }
+
+    workbook->set_current_cell(curr_sheet, Location(c, r));
+  }
+
+  workbook->set_active_sheet(active_sheet);
+
+  return 0;
+}
 
 TableWorkbookFile::TableWorkbookFile() { _db = nullptr; }
 
@@ -34,7 +71,21 @@ void TableWorkbookFile::close() {
   }
 }
 
-void TableWorkbookFile::read(TableWorkbookDocument &workbook) {}
+void TableWorkbookFile::read(TableWorkbookDocument &workbook) {
+  workbook.clear();
+
+  // int (*callback)(void *, int, char **, char **)
+  char *err_msg = nullptr;
+  int rc = sqlite3_exec(_db, "SELECT * FROM sheets ORDER BY id ASC;",
+                        read_sheet_callback, &workbook, &err_msg);
+
+  if (rc != SQLITE_OK) {
+    std::stringstream ss;
+    ss << "Error while reading sheet data: " << err_msg;
+    sqlite3_free(err_msg);
+    throw TableWorkbookFileError(ss.str());
+  }
+}
 
 void TableWorkbookFile::write(const TableWorkbookDocument &workbook) {
   create_tables();
@@ -45,7 +96,7 @@ void TableWorkbookFile::write(const TableWorkbookDocument &workbook) {
   int id = 1;
   const auto &sheets = workbook.sheets();
   for (const auto &sheet : sheets) {
-    save_sheet(id, sheet);
+    save_sheet(id, sheet, workbook);
     id++;
   }
 }
@@ -62,7 +113,8 @@ void TableWorkbookFile::create_tables() {
       "    id INT PRIMARY KEY NOT NULL,"
       "    name TEXT NOT NULL,"
       "    current_cell_row INT NOT NULL,"
-      "    current_cell_col INT NOT NULL);"
+      "    current_cell_col INT NOT NULL,"
+      "    active BOOL NOT NULL);"
       ""
       "CREATE TABLE IF NOT EXISTS cells ("
       "    sheet_id INT NOT NULL,"
@@ -78,6 +130,9 @@ void TableWorkbookFile::create_tables() {
       "row, col);"
       ""
       "DELETE FROM meta;"
+      "DELETE FROM sheets;"
+      "DELETE FROM cells;"
+      ""
       "INSERT INTO meta (property, value) VALUES ('version', '0.0.1a');";
 
   int rc = sqlite3_exec(_db, sql.c_str(), nullptr, nullptr, &err_msg);
@@ -90,13 +145,24 @@ void TableWorkbookFile::create_tables() {
   }
 }
 
-void TableWorkbookFile::save_sheet(int id, const TableSheetPtr &sheet) {
+void TableWorkbookFile::save_sheet(int id, const TableSheetPtr &sheet,
+                                   const TableWorkbookDocument &document) {
+  bool active = (sheet == document.current_sheet());
+
   std::stringstream sql;
 
-  sql << "INSERT INTO sheets (id, name, current_cell_row, current_cell_col) ";
+  sql << "INSERT INTO sheets (id, name, current_cell_row, current_cell_col, active) ";
   sql << "VALUES (";
   sql << id << "," << quote(sheet->name) << ",";
-  sql << sheet->current_cell.y() << "," << sheet->current_cell.x() << ");";
+  sql << sheet->current_cell.y() << "," << sheet->current_cell.x() << ",";
+
+  if (active) {
+    sql << "TRUE";
+  } else {
+    sql << "FALSE";
+  }
+
+  sql << ");";
 
   execute_sql(sql.str());
 
@@ -141,9 +207,9 @@ void TableWorkbookFile::save_cells(int id, const TableSheetPtr &sheet) {
       }
 
       ss << "INSERT INTO cells (sheet_id, row, col, content) "
-             << "VALUES (";
+         << "VALUES (";
       ss << id << ", " << r << ", " << c << ", ";
-        ss << quote(cell->get_formula_content()) << ");";
+      ss << quote(cell->get_formula_content()) << ");";
     }
   }
 

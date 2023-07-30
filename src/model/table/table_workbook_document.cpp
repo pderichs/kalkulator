@@ -3,6 +3,7 @@
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include "table_sheet.h"
+#include <algorithm>
 #include <cassert>
 #include <memory>
 #include <tuple>
@@ -172,4 +173,30 @@ TableCellPtrVector TableWorkbookDocument::get_range(const Location &from,
   }
 
   return result;
+}
+
+void TableWorkbookDocument::clear() {
+  _sheets.clear();
+  _current_sheet = {};
+}
+
+void TableWorkbookDocument::add_sheet(const std::string &name) {
+  _sheets.push_back(std::make_shared<TableSheet>(name));
+}
+
+void TableWorkbookDocument::set_active_sheet(const std::string &name) {
+  const auto &sheet = table_sheet_by_name(name);
+
+  if (sheet) {
+    _current_sheet = sheet;
+  }
+}
+
+void TableWorkbookDocument::set_current_cell(const std::string &sheet_name,
+                                             const Location &current_cell) {
+  const auto &sheet = table_sheet_by_name(sheet_name);
+
+  if (sheet) {
+    sheet->select_cell(current_cell);
+  }
 }

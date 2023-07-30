@@ -20,7 +20,7 @@ public:
 
 private:
   void create_tables();
-  void save_sheet(int id, const TableSheetPtr &sheet);
+  void save_sheet(int id, const TableSheetPtr &sheet, const TableWorkbookDocument& document);
   void save_cells(int id, const TableSheetPtr &sheet);
   std::string quote(const std::string& s) const;
   void execute_sql(const std::string& sql);
