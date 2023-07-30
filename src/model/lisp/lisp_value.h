@@ -15,6 +15,7 @@ enum LispValueType {
   LVT_NUMBER,
   LVT_FUNCTION,
   LVT_LIST,
+  LVT_IDENTIFIER,
 };
 
 class LispValue {
@@ -26,8 +27,16 @@ private:
 public:
   LispValue() { _type = LVT_NONE; }
 
-  LispValue(const std::string &s) {
-    _type = LVT_STRING;
+  LispValue(const std::string &s): LispValue(s, false) {
+  }
+
+  LispValue(const std::string &s, bool identifier) {
+    if (!identifier) {
+      _type = LVT_STRING;
+    } else {
+      _type = LVT_IDENTIFIER;
+    }
+
     _content = s;
   }
 
@@ -53,6 +62,7 @@ public:
   bool is_number() const { return _type == LVT_NUMBER; }
   bool is_function() const { return _type == LVT_FUNCTION; }
   bool is_list() const { return _type == LVT_LIST; }
+  bool is_identifier() const { return _type == LVT_IDENTIFIER; }
 
   std::string string() const { return std::any_cast<std::string>(_content); }
   double number() const { return std::any_cast<double>(_content); }
@@ -72,7 +82,7 @@ public:
   }
 
   bool operator==(const std::string &other) const {
-    if (!is_string()) {
+    if (!is_string() && !is_identifier()) {
       return false;
     }
 

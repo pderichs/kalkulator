@@ -25,6 +25,11 @@ std::optional<LispValue> LispValueParser::next() {
     std::string s = std::any_cast<std::string>(token.content);
     _pos++;
     return LispValue(s);
+  } else if (token.is_identifier()) {
+    // Same as string but with identifier flag set to true
+    std::string s = std::any_cast<std::string>(token.content);
+    _pos++;
+    return LispValue(s, true);
   }
 
   // Check for function

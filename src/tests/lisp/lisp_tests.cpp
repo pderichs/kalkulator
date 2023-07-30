@@ -21,6 +21,7 @@ int run_lisp_tests_parsing4();
 
 int run_lisp_tests_expression1();
 int run_lisp_tests_expression2();
+int run_lisp_tests_expression_with_identifier1();
 
 int run_lisp_tests_wrong_form1();
 
@@ -69,6 +70,8 @@ int run_lisp_tests() {
 
   RUN_TEST(run_lisp_tests_expression1);
   RUN_TEST(run_lisp_tests_expression2);
+
+  RUN_TEST(run_lisp_tests_expression_with_identifier1);
 
   RUN_TEST(run_lisp_tests_wrong_form1);
 
@@ -470,6 +473,56 @@ int run_lisp_tests_list1() {
   } catch (LispExecutionContextError &lee) {
     std::cerr << "*** Caught lisp execution context error: " << lee.what()
               << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_expression_with_identifier1() {
+  LispParser parser("(hello 33 some-variable \"Hello world\")");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto func = parser.next();
+    TEST_ASSERT(func);
+
+    LispValue val = *func;
+    TEST_ASSERT(val.is_function());
+
+    LispFunction expr = val.function();
+
+    TEST_ASSERT(expr.identifier() == "hello");
+    // std::cerr << expr.param_count() << std::endl;
+    TEST_ASSERT(expr.param_count() == 3);
+
+    std::optional<LispValuePtr> optparam = expr.param_at(0);
+    TEST_ASSERT(optparam);
+
+    auto param = *optparam;
+    TEST_ASSERT(param->is_number());
+    TEST_ASSERT((*param) == 33);
+
+    optparam = expr.param_at(1);
+    TEST_ASSERT(optparam);
+
+    param = *optparam;
+    TEST_ASSERT(param->is_identifier());
+    TEST_ASSERT((*param) == "some-variable");
+
+    optparam = expr.param_at(2);
+    TEST_ASSERT(optparam);
+
+    param = *optparam;
+    TEST_ASSERT(param->is_string());
+    TEST_ASSERT((*param) == "Hello world");
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
 
     TEST_ASSERT(false);
   }
