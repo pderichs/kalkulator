@@ -16,6 +16,7 @@ WX_LDFLAGS=-L$(WX_DIR)/buildgtk/lib -pthread -Wl,-rpath,$(WX_DIR)/buildgtk/lib -
 
 #CPPFLAGS=-std=c++17 -O3 -Wall -Wpedantic -Wextra -Weffc++ -I$(TOOLS_DIR) -I$(TESTS_DIR) $(WX_INCLUDES) $(WX_DEFINES)
 CPPFLAGS=-std=c++17 -g -Wall -Wpedantic -Wextra -Weffc++ -I$(TOOLS_DIR) -I$(TESTS_DIR) $(WX_INCLUDES) $(WX_DEFINES)
+CFLAGS=-g -Wall -Wpedantic -Wextra -I$(TOOLS_DIR) -I$(TESTS_DIR) $(WX_INCLUDES) $(WX_DEFINES)
 LDFLAGS=$(WX_LDFLAGS)
 LDLIBS=
 
@@ -40,6 +41,7 @@ SRCS+=$(TOOLS_DIR)/tools.cpp
 SRCS+=$(TESTS_DIR)/tests.cpp
 SRCS+=$(TESTS_DIR)/lisp/lisp_tests.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
+OBJS+=vendor/sqlite3/sqlite3.o
 
 TARGET=$(TARGET_DIR)/kalkulator
 
@@ -57,6 +59,9 @@ run: $(TARGET)
 .PHONY: unittests
 unittests: $(TARGET)
 	sh -c "$(TARGET) unittests"
+
+vendor/sqlite3/sqlite3.o: vendor/sqlite3/sqlite3.c
+	$(CC) $(CFLAGS) -c vendor/sqlite3/sqlite3.c -o vendor/sqlite3/sqlite3.o
 
 $(TARGET): $(OBJS)
 	$(CXX) $(LDFLAGS) -o $(TARGET) $(OBJS) $(LDLIBS)
