@@ -29,6 +29,8 @@ int run_lisp_tests_executor2();
 
 int run_lisp_tests_custom_function1();
 
+int run_lisp_tests_list1();
+
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
   virtual ~TestLispFunctionExecutionContext() = default;
@@ -74,6 +76,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_executor2);
 
   RUN_TEST(run_lisp_tests_custom_function1);
+
+  RUN_TEST(run_lisp_tests_list1);
 
   return 0;
 }
@@ -413,6 +417,51 @@ int run_lisp_tests_custom_function1() {
     LispValue result = executor.execute(value);
 
     TEST_ASSERT(result == "Hello Franzi!");
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  } catch (LispExecutionContextError &lee) {
+    std::cerr << "*** Caught lisp execution context error: " << lee.what()
+              << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_list1() {
+  LispParser parser("(list 42 \"Hallo\" (+ 3 900))");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto optvalue = parser.next();
+    TEST_ASSERT(optvalue);
+
+    auto value = *optvalue;
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(value);
+
+    TEST_ASSERT(result.is_list());
+
+    LispValuePtrVector lst = result.list();
+    TEST_ASSERT(lst.size() == 3);
+
+    LispValuePtr item;
+    item = lst[0];
+    TEST_ASSERT(item->is_number());
+
+    item = lst[1];
+    TEST_ASSERT(item->is_string());
+
+    item = lst[2];
+    TEST_ASSERT(item->is_function());
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;

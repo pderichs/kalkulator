@@ -93,7 +93,6 @@ bool MyApp::OnInit() {
 
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, "Kalkulator 0.1a"), _document(this) {
-  // TODO: Add cell function to execution context
   ValueConverter::update_execution_context(&_execution_context);
 
   _execution_context.add_function(

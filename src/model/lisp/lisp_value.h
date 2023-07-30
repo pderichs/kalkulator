@@ -6,9 +6,16 @@
 #include <string>
 #include <vector>
 
+#include "../not_implemented_error.h"
 #include "lisp_function.h"
 
-enum LispValueType { LVT_NONE, LVT_STRING, LVT_NUMBER, LVT_FUNCTION };
+enum LispValueType {
+  LVT_NONE,
+  LVT_STRING,
+  LVT_NUMBER,
+  LVT_FUNCTION,
+  LVT_LIST,
+};
 
 class LispValue {
 private:
@@ -34,17 +41,26 @@ public:
     _content = function;
   }
 
+  LispValue(const LispValuePtrVector &list) {
+    _type = LVT_LIST;
+    _content = list;
+  }
+
   LispValueType type() const { return _type; }
 
   bool is_none() const { return _type == LVT_NONE; }
   bool is_string() const { return _type == LVT_STRING; }
   bool is_number() const { return _type == LVT_NUMBER; }
   bool is_function() const { return _type == LVT_FUNCTION; }
+  bool is_list() const { return _type == LVT_LIST; }
 
   std::string string() const { return std::any_cast<std::string>(_content); }
   double number() const { return std::any_cast<double>(_content); }
   LispFunction function() const {
     return std::any_cast<LispFunction>(_content);
+  }
+  LispValuePtrVector list() const {
+    return std::any_cast<LispValuePtrVector>(_content);
   }
 
   bool operator==(const double &other) const {
@@ -61,6 +77,11 @@ public:
     }
 
     return string() == other;
+  }
+
+  // TODO: Prepare lisp eq functionality
+  bool lisp_eq(const LispValue &other) const {
+    throw NotImplementedError("eq is not implemented yet");
   }
 };
 
