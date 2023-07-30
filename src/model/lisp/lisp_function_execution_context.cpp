@@ -1,6 +1,8 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_execution_context.h"
 #include "lisp_function.h"
+#include "lisp_value.h"
+#include <memory>
 #include <sstream>
 
 void LispFunctionExecutionContext::ensure_params(
@@ -24,6 +26,33 @@ LispValue LispFunctionExecutionContext::expect_number(
     ss << "Unable to perform subtraction with this lisp value "
        << (int)value->type();
     throw LispExecutionContextError(ss.str());
+  }
+
+  return result;
+}
+
+LispValuePtrVector
+LispFunctionExecutionContext::execute_functions_and_extract_list_results(
+    const LispValuePtrVector &params,
+    const LispExecutionContext &execution_context) const {
+  LispValuePtrVector result;
+
+  for (const auto &param : params) {
+    if (param->is_function()) {
+      LispValue function_result(execution_context.execute(*param));
+
+      // A function could return a list - we add the
+      // list items separately to the result.
+      if (function_result.is_list()) {
+        for (const auto &item : function_result.list()) {
+          result.push_back(item);
+        }
+      } else {
+        result.push_back(std::make_shared<LispValue>(function_result));
+      }
+    } else {
+      result.push_back(param);
+    }
   }
 
   return result;

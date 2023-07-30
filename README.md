@@ -10,9 +10,7 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- FEAT: Support lists for mathematical operations: This helps later with cell_ranges
 - FEAT_ Add cell_range function which returns lists of values of cells
-- FEAT: Add sum function
 - FEAT: Add avg function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - first
@@ -30,6 +28,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- FEAT: Support lists for mathematical operations: This helps later with cell_ranges
 - REFA: There are functionalities in LispFunctionExecutionContext derived classes which principally just say "I want a number or a function which returns a number" - introduce function which streamlines this process
 - BUG: Add tests for function contexts
 - BUG: LispValue does not support IDENTIFIERS - could be useful for variables

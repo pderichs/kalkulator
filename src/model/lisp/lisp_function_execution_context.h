@@ -18,6 +18,11 @@ public:
   void ensure_params(const LispFunction &func) const;
   LispValue expect_number(const LispValuePtr &value,
                           const LispExecutionContext &execution_context) const;
+
+protected:
+  LispValuePtrVector execute_functions_and_extract_list_results(
+      const LispValuePtrVector &params,
+      const LispExecutionContext &execution_context) const;
 };
 
 #endif

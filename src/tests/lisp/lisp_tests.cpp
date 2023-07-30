@@ -33,9 +33,13 @@ int run_lisp_tests_custom_function1();
 int run_lisp_tests_list1();
 
 int run_lisp_tests_addition();
+int run_lisp_tests_addition_with_list1();
 int run_lisp_tests_subtraction();
+int run_lisp_tests_subtraction_with_list1();
 int run_lisp_tests_multiplication();
+int run_lisp_tests_multiplication_with_list1();
 int run_lisp_tests_division();
+int run_lisp_tests_division_with_list1();
 
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
@@ -88,9 +92,13 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_list1);
 
   RUN_TEST(run_lisp_tests_addition);
+  RUN_TEST(run_lisp_tests_addition_with_list1);
   RUN_TEST(run_lisp_tests_subtraction);
+  RUN_TEST(run_lisp_tests_subtraction_with_list1);
   RUN_TEST(run_lisp_tests_multiplication);
+  RUN_TEST(run_lisp_tests_multiplication_with_list1);
   RUN_TEST(run_lisp_tests_division);
+  RUN_TEST(run_lisp_tests_division_with_list1);
 
   return 0;
 }
@@ -630,6 +638,106 @@ int run_lisp_tests_division() {
     LispValue result = executor.execute(*value);
 
     TEST_ASSERT(result == 100);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_addition_with_list1() {
+  LispParser parser("(+ 10 (list 2000 20) 6)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(*value);
+
+    TEST_ASSERT(result == 2036);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_subtraction_with_list1() {
+  LispParser parser("(- 10000 (list 2000 20) 6)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(*value);
+
+    TEST_ASSERT(result == 7974);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_multiplication_with_list1() {
+  LispParser parser("(* 20 (list 2000 20) 6)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(*value);
+
+    TEST_ASSERT(result == 4800000);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_division_with_list1() {
+  LispParser parser("(/ 10000 (list 20 10) 5)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(*value);
+
+    TEST_ASSERT(result == 10);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
