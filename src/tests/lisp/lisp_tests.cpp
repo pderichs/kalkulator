@@ -1,8 +1,8 @@
 #include "lisp_tests.h"
 #include "../../model/lisp/lisp_execution_context.h"
-#include "../../model/lisp/lisp_function_execution_context.h"
 #include "../../model/lisp/lisp_execution_context_error.h"
 #include "../../model/lisp/lisp_function.h"
+#include "../../model/lisp/lisp_function_execution_context.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
 #include "../../model/lisp/lisp_value.h"
@@ -29,33 +29,34 @@ int run_lisp_tests_executor2();
 
 int run_lisp_tests_custom_function1();
 
-class TestLispFunctionExecutionContext: public LispFunctionExecutionContext {
+class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
-    virtual ~TestLispFunctionExecutionContext() = default;
+  virtual ~TestLispFunctionExecutionContext() = default;
 
-    // Adds "Hello " to the front of the provided string
-    virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
-      ensure_params(func);
+  // Adds "Hello " to the front of the provided string
+  virtual LispValue value(const LispFunction &func,
+                          const LispExecutionContext &execution_context) {
+    ensure_params(func);
 
-      if (func.param_count() != 1) {
-        throw LispExecutionContextError("Unexpected parameter count");
-      }
-
-      auto param_opt = func.param_at(0);
-      if (!param_opt) {
-        throw LispExecutionContextError("Unable to get first parameter");
-      }
-
-      auto param = *param_opt;
-      if (!param->is_string()) {
-        throw LispExecutionContextError("Parameter must be of type string");
-      }
-
-      std::stringstream ss;
-      ss << "Hello " << param->string() << "!";
-
-      return LispValue(ss.str());
+    if (func.param_count() != 1) {
+      throw LispExecutionContextError("Unexpected parameter count");
     }
+
+    auto param_opt = func.param_at(0);
+    if (!param_opt) {
+      throw LispExecutionContextError("Unable to get first parameter");
+    }
+
+    auto param = *param_opt;
+    if (!param->is_string()) {
+      throw LispExecutionContextError("Parameter must be of type string");
+    }
+
+    std::stringstream ss;
+    ss << "Hello " << param->string() << "!";
+
+    return LispValue(ss.str());
+  }
 };
 
 int run_lisp_tests() {
@@ -407,7 +408,8 @@ int run_lisp_tests_custom_function1() {
     auto value = *optvalue;
 
     LispExecutionContext executor;
-    executor.add_function("say_hello_test", std::make_shared<TestLispFunctionExecutionContext>());
+    executor.add_function("say_hello_test",
+                          std::make_shared<TestLispFunctionExecutionContext>());
     LispValue result = executor.execute(value);
 
     TEST_ASSERT(result == "Hello Franzi!");
