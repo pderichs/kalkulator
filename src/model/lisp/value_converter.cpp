@@ -21,6 +21,11 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 
   std::string input = pdtools::trim(s);
 
+  if (input.empty()) {
+    // Create none value
+    return std::make_shared<LispValue>();
+  }
+
   if (input[0] == '=') {
     // Formula
 
