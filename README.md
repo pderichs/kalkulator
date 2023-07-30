@@ -10,11 +10,19 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- Add lists: (list 3 556 "Hello")
+- Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
+  - first
+  - rest
+  - cons
+  - quote
+  - eq
+  - cond (if?)
+  - lambda
 - Cache function results
 - Save (sqlite)
 - Open (sqlite)
 - Fix circular formula bug
-- Add lists: (list 3 556 "Hello")
 - Support lists for mathematical operations
 - Add cell_range function which returns lists of values of cells
 - Refactoring: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
