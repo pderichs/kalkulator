@@ -3,10 +3,10 @@
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include "table_sheet.h"
+#include <cassert>
 #include <memory>
 #include <tuple>
 #include <utility>
-#include <cassert>
 
 TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink) {
   _event_sink = event_sink;
@@ -15,8 +15,9 @@ TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink) {
   _changed = false;
 }
 
-TableSheetPtr TableWorkbookDocument::table_sheet_by_name(const std::string& name) const {
-  for (auto sheet: _sheets) {
+TableSheetPtr
+TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
+  for (auto sheet : _sheets) {
     if (sheet->name == name) {
       return sheet;
     }
@@ -25,7 +26,8 @@ TableSheetPtr TableWorkbookDocument::table_sheet_by_name(const std::string& name
   return {};
 }
 
-void TableWorkbookDocument::update_content_current_cell(const std::string& content) {
+void TableWorkbookDocument::update_content_current_cell(
+    const std::string &content) {
   TableSheetPtr sheet = _current_sheet;
   TableCellPtr cell = sheet->get_current_cell();
 
@@ -65,7 +67,8 @@ void TableWorkbookDocument::move_cursor_right() {
   }
 }
 
-std::optional<TableCellPtr> TableWorkbookDocument::get_cell(const Location& location) {
+std::optional<TableCellPtr>
+TableWorkbookDocument::get_cell(const Location &location) const {
   TableSheetPtr sheet = _current_sheet;
   return sheet->get_cell_by_location(location);
 }
@@ -89,7 +92,8 @@ void TableWorkbookDocument::move_cursor_page_down() {
   }
 }
 
-Location TableWorkbookDocument::get_cell_by_pos(const Location& position) const {
+Location
+TableWorkbookDocument::get_cell_by_pos(const Location &position) const {
   int row = 0;
   int col = 0;
 
@@ -99,7 +103,7 @@ Location TableWorkbookDocument::get_cell_by_pos(const Location& position) const 
   int n;
 
   n = 0;
-  for (const auto& rowdef : _current_sheet->row_definitions) {
+  for (const auto &rowdef : _current_sheet->row_definitions) {
     height += rowdef->height;
 
     if (height > position.y()) {
@@ -111,7 +115,7 @@ Location TableWorkbookDocument::get_cell_by_pos(const Location& position) const 
   }
 
   n = 0;
-  for (const auto& coldef : _current_sheet->column_definitions) {
+  for (const auto &coldef : _current_sheet->column_definitions) {
     width += coldef->width;
 
     if (width > position.x()) {
@@ -125,16 +129,17 @@ Location TableWorkbookDocument::get_cell_by_pos(const Location& position) const 
   return Location(col, row);
 }
 
-void TableWorkbookDocument::select_cell(const Location& cell) {
+void TableWorkbookDocument::select_cell(const Location &cell) {
   if (_current_sheet->select_cell(cell)) {
-    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, _current_sheet->current_cell);
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
+                            _current_sheet->current_cell);
   }
 }
 
 int TableWorkbookDocument::get_current_sheet_width() const {
   int width = 0;
 
-  for (const auto& coldef : _current_sheet->column_definitions) {
+  for (const auto &coldef : _current_sheet->column_definitions) {
     width += coldef->width;
   }
 
@@ -144,9 +149,27 @@ int TableWorkbookDocument::get_current_sheet_width() const {
 int TableWorkbookDocument::get_current_sheet_height() const {
   int height = 0;
 
-  for (const auto& rowdef : _current_sheet->row_definitions) {
+  for (const auto &rowdef : _current_sheet->row_definitions) {
     height += rowdef->height;
   }
 
   return height;
+}
+
+TableCellPtrVector TableWorkbookDocument::get_range(const Location &from,
+                                                    const Location &to) const {
+  TableCellPtrVector result;
+
+  for (long r = from.y(); r <= to.y(); r++) {
+    for (long c = from.x(); c <= to.x(); c++) {
+      const auto &opt_cell = get_cell(Location(c, r));
+      if (!opt_cell) {
+        continue;
+      }
+
+      result.push_back(*opt_cell);
+    }
+  }
+
+  return result;
 }

@@ -7,6 +7,8 @@
 #include <vector>
 #include "../event_sink.h"
 
+typedef std::vector<TableCellPtr> TableCellPtrVector;
+
 class TableWorkbookDocument {
 public:
   TableWorkbookDocument(EventSink *event_sink);
@@ -28,8 +30,9 @@ public:
   Location get_cell_by_pos(const Location& position) const;
   void select_cell(const Location& cell);
 
-  std::optional<TableCellPtr> get_cell(const Location& location);
+  std::optional<TableCellPtr> get_cell(const Location& location) const;
   TableCellPtr get_current_cell() const;
+  TableCellPtrVector get_range(const Location& from, const Location& to) const;
 
   void update_content_current_cell(const std::string& content);
 
