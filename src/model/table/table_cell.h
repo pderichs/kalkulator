@@ -10,11 +10,6 @@
 
 class TableCell {
 public:
-  TableCell(int row, int col) {
-    _row = row;
-    _col = col;
-  }
-
   void update_content(const std::string &content);
 
   std::string visible_content() const;
@@ -25,16 +20,10 @@ public:
 
   bool has_content() const;
 
-  int row() const { return _row; }
-  int col() const { return _col; }
-
 private:
   std::string _formula_content;
 
   LispValuePtr _lisp_value;
-
-  int _row;
-  int _col;
 };
 
 typedef std::shared_ptr<TableCell> TableCellPtr;

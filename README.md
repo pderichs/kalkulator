@@ -10,8 +10,8 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: Fix circular reference formula bug: Referencing the same cell in a formula with "cell" causes the app to crash
 - BUG: Make sure cell_range ranges behave correctly  (with reversed directions)
+- BUG: Fix circular reference formula bug: Referencing the same cell in a formula with "cell" causes the app to crash
 - FEAT: Add bool type for LispValue (could be useful for if)
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - DONE first

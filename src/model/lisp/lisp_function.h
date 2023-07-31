@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 
-#include "lisp_tokens.h"
-
 class LispValue;
 
 typedef std::shared_ptr<LispValue> LispValuePtr;
@@ -16,7 +14,6 @@ typedef std::vector<LispValuePtr> LispValuePtrVector;
 
 class LispFunction {
 private:
-  LispTokens _tokens;
   std::string _identifier;
   LispValuePtrVector _params;
 

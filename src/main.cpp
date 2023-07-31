@@ -286,10 +286,6 @@ void MyFrame::send_event(TableEvent event_id, std::any param) {
 
       wxPrintf("  Formula update content: %s\n", new_content);
 
-      // Special case for "cell" function call: If it references the
-      // current cell this is an error. Stop execution early if so.
-      //Location current_cell(_document.current_sheet()->current_cell);
-
       // Apply new content to cell
       _document.update_content_current_cell(new_content);
     } catch (const std::bad_any_cast &e) {
