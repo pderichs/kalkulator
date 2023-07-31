@@ -2,6 +2,7 @@
 #include "lisp_execution_context_addition.h"
 #include "lisp_execution_context_division.h"
 #include "lisp_execution_context_error.h"
+#include "lisp_execution_context_first.h"
 #include "lisp_execution_context_list.h"
 #include "lisp_execution_context_multiplication.h"
 #include "lisp_execution_context_subtraction.h"
@@ -17,6 +18,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["*"] = std::make_shared<LispExecutionContextMultiplication>();
   _functions["/"] = std::make_shared<LispExecutionContextDivision>();
   _functions["list"] = std::make_shared<LispExecutionContextList>();
+  _functions["first"] = std::make_shared<LispExecutionContextFirst>();
 }
 
 LispValue LispExecutionContext::execute(const LispValue &value) const {
