@@ -12,6 +12,7 @@
 #include "model/event_sink.h"
 #include "model/lisp/lisp_execution_context.h"
 #include "model/lisp/value_converter.h"
+#include "model/table/lisp_execution_context_average.h"
 #include "model/table/lisp_execution_context_cell_range.h"
 #include "model/table/lisp_execution_context_cell_reference.h"
 #include "model/table/table_workbook_document.h"
@@ -103,6 +104,8 @@ MyFrame::MyFrame()
   _execution_context.add_function(
       "cell_range",
       std::make_shared<LispExecutionContextCellRange>(&_document));
+  _execution_context.add_function(
+      "avg", std::make_shared<LispExecutionContextAvg>(&_document));
 
   wxMenu *menuFile = new wxMenu();
   menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a figures file");
@@ -248,9 +251,7 @@ void MyFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
     file.open((const char *)saveFileDialog.GetPath());
     file.write(_document);
   } catch (TableWorkbookFileError &twfe) {
-      wxMessageBox(
-          twfe.what(),
-          wxT("Error"), wxICON_EXCLAMATION);
+    wxMessageBox(twfe.what(), wxT("Error"), wxICON_EXCLAMATION);
   }
 }
 

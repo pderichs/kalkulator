@@ -10,7 +10,6 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- FEAT: Add avg function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - first
   - rest
@@ -25,6 +24,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- FEAT: Add avg function
 - FEAT: Save (sqlite)
 - FEAT: Open (sqlite)
 - BUG: Clearing cell content is crashing the app
