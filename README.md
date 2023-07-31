@@ -24,6 +24,13 @@ This is one item of the "applications every software engineer should implement o
 - MAYB: Cache function results (see field _func_result on LispValue)
 - REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
 - BUG: Fix scroll bar behaviour (scrolling is not useable atm)
+- FEAT: Add simple format: bold
+- FEAT: Add simple format: italic
+- FEAT: Add simple format: underlined
+- FEAT: Add simple format: background color
+- FEAT: Add simple format: foreground color
+- FEAT: Funktion isnone
+- BUG: Support dark UI of Desktop Environment (see: https://stackoverflow.com/questions/58920057/wxwidgets-dark-mode-on-macos)
 
 # DONE
 
