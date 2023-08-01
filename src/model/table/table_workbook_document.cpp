@@ -27,7 +27,9 @@ TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
   return {};
 }
 
-void TableWorkbookDocument::update_cell_content(TableSheetPtr sheet, TableCellPtr cell, const std::string& content) {
+void TableWorkbookDocument::update_cell_content(TableSheetPtr sheet,
+                                                TableCellPtr cell,
+                                                const std::string &content) {
   assert(cell);
 
   cell->update_content(content);
@@ -165,8 +167,26 @@ TableCellPtrVector TableWorkbookDocument::get_range(const Location &from,
                                                     const Location &to) const {
   TableCellPtrVector result;
 
-  for (long r = from.y(); r <= to.y(); r++) {
-    for (long c = from.x(); c <= to.x(); c++) {
+  long min_x, min_y, max_x, max_y;
+
+  if (from.x() > to.x()) {
+    min_x = to.x();
+    max_x = from.x();
+  } else {
+    min_x = from.x();
+    max_x = to.x();
+  }
+
+  if (from.y() > to.y()) {
+    min_y = to.y();
+    max_y = from.y();
+  } else {
+    min_y = from.y();
+    max_y = to.y();
+  }
+
+  for (long r = min_y; r <= max_y; r++) {
+    for (long c = min_x; c <= max_x; c++) {
       const auto &opt_cell = get_cell(Location(c, r));
       if (!opt_cell) {
         continue;

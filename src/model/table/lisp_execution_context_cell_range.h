@@ -38,13 +38,6 @@ public:
       n++;
     }
 
-    // From smaller location to higher location - reorder
-    // if necessary
-    if (ranges[0] > ranges[2] || ranges[1] > ranges[3]) {
-      std::swap(ranges[0], ranges[2]);
-      std::swap(ranges[1], ranges[3]);
-    }
-
     Location from(ranges[1], ranges[0]);
     Location to(ranges[3], ranges[2]);
 
