@@ -9,7 +9,9 @@ public:
   LispExecutionContextList() = default;
   virtual ~LispExecutionContextList() = default;
 
-  virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
+  virtual LispValue value(const LispFunction &func,
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param = {}) {
     return LispValue(func.params()); // ;)
   }
 };

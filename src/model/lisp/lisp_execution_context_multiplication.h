@@ -11,12 +11,15 @@ public:
   LispExecutionContextMultiplication() = default;
   virtual ~LispExecutionContextMultiplication() = default;
 
-  virtual LispValue value(const LispFunction &func, const LispExecutionContext& execution_context) {
+  virtual LispValue value(const LispFunction &func,
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param = {}) {
     ensure_params(func);
 
     double result = 1.0;
 
-    LispValuePtrVector params = execute_functions_and_extract_list_results(func.params(), execution_context);
+    LispValuePtrVector params = execute_functions_and_extract_list_results(
+        func.params(), execution_context);
 
     for (const auto &param : params) {
       LispValue value(expect_number(param, execution_context));

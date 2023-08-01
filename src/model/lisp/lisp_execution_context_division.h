@@ -12,12 +12,14 @@ public:
   virtual ~LispExecutionContextDivision() = default;
 
   virtual LispValue value(const LispFunction &func,
-                          const LispExecutionContext &execution_context) {
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param = {}) {
     ensure_params(func);
 
     double result;
 
-    LispValuePtrVector params = execute_functions_and_extract_list_results(func.params(), execution_context);
+    LispValuePtrVector params = execute_functions_and_extract_list_results(
+        func.params(), execution_context);
 
     const auto &first_param = params[0];
 

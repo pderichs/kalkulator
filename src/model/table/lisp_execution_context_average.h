@@ -17,7 +17,8 @@ public:
   virtual ~LispExecutionContextAvg() = default;
 
   virtual LispValue value(const LispFunction &func,
-                          const LispExecutionContext &execution_context) {
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param = {}) {
     ensure_params(func);
 
     double result = 0.0;

@@ -13,7 +13,8 @@ public:
   LispFunctionExecutionContext() = default;
   virtual ~LispFunctionExecutionContext() = default;
   virtual LispValue value(const LispFunction &func,
-                          const LispExecutionContext &execution_context) = 0;
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param = {}) = 0;
 
   void ensure_params(const LispFunction &func) const;
   LispValue expect_number(const LispValuePtr &value,

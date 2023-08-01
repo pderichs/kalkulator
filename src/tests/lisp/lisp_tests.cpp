@@ -51,7 +51,8 @@ public:
 
   // Adds "Hello " to the front of the provided string
   virtual LispValue value(const LispFunction &func,
-                          const LispExecutionContext &execution_context) {
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param = {}) {
     ensure_params(func);
 
     if (func.param_count() != 1) {
@@ -778,7 +779,6 @@ int run_lisp_tests_first1() {
     TEST_ASSERT(false);
   }
 
-
   return 0;
 }
 
@@ -798,7 +798,7 @@ int run_lisp_tests_rest1() {
 
     TEST_ASSERT(result.is_list());
 
-    const auto& lst = result.list();
+    const auto &lst = result.list();
 
     TEST_ASSERT(*lst[0] == 20);
     TEST_ASSERT(*lst[1] == 10);
@@ -809,7 +809,6 @@ int run_lisp_tests_rest1() {
 
     TEST_ASSERT(false);
   }
-
 
   return 0;
 }

@@ -16,7 +16,8 @@ public:
   virtual ~LispExecutionContextCellReference() = default;
 
   virtual LispValue value(const LispFunction &func,
-                          const LispExecutionContext &execution_context) {
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param = {}) {
     if (func.param_count() != 2) {
       throw LispExecutionContextError(
           "cell function needs 2 parameters (row and colum)");

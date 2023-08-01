@@ -9,7 +9,8 @@ public:
   virtual ~LispExecutionContextFirst() = default;
 
   virtual LispValue value(const LispFunction &func,
-                          const LispExecutionContext &execution_context) {
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param = {}) {
     ensure_params(func);
 
     // TODO: Should we execute functions here or return the function
@@ -20,6 +21,5 @@ public:
     return LispValue(*params[0]);
   }
 };
-
 
 #endif
