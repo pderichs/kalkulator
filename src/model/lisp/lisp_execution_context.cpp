@@ -23,23 +23,27 @@ LispExecutionContext::LispExecutionContext() {
   _functions["rest"] = std::make_shared<LispExecutionContextRest>();
 }
 
-LispValue LispExecutionContext::execute(const LispValue &value) const {
+LispValue
+LispExecutionContext::execute(const LispValue &value,
+                              const std::any &context_param = {}) const {
   if (!value.is_function()) {
     return value;
   }
 
-  LispValue execution_result = eval_function(value.function());
+  LispValue execution_result = eval_function(value.function(), context_param);
   return execution_result;
 }
 
-LispValue LispExecutionContext::eval_function(const LispFunction &func) const {
+LispValue
+LispExecutionContext::eval_function(const LispFunction &func,
+                                    const std::any &context_param) const {
   const auto &execution_context_it = _functions.find(func.identifier());
   if (execution_context_it == _functions.end()) {
     throw LispExecutionContextError("Unknown function identifier");
   }
 
   const auto &execution_context = execution_context_it->second;
-  return execution_context->value(func, *this);
+  return execution_context->value(func, *this, context_param);
 }
 
 void LispExecutionContext::add_function(

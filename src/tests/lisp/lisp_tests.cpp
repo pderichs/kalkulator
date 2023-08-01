@@ -52,7 +52,7 @@ public:
   // Adds "Hello " to the front of the provided string
   virtual LispValue value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
-                          const std::any &context_param = {}) {
+                          const std::any &context_param) {
     ensure_params(func);
 
     if (func.param_count() != 1) {
@@ -378,7 +378,7 @@ int run_lisp_tests_executor1() {
     auto value = *optvalue;
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(value);
+    LispValue result = executor.execute(value, {});
 
     TEST_ASSERT(result == -416.32);
   } catch (LispParserError &lpe) {
@@ -410,7 +410,7 @@ int run_lisp_tests_executor2() {
     auto value = *optvalue;
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(value);
+    LispValue result = executor.execute(value, {});
 
     TEST_ASSERT(result == 32.0);
   } catch (LispParserError &lpe) {
@@ -444,7 +444,7 @@ int run_lisp_tests_custom_function1() {
     LispExecutionContext executor;
     executor.add_function("say_hello_test",
                           std::make_shared<TestLispFunctionExecutionContext>());
-    LispValue result = executor.execute(value);
+    LispValue result = executor.execute(value, {});
 
     TEST_ASSERT(result == "Hello Franzi!");
   } catch (LispParserError &lpe) {
@@ -476,7 +476,7 @@ int run_lisp_tests_list1() {
     auto value = *optvalue;
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(value);
+    LispValue result = executor.execute(value, {});
 
     TEST_ASSERT(result.is_list());
 
@@ -569,7 +569,7 @@ int run_lisp_tests_addition() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == -7);
   } catch (LispParserError &lpe) {
@@ -594,7 +594,7 @@ int run_lisp_tests_subtraction() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == 45);
   } catch (LispParserError &lpe) {
@@ -619,7 +619,7 @@ int run_lisp_tests_multiplication() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == -3648);
   } catch (LispParserError &lpe) {
@@ -644,7 +644,7 @@ int run_lisp_tests_division() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == 100);
   } catch (LispParserError &lpe) {
@@ -669,7 +669,7 @@ int run_lisp_tests_addition_with_list1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == 2036);
   } catch (LispParserError &lpe) {
@@ -694,7 +694,7 @@ int run_lisp_tests_subtraction_with_list1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == 7974);
   } catch (LispParserError &lpe) {
@@ -719,7 +719,7 @@ int run_lisp_tests_multiplication_with_list1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == 4800000);
   } catch (LispParserError &lpe) {
@@ -744,7 +744,7 @@ int run_lisp_tests_division_with_list1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == 10);
   } catch (LispParserError &lpe) {
@@ -769,7 +769,7 @@ int run_lisp_tests_first1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result == 24000);
   } catch (LispParserError &lpe) {
@@ -794,7 +794,7 @@ int run_lisp_tests_rest1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value);
+    LispValue result = executor.execute(*value, {});
 
     TEST_ASSERT(result.is_list());
 

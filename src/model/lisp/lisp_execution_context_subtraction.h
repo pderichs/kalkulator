@@ -14,17 +14,17 @@ public:
 
   virtual LispValue value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
-                          const std::any &context_param = {}) {
+                          const std::any &context_param) {
     ensure_params(func);
 
     double result;
 
     LispValuePtrVector params = execute_functions_and_extract_list_results(
-        func.params(), execution_context);
+        func.params(), execution_context, context_param);
 
     const auto &first_param = params[0];
 
-    LispValue value(expect_number(first_param, execution_context));
+    LispValue value(expect_number(first_param, execution_context, context_param));
 
     // First parameter of subtraction is base value
     result = value.number();
@@ -32,7 +32,7 @@ public:
     // Skip first param
     for (size_t n = 1; n < params.size(); n++) {
       const auto &param = params[n];
-      LispValue value(expect_number(param, execution_context));
+      LispValue value(expect_number(param, execution_context, context_param));
       result -= value.number();
     }
 

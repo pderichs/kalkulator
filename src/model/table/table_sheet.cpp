@@ -36,7 +36,7 @@ TableSheet::TableSheet(const std::string &name) : current_cell(0, 0) {
     auto row = std::make_shared<TableRow>();
 
     for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
-      row->push_back(std::make_shared<TableCell>());
+      row->push_back(std::make_shared<TableCell>(r, c));
     }
 
     rows.push_back(row);

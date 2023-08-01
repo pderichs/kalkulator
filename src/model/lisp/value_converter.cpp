@@ -63,15 +63,17 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
   return result;
 }
 
-std::string ValueConverter::to_string(const LispValuePtr &value) {
+std::string ValueConverter::to_string(const LispValuePtr &value,
+                                      const std::any &context_param) {
   if (!value) {
     return "";
   }
 
-  return ValueConverter::to_string(*value);
+  return ValueConverter::to_string(*value, context_param);
 }
 
-std::string ValueConverter::to_string(const LispValue &value) {
+std::string ValueConverter::to_string(const LispValue &value,
+                                      const std::any &context_param) {
   if (!execution_context) {
     throw std::runtime_error("to_string: Execution context is NULL");
   }
@@ -87,8 +89,8 @@ std::string ValueConverter::to_string(const LispValue &value) {
   } else if (value.is_function()) {
     try {
       // Execute function
-      LispValue result = execution_context->execute(value);
-      return ValueConverter::to_string(result);
+      LispValue result = execution_context->execute(value, context_param);
+      return ValueConverter::to_string(result, context_param);
     } catch (const std::runtime_error &e) {
       std::cerr << "*** CAUGHT EXCEPTION: " << e.what() << std::endl;
       exit(255);

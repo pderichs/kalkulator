@@ -13,12 +13,12 @@ void LispFunctionExecutionContext::ensure_params(
 }
 
 LispValue LispFunctionExecutionContext::expect_number(
-    const LispValuePtr &value,
-    const LispExecutionContext &execution_context) const {
+    const LispValuePtr &value, const LispExecutionContext &execution_context,
+    const std::any &context_param) const {
   LispValue result;
 
   if (value->is_function()) {
-    result = execution_context.execute(*value);
+    result = execution_context.execute(*value, context_param);
   } else if (value->is_number()) {
     result = *value;
   } else {
@@ -34,12 +34,14 @@ LispValue LispFunctionExecutionContext::expect_number(
 LispValuePtrVector
 LispFunctionExecutionContext::execute_functions_and_extract_list_results(
     const LispValuePtrVector &params,
-    const LispExecutionContext &execution_context) const {
+    const LispExecutionContext &execution_context,
+    const std::any &context_param) const {
   LispValuePtrVector result;
 
   for (const auto &param : params) {
     if (param->is_function()) {
-      LispValue function_result(execution_context.execute(*param));
+      LispValue function_result(
+          execution_context.execute(*param, context_param));
 
       // A function could return a list - we add the
       // list items separately to the result.

@@ -17,7 +17,7 @@ public:
 
   virtual LispValue value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
-                          const std::any &context_param = {}) {
+                          const std::any &context_param) {
     if (func.param_count() != 2) {
       throw LispExecutionContextError(
           "cell function needs 2 parameters (row and colum)");
@@ -25,43 +25,11 @@ public:
 
     int row, col;
 
-    auto opt_row_param = func.param_at(0);
-    auto opt_col_param = func.param_at(1);
+    LispValuePtrVector params = execute_functions_and_extract_list_results(
+        func.params(), execution_context, context_param);
 
-    if (!opt_col_param || !opt_row_param) {
-      throw LispExecutionContextError(
-          "cell: Unable to retrieve one of needed parameters");
-    }
-
-    auto row_param = *opt_row_param;
-    auto col_param = *opt_col_param;
-
-    LispValue row_value;
-    if (row_param->is_function()) {
-      row_value = execution_context.execute(*row_param);
-    } else if (row_param->is_number()) {
-      row_value = *row_param;
-    } else {
-      std::stringstream ss;
-      ss << "Unable to retrieve row value from param of type "
-         << (int)row_param->type();
-      throw LispExecutionContextError(ss.str());
-    }
-
-    LispValue col_value;
-    if (col_param->is_function()) {
-      col_value = execution_context.execute(*col_param);
-    } else if (col_param->is_number()) {
-      col_value = *col_param;
-    } else {
-      std::stringstream ss;
-      ss << "Unable to retrieve col value from param of type "
-         << (int)col_param->type();
-      throw LispExecutionContextError(ss.str());
-    }
-
-    row = (int)row_value.number();
-    col = (int)col_value.number();
+    row = (int)params[0]->number();
+    col = (int)params[1]->number();
 
     auto opt_cell = _workbook->get_cell(Location(col, row));
     if (!opt_cell) {

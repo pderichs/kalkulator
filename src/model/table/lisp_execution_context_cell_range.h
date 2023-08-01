@@ -16,13 +16,13 @@ public:
 
   virtual LispValue value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
-                          const std::any &context_param = {}) {
+                          const std::any &context_param) {
     ensure_params(func);
 
     LispValuePtrVector result;
 
     LispValuePtrVector params = execute_functions_and_extract_list_results(
-        func.params(), execution_context);
+        func.params(), execution_context, context_param);
 
     if (params.size() != 4) {
       std::stringstream ss;
@@ -34,7 +34,7 @@ public:
     int ranges[4]; // from_row, from_col, to_row, to_col
     int n = 0;
     for (const auto &param : params) {
-      LispValue value(expect_number(param, execution_context));
+      LispValue value(expect_number(param, execution_context, context_param));
       ranges[n] = (int)value.number();
       n++;
     }

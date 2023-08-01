@@ -12,8 +12,10 @@ public:
   static void update_execution_context(LispExecutionContext *context);
 
   static LispValuePtr to_lisp_value(const std::string &s);
-  static std::string to_string(const LispValuePtr &value);
-  static std::string to_string(const LispValue &value);
+  static std::string to_string(const LispValuePtr &value,
+                               const std::any &context_param);
+  static std::string to_string(const LispValue &value,
+                               const std::any &context_param);
 };
 
 #endif

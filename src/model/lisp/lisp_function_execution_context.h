@@ -14,16 +14,18 @@ public:
   virtual ~LispFunctionExecutionContext() = default;
   virtual LispValue value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
-                          const std::any &context_param = {}) = 0;
+                          const std::any &context_param) = 0;
 
   void ensure_params(const LispFunction &func) const;
   LispValue expect_number(const LispValuePtr &value,
-                          const LispExecutionContext &execution_context) const;
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param) const;
 
 protected:
   LispValuePtrVector execute_functions_and_extract_list_results(
       const LispValuePtrVector &params,
-      const LispExecutionContext &execution_context) const;
+      const LispExecutionContext &execution_context,
+      const std::any &context_param) const;
 };
 
 #endif

@@ -12,7 +12,7 @@ void TableCell::update_content(const std::string &content) {
 }
 
 std::string TableCell::visible_content() const {
-  return ValueConverter::to_string(_lisp_value);
+  return ValueConverter::to_string(_lisp_value, _location);
 }
 
 std::string TableCell::get_formula_content() const {

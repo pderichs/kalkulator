@@ -8,8 +8,12 @@
 #include "../lisp/lisp_function.h"
 #include "../lisp/value_converter.h"
 
+#include "location.h"
+
 class TableCell {
 public:
+  TableCell(int row, int col): _location(col, row) {}
+
   void update_content(const std::string &content);
 
   std::string visible_content() const;
@@ -24,6 +28,9 @@ private:
   std::string _formula_content;
 
   LispValuePtr _lisp_value;
+
+  // Cell knows about its position
+  Location _location; // TODO can be const!
 };
 
 typedef std::shared_ptr<TableCell> TableCellPtr;
