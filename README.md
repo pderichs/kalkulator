@@ -11,6 +11,8 @@ This is one item of the "applications every software engineer should implement o
 # TODO
 
 - FEAT: Add bool type for LispValue (could be useful for if)
+- FEAT: Implement DELETE operation on cells
+- FEAT: Direct editing? (without the need of pressing F2)
 - BUG: Fix circular reference formula bug: Referencing the same cell in a formula with "cell" causes the app to crash
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - DONE first
