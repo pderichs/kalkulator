@@ -16,6 +16,7 @@ enum LispValueType {
   LVT_FUNCTION,
   LVT_LIST,
   LVT_IDENTIFIER,
+  LVT_BOOL,
 };
 
 class LispValue {
@@ -45,6 +46,11 @@ public:
     _content = number;
   }
 
+  LispValue(bool b) {
+    _type = LVT_BOOL;
+    _content = b;
+  }
+
   LispValue(const LispFunction &function) {
     _type = LVT_FUNCTION;
     _content = function;
@@ -63,9 +69,11 @@ public:
   bool is_function() const { return _type == LVT_FUNCTION; }
   bool is_list() const { return _type == LVT_LIST; }
   bool is_identifier() const { return _type == LVT_IDENTIFIER; }
+  bool is_boolean() const { return _type == LVT_BOOL; }
 
   std::string string() const { return std::any_cast<std::string>(_content); }
   double number() const { return std::any_cast<double>(_content); }
+  bool boolean() const { return std::any_cast<bool>(_content); }
   LispFunction function() const {
     return std::any_cast<LispFunction>(_content);
   }
