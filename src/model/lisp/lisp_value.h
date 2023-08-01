@@ -10,13 +10,18 @@
 #include "lisp_function.h"
 
 enum LispValueType {
-  LVT_NONE,
-  LVT_STRING,
-  LVT_NUMBER,
-  LVT_FUNCTION,
-  LVT_LIST,
-  LVT_IDENTIFIER,
-  LVT_BOOL,
+  LVT_NONE = 0,
+  LVT_STRING = 1,
+  LVT_NUMBER = 2,
+  LVT_FUNCTION = 3,
+  LVT_LIST = 4,
+  LVT_IDENTIFIER = 5,
+  LVT_BOOL = 6,
+};
+
+enum LispBool {
+  LISP_BOOL_FALSE = 0,
+  LISP_BOOL_TRUE = 1,
 };
 
 class LispValue {
@@ -46,7 +51,7 @@ public:
     _content = number;
   }
 
-  LispValue(bool b) {
+  LispValue(LispBool b) {
     _type = LVT_BOOL;
     _content = b;
   }
@@ -73,7 +78,7 @@ public:
 
   std::string string() const { return std::any_cast<std::string>(_content); }
   double number() const { return std::any_cast<double>(_content); }
-  bool boolean() const { return std::any_cast<bool>(_content); }
+  bool boolean() const { return std::any_cast<LispBool>(_content) == LISP_BOOL_TRUE; }
   LispFunction function() const {
     return std::any_cast<LispFunction>(_content);
   }

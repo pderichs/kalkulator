@@ -5,6 +5,7 @@
 #include "../lisp/lisp_execution_context_error.h"
 #include "../lisp/lisp_function_execution_context.h"
 #include "table_workbook_document.h"
+#include <any>
 #include <sstream>
 
 class LispExecutionContextCellReference : public LispFunctionExecutionContext {
@@ -23,6 +24,13 @@ public:
           "cell function needs 2 parameters (row and colum)");
     }
 
+    // To prevent a circular reference we need to check whether
+    // the function parameters would make the cell reference
+    // itself.
+    // The context_param contains the current cell location
+    // within the spreadsheet calculation application.
+    Location cell_location = std::any_cast<Location>(context_param);
+
     int row, col;
 
     LispValuePtrVector params = execute_functions_and_extract_list_results(
@@ -30,6 +38,12 @@ public:
 
     row = (int)params[0]->number();
     col = (int)params[1]->number();
+
+    if (row == cell_location.y() && col == cell_location.x()) {
+      // This would be a circular reference - cancel operation
+      // throw LispExecutionContextError("Detected circular reference.");
+      return LispValue("#CIRCULARREFERR");
+    }
 
     auto opt_cell = _workbook->get_cell(Location(col, row));
     if (!opt_cell) {
@@ -39,6 +53,10 @@ public:
     auto cell = *opt_cell;
 
     if (!cell) {
+      return LispValue();
+    }
+
+    if (!cell->has_content()) {
       return LispValue();
     }
 
