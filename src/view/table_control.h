@@ -45,7 +45,7 @@ private:
   }
 
   void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);
-  Location GetTableCellByClickPosition(const wxPoint& pos) const;
+  Location GetTableCellByClickPosition(const wxPoint &pos) const;
 
 private:
   TableWorkbookDocument *_document;
@@ -53,6 +53,12 @@ private:
   wxPen *_grid_pen;
   wxPen *_current_cell_pen;
   EventSink *_event_sink;
+  wxBrush *_window_brush;
+  wxColour _window_color;
+  wxColour _window_text_color;
+  wxColour _button_face_color;
+  wxColour _button_text_color;
+  wxBrush *_caption_background_brush;
 };
 
 #endif

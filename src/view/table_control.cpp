@@ -26,13 +26,29 @@ TableControl::TableControl(TableWorkbookDocument *document,
   Bind(wxEVT_CHAR_HOOK, &TableControl::OnKeyPress, this);
   Bind(wxEVT_LEFT_DOWN, &TableControl::OnLeftDown, this);
 
-  SetBackgroundColour(wxColour(*wxWHITE));
 
   RefreshScrollbars();
 
-  _caption_grid_pen = new wxPen(wxColour(145, 145, 145));
+  _window_color =
+      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOW);
+  _window_text_color =
+      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+  _button_face_color =
+      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
+  _button_text_color =
+      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNTEXT);
+
+  SetBackgroundColour(_window_color);
+  SetForegroundColour(_window_text_color);
+
+  _window_brush = new wxBrush(_window_color);
+
+  _caption_background_brush = new wxBrush(_button_face_color);
+  //_caption_grid_pen = new wxPen(wxColour(145, 145, 145));
+  _caption_grid_pen = new wxPen(_button_text_color);
   _grid_pen = new wxPen(wxColour(100, 100, 100));
-  _current_cell_pen = new wxPen(wxColour(47, 65, 163), 2);
+  //_current_cell_pen = new wxPen(wxColour(47, 65, 163), 2);
+  _current_cell_pen = new wxPen(_window_text_color);
 }
 
 void TableControl::OnDraw(wxDC &dc) {
@@ -80,13 +96,13 @@ Location TableControl::GetScrollPosition() const {
   return Location(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos), int width,
-                               int height, TableSheetPtr sheet) {
+void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos),
+                               int width, int height, TableSheetPtr sheet) {
   int x, y, c;
 
   // Set pen and brushes for headers of columns and rows
   dc->SetPen(*_caption_grid_pen);
-  dc->SetBrush(*wxLIGHT_GREY_BRUSH);
+  dc->SetBrush(*_caption_background_brush);
 
   // TODO for now we are drawing all available columns and rows
   // this can possibly be optimized
@@ -145,8 +161,9 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos), in
   }
 }
 
-void TableControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos), int WXUNUSED(width),
-                             int WXUNUSED(height), TableSheetPtr sheet) {
+void TableControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
+                             int WXUNUSED(width), int WXUNUSED(height),
+                             TableSheetPtr sheet) {
   wxRect scrollArea = GetCurrentScrollArea();
 
   // TODO Only draw visible ones
@@ -181,7 +198,7 @@ void TableControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos), int 
   wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell);
   if (!current_cell_rect.IsEmpty() && scrollArea.Contains(current_cell_rect)) {
     dc->SetPen(*_current_cell_pen);
-    dc->SetBrush(*wxWHITE_BRUSH);
+    dc->SetBrush(*_window_brush);
     dc->DrawRectangle(current_cell_rect);
 
     auto cell = _document->get_current_cell();
@@ -192,6 +209,11 @@ void TableControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos), int 
 }
 
 TableControl::~TableControl() {
+  if (_window_brush) {
+    delete _window_brush;
+    _window_brush = NULL;
+  }
+
   if (_grid_pen) {
     delete _grid_pen;
     _grid_pen = NULL;
@@ -336,7 +358,8 @@ void TableControl::DrawTextInCenter(wxDC *dc, const wxString &s,
 void TableControl::OnLeftDown(wxMouseEvent &event) {
   Location scrollPos = GetScrollPosition();
   wxPoint pos = event.GetPosition();
-  wxPoint delta(pos.x + scrollPos.x() - ROW_HEADER_WIDTH, pos.y + scrollPos.y() - COLUMN_HEADER_HEIGHT);
+  wxPoint delta(pos.x + scrollPos.x() - ROW_HEADER_WIDTH,
+                pos.y + scrollPos.y() - COLUMN_HEADER_HEIGHT);
 
   wxPrintf("Mouse Left Down! %d, %d\n", delta.x, delta.y);
 

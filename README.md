@@ -10,7 +10,7 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: Make sure cell_range ranges behave correctly  (with reversed directions)
+- BUG: Support dark UI of Desktop Environment (see: https://stackoverflow.com/questions/58920057/wxwidgets-dark-mode-on-macos)
 - BUG: Fix circular reference formula bug: Referencing the same cell in a formula with "cell" causes the app to crash
 - FEAT: Add bool type for LispValue (could be useful for if)
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
@@ -30,10 +30,10 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Add simple format: background color
 - FEAT: Add simple format: foreground color
 - FEAT: Funktion isnone
-- BUG: Support dark UI of Desktop Environment (see: https://stackoverflow.com/questions/58920057/wxwidgets-dark-mode-on-macos)
 
 # DONE
 
+- BUG: Make sure cell_range ranges behave correctly  (with reversed directions)
 - FEAT: Add avg function
 - FEAT: Save (sqlite)
 - FEAT: Open (sqlite)
