@@ -10,6 +10,7 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- REFA: Clean up main.cpp
 - BUG: Fix color of selected cell (should be blueish)
 - BUG: Respect changed flag in UI
 - FEAT: Add "New" operation to menu
@@ -31,6 +32,7 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Add simple format: underlined
 - FEAT: Add simple format: background color
 - FEAT: Add simple format: foreground color
+- FEAT: Add simple format: font size
 - FEAT: Funktion isnone
 
 # DONE
