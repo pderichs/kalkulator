@@ -34,10 +34,10 @@ public:
   virtual bool OnInit();
 };
 
-class MyFrame : public wxFrame, public EventSink {
+class KalkulatorMainFrame : public wxFrame, public EventSink {
 public:
-  MyFrame();
-  virtual ~MyFrame() = default;
+  KalkulatorMainFrame();
+  virtual ~KalkulatorMainFrame() = default;
 
   virtual void OnClose(wxCloseEvent &event);
 
@@ -88,14 +88,14 @@ bool MyApp::OnInit() {
     }
   }
 
-  MyFrame *frame = new MyFrame();
+  KalkulatorMainFrame *frame = new KalkulatorMainFrame();
   frame->SetSize(WIDTH, HEIGHT);
   frame->Show();
 
   return true;
 }
 
-MyFrame::MyFrame()
+KalkulatorMainFrame::KalkulatorMainFrame()
     : wxFrame(NULL, wxID_ANY, "Kalkulator 0.0.1a"), _document(this) {
   ValueConverter::update_execution_context(&_execution_context);
 
@@ -138,7 +138,7 @@ MyFrame::MyFrame()
   SetupUserInterface();
 }
 
-void MyFrame::SetupUserInterface() {
+void KalkulatorMainFrame::SetupUserInterface() {
   wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
   // Textctrl for formula editing (normal text control for now)
@@ -153,18 +153,18 @@ void MyFrame::SetupUserInterface() {
   _table_control->SetFocus();
 }
 
-void MyFrame::BindEvents() {
-  Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
-  Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
-  Bind(wxEVT_MENU, &MyFrame::OnOpen, this, ID_Open);
-  Bind(wxEVT_MENU, &MyFrame::OnSaveAs, this, ID_SaveAs);
+void KalkulatorMainFrame::BindEvents() {
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnAbout, this, wxID_ABOUT);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnExit, this, wxID_EXIT);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnOpen, this, ID_Open);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSaveAs, this, ID_SaveAs);
 
-  Bind(wxEVT_RIGHT_DOWN, &MyFrame::OnRightDown, this);
-  Bind(wxEVT_CLOSE_WINDOW, &MyFrame::OnClose, this);
-  Bind(wxEVT_CHAR_HOOK, &MyFrame::OnKeyPress, this);
+  Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
+  Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
+  Bind(wxEVT_CHAR_HOOK, &KalkulatorMainFrame::OnKeyPress, this);
 }
 
-void MyFrame::OnRightDown(wxMouseEvent &event) {
+void KalkulatorMainFrame::OnRightDown(wxMouseEvent &event) {
   int x = event.GetPosition().x;
   int y = event.GetPosition().y;
 
@@ -177,13 +177,13 @@ void MyFrame::OnRightDown(wxMouseEvent &event) {
   // }
 }
 
-void MyFrame::OnExit(wxCommandEvent &WXUNUSED(event)) { Close(true); }
+void KalkulatorMainFrame::OnExit(wxCommandEvent &WXUNUSED(event)) { Close(true); }
 
-void MyFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
+void KalkulatorMainFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
   wxMessageBox("This is a sample!", "About", wxOK | wxICON_INFORMATION);
 }
 
-void MyFrame::OnClose(wxCloseEvent &event) {
+void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
   // if (_document.changed()) {
   //   if (wxMessageBox(_("Current content has not been saved! Proceed?"),
   //                    _("Please confirm Exiting"), wxICON_QUESTION | wxYES_NO,
@@ -196,7 +196,7 @@ void MyFrame::OnClose(wxCloseEvent &event) {
   event.Skip();
 }
 
-void MyFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
+void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   // https://docs.wxwidgets.org/3.0/classwx_file_dialog.html
 
   if (_document.changed()) {
@@ -231,7 +231,7 @@ void MyFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   Refresh();
 }
 
-void MyFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
+void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
   wxString startFolder;
 
   if (!_document.file_path().empty()) {
@@ -255,11 +255,11 @@ void MyFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
   }
 }
 
-void MyFrame::OnKeyPress(wxKeyEvent &event) {
+void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
   // Handle the keypress event here
   int keyCode = event.GetKeyCode();
 
-  // wxPrintf("MyFrame: Key pressed: %d\n", keyCode);
+  // wxPrintf("KalkulatorMainFrame: Key pressed: %d\n", keyCode);
 
   switch (keyCode) {
   case WXK_F2:
@@ -270,7 +270,7 @@ void MyFrame::OnKeyPress(wxKeyEvent &event) {
   event.Skip();
 }
 
-void MyFrame::send_event(TableEvent event_id, std::any param) {
+void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
   wxPrintf("* EVENT: ");
 
   std::string new_content;
