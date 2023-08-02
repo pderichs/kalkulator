@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <wx/dcclient.h>
 #include <wx/event.h>
+#include <wx/msgdlg.h>
 #include <wx/rawbmp.h>
 #include <wx/timer.h>
 #include <wx/wxprec.h>
@@ -45,6 +46,7 @@ private:
   void OnExit(wxCommandEvent &event);
   void OnAbout(wxCommandEvent &event);
   void OnOpen(wxCommandEvent &event);
+  void OnNew(wxCommandEvent &event);
   void OnSaveAs(wxCommandEvent &event);
   void OnRightDown(wxMouseEvent &event);
   void OnKeyPress(wxKeyEvent &event);
@@ -53,6 +55,8 @@ private:
 
   void SetupUserInterface();
   virtual void send_event(TableEvent event_id, std::any param);
+
+  bool PermitLoseChanges();
 
 private:
   TableWorkbookDocument _document;
@@ -64,6 +68,7 @@ private:
 enum {
   ID_Open = 1,
   ID_SaveAs,
+  ID_New,
 };
 
 wxIMPLEMENT_APP(MyApp);
@@ -108,9 +113,11 @@ KalkulatorMainFrame::KalkulatorMainFrame()
       "avg", std::make_shared<LispExecutionContextAvg>(&_document));
 
   wxMenu *menuFile = new wxMenu();
-  menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a figures file");
+  menuFile->Append(ID_New, "&New\tCtrl-N",
+                   "Creates a new spreadsheet workbook");
+  menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a Kalkulator file");
   menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-S",
-                   "Saves the current figures to a file");
+                   "Saves the current workbook");
   menuFile->AppendSeparator();
   menuFile->Append(wxID_EXIT);
 
@@ -157,6 +164,7 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnAbout, this, wxID_ABOUT);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnExit, this, wxID_EXIT);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnOpen, this, ID_Open);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnNew, this, ID_New);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSaveAs, this, ID_SaveAs);
 
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
@@ -177,34 +185,50 @@ void KalkulatorMainFrame::OnRightDown(wxMouseEvent &event) {
   // }
 }
 
-void KalkulatorMainFrame::OnExit(wxCommandEvent &WXUNUSED(event)) { Close(true); }
+void KalkulatorMainFrame::OnExit(wxCommandEvent &WXUNUSED(event)) {
+  Close(true);
+}
 
 void KalkulatorMainFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
   wxMessageBox("This is a sample!", "About", wxOK | wxICON_INFORMATION);
 }
 
 void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
-  // if (_document.changed()) {
-  //   if (wxMessageBox(_("Current content has not been saved! Proceed?"),
-  //                    _("Please confirm Exiting"), wxICON_QUESTION | wxYES_NO,
-  //                    this) == wxNO) {
-  //     event.Veto();
-  //     return;
-  //   }
-  // }
+  if (!PermitLoseChanges()) {
+    event.Veto();
+    return;
+  }
 
   event.Skip();
+}
+
+bool KalkulatorMainFrame::PermitLoseChanges() {
+  if (_document.changed()) {
+    if (wxMessageBox(
+            wxT("Current content has not been saved. Your changes will "
+                "be lost. Proceed?"),
+            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
+      return false;
+  }
+
+  return true;
+}
+
+void KalkulatorMainFrame::OnNew(wxCommandEvent &WXUNUSED(event)) {
+  if (!PermitLoseChanges()) {
+    return;
+  }
+
+  _document.clear_and_initialize();
+
+  Refresh();
 }
 
 void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   // https://docs.wxwidgets.org/3.0/classwx_file_dialog.html
 
-  if (_document.changed()) {
-    if (wxMessageBox(_("Current content has not been saved. Your changes will "
-                       "be lost. Proceed?"),
-                     _("Please confirm"), wxICON_QUESTION | wxYES_NO,
-                     this) == wxNO)
-      return;
+  if (!PermitLoseChanges()) {
+    return;
   }
 
   wxString startFolder;
@@ -335,6 +359,4 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
     break;
   }
-
-  // TODO
 }

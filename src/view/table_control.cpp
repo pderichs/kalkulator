@@ -26,7 +26,6 @@ TableControl::TableControl(TableWorkbookDocument *document,
   Bind(wxEVT_CHAR_HOOK, &TableControl::OnKeyPress, this);
   Bind(wxEVT_LEFT_DOWN, &TableControl::OnLeftDown, this);
 
-
   RefreshScrollbars();
 
   _window_color =
@@ -37,6 +36,8 @@ TableControl::TableControl(TableWorkbookDocument *document,
       wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
   _button_text_color =
       wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNTEXT);
+  _active_border_color =
+      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
   SetBackgroundColour(_window_color);
   SetForegroundColour(_window_text_color);
@@ -48,7 +49,7 @@ TableControl::TableControl(TableWorkbookDocument *document,
   _caption_grid_pen = new wxPen(_button_text_color);
   _grid_pen = new wxPen(wxColour(100, 100, 100));
   //_current_cell_pen = new wxPen(wxColour(47, 65, 163), 2);
-  _current_cell_pen = new wxPen(_window_text_color);
+  _current_cell_pen = new wxPen(_active_border_color);
 }
 
 void TableControl::OnDraw(wxDC &dc) {

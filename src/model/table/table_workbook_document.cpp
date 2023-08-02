@@ -11,9 +11,8 @@
 
 TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink) {
   _event_sink = event_sink;
-  _sheets.push_back(std::make_shared<TableSheet>("Sheet 1"));
-  _current_sheet = _sheets[0];
-  _changed = false;
+
+  initialize();
 }
 
 TableSheetPtr
@@ -33,6 +32,8 @@ void TableWorkbookDocument::update_cell_content(TableSheetPtr sheet,
   assert(cell);
 
   cell->update_content(content);
+
+  _changed = true;
 
   std::any param = sheet->current_cell;
   _event_sink->send_event(CELL_UPDATED, param);
@@ -138,6 +139,7 @@ TableWorkbookDocument::get_cell_by_pos(const Location &position) const {
 
 void TableWorkbookDocument::select_cell(const Location &cell) {
   if (_current_sheet->select_cell(cell)) {
+    _changed = true;
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
                             _current_sheet->current_cell);
   }
@@ -206,6 +208,7 @@ void TableWorkbookDocument::clear() {
 
 void TableWorkbookDocument::add_sheet(const std::string &name) {
   _sheets.push_back(std::make_shared<TableSheet>(name));
+  _changed = true;
 }
 
 void TableWorkbookDocument::set_active_sheet(const std::string &name) {
@@ -213,6 +216,8 @@ void TableWorkbookDocument::set_active_sheet(const std::string &name) {
 
   if (sheet) {
     _current_sheet = sheet;
+
+    _changed = true;
   }
 }
 
@@ -222,5 +227,18 @@ void TableWorkbookDocument::set_current_cell(const std::string &sheet_name,
 
   if (sheet) {
     sheet->select_cell(current_cell);
+
+    _changed = true;
   }
+}
+
+void TableWorkbookDocument::clear_and_initialize() {
+  clear();
+  initialize();
+}
+
+void TableWorkbookDocument::initialize() {
+  _sheets.push_back(std::make_shared<TableSheet>("Sheet 1"));
+  _current_sheet = _sheets[0];
+  _changed = false;
 }

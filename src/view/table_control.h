@@ -59,6 +59,7 @@ private:
   wxColour _button_face_color;
   wxColour _button_text_color;
   wxBrush *_caption_background_brush;
+  wxColour _active_border_color;
 };
 
 #endif

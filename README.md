@@ -10,7 +10,9 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- BUG: Fix cell_range circular reference
 - REFA: Clean up main.cpp
+- FEAT: Copy / Paste
 - BUG: Fix color of selected cell (should be blueish)
 - BUG: Respect changed flag in UI
 - FEAT: Add "New" operation to menu
