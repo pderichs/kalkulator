@@ -10,12 +10,8 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: Fix cell_range circular reference
-- REFA: Clean up main.cpp
 - FEAT: Copy / Paste
-- BUG: Fix color of selected cell (should be blueish)
-- BUG: Respect changed flag in UI
-- FEAT: Add "New" operation to menu
+- BUG: Fix cell_range circular reference
 - FEAT: Implement DELETE operation on cells
 - FEAT: Direct editing? (without the need of pressing F2)
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
@@ -39,6 +35,10 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- BUG: Respect changed flag in UI
+- BUG: Fix color of selected cell (should be blueish)
+- FEAT: Add "New" operation to menu
+- REFA: Clean up main.cpp
 - FEAT: Add bool type for LispValue (could be useful for if)
 - BUG: Fix circular reference formula bug: Referencing the same cell in a formula with "cell" causes the app to crash
 - BUG: Support dark UI of Desktop Environment (see: https://stackoverflow.com/questions/58920057/wxwidgets-dark-mode-on-macos)
