@@ -274,6 +274,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
   try {
     file.open((const char *)saveFileDialog.GetPath());
     file.write(_document);
+    _document.clear_changed_flag();
   } catch (TableWorkbookFileError &twfe) {
     wxMessageBox(twfe.what(), wxT("Error"), wxICON_EXCLAMATION);
   }

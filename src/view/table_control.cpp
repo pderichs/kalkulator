@@ -28,14 +28,11 @@ TableControl::TableControl(TableWorkbookDocument *document,
 
   RefreshScrollbars();
 
-  _window_color =
-      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOW);
+  _window_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOW);
   _window_text_color =
       wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-  _button_face_color =
-      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
-  _button_text_color =
-      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNTEXT);
+  _button_face_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
+  _button_text_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNTEXT);
   _active_border_color =
       wxSystemSettingsNative::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
@@ -296,6 +293,7 @@ wxRect TableControl::GetCurrentScrollArea() const {
 void TableControl::OnKeyPress(wxKeyEvent &event) {
   // Handle the keypress event here
   int keyCode = event.GetKeyCode();
+  bool control = event.RawControlDown();
 
   // Example: Print the keycode to the console
   wxPrintf("Key pressed: %d\n", keyCode);
@@ -320,6 +318,21 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
     break;
   case WXK_PAGEDOWN:
     _document->move_cursor_page_down();
+    break;
+  case 'c':
+    if (control) {
+      wxPrintf("COPY!!\n");
+    }
+    break;
+  case 'v':
+    if (control) {
+      wxPrintf("PASTE!!\n");
+    }
+    break;
+  case 'x':
+    if (control) {
+      wxPrintf("CUT!!\n");
+    }
     break;
   default:
     handled = false;
