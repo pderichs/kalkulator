@@ -10,13 +10,13 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: Fix cell_range circular reference
 - FEAT: Implement DELETE operation on cells
 - FEAT: Direct editing? (without the need of pressing F2)
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - DONE first
   - DONE rest
   - DONE quote (DONE with "list")
+  - join
   - cons
   - eq (see prepared lisp_eq on LispValue)
   - cond (use "if" as identifier)
@@ -34,6 +34,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- BUG: Fix cell_range circular reference
 - FEAT: Copy / Paste
 - BUG: Respect changed flag in UI
 - BUG: Fix color of selected cell (should be blueish)
