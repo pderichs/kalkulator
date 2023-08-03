@@ -10,6 +10,8 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- FEAT: Provide possibility to change column width
+- FEAT: Provide possibility to change row height
 - FEAT: Undo
 - FEAT: Redo
 - FEAT: Direct editing? (without the need of pressing F2)
