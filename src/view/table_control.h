@@ -22,6 +22,9 @@ public:
   void OnScroll(wxScrollWinEvent &scrollEvent);
   void OnKeyPress(wxKeyEvent &event);
   void OnLeftDown(wxMouseEvent &event);
+  void OnCopy();
+  void OnPaste();
+  void OnCut();
 
   void RefreshScrollbars();
 

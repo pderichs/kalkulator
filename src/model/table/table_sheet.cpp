@@ -168,3 +168,8 @@ bool TableSheet::select_cell(const Location &cell) {
 
   return true;
 }
+
+void TableSheet::clear_current_cell() {
+  auto cell = get_current_cell();
+  cell->clear();
+}

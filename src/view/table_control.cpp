@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <iostream>
 #include <sstream>
+#include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
 const int ROW_HEADER_WIDTH = 50;
@@ -57,6 +58,37 @@ void TableControl::OnDraw(wxDC &dc) {
   }
 
   DrawTable(&dc, sheet);
+}
+
+void TableControl::OnCopy() {
+  TableCellPtr cell = _document->get_current_cell();
+  if (cell) {
+    std::string content = cell->get_formula_content();
+    if (wxTheClipboard->Open()) {
+      wxString textToCopy = content.c_str();
+      wxTheClipboard->SetData(new wxTextDataObject(textToCopy));
+      wxTheClipboard->Close();
+    }
+  }
+}
+
+void TableControl::OnPaste() {
+  if (wxTheClipboard->Open()) {
+    if (wxTheClipboard->IsSupported(wxDF_TEXT)) {
+      wxTextDataObject data;
+      wxTheClipboard->GetData(data);
+      //wxMessageBox(data.GetText());
+      std::string content(data.GetText());
+      _document->update_content_current_cell(content);
+    }
+    wxTheClipboard->Close();
+  }
+}
+
+void TableControl::OnCut() {
+  OnCopy();
+
+  _document->clear_current_cell();
 }
 
 void TableControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
@@ -319,19 +351,19 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
   case WXK_PAGEDOWN:
     _document->move_cursor_page_down();
     break;
-  case 'c':
+  case 'C':
     if (control) {
-      wxPrintf("COPY!!\n");
+      OnCopy();
     }
     break;
-  case 'v':
+  case 'V':
     if (control) {
-      wxPrintf("PASTE!!\n");
+      OnPaste();
     }
     break;
-  case 'x':
+  case 'X':
     if (control) {
-      wxPrintf("CUT!!\n");
+      OnCut();
     }
     break;
   default:

@@ -30,3 +30,7 @@ bool TableCell::is_formula() const {
 bool TableCell::has_content() const {
   return _lisp_value && !_lisp_value->is_none();
 }
+
+void TableCell::clear() {
+  _lisp_value = {};
+}

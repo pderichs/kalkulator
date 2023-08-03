@@ -24,6 +24,8 @@ public:
 
   bool has_content() const;
 
+  void clear();
+
 private:
   std::string _formula_content;
 

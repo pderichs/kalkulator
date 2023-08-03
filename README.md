@@ -10,7 +10,6 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- FEAT: Copy / Paste
 - BUG: Fix cell_range circular reference
 - FEAT: Implement DELETE operation on cells
 - FEAT: Direct editing? (without the need of pressing F2)
@@ -35,6 +34,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- FEAT: Copy / Paste
 - BUG: Respect changed flag in UI
 - BUG: Fix color of selected cell (should be blueish)
 - FEAT: Add "New" operation to menu

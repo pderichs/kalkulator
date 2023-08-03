@@ -242,3 +242,16 @@ void TableWorkbookDocument::initialize() {
   _current_sheet = _sheets[0];
   _changed = false;
 }
+
+void TableWorkbookDocument::clear_current_cell() {
+  if (!_current_sheet) {
+    return;
+  }
+
+  _current_sheet->clear_current_cell();
+
+  _changed = true;
+
+  std::any param = _current_sheet->current_cell;
+  _event_sink->send_event(CELL_UPDATED, param);
+}

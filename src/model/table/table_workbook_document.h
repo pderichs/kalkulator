@@ -30,6 +30,7 @@ public:
                         const Location &current_cell);
   void update_cell_content(TableSheetPtr sheet, TableCellPtr cell,
                            const std::string &content);
+  void clear_current_cell();
 
   void move_cursor_up();
   void move_cursor_down();

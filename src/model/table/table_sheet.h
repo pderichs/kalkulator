@@ -48,6 +48,8 @@ struct TableSheet {
   bool select_cell(const Location &cell);
 
   bool is_in_bounds(const Location &cell) const;
+
+  void clear_current_cell();
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;
