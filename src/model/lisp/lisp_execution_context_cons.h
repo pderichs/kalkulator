@@ -1,0 +1,28 @@
+#ifndef LISP_EXECUTION_CONTEXT_CONS_INCLUDED
+#define LISP_EXECUTION_CONTEXT_CONS_INCLUDED
+
+#include "lisp_execution_context_error.h"
+#include "lisp_function.h"
+class LispExecutionContextCons : public LispFunctionExecutionContext {
+public:
+  LispExecutionContextCons() = default;
+  virtual ~LispExecutionContextCons() = default;
+
+  virtual LispValue value(const LispFunction &func,
+                          const LispExecutionContext &execution_context,
+                          const std::any &context_param) {
+    if (func.param_count() != 2) {
+      throw LispExecutionContextError("cons expects two parameters");
+    }
+
+    LispValuePtrVector result;
+
+    for (const auto& param: func.params()) {
+        result.push_back(param);
+    }
+
+    return LispValue(result);
+  }
+};
+
+#endif

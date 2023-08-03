@@ -16,8 +16,8 @@ This is one item of the "applications every software engineer should implement o
   - DONE first
   - DONE rest
   - DONE quote (DONE with "list")
-  - join
-  - cons
+  - DONE join
+  - DONE cons
   - eq (see prepared lisp_eq on LispValue)
   - cond (use "if" as identifier)
   - lambda
