@@ -52,11 +52,7 @@ public:
 
     auto cell = *opt_cell;
 
-    if (!cell) {
-      return LispValue();
-    }
-
-    if (!cell->has_content()) {
+    if (!cell || !cell->has_content()) {
       return LispValue();
     }
 

@@ -330,6 +330,15 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
       Location location(std::any_cast<Location>(param));
 
       _table_control->OnCellUpdate(location);
+
+      auto cell = _document.get_current_cell();
+
+      if (cell && cell->row() == location.y() && cell->col() == location.x()) {
+        std::string formula = cell->get_formula_content();
+        _text_control_formula->SetValue(formula);
+      } else {
+        _text_control_formula->SetValue("");
+      }
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for cell update. Event will be "
                "ignored.\n");

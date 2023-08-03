@@ -77,7 +77,7 @@ void TableControl::OnPaste() {
     if (wxTheClipboard->IsSupported(wxDF_TEXT)) {
       wxTextDataObject data;
       wxTheClipboard->GetData(data);
-      //wxMessageBox(data.GetText());
+      // wxMessageBox(data.GetText());
       std::string content(data.GetText());
       _document->update_content_current_cell(content);
     }
@@ -350,6 +350,9 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
     break;
   case WXK_PAGEDOWN:
     _document->move_cursor_page_down();
+    break;
+  case WXK_DELETE:
+    _document->clear_current_cell();
     break;
   case 'C':
     if (control) {
