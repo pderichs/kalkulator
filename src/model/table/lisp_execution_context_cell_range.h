@@ -19,6 +19,8 @@ public:
                           const std::any &context_param) {
     ensure_params(func);
 
+    Location this_cell = std::any_cast<Location>(context_param);
+
     LispValuePtrVector result;
 
     LispValuePtrVector params = execute_functions_and_extract_list_results(
@@ -47,6 +49,10 @@ public:
     for (const auto &cell : cells) {
       if (!cell) {
         continue;
+      }
+
+      if (cell->row() == this_cell.y() && cell->col() == this_cell.x()) {
+        return LispValue("#CIRCULARREFERR");
       }
 
       LispValuePtr value(cell->lisp_value());

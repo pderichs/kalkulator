@@ -12,7 +12,7 @@
 
 class TableCell {
 public:
-  TableCell(int row, int col): _location(col, row) {}
+  TableCell(int row, int col) : _location(col, row) {}
 
   void update_content(const std::string &content);
 
@@ -25,6 +25,9 @@ public:
   bool has_content() const;
 
   void clear();
+
+  long row() const { return _location.y(); }
+  long col() const { return _location.x(); }
 
 private:
   std::string _formula_content;

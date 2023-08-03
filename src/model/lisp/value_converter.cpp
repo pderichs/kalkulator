@@ -95,6 +95,14 @@ std::string ValueConverter::to_string(const LispValue &value,
       std::cerr << "*** CAUGHT EXCEPTION: " << e.what() << std::endl;
       exit(255);
     }
+  } else if (value.is_list()) {
+    return "#LIST";
+  } else if (value.is_boolean()) {
+    if (value.boolean()) {
+      return "TRUE";
+    } else {
+      return "FALSE";
+    }
   } else {
     std::stringstream ss;
     ss << "Unable to convert lisp value of type " << (int)value.type();
