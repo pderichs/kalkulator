@@ -22,7 +22,7 @@ This is one item of the "applications every software engineer should implement o
   - DONE quote (DONE with "list")
   - DONE join
   - DONE cons
-  - eq (see prepared lisp_eq on LispValue)
+  - DONE eq (see prepared lisp_eq on LispValue)
   - DONE if/cond
   - lambda
 - MAYB: Cache function results (see field _func_result on LispValue)

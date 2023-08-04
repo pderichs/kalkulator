@@ -2,7 +2,9 @@
 #define LISP_VALUE_INCLUDED
 
 #include <any>
+#include <cstddef>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -119,10 +121,48 @@ public:
     return true;
   }
 
-  // TODO: Prepare lisp eq functionality
-  bool lisp_eq(const LispValue &other) const {
-    throw NotImplementedError("eq is not implemented yet");
+  bool lists_equals(const LispValue &list) const {
+    const auto &my_list = this->list();
+    const auto &other_list = list.list();
+
+    if (my_list.size() != other_list.size()) {
+      return false;
+    }
+
+    size_t n = 0;
+    for (const auto &item : my_list) {
+      const auto &other_item = other_list[n];
+      if (!item->content_equals(*other_item)) {
+        return false;
+      }
+    }
+
+    return true;
   }
+
+  bool content_equals(const LispValue &other) const {
+    if (_type == other._type) {
+      switch (_type) {
+      case LVT_NONE:
+        return this->is_none() && other.is_none();
+      case LVT_BOOL:
+        return boolean() == other.boolean();
+      case LVT_IDENTIFIER:
+      case LVT_STRING:
+        return string() == other.string();
+      case LVT_LIST:
+        return lists_equals(other);
+      case LVT_NUMBER:
+        return number() == other.number();
+      default:
+        throw std::runtime_error(
+            "Equality check is not implemented for this type");
+      }
+    }
+
+    return false;
+  }
+  // TODO: identity_equals needed?
 };
 
 #endif
