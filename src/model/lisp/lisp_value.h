@@ -33,8 +33,7 @@ private:
 public:
   LispValue() { _type = LVT_NONE; }
 
-  LispValue(const std::string &s): LispValue(s, false) {
-  }
+  LispValue(const std::string &s) : LispValue(s, false) {}
 
   LispValue(const std::string &s, bool identifier) {
     if (!identifier) {
@@ -78,7 +77,9 @@ public:
 
   std::string string() const { return std::any_cast<std::string>(_content); }
   double number() const { return std::any_cast<double>(_content); }
-  bool boolean() const { return std::any_cast<LispBool>(_content) == LISP_BOOL_TRUE; }
+  bool boolean() const {
+    return std::any_cast<LispBool>(_content) == LISP_BOOL_TRUE;
+  }
   LispFunction function() const {
     return std::any_cast<LispFunction>(_content);
   }
@@ -100,6 +101,22 @@ public:
     }
 
     return string() == other;
+  }
+
+  bool is_truthy() const {
+    if (is_none()) {
+      return false;
+    }
+
+    if (is_boolean()) {
+      return boolean() == LISP_BOOL_TRUE;
+    }
+
+    if (is_number()) {
+      return number() != 0.0;
+    }
+
+    return true;
   }
 
   // TODO: Prepare lisp eq functionality

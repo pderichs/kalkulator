@@ -1,5 +1,6 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_execution_context.h"
+#include "lisp_execution_context_error.h"
 #include "lisp_function.h"
 #include "lisp_value.h"
 #include <memory>
@@ -58,4 +59,27 @@ LispFunctionExecutionContext::execute_functions_and_extract_list_results(
   }
 
   return result;
+}
+
+LispValuePtr
+LispFunctionExecutionContext::expect_parameter_at(const LispFunction &func,
+                                                  size_t index) const {
+  const auto &opt_param = func.param_at(index);
+
+  if (!opt_param) {
+    std::stringstream ss;
+    ss << "Expected parameter at position " << index;
+    throw LispExecutionContextError(ss.str());
+  }
+
+  const auto &value = *opt_param;
+
+  if (!value) {
+    std::stringstream ss;
+    ss << "Expected parameter at position " << index;
+    ss << " is invalid.";
+    throw LispExecutionContextError(ss.str());
+  }
+
+  return *opt_param;
 }

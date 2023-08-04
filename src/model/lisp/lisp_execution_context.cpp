@@ -4,6 +4,7 @@
 #include "lisp_execution_context_division.h"
 #include "lisp_execution_context_error.h"
 #include "lisp_execution_context_first.h"
+#include "lisp_execution_context_if.h"
 #include "lisp_execution_context_join.h"
 #include "lisp_execution_context_list.h"
 #include "lisp_execution_context_multiplication.h"
@@ -25,6 +26,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["rest"] = std::make_shared<LispExecutionContextRest>();
   _functions["join"] = std::make_shared<LispExecutionContextJoin>();
   _functions["cons"] = std::make_shared<LispExecutionContextCons>();
+  _functions["if"] = std::make_shared<LispExecutionContextIf>();
 }
 
 LispValue

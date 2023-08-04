@@ -1,6 +1,7 @@
 #ifndef LISP_FUNCTION_EXECUTION_CONTEXT_INCLUDED
 #define LISP_FUNCTION_EXECUTION_CONTEXT_INCLUDED
 
+#include <cstddef>
 #include <memory>
 
 #include "lisp_execution_context.h"
@@ -20,6 +21,7 @@ public:
   LispValue expect_number(const LispValuePtr &value,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) const;
+  LispValuePtr expect_parameter_at(const LispFunction& func, size_t index) const;
 
 protected:
   LispValuePtrVector execute_functions_and_extract_list_results(
