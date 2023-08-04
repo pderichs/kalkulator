@@ -24,6 +24,8 @@ This is one item of the "applications every software engineer should implement o
   - DONE cons
   - DONE eq (see prepared lisp_eq on LispValue)
   - DONE if/cond
+  - not
+  - identifier support (needed for functions)
   - lambda
 - MAYB: Cache function results (see field _func_result on LispValue)
 - REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
