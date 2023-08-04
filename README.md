@@ -10,10 +10,11 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- FEAT: Provide possibility to change column width
-- FEAT: Provide possibility to change row height
+- BUG: Fix scroll bar behaviour (scrolling is not useable atm)
 - FEAT: Undo
 - FEAT: Redo
+- FEAT: Provide possibility to change column width
+- FEAT: Provide possibility to change row height
 - FEAT: Direct editing? (without the need of pressing F2)
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - DONE first
@@ -26,7 +27,6 @@ This is one item of the "applications every software engineer should implement o
   - lambda
 - MAYB: Cache function results (see field _func_result on LispValue)
 - REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
-- BUG: Fix scroll bar behaviour (scrolling is not useable atm)
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
 - FEAT: Add simple format: underlined
