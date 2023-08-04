@@ -23,7 +23,7 @@ This is one item of the "applications every software engineer should implement o
   - DONE join
   - DONE cons
   - eq (see prepared lisp_eq on LispValue)
-  - cond (use "if" as identifier)
+  - DONE if/cond
   - lambda
 - MAYB: Cache function results (see field _func_result on LispValue)
 - REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
