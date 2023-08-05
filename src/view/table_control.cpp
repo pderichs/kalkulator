@@ -104,8 +104,8 @@ void TableControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
 }
 
 void TableControl::OnScroll(wxScrollWinEvent &WXUNUSED(scrollEvent)) {
-  int x = GetScrollPos(wxHORIZONTAL);
-  int y = GetScrollPos(wxVERTICAL);
+  // int x = GetScrollPos(wxHORIZONTAL);
+  // int y = GetScrollPos(wxVERTICAL);
 
   // Not needed here, but can be useful later (e.g. search for specific cell)
   // Scroll(x, y);

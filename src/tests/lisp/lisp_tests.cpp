@@ -12,6 +12,7 @@
 #include <any>
 #include <memory>
 #include <sstream>
+#include <tuple>
 #include <wx/wx.h>
 
 int run_lisp_tests_parsing1();
@@ -53,6 +54,9 @@ public:
   virtual LispValue value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
+    std::ignore = execution_context;
+    std::ignore = context_param;
+
     ensure_params(func);
 
     if (func.param_count() != 1) {

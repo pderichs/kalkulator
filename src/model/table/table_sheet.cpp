@@ -155,8 +155,8 @@ bool TableSheet::move_cursor_page_down() {
 }
 
 bool TableSheet::is_in_bounds(const Location &cell) const {
-  return cell.x() >= 0 && cell.x() < num_cols() && cell.y() >= 0 &&
-         cell.y() < num_rows();
+  return cell.x() >= 0 && (size_t)cell.x() < num_cols() && cell.y() >= 0 &&
+         (size_t)cell.y() < num_rows();
 }
 
 bool TableSheet::select_cell(const Location &cell) {

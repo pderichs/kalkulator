@@ -13,8 +13,6 @@ LispTokens LispParser::parse() {
 
   start_parsing();
 
-  bool identifier_expected = false;
-
   do {
     char c = current_char();
 
@@ -40,7 +38,6 @@ LispTokens LispParser::parse() {
       result.push_back(create_space_token());
     } else if (c == '(') {
       result.push_back(create_open_bracket_token());
-      identifier_expected = true;
     } else if (c == ')') {
       result.push_back(create_close_bracket_token());
     } else if (std::isprint(c)) {
@@ -67,14 +64,14 @@ LispToken LispParser::create_identifier_token(const std::string &s) {
 }
 
 LispToken LispParser::create_open_bracket_token() {
-  return LispToken{OPEN_BRACKET};
+  return LispToken{OPEN_BRACKET, {}};
 }
 
 LispToken LispParser::create_close_bracket_token() {
-  return LispToken{CLOSE_BRACKET};
+  return LispToken{CLOSE_BRACKET, {}};
 }
 
-LispToken LispParser::create_space_token() { return LispToken{SPACE}; }
+LispToken LispParser::create_space_token() { return LispToken{SPACE, {}}; }
 
 void LispParser::start_parsing() { _pos = 0; }
 

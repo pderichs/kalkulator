@@ -3,6 +3,8 @@
 
 #include "lisp_execution_context_error.h"
 #include "lisp_function.h"
+#include <tuple>
+
 class LispExecutionContextCons : public LispFunctionExecutionContext {
 public:
   LispExecutionContextCons() = default;
@@ -11,6 +13,9 @@ public:
   virtual LispValue value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
+    std::ignore = execution_context;
+    std::ignore = context_param;
+
     if (func.param_count() != 2) {
       throw LispExecutionContextError("cons expects two parameters");
     }

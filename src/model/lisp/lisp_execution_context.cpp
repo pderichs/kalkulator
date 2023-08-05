@@ -50,8 +50,8 @@ LispExecutionContext::eval_function(const LispFunction &func,
     throw LispExecutionContextError("Unknown function identifier");
   }
 
-  const auto &execution_context = execution_context_it->second;
-  return execution_context->value(func, *this, context_param);
+  const auto &function_context = execution_context_it->second;
+  return function_context->value(func, *this, context_param);
 }
 
 void LispExecutionContext::add_function(

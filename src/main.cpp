@@ -1,5 +1,6 @@
 #include <memory>
 #include <stdexcept>
+#include <tuple>
 #include <wx/dcclient.h>
 #include <wx/event.h>
 #include <wx/msgdlg.h>
@@ -172,9 +173,9 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_CHAR_HOOK, &KalkulatorMainFrame::OnKeyPress, this);
 }
 
-void KalkulatorMainFrame::OnRightDown(wxMouseEvent &event) {
-  int x = event.GetPosition().x;
-  int y = event.GetPosition().y;
+void KalkulatorMainFrame::OnRightDown(wxMouseEvent &WXUNUSED(event)) {
+  // int x = event.GetPosition().x;
+  // int y = event.GetPosition().y;
 
   // KFigure *p = _document.getFigureAtPosition(x, y);
   // if (p) {
