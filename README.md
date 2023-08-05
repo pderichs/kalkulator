@@ -17,6 +17,10 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Provide possibility to change row height
 - FEAT: Direct editing? (without the need of pressing F2)
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
+  - FEAT: Support for variables (setq)
+  - lambda
+  - not
+  - FEAT: isnone
   - DONE first
   - DONE rest
   - DONE quote (DONE with "list")
@@ -24,9 +28,6 @@ This is one item of the "applications every software engineer should implement o
   - DONE cons
   - DONE eq (see prepared lisp_eq on LispValue)
   - DONE if/cond
-  - not
-  - identifier support (needed for functions)
-  - lambda
 - MAYB: Cache function results (see field _func_result on LispValue)
 - REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
 - FEAT: Add simple format: bold
@@ -35,7 +36,6 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Add simple format: background color
 - FEAT: Add simple format: foreground color
 - FEAT: Add simple format: font size
-- FEAT: Funktion isnone
 
 # DONE
 
