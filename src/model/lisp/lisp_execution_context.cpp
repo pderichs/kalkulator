@@ -9,6 +9,7 @@
 #include "lisp_execution_context_join.h"
 #include "lisp_execution_context_list.h"
 #include "lisp_execution_context_multiplication.h"
+#include "lisp_execution_context_not.h"
 #include "lisp_execution_context_rest.h"
 #include "lisp_execution_context_subtraction.h"
 #include "lisp_function.h"
@@ -29,6 +30,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["cons"] = std::make_shared<LispExecutionContextCons>();
   _functions["if"] = std::make_shared<LispExecutionContextIf>();
   _functions["eq"] = std::make_shared<LispExecutionContextEq>();
+  _functions["not"] = std::make_shared<LispExecutionContextNot>();
 }
 
 LispValue
