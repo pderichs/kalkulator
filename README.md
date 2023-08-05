@@ -36,6 +36,7 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Add simple format: background color
 - FEAT: Add simple format: foreground color
 - FEAT: Add simple format: font size
+- FEAT: Add application settings (e.g. size of undo steps)
 
 # DONE
 

@@ -14,9 +14,7 @@ public:
   virtual LispValue value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
-    if (func.param_count() < 1) {
-      throw LispExecutionContextError("Expected one parameter for not");
-    }
+    ensure_params(func);
 
     LispValuePtrVector params = execute_functions_and_extract_list_results(
         func.params(), execution_context, context_param);
@@ -30,4 +28,5 @@ public:
     return LispValue(LISP_BOOL_TRUE);
   }
 };
+
 #endif
