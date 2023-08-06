@@ -93,3 +93,7 @@ callgrind: $(TARGET)
 .PHONY: debug
 debug: $(TARGET)
 	ddd $(TARGET)
+
+.PHONY: countlines
+countlines: $(TARGET)
+	cloc . --exclude-dir=vendor
