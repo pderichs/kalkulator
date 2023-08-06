@@ -17,10 +17,12 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Provide possibility to change column width
 - FEAT: Provide possibility to change row height
 - FEAT: Direct editing? (without the need of pressing F2)
+- FEAT: Lisp progn
+- FEAT: Lisp map
+- FEAT: Lisp Support for variables (setq)
+- FEAT: isnone
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
-  - Support for variables (setq)
   - lambda
-  - isnone
   - DONE not
   - DONE first
   - DONE rest
