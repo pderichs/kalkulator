@@ -11,6 +11,7 @@ This is one item of the "applications every software engineer should implement o
 # TODO
 
 - BUG: Fix scroll bar behaviour (scrolling is not useable atm)
+  Refactoring of table control might be needed
 - FEAT: Undo
 - FEAT: Redo
 - FEAT: Provide possibility to change column width
