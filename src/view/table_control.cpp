@@ -2,11 +2,13 @@
 #include <cstddef>
 #include <iostream>
 #include <sstream>
+#include <tuple>
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
 const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
+const int SCROLL_UNIT = 10;
 
 TableControl::TableControl(TableWorkbookDocument *document,
                            EventSink *event_sink, wxWindow *parent,
@@ -103,7 +105,7 @@ void TableControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
   DrawCells(dc, scrollPos, width, height, sheet);
 }
 
-void TableControl::OnScroll(wxScrollWinEvent &WXUNUSED(scrollEvent)) {
+void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
   // int x = GetScrollPos(wxHORIZONTAL);
   // int y = GetScrollPos(wxVERTICAL);
 
@@ -112,14 +114,14 @@ void TableControl::OnScroll(wxScrollWinEvent &WXUNUSED(scrollEvent)) {
 
   // std::cout << "Scroll: x: " << x << ", y: " << y << std::endl;
 
-  // scrollEvent.Skip();
+  scrollEvent.Skip();
 }
 
 void TableControl::RefreshScrollbars() {
-  int width = _document->get_current_sheet_width();
-  int height = _document->get_current_sheet_height();
+  int width = (COLUMN_HEADER_HEIGHT + _document->get_current_sheet_width()) / SCROLL_UNIT;
+  int height = (ROW_HEADER_WIDTH + _document->get_current_sheet_height()) / SCROLL_UNIT;
 
-  SetScrollbars(1, 1, width, height, 0, 0);
+  SetScrollbars(SCROLL_UNIT, SCROLL_UNIT, width, height);
 }
 
 Location TableControl::GetScrollPosition() const {
@@ -128,6 +130,9 @@ Location TableControl::GetScrollPosition() const {
 
 void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos),
                                int width, int height, TableSheetPtr sheet) {
+  std::ignore = width;
+  std::ignore = height;
+
   int x, y, c;
 
   // Set pen and brushes for headers of columns and rows
@@ -143,9 +148,9 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos),
                         // for columns to leave some space
                         // from left
   for (auto coldef : sheet->column_definitions) {
-    if (x > width) {
-      break;
-    }
+    // if (x > width) {
+    //   break;
+    // }
 
     auto name = coldef->caption;
 
@@ -169,9 +174,9 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos),
   c = 0;
   y = COLUMN_HEADER_HEIGHT + 2;
   for (auto rowdef : sheet->row_definitions) {
-    if (y > height) {
-      break;
-    }
+    // if (y > height) {
+    //   break;
+    // }
 
     auto name = rowdef->caption;
 
@@ -194,7 +199,7 @@ void TableControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos),
 void TableControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
                              int WXUNUSED(width), int WXUNUSED(height),
                              TableSheetPtr sheet) {
-  wxRect scrollArea = GetCurrentScrollArea();
+  // wxRect scrollArea = GetCurrentScrollArea();
 
   // TODO Only draw visible ones
 
@@ -203,9 +208,9 @@ void TableControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
       auto cell = sheet->get_cell(r, c);
       if (cell) {
         wxRect cellRect = GetCellRectByLocation(Location(c, r));
-        if (!scrollArea.Contains(cellRect)) {
-          break;
-        }
+        // if (!scrollArea.Contains(cellRect)) {
+        //   break;
+        // }
 
         auto unwrapped_cell = *cell; // unwrap optional
         DrawTextInCenter(dc, unwrapped_cell->visible_content(), cellRect);
@@ -226,7 +231,8 @@ void TableControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
 
   // Current cell
   wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell);
-  if (!current_cell_rect.IsEmpty() && scrollArea.Contains(current_cell_rect)) {
+  if (!current_cell_rect
+           .IsEmpty() /*&& scrollArea.Contains(current_cell_rect)*/) {
     dc->SetPen(*_current_cell_pen);
     dc->SetBrush(*_window_brush);
     dc->DrawRectangle(current_cell_rect);
@@ -378,7 +384,7 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
     Refresh();
   }
 
-  event.Skip(); // Allow further event handling
+  //event.Skip(); // Allow further event handling
 }
 
 void TableControl::OnCellUpdate(const Location &location) {
@@ -405,16 +411,32 @@ void TableControl::DrawTextInCenter(wxDC *dc, const wxString &s,
 }
 
 void TableControl::OnLeftDown(wxMouseEvent &event) {
+  wxPoint clickPosition = event.GetPosition();
+  wxPrintf("Click Position: %d, %d\n", clickPosition.x, clickPosition.y);
+
   Location scrollPos = GetScrollPosition();
-  wxPoint pos = event.GetPosition();
-  wxPoint delta(pos.x + scrollPos.x() - ROW_HEADER_WIDTH,
-                pos.y + scrollPos.y() - COLUMN_HEADER_HEIGHT);
+  wxPrintf("scroll pos: %ld,%ld\n", scrollPos.x(), scrollPos.y());
 
-  wxPrintf("Mouse Left Down! %d, %d\n", delta.x, delta.y);
+  int scrollPixelPerUnitX, scrollPixelPerUnitY;
+  GetScrollPixelsPerUnit(&scrollPixelPerUnitX, &scrollPixelPerUnitY);
+  wxPrintf("pixels per unit: %d,%d\n", scrollPixelPerUnitX,
+           scrollPixelPerUnitY);
 
-  Location cell = GetTableCellByClickPosition(delta);
+  long scrollPosX, scrollPosY;
+  scrollPosX = scrollPos.x() * scrollPixelPerUnitX;
+  scrollPosY = scrollPos.y() * scrollPixelPerUnitY;
 
-  wxPrintf("Selected cell: %ld, %ld\n", cell.x(), cell.y());
+  clickPosition.x += scrollPosX;
+  clickPosition.y += scrollPosY;
+
+  // Calculate the clicked coordinates accounting for the scroll position
+  clickPosition.x -= ROW_HEADER_WIDTH;
+  clickPosition.y -= COLUMN_HEADER_HEIGHT;
+  wxPrintf("Logical / calculated Click Position: %d, %d\n", clickPosition.x, clickPosition.y);
+
+  Location cell = GetTableCellByClickPosition(clickPosition);
+
+  // wxPrintf("Selected cell: %ld, %ld\n", cell.x(), cell.y());
 
   _document->select_cell(cell);
 
