@@ -10,8 +10,6 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: Fix scroll bar behaviour (scrolling is not useable atm)
-  Refactoring of table control might be needed
 - FEAT: Undo
 - FEAT: Redo
 - FEAT: Provide possibility to change column width
@@ -32,7 +30,6 @@ This is one item of the "applications every software engineer should implement o
   - DONE eq (see prepared lisp_eq on LispValue)
   - DONE if/cond
 - MAYB: Cache function results (see field _func_result on LispValue)
-- REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
 - FEAT: Add simple format: underlined
@@ -43,6 +40,9 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
+- BUG: Fix scroll bar behaviour (scrolling is not useable atm)
+  Refactoring of table control might be needed
 - FEAT: Implement DELETE operation on cells
 - BUG: Fix cell_range circular reference
 - FEAT: Copy / Paste
