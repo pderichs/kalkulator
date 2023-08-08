@@ -28,6 +28,7 @@ public:
 
   long row() const { return _location.y(); }
   long col() const { return _location.x(); }
+  Location location() const { return _location; }
 
 private:
   std::string _formula_content;

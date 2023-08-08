@@ -297,7 +297,7 @@ void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
 }
 
 void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
-  wxPrintf("* EVENT: ");
+  //wxPrintf("* EVENT: ");
 
   std::string new_content;
 

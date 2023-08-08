@@ -3,6 +3,7 @@
 
 #include "../model/table/table_sheet.h"
 #include "../model/table/table_workbook_document.h"
+#include "../model/table/table_cell_orientation.h"
 #include <wx/wx.h>
 
 #include "../model/event_sink.h"
@@ -47,8 +48,10 @@ private:
     // Refresh();
   }
 
+  void ScrollToCurrentCell();
   void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);
   Location GetTableCellByClickPosition(const wxPoint &pos) const;
+  void ScrollToCell(const Location& cell, TableCellOrientation orientation);
 
 private:
   TableWorkbookDocument *_document;

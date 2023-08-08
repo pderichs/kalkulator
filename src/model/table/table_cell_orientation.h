@@ -1,0 +1,6 @@
+#ifndef TABLE_CELL_ORIENTATION_INCLUDED
+#define TABLE_CELL_ORIENTATION_INCLUDED
+
+enum TableCellOrientation { LEFT, TOP, RIGHT, BOTTOM };
+
+#endif

@@ -118,8 +118,10 @@ void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
 }
 
 void TableControl::RefreshScrollbars() {
-  int width = (COLUMN_HEADER_HEIGHT + _document->get_current_sheet_width()) / SCROLL_UNIT;
-  int height = (ROW_HEADER_WIDTH + _document->get_current_sheet_height()) / SCROLL_UNIT;
+  int width = (COLUMN_HEADER_HEIGHT + _document->get_current_sheet_width()) /
+              SCROLL_UNIT;
+  int height =
+      (ROW_HEADER_WIDTH + _document->get_current_sheet_height()) / SCROLL_UNIT;
 
   SetScrollbars(SCROLL_UNIT, SCROLL_UNIT, width, height);
 }
@@ -314,52 +316,87 @@ wxRect TableControl::GetCellRectByLocation(const Location &cell) {
 }
 
 wxRect TableControl::GetCurrentScrollArea() const {
-  wxRect clientRect = GetClientRect();
+  wxPoint viewStart = GetViewStart();
+  wxSize clientSize = GetClientSize();
 
-  int scrollX, scrollY;
-  GetViewStart(&scrollX, &scrollY);
+  viewStart.x *= SCROLL_UNIT;
+  viewStart.y *= SCROLL_UNIT;
 
-  wxRect scrollArea;
-  scrollArea.x = scrollX;
-  scrollArea.y = scrollY;
-  scrollArea.width = clientRect.width;
-  scrollArea.height = clientRect.height;
-
-  return scrollArea;
+  // Calculate the view rect
+  return wxRect(viewStart, clientSize);
 }
 
 void TableControl::OnKeyPress(wxKeyEvent &event) {
+  bool cell_selection_moved = false;
+
   // Handle the keypress event here
   int keyCode = event.GetKeyCode();
   bool control = event.RawControlDown();
 
   // Example: Print the keycode to the console
-  wxPrintf("Key pressed: %d\n", keyCode);
+  // wxPrintf("Key pressed: %d\n", keyCode);
 
   bool handled = true;
 
   switch (keyCode) {
   case WXK_UP:
     _document->move_cursor_up();
+    cell_selection_moved = true;
     break;
   case WXK_DOWN:
     _document->move_cursor_down();
+    cell_selection_moved = true;
     break;
   case WXK_LEFT:
     _document->move_cursor_left();
+    cell_selection_moved = true;
     break;
   case WXK_RIGHT:
     _document->move_cursor_right();
+    cell_selection_moved = true;
     break;
   case WXK_PAGEUP:
     _document->move_cursor_page_up();
+    cell_selection_moved = true;
     break;
   case WXK_PAGEDOWN:
     _document->move_cursor_page_down();
+    cell_selection_moved = true;
     break;
   case WXK_DELETE:
     _document->clear_current_cell();
     break;
+  case WXK_F2: {
+    // TEST
+    Location loc(2, 40);
+    _document->select_cell(loc);
+
+    // wxRect rect = GetCellRectByLocation(loc);
+    // wxPrintf("TEST! Cell Rect: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
+    //          rect.GetLeft(), rect.GetTop(), rect.GetWidth(),
+    //          rect.GetHeight(), rect.GetRight(), rect.GetBottom());
+
+    // Scroll(rect.GetLeft() / SCROLL_UNIT, rect.GetTop() / SCROLL_UNIT);
+
+    ScrollToCell(loc, TOP);
+
+    // TEST
+    break;
+  }
+  case WXK_F3: {
+    int x, y;
+    GetViewStart(&x, &y);
+    wxPrintf("TEST view start: %d, %d\n", x, y);
+
+    wxRect scrollArea = GetCurrentScrollArea();
+
+    wxPrintf("TEST! Scroll Area: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
+             scrollArea.GetLeft(), scrollArea.GetTop(), scrollArea.GetWidth(),
+             scrollArea.GetHeight(), scrollArea.GetRight(),
+             scrollArea.GetBottom());
+
+    break;
+  }
   case 'C':
     if (control) {
       OnCopy();
@@ -380,11 +417,93 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
     break;
   }
 
+  if (cell_selection_moved) {
+    ScrollToCurrentCell();
+  }
+
   if (handled) {
     Refresh();
   }
 
-  //event.Skip(); // Allow further event handling
+  // event.Skip(); // Allow further event handling
+}
+
+void TableControl::ScrollToCell(const Location &cell,
+                                TableCellOrientation orientation) {
+  wxRect scrollArea = GetCurrentScrollArea();
+  wxRect rect = GetCellRectByLocation(cell);
+  // wxPrintf("TEST! Cell Rect: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
+  // rect.GetLeft(),
+  //          rect.GetTop(), rect.GetWidth(), rect.GetHeight(),
+  //          rect.GetRight(), rect.GetBottom());
+
+  int x, y;
+
+  switch (orientation) {
+  case TOP:
+    x = rect.GetLeft();
+    y = rect.GetTop();
+    break;
+  case LEFT:
+    x = rect.GetLeft();
+    y = scrollArea.GetTop();
+    break;
+  case BOTTOM:
+    x = rect.GetLeft();
+    y = rect.GetBottom() - scrollArea.GetHeight();
+    break;
+  case RIGHT:
+    x = rect.GetRight() - scrollArea.GetWidth();
+    y = scrollArea.GetTop();
+    break;
+  default:
+    throw std::runtime_error("Unknown orientation");
+  }
+
+  x /= SCROLL_UNIT;
+  y /= SCROLL_UNIT;
+
+  Scroll(x, y);
+}
+
+void TableControl::ScrollToCurrentCell() {
+  wxRect scrollArea = GetCurrentScrollArea();
+  TableCellPtr cell = _document->get_current_cell();
+  wxRect cell_rect = GetCellRectByLocation(cell->location());
+
+  // int scrollX, scrollY;
+  // GetScrollPixelsPerUnit(&scrollX, &scrollY);
+
+  // wxPrintf("Scroll Area: %d, %d, %d, %d, %d, %d\n", scrollArea.GetLeft(),
+  //          scrollArea.GetTop(), scrollArea.GetWidth(), scrollArea.GetHeight(),
+  //          scrollArea.GetRight(), scrollArea.GetBottom());
+  // wxPrintf("  -> Cell Rect: %d, %d, %d, %d, %d, %d\n", cell_rect.GetLeft(),
+  //          cell_rect.GetTop(), cell_rect.GetWidth(), cell_rect.GetHeight(),
+  //          cell_rect.GetRight(), cell_rect.GetBottom());
+
+  if (scrollArea.Contains(cell_rect)) {
+    return;
+  }
+
+  if (cell_rect.GetRight() < scrollArea.GetLeft()) {
+    // Cell is left from scroll area
+    ScrollToCell(cell->location(), LEFT);
+  }
+
+  if (cell_rect.GetTop() < scrollArea.GetTop()) {
+    // Cell is above scroll area
+    ScrollToCell(cell->location(), TOP);
+  }
+
+  if (cell_rect.GetBottom() > scrollArea.GetBottom()) {
+    // Cell is below scroll area
+    ScrollToCell(cell->location(), BOTTOM);
+  }
+
+  if (cell_rect.GetLeft() > scrollArea.GetRight()) {
+    // Cell is right from scroll area
+    ScrollToCell(cell->location(), RIGHT);
+  }
 }
 
 void TableControl::OnCellUpdate(const Location &location) {
@@ -432,7 +551,8 @@ void TableControl::OnLeftDown(wxMouseEvent &event) {
   // Calculate the clicked coordinates accounting for the scroll position
   clickPosition.x -= ROW_HEADER_WIDTH;
   clickPosition.y -= COLUMN_HEADER_HEIGHT;
-  wxPrintf("Logical / calculated Click Position: %d, %d\n", clickPosition.x, clickPosition.y);
+  wxPrintf("Logical / calculated Click Position: %d, %d\n", clickPosition.x,
+           clickPosition.y);
 
   Location cell = GetTableCellByClickPosition(clickPosition);
 

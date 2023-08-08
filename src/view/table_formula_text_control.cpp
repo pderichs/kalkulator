@@ -16,13 +16,13 @@ void TableFormulaTextControl::OnKeyPress(wxKeyEvent &event) {
   int keyCode = event.GetKeyCode();
 
   // Example: Print the keycode to the console
-  wxPrintf("Formula control: Key pressed: %d\n", keyCode);
+  //wxPrintf("Formula control: Key pressed: %d\n", keyCode);
 
   switch (keyCode) {
   case WXK_RETURN:
     if (IsModified()) {
       std::string content = (const char *)GetValue();
-      wxPrintf("Sending update event: %s\n", content);
+      //wxPrintf("Sending update event: %s\n", content);
 
       _event_sink->send_event(FORMULA_UPDATE, content);
     }
