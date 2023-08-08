@@ -61,10 +61,10 @@ std::optional<TableCellPtr> TableSheet::get_cell(size_t row, size_t col) const {
   return {};
 }
 
-// std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
-// TableSheet::get_definitions_for_location(const Location &location) {
-//   return {};
-// }
+std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
+TableSheet::get_definitions_for_location(const Location &location) const {
+  return {row_definitions[location.y()], column_definitions[location.x()]};
+}
 
 bool TableSheet::move_cursor_left() {
   if (current_cell.x() == 0) {

@@ -20,7 +20,6 @@ public:
   virtual ~TableControl();
 
   void OnDraw(wxDC &dc);
-  void OnScroll(wxScrollWinEvent &scrollEvent);
   void OnKeyPress(wxKeyEvent &event);
   void OnLeftDown(wxMouseEvent &event);
   void OnCopy();

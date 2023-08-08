@@ -21,11 +21,6 @@ TableControl::TableControl(TableWorkbookDocument *document,
   _event_sink = event_sink;
   _document = document;
 
-  // Bind(wxEVT_PAINT, &TableControl::OnPaint, this);
-  Bind(wxEVT_SCROLLWIN_THUMBTRACK, &TableControl::OnScroll, this);
-  Bind(wxEVT_SCROLLWIN_THUMBRELEASE, &TableControl::OnScroll, this);
-  Bind(wxEVT_SCROLLWIN_LINEUP, &TableControl::OnScroll, this);
-  Bind(wxEVT_SCROLLWIN_LINEDOWN, &TableControl::OnScroll, this);
   Bind(wxEVT_CHAR_HOOK, &TableControl::OnKeyPress, this);
   Bind(wxEVT_LEFT_DOWN, &TableControl::OnLeftDown, this);
 
@@ -103,18 +98,6 @@ void TableControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
   // contents and only draw these to avoid flickering?
   DrawHeaders(dc, scrollPos, width, height, sheet);
   DrawCells(dc, scrollPos, width, height, sheet);
-}
-
-void TableControl::OnScroll(wxScrollWinEvent &scrollEvent) {
-  // int x = GetScrollPos(wxHORIZONTAL);
-  // int y = GetScrollPos(wxVERTICAL);
-
-  // Not needed here, but can be useful later (e.g. search for specific cell)
-  // Scroll(x, y);
-
-  // std::cout << "Scroll: x: " << x << ", y: " << y << std::endl;
-
-  scrollEvent.Skip();
 }
 
 void TableControl::RefreshScrollbars() {
@@ -437,19 +420,22 @@ void TableControl::ScrollToCell(const Location &cell,
   //          rect.GetTop(), rect.GetWidth(), rect.GetHeight(),
   //          rect.GetRight(), rect.GetBottom());
 
+  std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr> defs =
+      _document->get_definitions_for_location(cell);
+
   int x, y;
 
   switch (orientation) {
   case TOP:
-    x = rect.GetLeft();
+    x = scrollArea.GetLeft();
     y = rect.GetTop();
     break;
   case LEFT:
-    x = rect.GetLeft();
+    x = rect.GetLeft() - defs.second->width;
     y = scrollArea.GetTop();
     break;
   case BOTTOM:
-    x = rect.GetLeft();
+    x = scrollArea.GetLeft();
     y = rect.GetBottom() - scrollArea.GetHeight();
     break;
   case RIGHT:
@@ -475,8 +461,9 @@ void TableControl::ScrollToCurrentCell() {
   // GetScrollPixelsPerUnit(&scrollX, &scrollY);
 
   // wxPrintf("Scroll Area: %d, %d, %d, %d, %d, %d\n", scrollArea.GetLeft(),
-  //          scrollArea.GetTop(), scrollArea.GetWidth(), scrollArea.GetHeight(),
-  //          scrollArea.GetRight(), scrollArea.GetBottom());
+  //          scrollArea.GetTop(), scrollArea.GetWidth(),
+  //          scrollArea.GetHeight(), scrollArea.GetRight(),
+  //          scrollArea.GetBottom());
   // wxPrintf("  -> Cell Rect: %d, %d, %d, %d, %d, %d\n", cell_rect.GetLeft(),
   //          cell_rect.GetTop(), cell_rect.GetWidth(), cell_rect.GetHeight(),
   //          cell_rect.GetRight(), cell_rect.GetBottom());
@@ -485,7 +472,7 @@ void TableControl::ScrollToCurrentCell() {
     return;
   }
 
-  if (cell_rect.GetRight() < scrollArea.GetLeft()) {
+  if (cell_rect.GetLeft() < scrollArea.GetLeft()) {
     // Cell is left from scroll area
     ScrollToCell(cell->location(), LEFT);
   }
@@ -500,7 +487,7 @@ void TableControl::ScrollToCurrentCell() {
     ScrollToCell(cell->location(), BOTTOM);
   }
 
-  if (cell_rect.GetLeft() > scrollArea.GetRight()) {
+  if (cell_rect.GetRight() > scrollArea.GetRight()) {
     // Cell is right from scroll area
     ScrollToCell(cell->location(), RIGHT);
   }

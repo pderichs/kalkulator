@@ -55,6 +55,10 @@ public:
 
   std::string file_path() const { return _path; }
 
+  std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
+  get_definitions_for_location(const Location &location) const {
+    return _current_sheet->get_definitions_for_location(location);
+  }
 private:
   std::string _path;
   bool _changed;
