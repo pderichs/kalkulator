@@ -46,6 +46,17 @@ int run_lisp_tests_first1();
 
 int run_lisp_tests_rest1();
 
+int run_lisp_tests_join1();
+
+// TODO join
+// TODO cons
+// TODO if
+// TODO eq
+// TODO not
+// TODO xor
+// TODO or
+// TODO and
+
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
   virtual ~TestLispFunctionExecutionContext() = default;
@@ -112,6 +123,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_first1);
 
   RUN_TEST(run_lisp_tests_rest1);
+
+  RUN_TEST(run_lisp_tests_join1);
 
   return 0;
 }
@@ -807,6 +820,43 @@ int run_lisp_tests_rest1() {
     TEST_ASSERT(*lst[0] == 20);
     TEST_ASSERT(*lst[1] == 10);
     TEST_ASSERT(*lst[2] == 5);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_join1() {
+  LispParser parser("(join (list 39 345 \"Hello\" 5858.22 1) 42 (list 0 0 0))");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(*value, {});
+
+    TEST_ASSERT(result.is_list());
+
+    const auto &lst = result.list();
+
+    TEST_ASSERT(*lst[0] == 39);
+    TEST_ASSERT(*lst[1] == 345);
+    TEST_ASSERT(*lst[2] == "Hello");
+    TEST_ASSERT(*lst[3] == 5858.22);
+    TEST_ASSERT(*lst[4] == 1);
+    TEST_ASSERT(*lst[5] == 42);
+    TEST_ASSERT(*lst[6] == 0);
+    TEST_ASSERT(*lst[7] == 0);
+    TEST_ASSERT(*lst[8] == 0);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;

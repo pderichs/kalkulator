@@ -10,6 +10,7 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- BUG: Add more tests
 - FEAT: Undo
 - FEAT: Redo
 - FEAT: Provide possibility to change column width
@@ -21,6 +22,9 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: isnone
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - lambda
+  - and
+  - or
+  - xor
   - DONE not
   - DONE first
   - DONE rest
