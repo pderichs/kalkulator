@@ -48,8 +48,8 @@ int run_lisp_tests_rest1();
 
 int run_lisp_tests_join1();
 
-// TODO join
-// TODO cons
+int run_lisp_tests_cons1();
+
 // TODO if
 // TODO eq
 // TODO not
@@ -125,6 +125,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_rest1);
 
   RUN_TEST(run_lisp_tests_join1);
+
+  RUN_TEST(run_lisp_tests_cons1);
 
   return 0;
 }
@@ -857,6 +859,36 @@ int run_lisp_tests_join1() {
     TEST_ASSERT(*lst[6] == 0);
     TEST_ASSERT(*lst[7] == 0);
     TEST_ASSERT(*lst[8] == 0);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_cons1() {
+  LispParser parser("(cons 42 \"Hello\")");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(*value, {});
+
+    TEST_ASSERT(result.is_list());
+
+    const auto &lst = result.list();
+
+    TEST_ASSERT(*lst[0] == 42);
+    TEST_ASSERT(*lst[1] == "Hello");
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
