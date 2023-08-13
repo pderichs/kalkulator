@@ -30,6 +30,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["cons"] = std::make_shared<LispExecutionContextCons>();
   _functions["if"] = std::make_shared<LispExecutionContextIf>();
   _functions["eq"] = std::make_shared<LispExecutionContextEq>();
+  _functions["="] = std::make_shared<LispExecutionContextEq>(); // Same as eq
   _functions["not"] = std::make_shared<LispExecutionContextNot>();
 }
 

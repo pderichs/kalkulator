@@ -50,7 +50,9 @@ int run_lisp_tests_join1();
 
 int run_lisp_tests_cons1();
 
-// TODO if
+int run_lisp_tests_if1();
+int run_lisp_tests_if2();
+
 // TODO eq
 // TODO not
 // TODO xor
@@ -127,6 +129,9 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_join1);
 
   RUN_TEST(run_lisp_tests_cons1);
+
+  RUN_TEST(run_lisp_tests_if1);
+  RUN_TEST(run_lisp_tests_if2);
 
   return 0;
 }
@@ -889,6 +894,60 @@ int run_lisp_tests_cons1() {
 
     TEST_ASSERT(*lst[0] == 42);
     TEST_ASSERT(*lst[1] == "Hello");
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_if1() {
+  LispParser parser("(if (= 3 3) \"OK\" \"Not ok\")");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(*value, {});
+
+    TEST_ASSERT(result.is_string());
+
+    TEST_ASSERT(result == "OK");
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_if2() {
+  LispParser parser("(if (= 4 3) \"Not ok\" \"GOOD!\")");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    LispExecutionContext executor;
+    LispValue result = executor.execute(*value, {});
+
+    TEST_ASSERT(result.is_string());
+
+    TEST_ASSERT(result == "GOOD!");
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
