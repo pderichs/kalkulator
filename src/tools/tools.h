@@ -17,6 +17,7 @@ typedef std::set<std::string> StringSet;
 typedef std::deque<std::string> StringDeque;
 
 typedef std::vector<int> IntVector;
+typedef std::vector<bool> BoolVector;
 typedef std::vector<unsigned char> UnsignedCharVector;
 
 namespace pdtools {

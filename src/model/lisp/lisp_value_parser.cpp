@@ -53,8 +53,8 @@ void LispValueParser::skip_spaces() {
 LispValue LispValueParser::parse_function() {
   LispTokens function_tokens = collect_current_function_tokens();
 
-  std::cerr << "Function tokens:" << std::endl;
-  function_tokens.debug_print(std::cerr);
+  // std::cerr << "Function tokens:" << std::endl;
+  // function_tokens.debug_print(std::cerr);
 
   bool identifier_search = false;
   bool first_bracket_found = false;
@@ -115,8 +115,8 @@ LispValue LispValueParser::parse_function() {
     }
   }
 
-  std::cerr << "Param tokens:" << std::endl;
-  param_tokens.debug_print(std::cerr);
+  // std::cerr << "Param tokens:" << std::endl;
+  // param_tokens.debug_print(std::cerr);
 
   LispValueParser params_parser(param_tokens);
   std::vector<std::shared_ptr<LispValue>> params;

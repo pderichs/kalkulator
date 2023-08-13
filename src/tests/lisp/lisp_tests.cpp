@@ -53,7 +53,8 @@ int run_lisp_tests_cons1();
 int run_lisp_tests_if1();
 int run_lisp_tests_if2();
 
-// TODO eq
+int run_lisp_tests_eq1();
+
 // TODO not
 // TODO xor
 // TODO or
@@ -132,6 +133,8 @@ int run_lisp_tests() {
 
   RUN_TEST(run_lisp_tests_if1);
   RUN_TEST(run_lisp_tests_if2);
+
+  RUN_TEST(run_lisp_tests_eq1);
 
   return 0;
 }
@@ -953,6 +956,55 @@ int run_lisp_tests_if2() {
               << lpe.item() << "\")" << std::endl;
 
     TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_eq1() {
+  StringVector tests = {
+      "(eq 1 1)", "(eq \"Hase\" 1)", "(eq \"Hase\" \"Bär\")",
+      "(eq \"Hase\" \"Hase\")",
+      //"(eq (list 54 2 66 9.326) (list 54 2 66 9.326))" // FIXME: list equality
+      // is not checked atm - see comment in execution_context_eq
+      "(eq (+ 54 2 66 9.326) (+ 54 2 66 9.326))",
+      "(eq (list 6 6 6) (list 6 6 6) 6)", "(eq (list 6 6 6) (list 6 6 6) 5)"};
+
+  BoolVector expected = {true, false, false, true, true, true, false};
+
+  size_t i = 0;
+  for (const auto &test : tests) {
+    bool expected_result = expected[i];
+
+    std::cerr << "eq test for " << test
+              << ", expected outcome: " << expected_result << std::endl;
+
+    LispParser parser(test);
+
+    try {
+      LispTokens tokens = parser.parse();
+
+      LispValueParser parser(tokens);
+
+      auto value = parser.next();
+      TEST_ASSERT(value);
+
+      LispExecutionContext executor;
+      LispValue result = executor.execute(*value, {});
+
+      if (expected_result) {
+        TEST_ASSERT(result.is_truthy());
+      } else {
+        TEST_ASSERT(!result.is_truthy());
+      }
+    } catch (LispParserError &lpe) {
+      std::cerr << "*** Caught lisp parser error: " << lpe.what()
+                << " (item: \"" << lpe.item() << "\")" << std::endl;
+
+      TEST_ASSERT(false);
+    }
+
+    i++;
   }
 
   return 0;

@@ -135,6 +135,8 @@ public:
       if (!item->content_equals(*other_item)) {
         return false;
       }
+
+      n++;
     }
 
     return true;
