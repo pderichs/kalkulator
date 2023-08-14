@@ -24,6 +24,10 @@ public:
   LispValuePtr expect_parameter_at(const LispFunction& func, size_t index) const;
 
 protected:
+  LispValuePtrVector execute_functions(
+      const LispValuePtrVector &params,
+      const LispExecutionContext &execution_context,
+      const std::any &context_param) const;
   LispValuePtrVector execute_functions_and_extract_list_results(
       const LispValuePtrVector &params,
       const LispExecutionContext &execution_context,

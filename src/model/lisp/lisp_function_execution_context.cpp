@@ -32,8 +32,7 @@ LispValue LispFunctionExecutionContext::expect_number(
   return result;
 }
 
-LispValuePtrVector
-LispFunctionExecutionContext::execute_functions_and_extract_list_results(
+LispValuePtrVector LispFunctionExecutionContext::execute_functions(
     const LispValuePtrVector &params,
     const LispExecutionContext &execution_context,
     const std::any &context_param) const {
@@ -44,14 +43,28 @@ LispFunctionExecutionContext::execute_functions_and_extract_list_results(
       LispValue function_result(
           execution_context.execute(*param, context_param));
 
-      // A function could return a list - we add the
-      // list items separately to the result.
-      if (function_result.is_list()) {
-        for (const auto &item : function_result.list()) {
-          result.push_back(item);
-        }
-      } else {
-        result.push_back(std::make_shared<LispValue>(function_result));
+      result.push_back(std::make_shared<LispValue>(function_result));
+    } else {
+      result.push_back(param);
+    }
+  }
+
+  return result;
+}
+
+LispValuePtrVector
+LispFunctionExecutionContext::execute_functions_and_extract_list_results(
+    const LispValuePtrVector &params,
+    const LispExecutionContext &execution_context,
+    const std::any &context_param) const {
+  LispValuePtrVector result;
+
+  auto exparams = execute_functions(params, execution_context, context_param);
+
+  for (const auto &param : exparams) {
+    if (param->is_list()) {
+      for (const auto &item : param->list()) {
+        result.push_back(item);
       }
     } else {
       result.push_back(param);

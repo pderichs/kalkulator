@@ -10,12 +10,14 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- FEAT: Lisp: Add lists-eq
 - BUG: Add more tests
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
 - FEAT: Add macro support: OnLoad?
 - FEAT: Undo
 - FEAT: Redo
+- FEAT: Macros: Add OnTimer and Timer start functionality
 - FEAT: Provide possibility to change column width
 - FEAT: Provide possibility to change row height
 - FEAT: Direct editing? (without the need of pressing F2)
