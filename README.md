@@ -10,6 +10,8 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- BUG: Add tests for cell function
+- BUG: Add tests for cell_range function
 - FEAT: Print
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
@@ -33,17 +35,6 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: isnone
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - lambda
-  - DONE and
-  - DONE or
-  - DONE xor
-  - DONE not
-  - DONE first
-  - DONE rest
-  - DONE quote (DONE with "list")
-  - DONE join
-  - DONE cons
-  - DONE eq (see prepared lisp_eq on LispValue)
-  - DONE if/cond
 - MAYB: Cache function results (see field _func_result on LispValue)
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
@@ -56,6 +47,18 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
+  - DONE and
+  - DONE or
+  - DONE xor
+  - DONE not
+  - DONE first
+  - DONE rest
+  - DONE quote (DONE with "list")
+  - DONE join
+  - DONE cons
+  - DONE eq (see prepared lisp_eq on LispValue)
+  - DONE if/cond
 - REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
 - BUG: Fix scroll bar behaviour (scrolling is not useable atm)
   Refactoring of table control might be needed

@@ -40,6 +40,7 @@ SRCS+=$(SRC_DIR)/model/lisp/value_converter.cpp
 SRCS+=$(TOOLS_DIR)/tools.cpp
 SRCS+=$(TESTS_DIR)/tests.cpp
 SRCS+=$(TESTS_DIR)/lisp/lisp_tests.cpp
+SRCS+=$(TESTS_DIR)/table/table_lisp_function_tests.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 OBJS+=vendor/sqlite3/sqlite3.o
 
