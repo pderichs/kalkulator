@@ -1090,11 +1090,7 @@ int run_lisp_tests(const std::map<std::string, bool> tests,
       LispExecutionContext executor;
       LispValue result = executor.execute(*value, {});
 
-      if (expected_result) {
-        TEST_ASSERT(result.is_truthy());
-      } else {
-        TEST_ASSERT(!result.is_truthy());
-      }
+      TEST_ASSERT(result.boolean() == expected_result);
     } catch (LispParserError &lpe) {
       std::cerr << "*** Caught lisp parser error: " << lpe.what()
                 << " (item: \"" << lpe.item() << "\")" << std::endl;

@@ -10,9 +10,7 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- FEAT: Lisp: Add lists-eq
 - FEAT: Print
-- BUG: Add more tests
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
 - FEAT: Add macro support: OnLoad?
@@ -30,14 +28,14 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Lisp sin
 - FEAT: Lisp sqroot
 - FEAT: Lisp log(arithm)
-- FEAT: Lisp map
+- FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
 - FEAT: isnone
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - lambda
-  - and
-  - or
-  - xor
+  - DONE and
+  - DONE or
+  - DONE xor
   - DONE not
   - DONE first
   - DONE rest

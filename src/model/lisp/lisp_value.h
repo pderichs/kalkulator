@@ -105,6 +105,14 @@ public:
     return string() == other;
   }
 
+  bool operator==(bool &other) const {
+    if (!is_boolean()) {
+      return false;
+    }
+
+    return boolean() == other;
+  }
+
   bool is_truthy() const {
     if (is_none()) {
       return false;
@@ -164,7 +172,6 @@ public:
 
     return false;
   }
-  // TODO: identity_equals needed?
 };
 
 #endif
