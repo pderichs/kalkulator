@@ -29,8 +29,9 @@ LispExecutionContext::LispExecutionContext() {
   _functions["join"] = std::make_shared<LispExecutionContextJoin>();
   _functions["cons"] = std::make_shared<LispExecutionContextCons>();
   _functions["if"] = std::make_shared<LispExecutionContextIf>();
-  _functions["eq"] = std::make_shared<LispExecutionContextEq>();
-  _functions["="] = std::make_shared<LispExecutionContextEq>(); // Same as eq
+  _functions["eq"] = std::make_shared<LispExecutionContextEq>(false);
+  _functions["xeq"] = std::make_shared<LispExecutionContextEq>(true); // read as: extracted equal
+  _functions["="] = std::make_shared<LispExecutionContextEq>(true); // Same as xeq
   _functions["not"] = std::make_shared<LispExecutionContextNot>();
 }
 
