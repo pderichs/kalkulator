@@ -11,6 +11,7 @@ This is one item of the "applications every software engineer should implement o
 # TODO
 
 - FEAT: Lisp: Add lists-eq
+- FEAT: Print
 - BUG: Add more tests
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
