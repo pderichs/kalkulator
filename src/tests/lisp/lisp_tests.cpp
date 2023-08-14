@@ -59,10 +59,10 @@ int run_lisp_tests_xeq1();
 
 int run_lisp_tests_not1();
 
-// TODO not
-// TODO xor
-// TODO or
+int run_lisp_tests_or1();
+
 // TODO and
+// TODO xor
 
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
@@ -143,6 +143,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_xeq1);
 
   RUN_TEST(run_lisp_tests_not1);
+
+  RUN_TEST(run_lisp_tests_or1);
 
   return 0;
 }
@@ -1090,6 +1092,56 @@ int run_lisp_tests_not1() {
     bool expected_result = it.second;
 
     std::cerr << "not test for " << test
+              << ", expected outcome: " << expected_result << std::endl;
+
+    LispParser parser(test);
+
+    try {
+      LispTokens tokens = parser.parse();
+
+      LispValueParser parser(tokens);
+
+      auto value = parser.next();
+      TEST_ASSERT(value);
+
+      LispExecutionContext executor;
+      LispValue result = executor.execute(*value, {});
+
+      if (expected_result) {
+        TEST_ASSERT(result.is_truthy());
+      } else {
+        TEST_ASSERT(!result.is_truthy());
+      }
+    } catch (LispParserError &lpe) {
+      std::cerr << "*** Caught lisp parser error: " << lpe.what()
+                << " (item: \"" << lpe.item() << "\")" << std::endl;
+
+      TEST_ASSERT(false);
+    }
+
+    i++;
+  }
+
+  return 0;
+}
+
+int run_lisp_tests_or1() {
+  // clang-format off
+  std::map<std::string, bool> tests = {
+     {"(or (= 1 0))", false},
+     {"(or (= 1 0) (= 0 1))", false},
+     {"(or (= 1 1))", true},
+     {"(or (= 1 1) (= 0 1))", true},
+     {"(or (= 1 0) (= 1 1))", true},
+  };
+  // clang-format on
+
+  size_t i = 0;
+  for (const auto &it : tests) {
+    std::string test = it.first;
+    bool expected_result = it.second;
+
+    std::cerr << "or test for " << test
               << ", expected outcome: " << expected_result << std::endl;
 
     LispParser parser(test);
