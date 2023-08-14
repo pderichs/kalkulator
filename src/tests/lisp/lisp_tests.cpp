@@ -962,15 +962,26 @@ int run_lisp_tests_if2() {
 }
 
 int run_lisp_tests_eq1() {
+  // clang-format off
   StringVector tests = {
-      "(eq 1 1)", "(eq \"Hase\" 1)", "(eq \"Hase\" \"Bär\")",
-      "(eq \"Hase\" \"Hase\")",
-      //"(eq (list 54 2 66 9.326) (list 54 2 66 9.326))" // FIXME: list equality
-      // is not checked atm - see comment in execution_context_eq
-      "(eq (+ 54 2 66 9.326) (+ 54 2 66 9.326))",
-      "(eq (list 6 6 6) (list 6 6 6) 6)", "(eq (list 6 6 6) (list 6 6 6) 5)"};
+    "(eq 1 1)",
+    "(eq \"Hase\" 1)",
+    "(eq \"Hase\" \"Bär\")",
+    "(eq \"Hase\" \"Hase\")",
+    "(eq (list 54 2 66 9.326) (list 54 2 66 9.326))",
+    "(eq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))",
+    "(eq (list 6 6 6) (list 6 6 6) 6)",
+    "(eq (list 6 6 6) (list 6 6 6) 5)"};
 
-  BoolVector expected = {true, false, false, true, true, true, false};
+  BoolVector expected = {
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    false};
+  // clang-format on
 
   size_t i = 0;
   for (const auto &test : tests) {
