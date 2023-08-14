@@ -1,5 +1,6 @@
 #include "lisp_execution_context.h"
 #include "lisp_execution_context_addition.h"
+#include "lisp_execution_context_and.h"
 #include "lisp_execution_context_cons.h"
 #include "lisp_execution_context_division.h"
 #include "lisp_execution_context_eq.h"
@@ -13,6 +14,7 @@
 #include "lisp_execution_context_or.h"
 #include "lisp_execution_context_rest.h"
 #include "lisp_execution_context_subtraction.h"
+#include "lisp_execution_context_xor.h"
 #include "lisp_function.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
@@ -37,6 +39,8 @@ LispExecutionContext::LispExecutionContext() {
       std::make_shared<LispExecutionContextEq>(true); // Same as xeq
   _functions["not"] = std::make_shared<LispExecutionContextNot>();
   _functions["or"] = std::make_shared<LispExecutionContextOr>();
+  _functions["xor"] = std::make_shared<LispExecutionContextXor>();
+  _functions["and"] = std::make_shared<LispExecutionContextAnd>();
 }
 
 LispValue

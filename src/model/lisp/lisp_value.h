@@ -33,11 +33,11 @@ private:
   LispValuePtr _func_result; // cached result of function execution
 
 public:
-  LispValue() { _type = LVT_NONE; }
+  explicit LispValue() { _type = LVT_NONE; }
 
-  LispValue(const std::string &s) : LispValue(s, false) {}
+  explicit LispValue(const std::string &s) : LispValue(s, false) {}
 
-  LispValue(const std::string &s, bool identifier) {
+  explicit LispValue(const std::string &s, bool identifier) {
     if (!identifier) {
       _type = LVT_STRING;
     } else {
@@ -47,22 +47,22 @@ public:
     _content = s;
   }
 
-  LispValue(double number) {
-    _type = LVT_NUMBER;
-    _content = number;
-  }
-
-  LispValue(LispBool b) {
+  explicit LispValue(LispBool b) {
     _type = LVT_BOOL;
     _content = b;
   }
 
-  LispValue(const LispFunction &function) {
+  explicit LispValue(double number) {
+    _type = LVT_NUMBER;
+    _content = number;
+  }
+
+  explicit LispValue(const LispFunction &function) {
     _type = LVT_FUNCTION;
     _content = function;
   }
 
-  LispValue(const LispValuePtrVector &list) {
+  explicit LispValue(const LispValuePtrVector &list) {
     _type = LVT_LIST;
     _content = list;
   }

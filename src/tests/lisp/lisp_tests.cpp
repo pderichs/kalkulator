@@ -15,6 +15,9 @@
 #include <tuple>
 #include <wx/wx.h>
 
+int run_lisp_tests(const std::map<std::string, bool> tests,
+                   const std::string &test_name);
+
 int run_lisp_tests_parsing1();
 int run_lisp_tests_parsing2();
 int run_lisp_tests_parsing3();
@@ -61,8 +64,9 @@ int run_lisp_tests_not1();
 
 int run_lisp_tests_or1();
 
-// TODO and
-// TODO xor
+int run_lisp_tests_and1();
+
+int run_lisp_tests_xor1();
 
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
@@ -145,6 +149,10 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_not1);
 
   RUN_TEST(run_lisp_tests_or1);
+
+  RUN_TEST(run_lisp_tests_and1);
+
+  RUN_TEST(run_lisp_tests_xor1);
 
   return 0;
 }
@@ -985,43 +993,7 @@ int run_lisp_tests_eq1() {
       {"(eq (list 6 6 6) (list 6 6 6) 5)", false}};
   // clang-format on
 
-  size_t i = 0;
-  for (const auto &it : tests) {
-    std::string test = it.first;
-    bool expected_result = it.second;
-
-    std::cerr << "eq test for " << test
-              << ", expected outcome: " << expected_result << std::endl;
-
-    LispParser parser(test);
-
-    try {
-      LispTokens tokens = parser.parse();
-
-      LispValueParser parser(tokens);
-
-      auto value = parser.next();
-      TEST_ASSERT(value);
-
-      LispExecutionContext executor;
-      LispValue result = executor.execute(*value, {});
-
-      if (expected_result) {
-        TEST_ASSERT(result.is_truthy());
-      } else {
-        TEST_ASSERT(!result.is_truthy());
-      }
-    } catch (LispParserError &lpe) {
-      std::cerr << "*** Caught lisp parser error: " << lpe.what()
-                << " (item: \"" << lpe.item() << "\")" << std::endl;
-
-      TEST_ASSERT(false);
-    }
-
-    i++;
-  }
-
-  return 0;
+  return run_lisp_tests(tests, "eq");
 }
 
 int run_lisp_tests_xeq1() {
@@ -1037,43 +1009,7 @@ int run_lisp_tests_xeq1() {
       {"(xeq (list 6 6 6) (list 6 6 6) 5)", false}};
   // clang-format on
 
-  size_t i = 0;
-  for (const auto &it : tests) {
-    std::string test = it.first;
-    bool expected_result = it.second;
-
-    std::cerr << "xeq test for " << test
-              << ", expected outcome: " << expected_result << std::endl;
-
-    LispParser parser(test);
-
-    try {
-      LispTokens tokens = parser.parse();
-
-      LispValueParser parser(tokens);
-
-      auto value = parser.next();
-      TEST_ASSERT(value);
-
-      LispExecutionContext executor;
-      LispValue result = executor.execute(*value, {});
-
-      if (expected_result) {
-        TEST_ASSERT(result.is_truthy());
-      } else {
-        TEST_ASSERT(!result.is_truthy());
-      }
-    } catch (LispParserError &lpe) {
-      std::cerr << "*** Caught lisp parser error: " << lpe.what()
-                << " (item: \"" << lpe.item() << "\")" << std::endl;
-
-      TEST_ASSERT(false);
-    }
-
-    i++;
-  }
-
-  return 0;
+  return run_lisp_tests(tests, "xeq");
 }
 
 int run_lisp_tests_not1() {
@@ -1086,43 +1022,7 @@ int run_lisp_tests_not1() {
   };
   // clang-format on
 
-  size_t i = 0;
-  for (const auto &it : tests) {
-    std::string test = it.first;
-    bool expected_result = it.second;
-
-    std::cerr << "not test for " << test
-              << ", expected outcome: " << expected_result << std::endl;
-
-    LispParser parser(test);
-
-    try {
-      LispTokens tokens = parser.parse();
-
-      LispValueParser parser(tokens);
-
-      auto value = parser.next();
-      TEST_ASSERT(value);
-
-      LispExecutionContext executor;
-      LispValue result = executor.execute(*value, {});
-
-      if (expected_result) {
-        TEST_ASSERT(result.is_truthy());
-      } else {
-        TEST_ASSERT(!result.is_truthy());
-      }
-    } catch (LispParserError &lpe) {
-      std::cerr << "*** Caught lisp parser error: " << lpe.what()
-                << " (item: \"" << lpe.item() << "\")" << std::endl;
-
-      TEST_ASSERT(false);
-    }
-
-    i++;
-  }
-
-  return 0;
+  return run_lisp_tests(tests, "not");
 }
 
 int run_lisp_tests_or1() {
@@ -1133,15 +1033,48 @@ int run_lisp_tests_or1() {
      {"(or (= 1 1))", true},
      {"(or (= 1 1) (= 0 1))", true},
      {"(or (= 1 0) (= 1 1))", true},
+     {"(or (= 1 1) (= 1 1))", true},
   };
   // clang-format on
 
-  size_t i = 0;
+  return run_lisp_tests(tests, "or");
+}
+
+int run_lisp_tests_and1() {
+  // clang-format off
+  std::map<std::string, bool> tests = {
+     {"(and (= 1 0))", false},
+     {"(and (= 1 0) (= 0 1))", false},
+     {"(and (= 1 1))", true},
+     {"(and (= 1 1) (= 0 1))", false},
+     {"(and (= 1 0) (= 1 1))", false},
+     {"(and (= 1 1) (= 1 1))", true},
+  };
+  // clang-format on
+
+  return run_lisp_tests(tests, "and");
+}
+
+int run_lisp_tests_xor1() {
+  // clang-format off
+  std::map<std::string, bool> tests = {
+     {"(xor (= 1 0) (= 0 1))", false},
+     {"(xor (= 1 1) (= 0 1))", true},
+     {"(xor (= 1 0) (= 1 1))", true},
+     {"(xor (= 1 1) (= 1 1))", false},
+  };
+  // clang-format on
+
+  return run_lisp_tests(tests, "xor");
+}
+
+int run_lisp_tests(const std::map<std::string, bool> tests,
+                   const std::string &test_name) {
   for (const auto &it : tests) {
     std::string test = it.first;
     bool expected_result = it.second;
 
-    std::cerr << "or test for " << test
+    std::cerr << test_name << ": test for " << test
               << ", expected outcome: " << expected_result << std::endl;
 
     LispParser parser(test);
@@ -1167,9 +1100,11 @@ int run_lisp_tests_or1() {
                 << " (item: \"" << lpe.item() << "\")" << std::endl;
 
       TEST_ASSERT(false);
-    }
+    } catch (LispExecutionContextError &lece) {
+      std::cerr << "*** Caught lisp parser error: " << lece.what() << std::endl;
 
-    i++;
+      TEST_ASSERT(false);
+    }
   }
 
   return 0;

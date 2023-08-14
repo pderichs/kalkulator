@@ -27,11 +27,8 @@ public:
 
     LispValuePtr last;
     for (const auto &param : params) {
-      if (last) {
-        LispValue eq_result = last->content_equals(*param);
-        if (!eq_result.is_truthy()) {
-          return LispValue(LISP_BOOL_FALSE);
-        }
+      if (last && !last->content_equals(*param)) {
+        return LispValue(LISP_BOOL_FALSE);
       }
 
       last = param;
