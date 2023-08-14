@@ -24,7 +24,7 @@ LispValue LispFunctionExecutionContext::expect_number(
     result = *value;
   } else {
     std::stringstream ss;
-    ss << "Unable to perform subtraction with this lisp value "
+    ss << "Unable to perform this operation with this lisp value (expecting number) "
        << (int)value->type();
     throw LispExecutionContextError(ss.str());
   }

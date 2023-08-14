@@ -10,8 +10,6 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: Add tests for cell function
-- BUG: Add tests for cell_range function
 - FEAT: Print
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
@@ -47,6 +45,8 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- BUG: Add tests for cell function
+- BUG: Add tests for cell_range function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - DONE and
   - DONE or

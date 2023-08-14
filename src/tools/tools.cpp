@@ -1,5 +1,6 @@
 #include "tools.h"
 #include <algorithm>
+#include <random>
 #include <sstream>
 
 namespace pdtools {
@@ -53,10 +54,17 @@ std::string locationToString(const Location &l) {
 std::string rectangleToString(const Rectangle &rect) {
   std::stringstream oss;
 
-  oss << "(t:" << rect.top() << ", l:" << rect.left()
-      << ", b:" << rect.bottom() << ", r:" << rect.right() << ")";
+  oss << "(t:" << rect.top() << ", l:" << rect.left() << ", b:" << rect.bottom()
+      << ", r:" << rect.right() << ")";
 
   return oss.str();
 }
 
+// Function to generate a random integer within a specified range [min, max]
+int generate_random_int_in_range(int min, int max) {
+  std::random_device rd;
+  std::mt19937 gen(rd()); // Mersenne Twister random number generator
+  std::uniform_int_distribution<int> dist(min, max);
+  return dist(gen);
+}
 }; // namespace pdtools

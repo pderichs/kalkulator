@@ -1,4 +1,5 @@
 #include <any>
+#include <sstream>
 #include <tuple>
 
 #include "../../model/table/lisp_execution_context_average.h"
@@ -7,9 +8,10 @@
 #include "../../model/table/table_workbook_document.h"
 #include "table_lisp_function_tests.h"
 #include "tools.h"
+
 int run_cell_tests1();
 
-// TODO cell_range
+int run_cell_range_tests1();
 
 class TestEventSink : public EventSink {
 public:
@@ -19,7 +21,6 @@ public:
   virtual void send_event(TableEvent event_id, std::any param) {
     std::ignore = event_id;
     std::ignore = param;
-    // TODO?
   }
 };
 
@@ -28,6 +29,7 @@ void prepare_execution_context(LispExecutionContext *execution_context,
 
 int run_table_lisp_function_tests() {
   RUN_TEST(run_cell_tests1);
+  RUN_TEST(run_cell_range_tests1);
 
   return 0;
 }
@@ -55,6 +57,44 @@ int run_cell_tests1() {
   LispValuePtr value = cell->lisp_value();
   TEST_ASSERT(value->is_function());
   TEST_ASSERT(cell->visible_content() == "42");
+
+  return 0;
+}
+
+int run_cell_range_tests1() {
+  // Test setup
+  TestEventSink sink;
+  LispExecutionContext execution_context;
+  ValueConverter::update_execution_context(&execution_context);
+  TableWorkbookDocument document(&sink);
+  prepare_execution_context(&execution_context, &document);
+
+  // Put random values in cells and store actual sum
+  int actual_sum = 0;
+  for (int n = 0; n <= 5; n++) {
+    int rand = pdtools::generate_random_int_in_range(1, 20000);
+    actual_sum += rand;
+    document.select_cell(Location(0, n));
+    std::stringstream ss;
+    ss << rand;
+    document.update_content_current_cell(ss.str());
+  }
+
+  std::stringstream actual_sum_str;
+  actual_sum_str << actual_sum;
+
+  // Put cell_range formula in cell 0 1 which sums up all values
+  // in rows 0 - 5 of first column
+  document.select_cell(Location(1, 0));
+  document.update_content_current_cell("=(+ (cell_range 0 0 5 0))");
+
+  const auto &opt_cell = document.get_cell(Location(1, 0));
+  TEST_ASSERT(opt_cell);
+  const auto &cell = *opt_cell;
+  TEST_ASSERT(cell);
+  LispValuePtr value = cell->lisp_value();
+  TEST_ASSERT(value->is_function());
+  TEST_ASSERT(cell->visible_content() == actual_sum_str.str());
 
   return 0;
 }
