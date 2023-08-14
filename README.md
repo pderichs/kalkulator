@@ -22,6 +22,8 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Provide possibility to change row height
 - FEAT: Direct editing? (without the need of pressing F2)
 - FEAT: Lisp progn
+- FEAT: Lisp abs
+- FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon())
 - FEAT: Lisp tan
 - FEAT: Lisp cos
 - FEAT: Lisp sin
