@@ -349,7 +349,21 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
   case WXK_DELETE:
     _document->clear_current_cell();
     break;
-  case WXK_F2: {
+  case WXK_F3: {
+    int x, y;
+    GetViewStart(&x, &y);
+    wxPrintf("TEST view start: %d, %d\n", x, y);
+
+    wxRect scrollArea = GetCurrentScrollArea();
+
+    wxPrintf("TEST! Scroll Area: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
+             scrollArea.GetLeft(), scrollArea.GetTop(), scrollArea.GetWidth(),
+             scrollArea.GetHeight(), scrollArea.GetRight(),
+             scrollArea.GetBottom());
+
+    break;
+  }
+  case WXK_F4: {
     // TEST
     Location loc(2, 40);
     _document->select_cell(loc);
@@ -364,20 +378,6 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
     ScrollToCell(loc, TOP);
 
     // TEST
-    break;
-  }
-  case WXK_F3: {
-    int x, y;
-    GetViewStart(&x, &y);
-    wxPrintf("TEST view start: %d, %d\n", x, y);
-
-    wxRect scrollArea = GetCurrentScrollArea();
-
-    wxPrintf("TEST! Scroll Area: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
-             scrollArea.GetLeft(), scrollArea.GetTop(), scrollArea.GetWidth(),
-             scrollArea.GetHeight(), scrollArea.GetRight(),
-             scrollArea.GetBottom());
-
     break;
   }
   case 'C':
@@ -406,9 +406,9 @@ void TableControl::OnKeyPress(wxKeyEvent &event) {
 
   if (handled) {
     Refresh();
+  } else {
+    event.Skip(); // Allow further event handling
   }
-
-  // event.Skip(); // Allow further event handling
 }
 
 void TableControl::ScrollToCell(const Location &cell,
