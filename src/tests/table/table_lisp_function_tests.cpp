@@ -2,7 +2,6 @@
 #include <sstream>
 #include <tuple>
 
-#include "../../model/table/lisp_execution_context_average.h"
 #include "../../model/table/lisp_execution_context_cell_range.h"
 #include "../../model/table/lisp_execution_context_cell_reference.h"
 #include "../../model/table/table_workbook_document.h"
@@ -105,6 +104,4 @@ void prepare_execution_context(LispExecutionContext *execution_context,
       "cell", std::make_shared<LispExecutionContextCellReference>(document));
   execution_context->add_function(
       "cell_range", std::make_shared<LispExecutionContextCellRange>(document));
-  execution_context->add_function(
-      "avg", std::make_shared<LispExecutionContextAvg>(document));
 }

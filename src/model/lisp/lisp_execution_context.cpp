@@ -1,6 +1,7 @@
 #include "lisp_execution_context.h"
 #include "lisp_execution_context_addition.h"
 #include "lisp_execution_context_and.h"
+#include "lisp_execution_context_average.h"
 #include "lisp_execution_context_cons.h"
 #include "lisp_execution_context_division.h"
 #include "lisp_execution_context_eq.h"
@@ -41,6 +42,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["or"] = std::make_shared<LispExecutionContextOr>();
   _functions["xor"] = std::make_shared<LispExecutionContextXor>();
   _functions["and"] = std::make_shared<LispExecutionContextAnd>();
+  _functions["avg"] = std::make_shared<LispExecutionContextAvg>();
 }
 
 LispValue

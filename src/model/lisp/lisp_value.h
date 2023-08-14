@@ -113,6 +113,33 @@ public:
     return boolean() == other;
   }
 
+  bool operator==(const LispValue &other) const {
+    if (_type != other._type) {
+      return false;
+    }
+
+    switch (_type) {
+    case LVT_STRING:
+    case LVT_IDENTIFIER:
+      return string() == other.string();
+
+    case LVT_NUMBER:
+      return number() == other.number();
+
+    case LVT_BOOL:
+      return boolean() == other.boolean();
+
+    case LVT_NONE:
+      return is_none() && other.is_none();
+
+    case LVT_LIST:
+      return lists_equals(other);
+
+    default:
+      throw std::runtime_error("Unable to compare with that type.");
+    }
+  }
+
   bool is_truthy() const {
     if (is_none()) {
       return false;

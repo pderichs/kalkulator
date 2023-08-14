@@ -1,19 +1,11 @@
 #ifndef LISP_EXECUTION_CONTEXT_AVG_INCLUDED
 #define LISP_EXECUTION_CONTEXT_AVG_INCLUDED
 
-#include "../lisp/lisp_function_execution_context.h"
-#include "table_workbook_document.h"
-#include <cstddef>
+#include "lisp_function_execution_context.h"
 
 class LispExecutionContextAvg : public LispFunctionExecutionContext {
-private:
-  TableWorkbookDocument *_document;
-
 public:
-  LispExecutionContextAvg(TableWorkbookDocument *document) {
-    _document = document;
-  }
-
+  LispExecutionContextAvg() = default;
   virtual ~LispExecutionContextAvg() = default;
 
   virtual LispValue value(const LispFunction &func,

@@ -15,7 +15,7 @@
 #include <tuple>
 #include <wx/wx.h>
 
-int run_lisp_tests(const std::map<std::string, bool> tests,
+int run_lisp_tests(const std::map<std::string, LispValue> tests,
                    const std::string &test_name);
 
 int run_lisp_tests_parsing1();
@@ -67,6 +67,8 @@ int run_lisp_tests_or1();
 int run_lisp_tests_and1();
 
 int run_lisp_tests_xor1();
+
+int run_lisp_tests_avg1();
 
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
@@ -153,6 +155,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_and1);
 
   RUN_TEST(run_lisp_tests_xor1);
+
+  RUN_TEST(run_lisp_tests_avg1);
 
   return 0;
 }
@@ -981,16 +985,16 @@ int run_lisp_tests_if2() {
 
 int run_lisp_tests_eq1() {
   // clang-format off
-  std::map<std::string, bool> tests = {
-      {"(eq 1 1)", true},
-      {"(eq \"Hase\" 1)", false},
-      {"(eq \"Hase\" \"Bär\")", false},
-      {"(eq \"Hase\" \"Hase\")", true},
-      {"(eq (list 54 2 66 9.326) (list 54 2 66 9.326))", true},
-      {"(eq (list 54 2 66 9.326) (list 54 3 66 9.326))", false},
-      {"(eq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", true},
-      {"(eq (list 6 6 6) (list 6 6 6) 6)", false},
-      {"(eq (list 6 6 6) (list 6 6 6) 5)", false}};
+  std::map<std::string, LispValue> tests = {
+      {"(eq 1 1)", LispValue(LISP_BOOL_TRUE)},
+      {"(eq \"Hase\" 1)", LispValue(LISP_BOOL_FALSE)},
+      {"(eq \"Hase\" \"Bär\")", LispValue(LISP_BOOL_FALSE)},
+      {"(eq \"Hase\" \"Hase\")", LispValue(LISP_BOOL_TRUE)},
+      {"(eq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValue(LISP_BOOL_TRUE)},
+      {"(eq (list 54 2 66 9.326) (list 54 3 66 9.326))", LispValue(LISP_BOOL_FALSE)},
+      {"(eq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValue(LISP_BOOL_TRUE)},
+      {"(eq (list 6 6 6) (list 6 6 6) 6)", LispValue(LISP_BOOL_FALSE)},
+      {"(eq (list 6 6 6) (list 6 6 6) 5)", LispValue(LISP_BOOL_FALSE)}};
   // clang-format on
 
   return run_lisp_tests(tests, "eq");
@@ -998,15 +1002,15 @@ int run_lisp_tests_eq1() {
 
 int run_lisp_tests_xeq1() {
   // clang-format off
-  std::map<std::string, bool> tests = {
-      {"(xeq 1 1)", true},
-      {"(xeq \"Hase\" 1)", false},
-      {"(xeq \"Hase\" \"Bär\")", false},
-      {"(xeq \"Hase\" \"Hase\")", true},
-      {"(xeq (list 54 2 66 9.326) (list 54 2 66 9.326))", false},
-      {"(xeq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", true},
-      {"(xeq (list 6 6 6) (list 6 6 6) 6)", true},
-      {"(xeq (list 6 6 6) (list 6 6 6) 5)", false}};
+  std::map<std::string, LispValue> tests = {
+      {"(xeq 1 1)", LispValue(LISP_BOOL_TRUE)},
+      {"(xeq \"Hase\" 1)", LispValue(LISP_BOOL_FALSE)},
+      {"(xeq \"Hase\" \"Bär\")", LispValue(LISP_BOOL_FALSE)},
+      {"(xeq \"Hase\" \"Hase\")", LispValue(LISP_BOOL_TRUE)},
+      {"(xeq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValue(LISP_BOOL_FALSE)},
+      {"(xeq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValue(LISP_BOOL_TRUE)},
+      {"(xeq (list 6 6 6) (list 6 6 6) 6)", LispValue(LISP_BOOL_TRUE)},
+      {"(xeq (list 6 6 6) (list 6 6 6) 5)", LispValue(LISP_BOOL_FALSE)}};
   // clang-format on
 
   return run_lisp_tests(tests, "xeq");
@@ -1014,11 +1018,11 @@ int run_lisp_tests_xeq1() {
 
 int run_lisp_tests_not1() {
   // clang-format off
-  std::map<std::string, bool> tests = {
-     {"(not (= 1 0))", true},
-     {"(not (= 1 0) (= 0 1))", true},
-     {"(not (= 1 1))", false},
-     {"(not (= 1 1) (= 0 1))", false},
+  std::map<std::string, LispValue> tests = {
+     {"(not (= 1 0))", LispValue(LISP_BOOL_TRUE)},
+     {"(not (= 1 0) (= 0 1))", LispValue(LISP_BOOL_TRUE)},
+     {"(not (= 1 1))", LispValue(LISP_BOOL_FALSE)},
+     {"(not (= 1 1) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
   };
   // clang-format on
 
@@ -1027,13 +1031,13 @@ int run_lisp_tests_not1() {
 
 int run_lisp_tests_or1() {
   // clang-format off
-  std::map<std::string, bool> tests = {
-     {"(or (= 1 0))", false},
-     {"(or (= 1 0) (= 0 1))", false},
-     {"(or (= 1 1))", true},
-     {"(or (= 1 1) (= 0 1))", true},
-     {"(or (= 1 0) (= 1 1))", true},
-     {"(or (= 1 1) (= 1 1))", true},
+  std::map<std::string, LispValue> tests = {
+     {"(or (= 1 0))", LispValue(LISP_BOOL_FALSE)},
+     {"(or (= 1 0) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
+     {"(or (= 1 1))", LispValue(LISP_BOOL_TRUE)},
+     {"(or (= 1 1) (= 0 1))", LispValue(LISP_BOOL_TRUE)},
+     {"(or (= 1 0) (= 1 1))", LispValue(LISP_BOOL_TRUE)},
+     {"(or (= 1 1) (= 1 1))", LispValue(LISP_BOOL_TRUE)},
   };
   // clang-format on
 
@@ -1042,13 +1046,13 @@ int run_lisp_tests_or1() {
 
 int run_lisp_tests_and1() {
   // clang-format off
-  std::map<std::string, bool> tests = {
-     {"(and (= 1 0))", false},
-     {"(and (= 1 0) (= 0 1))", false},
-     {"(and (= 1 1))", true},
-     {"(and (= 1 1) (= 0 1))", false},
-     {"(and (= 1 0) (= 1 1))", false},
-     {"(and (= 1 1) (= 1 1))", true},
+  std::map<std::string, LispValue> tests = {
+     {"(and (= 1 0))", LispValue(LISP_BOOL_FALSE)},
+     {"(and (= 1 0) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
+     {"(and (= 1 1))", LispValue(LISP_BOOL_TRUE)},
+     {"(and (= 1 1) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
+     {"(and (= 1 0) (= 1 1))", LispValue(LISP_BOOL_FALSE)},
+     {"(and (= 1 1) (= 1 1))", LispValue(LISP_BOOL_TRUE)},
   };
   // clang-format on
 
@@ -1057,25 +1061,35 @@ int run_lisp_tests_and1() {
 
 int run_lisp_tests_xor1() {
   // clang-format off
-  std::map<std::string, bool> tests = {
-     {"(xor (= 1 0) (= 0 1))", false},
-     {"(xor (= 1 1) (= 0 1))", true},
-     {"(xor (= 1 0) (= 1 1))", true},
-     {"(xor (= 1 1) (= 1 1))", false},
+  std::map<std::string, LispValue> tests = {
+     {"(xor (= 1 0) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
+     {"(xor (= 1 1) (= 0 1))", LispValue(LISP_BOOL_TRUE)},
+     {"(xor (= 1 0) (= 1 1))", LispValue(LISP_BOOL_TRUE)},
+     {"(xor (= 1 1) (= 1 1))", LispValue(LISP_BOOL_FALSE)},
   };
   // clang-format on
 
   return run_lisp_tests(tests, "xor");
 }
 
-int run_lisp_tests(const std::map<std::string, bool> tests,
+int run_lisp_tests_avg1() {
+  // clang-format off
+  std::map<std::string, LispValue> tests = {
+     {"(avg 2 2 2)", LispValue(2)},
+     {"(avg 42)", LispValue(42)},
+  };
+  // clang-format on
+
+  return run_lisp_tests(tests, "avg");
+}
+
+int run_lisp_tests(const std::map<std::string, LispValue> tests,
                    const std::string &test_name) {
   for (const auto &it : tests) {
     std::string test = it.first;
-    bool expected_result = it.second;
+    const auto &expected_result = it.second;
 
-    std::cerr << test_name << ": test for " << test
-              << ", expected outcome: " << expected_result << std::endl;
+    std::cerr << test_name << ": test for " << test << std::endl;
 
     LispParser parser(test);
 
@@ -1090,7 +1104,7 @@ int run_lisp_tests(const std::map<std::string, bool> tests,
       LispExecutionContext executor;
       LispValue result = executor.execute(*value, {});
 
-      TEST_ASSERT(result.boolean() == expected_result);
+      TEST_ASSERT(result == expected_result);
     } catch (LispParserError &lpe) {
       std::cerr << "*** Caught lisp parser error: " << lpe.what()
                 << " (item: \"" << lpe.item() << "\")" << std::endl;
