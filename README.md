@@ -11,12 +11,20 @@ This is one item of the "applications every software engineer should implement o
 # TODO
 
 - BUG: Add more tests
+- FEAT: Add repl for lisp
+- FEAT: Add code editor for macros?
+- FEAT: Add macro support: OnLoad?
 - FEAT: Undo
 - FEAT: Redo
 - FEAT: Provide possibility to change column width
 - FEAT: Provide possibility to change row height
 - FEAT: Direct editing? (without the need of pressing F2)
 - FEAT: Lisp progn
+- FEAT: Lisp tan
+- FEAT: Lisp cos
+- FEAT: Lisp sin
+- FEAT: Lisp sqroot
+- FEAT: Lisp log(arithm)
 - FEAT: Lisp map
 - FEAT: Lisp Support for variables (setq)
 - FEAT: isnone
@@ -41,6 +49,7 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Add simple format: foreground color
 - FEAT: Add simple format: font size
 - FEAT: Add application settings (e.g. size of undo steps)
+- DOC: Add explanation of functions (especially behaviour of eq)
 
 # DONE
 
