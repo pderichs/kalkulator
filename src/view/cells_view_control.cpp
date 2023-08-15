@@ -6,14 +6,12 @@
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
-const int ROW_HEADER_WIDTH = 50;
-const int COLUMN_HEADER_HEIGHT = 30;
 const int SCROLL_UNIT = 10;
 
 CellsViewControl::CellsViewControl(TableWorkbookDocument *document,
-                           EventSink *event_sink, wxWindow *parent,
-                           wxWindowID id, const wxPoint &pos,
-                           const wxSize &size, long style)
+                                   EventSink *event_sink, wxWindow *parent,
+                                   wxWindowID id, const wxPoint &pos,
+                                   const wxSize &size, long style)
     : wxScrolledWindow(parent, id, pos, size, style) {
   assert(event_sink);
   assert(document);
@@ -96,15 +94,13 @@ void CellsViewControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
 
   // TODO With the above information we could calculate the viewport
   // contents and only draw these to avoid flickering?
-  //DrawHeaders(dc, scrollPos, width, height, sheet);
+  // DrawHeaders(dc, scrollPos, width, height, sheet);
   DrawCells(dc, scrollPos, width, height, sheet);
 }
 
 void CellsViewControl::RefreshScrollbars() {
-  int width = (COLUMN_HEADER_HEIGHT + _document->get_current_sheet_width()) /
-              SCROLL_UNIT;
-  int height =
-      (ROW_HEADER_WIDTH + _document->get_current_sheet_height()) / SCROLL_UNIT;
+  int width = _document->get_current_sheet_width() / SCROLL_UNIT;
+  int height = _document->get_current_sheet_height() / SCROLL_UNIT;
 
   SetScrollbars(SCROLL_UNIT, SCROLL_UNIT, width, height);
 }
@@ -113,7 +109,8 @@ Location CellsViewControl::GetScrollPosition() const {
   return Location(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
-// void CellsViewControl::DrawHeaders(wxDC *dc, const Location &WXUNUSED(scrollPos),
+// void CellsViewControl::DrawHeaders(wxDC *dc, const Location
+// &WXUNUSED(scrollPos),
 //                                int width, int height, TableSheetPtr sheet) {
 //   std::ignore = width;
 //   std::ignore = height;
@@ -182,8 +179,8 @@ Location CellsViewControl::GetScrollPosition() const {
 // }
 
 void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
-                             int WXUNUSED(width), int WXUNUSED(height),
-                             TableSheetPtr sheet) {
+                                 int WXUNUSED(width), int WXUNUSED(height),
+                                 TableSheetPtr sheet) {
   // wxRect scrollArea = GetCurrentScrollArea();
 
   // TODO Only draw visible ones
@@ -252,8 +249,8 @@ CellsViewControl::~CellsViewControl() {
 }
 
 wxRect CellsViewControl::GetCellRectByLocation(const Location &cell) {
-  int x = ROW_HEADER_WIDTH + 1;
-  int y = COLUMN_HEADER_HEIGHT + 2;
+  int x = 1;
+  int y = 2;
   int n;
 
   wxRect result;
@@ -412,7 +409,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
 }
 
 void CellsViewControl::ScrollToCell(const Location &cell,
-                                TableCellOrientation orientation) {
+                                    TableCellOrientation orientation) {
   wxRect scrollArea = GetCurrentScrollArea();
   wxRect rect = GetCellRectByLocation(cell);
   // wxPrintf("TEST! Cell Rect: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
@@ -502,7 +499,7 @@ void CellsViewControl::OnCellUpdate(const Location &location) {
 }
 
 void CellsViewControl::DrawTextInCenter(wxDC *dc, const wxString &s,
-                                    const wxRect &rect) {
+                                        const wxRect &rect) {
   // Calculate the center coordinates of the wxRect
   int centerX = rect.GetX() + rect.GetWidth() / 2;
   int centerY = rect.GetY() + rect.GetHeight() / 2;
@@ -536,8 +533,6 @@ void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
   clickPosition.y += scrollPosY;
 
   // Calculate the clicked coordinates accounting for the scroll position
-  clickPosition.x -= ROW_HEADER_WIDTH;
-  clickPosition.y -= COLUMN_HEADER_HEIGHT;
   wxPrintf("Logical / calculated Click Position: %d, %d\n", clickPosition.x,
            clickPosition.y);
 
@@ -550,6 +545,7 @@ void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
   event.Skip();
 }
 
-Location CellsViewControl::GetTableCellByClickPosition(const wxPoint &pos) const {
+Location
+CellsViewControl::GetTableCellByClickPosition(const wxPoint &pos) const {
   return _document->get_cell_by_pos(Location(pos.x, pos.y));
 }
