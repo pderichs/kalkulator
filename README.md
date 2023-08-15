@@ -4,18 +4,21 @@ This is a simple and small spreadsheet application which uses a Lisp-like langua
 
 This is by no means bug free and / or production ready - **USE AT YOUR OWN RISK**.
 
-I have implemented a similar application in C with ncurses before ("simplecalc"), but for usability reasons I wanted to create a GUI application now.
+I have implemented a similar application in C before ("simplecalc"), but for usability reasons I wanted to create a GUI application now.
 
 This is one item of the "applications every software engineer should implement once in their lifetime" list :)
 
 # TODO
 
+- BUG: Scrolling should not scroll col/row header controls
+- BUG: Cell content should not be drawn outside of cells
+- FEAT: Undo
+- FEAT: Redo
+- FEAT: Toolbar
 - FEAT: Print
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
 - FEAT: Add macro support: OnLoad?
-- FEAT: Undo
-- FEAT: Redo
 - FEAT: Macros: Add OnTimer and Timer start functionality
 - FEAT: Provide possibility to change column width
 - FEAT: Provide possibility to change row height
@@ -26,7 +29,7 @@ This is one item of the "applications every software engineer should implement o
 - FEAT: Lisp tan
 - FEAT: Lisp cos
 - FEAT: Lisp sin
-- FEAT: Lisp sqroot
+- FEAT: Lisp root
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
@@ -45,6 +48,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- BUG: Add tests for LispValue
 - REFA: Move avg function to normal lisp functions
 - BUG: Add tests for cell function
 - BUG: Add tests for cell_range function
