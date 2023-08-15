@@ -20,6 +20,7 @@ public:
   virtual ~TableControl();
   void OnCellUpdate(const Location &location);
 
+  void OnSetFocus(wxFocusEvent& event);
 protected:
   void Init();
 

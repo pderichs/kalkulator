@@ -39,6 +39,8 @@ TableControl::~TableControl() {
 }
 
 void TableControl::Init() {
+  Bind(wxEVT_SET_FOCUS, &TableControl::OnSetFocus, this);
+
   CreateHeaderControls();
   CreateCellsViewControl();
 
@@ -54,6 +56,8 @@ void TableControl::Init() {
   _top_sizer->Add(_row_cell_view_sizer, 1, wxEXPAND | wxALL, 0);
 
   SetSizerAndFit(_top_sizer);
+
+  _cells_view_control->SetFocus();
 }
 
 void TableControl::CreateHeaderControls() {
@@ -69,4 +73,9 @@ void TableControl::CreateCellsViewControl() {
 
 void TableControl::OnCellUpdate(const Location &location) {
   _cells_view_control->OnCellUpdate(location);
+}
+
+void TableControl::OnSetFocus(wxFocusEvent& event) {
+  std::ignore = event;
+  _cells_view_control->SetFocus();
 }

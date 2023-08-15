@@ -126,9 +126,8 @@ KalkulatorMainFrame::KalkulatorMainFrame()
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuHelp, "&Help");
 
-  _table_control =
-      new TableControl(&_document, this, this, wxID_ANY, wxDefaultPosition,
-                       wxDefaultSize, wxWANTS_CHARS);
+  _table_control = new TableControl(&_document, this, this, wxID_ANY,
+                                    wxDefaultPosition, wxDefaultSize);
 
   _text_control_formula = new TableFormulaTextControl(
       this, this, -1, "", wxDefaultPosition, wxDefaultSize);
@@ -294,7 +293,7 @@ void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
 }
 
 void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
-  //wxPrintf("* EVENT: ");
+  // wxPrintf("* EVENT: ");
 
   std::string new_content;
 

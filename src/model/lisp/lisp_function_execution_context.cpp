@@ -22,6 +22,8 @@ LispValue LispFunctionExecutionContext::expect_number(
     result = execution_context.execute(*value, context_param);
   } else if (value->is_number()) {
     result = *value;
+  } else if (value->is_none()) {
+    result = LispValue(0);
   } else {
     std::stringstream ss;
     ss << "Unable to perform this operation with this lisp value (expecting number) "

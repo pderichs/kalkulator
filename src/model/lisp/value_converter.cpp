@@ -87,13 +87,12 @@ std::string ValueConverter::to_string(const LispValue &value,
   } else if (value.is_none()) {
     return "";
   } else if (value.is_function()) {
+    // Execute function
     try {
-      // Execute function
       LispValue result = execution_context->execute(value, context_param);
       return ValueConverter::to_string(result, context_param);
-    } catch (const std::runtime_error &e) {
-      std::cerr << "*** CAUGHT EXCEPTION: " << e.what() << std::endl;
-      exit(255);
+    } catch (const std::runtime_error &) {
+      return "#ERR";
     }
   } else if (value.is_list()) {
     return "#LIST";
