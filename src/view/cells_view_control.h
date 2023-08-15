@@ -34,6 +34,8 @@ public:
 
   void OnCellUpdate(const Location &location);
 
+  virtual void ScrollWindow(int dx, int dy, const wxRect *rect);
+
 private:
   // void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int
   // height,

@@ -83,3 +83,9 @@ void TableControl::OnSetFocus(wxFocusEvent &event) {
   std::ignore = event;
   _cells_view_control->SetFocus();
 }
+
+void TableControl::update_scroll_positions(int dx, int dy, const wxRect *rect) {
+  std::ignore = dx;
+  //_column_header_control->ScrollWindow(dx, 0, rect);
+  _row_headers_control->ScrollWindow(0, dy, rect);
+}

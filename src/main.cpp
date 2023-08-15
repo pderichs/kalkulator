@@ -365,5 +365,16 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     }
 
     break;
+
+  case CELL_VIEW_SCROLL_EVENT:
+    std::tuple<int, int, const wxRect*> scroll_params =
+        std::any_cast<std::tuple<int, int, const wxRect*>>(param);
+    int dx = std::get<0>(scroll_params);
+    int dy = std::get<1>(scroll_params);
+    const wxRect* rect = std::get<2>(scroll_params);
+
+    _table_control->update_scroll_positions(dx, dy, rect);
+
+    break;
   }
 }

@@ -55,6 +55,15 @@ void CellsViewControl::OnDraw(wxDC &dc) {
   DrawTable(&dc, sheet);
 }
 
+void CellsViewControl::ScrollWindow(int dx, int dy, const wxRect *rect) {
+  wxScrolledWindow::ScrollWindow(dx, dy, rect);
+  wxPrintf("SCROLL EVENT: %d/%d\n", dx, dy);
+  // m_colLabels->ScrollWindow(dx, 0, rect);
+  // m_rowLabels->ScrollWindow(0, dy, rect);
+  // TODO: Scroll row control and col control
+  _event_sink->send_event(CELL_VIEW_SCROLL_EVENT, std::make_tuple(dx, dy, rect));
+}
+
 void CellsViewControl::OnCopy() {
   TableCellPtr cell = _document->get_current_cell();
   if (cell) {

@@ -19,6 +19,11 @@ TableRowHeadersControl::TableRowHeadersControl(TableWorkbookDocument *document,
       wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
   _caption_background_brush = new wxBrush(button_face_color);
   _caption_grid_pen = new wxPen(button_text_color);
+
+  int height = document->get_current_sheet_height();
+  SetScrollRate(0, 10);
+  SetVirtualSize(ROW_HEADER_WIDTH, height);
+  EnableScrolling(false, true);
 }
 
 TableRowHeadersControl::~TableRowHeadersControl() {
