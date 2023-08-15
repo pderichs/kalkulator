@@ -19,6 +19,7 @@ public:
   Location GetScrollPosition() const;
 
   void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);
+  virtual wxSize DoGetBestSize() const;
 
 private:
   void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height,

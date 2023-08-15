@@ -50,10 +50,11 @@ private:
 
 private:
   TableWorkbookDocument *_document;
+  EventSink *_event_sink;
+
   wxPen *_caption_grid_pen;
   wxPen *_grid_pen;
   wxPen *_current_cell_pen;
-  EventSink *_event_sink;
   wxBrush *_window_brush;
   wxColour _window_color;
   wxColour _window_text_color;

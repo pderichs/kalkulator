@@ -2,7 +2,7 @@
 
 // FIXME: Remove these as soon as possible!
 const int ROW_HEADER_WIDTH = 50;
-//const int COLUMN_HEADER_HEIGHT = 30;
+// const int COLUMN_HEADER_HEIGHT = 30;
 
 TableRowHeadersControl::TableRowHeadersControl(TableWorkbookDocument *document,
                                                EventSink *event_sink,
@@ -137,4 +137,12 @@ void TableRowHeadersControl::DrawTextInCenter(wxDC *dc, const wxString &s,
   int textX = centerX - textWidth / 2;
   int textY = centerY - textHeight / 2;
   dc->DrawText(s, textX, textY);
+}
+
+wxSize TableRowHeadersControl::DoGetBestSize() const {
+  int height = _document->get_current_sheet_height();
+
+  // FIXME: Max header width should be calculated and returned by document
+  // Remove fixed value
+  return wxSize(ROW_HEADER_WIDTH, height);
 }
