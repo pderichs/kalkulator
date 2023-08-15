@@ -94,7 +94,6 @@ void CellsViewControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
 
   // TODO With the above information we could calculate the viewport
   // contents and only draw these to avoid flickering?
-  // DrawHeaders(dc, scrollPos, width, height, sheet);
   DrawCells(dc, scrollPos, width, height, sheet);
 }
 
@@ -108,75 +107,6 @@ void CellsViewControl::RefreshScrollbars() {
 Location CellsViewControl::GetScrollPosition() const {
   return Location(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
-
-// void CellsViewControl::DrawHeaders(wxDC *dc, const Location
-// &WXUNUSED(scrollPos),
-//                                int width, int height, TableSheetPtr sheet) {
-//   std::ignore = width;
-//   std::ignore = height;
-
-//   int x, y, c;
-
-//   // Set pen and brushes for headers of columns and rows
-//   dc->SetPen(*_caption_grid_pen);
-//   dc->SetBrush(*_caption_background_brush);
-
-//   // TODO for now we are drawing all available columns and rows
-//   // this can possibly be optimized
-
-//   // Columns
-//   c = 0;
-//   x = ROW_HEADER_WIDTH; // Use row header width as offset
-//                         // for columns to leave some space
-//                         // from left
-//   for (auto coldef : sheet->column_definitions) {
-//     // if (x > width) {
-//     //   break;
-//     // }
-
-//     auto name = coldef->caption;
-
-//     // TODO Move to tools
-//     if (name.empty()) {
-//       std::stringstream ss;
-//       ss << c;
-//       name = ss.str();
-//     }
-
-//     wxRect rect(x, 2, coldef->width, COLUMN_HEADER_HEIGHT);
-//     dc->DrawRectangle(rect);
-//     DrawTextInCenter(dc, name, rect);
-
-//     x += coldef->width;
-
-//     c++;
-//   }
-
-//   // Rows
-//   c = 0;
-//   y = COLUMN_HEADER_HEIGHT + 2;
-//   for (auto rowdef : sheet->row_definitions) {
-//     // if (y > height) {
-//     //   break;
-//     // }
-
-//     auto name = rowdef->caption;
-
-//     if (name.empty()) {
-//       std::stringstream ss;
-//       ss << c;
-//       name = ss.str();
-//     }
-
-//     wxRect rect(0, y, ROW_HEADER_WIDTH, rowdef->height);
-//     dc->DrawRectangle(rect);
-//     DrawTextInCenter(dc, name, rect);
-
-//     y += rowdef->height;
-
-//     c++;
-//   }
-// }
 
 void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
                                  int WXUNUSED(width), int WXUNUSED(height),
@@ -245,6 +175,11 @@ CellsViewControl::~CellsViewControl() {
   if (_current_cell_pen) {
     delete _current_cell_pen;
     _current_cell_pen = NULL;
+  }
+
+  if (_caption_background_brush) {
+    delete _caption_background_brush;
+    _caption_background_brush = NULL;
   }
 }
 
