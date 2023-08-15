@@ -48,16 +48,19 @@ int run_lisp_value_equality_tests() {
   return 0;
 }
 
+template<typename T>
+void add_values(LispValuePtrVector& v, T val) {
+  v.push_back(std::make_shared<LispValue>(val));
+}
+// recursive variadic template
+template<typename First, typename ... Rest>
+void add_values(LispValuePtrVector& v, First first, Rest ... rest) {
+  add_values(v, first);
+  add_values(v, rest...);
+}
 template <typename... Args>
 LispValuePtrVector make_value_list(Args... args) {
-    // Create a tuple from arguments
-    auto params = std::make_tuple(args...);
-
     LispValuePtrVector result;
-
-    std::apply([&result](const auto&... param) {
-        ((result.push_back(std::make_shared<LispValue>(param))), ...);
-    }, params);
-
+    add_values(result, args...);
     return result;
 }
