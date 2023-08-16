@@ -60,8 +60,7 @@ void CellsViewControl::ScrollWindow(int dx, int dy, const wxRect *rect) {
   wxPrintf("SCROLL EVENT: %d/%d\n", dx, dy);
   // m_colLabels->ScrollWindow(dx, 0, rect);
   // m_rowLabels->ScrollWindow(0, dy, rect);
-  // TODO: Scroll row control and col control
-  _event_sink->send_event(CELL_VIEW_SCROLL_EVENT, std::make_tuple(dx, dy, rect));
+  _event_sink->send_event(CELL_VIEW_SCROLL_EVENT, GetScrollPosition());
 }
 
 void CellsViewControl::OnCopy() {

@@ -1,6 +1,6 @@
 #include "table_row_headers_control.h"
 
-// FIXME: Remove these as soon as possible!
+//  FIXME: Remove these as soon as possible!
 const int ROW_HEADER_WIDTH = 50;
 // const int COLUMN_HEADER_HEIGHT = 30;
 
@@ -20,10 +20,11 @@ TableRowHeadersControl::TableRowHeadersControl(TableWorkbookDocument *document,
   _caption_background_brush = new wxBrush(button_face_color);
   _caption_grid_pen = new wxPen(button_text_color);
 
+  // FIXME: Hide scroll bars
   int height = document->get_current_sheet_height();
   SetScrollRate(0, 10);
   SetVirtualSize(ROW_HEADER_WIDTH, height);
-  EnableScrolling(false, true);
+  EnableScrolling(false, false);
 }
 
 TableRowHeadersControl::~TableRowHeadersControl() {

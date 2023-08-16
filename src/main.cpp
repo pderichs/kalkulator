@@ -1,4 +1,5 @@
 #include <memory>
+#include <sched.h>
 #include <stdexcept>
 #include <tuple>
 #include <wx/dcclient.h>
@@ -367,14 +368,8 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     break;
 
   case CELL_VIEW_SCROLL_EVENT:
-    std::tuple<int, int, const wxRect*> scroll_params =
-        std::any_cast<std::tuple<int, int, const wxRect*>>(param);
-    int dx = std::get<0>(scroll_params);
-    int dy = std::get<1>(scroll_params);
-    const wxRect* rect = std::get<2>(scroll_params);
-
-    _table_control->update_scroll_positions(dx, dy, rect);
-
+    Location scroll_pos = std::any_cast<Location>(param);
+    _table_control->update_scroll_positions(scroll_pos);
     break;
   }
 }

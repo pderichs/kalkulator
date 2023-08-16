@@ -23,7 +23,7 @@ public:
 
   void OnSetFocus(wxFocusEvent &event);
 
-  void update_scroll_positions(int dx, int dy, const wxRect *rect);
+  void update_scroll_positions(const Location& scroll_pos);
 
 protected:
   void Init();
