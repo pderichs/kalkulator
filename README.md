@@ -10,7 +10,8 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: Scrolling should not scroll col/row header controls
+- BUG: Scrolling to the outer left crashes app
+- BUG: Hide scrollbars from header controls
 - BUG: Cell content should not be drawn outside of cells
 - FEAT: Undo
 - FEAT: Redo
@@ -48,6 +49,8 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- BUG: Height is fixed atm
+- BUG: Scrolling should not scroll col/row header controls
 - BUG: Add tests for LispValue
 - REFA: Move avg function to normal lisp functions
 - BUG: Add tests for cell function

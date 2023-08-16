@@ -118,9 +118,5 @@ void TableColumnHeadersControl::DrawTextInCenter(wxDC *dc, const wxString &s,
 }
 
 wxSize TableColumnHeadersControl::DoGetBestSize() const {
-  int width = _document->get_current_sheet_width();
-
-  // FIXME: Max header width should be calculated and returned by document
-  // Remove fixed value
-  return wxSize(width, COLUMN_HEADER_HEIGHT);
+  return wxSize(100, COLUMN_HEADER_HEIGHT);
 }

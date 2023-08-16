@@ -8,13 +8,6 @@
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
-// FIXME Delete these test values
-enum {
-  BUTTON_TEMP_1 =
-      wxID_HIGHEST + 1, // declares an id which will be used to call our button
-  BUTTON_TEMP_2,
-};
-
 TableControl::TableControl(TableWorkbookDocument *document,
                            EventSink *event_sink, wxWindow *parent,
                            wxWindowID id, const wxPoint &pos,
@@ -53,8 +46,8 @@ void TableControl::Init() {
   _top_sizer->Add(_column_headers_control, 0, wxEXPAND | wxALL, 0);
 
   _row_cell_view_sizer = new wxBoxSizer(wxHORIZONTAL);
-  _row_cell_view_sizer->Add(_row_headers_control, 0, wxALIGN_LEFT, 0);
-  _row_cell_view_sizer->Add(_cells_view_control, 1, wxEXPAND | wxALL, 0);
+  _row_cell_view_sizer->Add(_row_headers_control, 0, wxEXPAND, 0);
+  _row_cell_view_sizer->Add(_cells_view_control, 1, wxEXPAND, 0);
 
   _top_sizer->Add(_row_cell_view_sizer, 1, wxEXPAND | wxALL, 0);
 

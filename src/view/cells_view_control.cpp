@@ -305,7 +305,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   }
   case WXK_F4: {
     // TEST
-    Location loc(2, 40);
+    Location loc(50, 40);
     _document->select_cell(loc);
 
     // wxRect rect = GetCellRectByLocation(loc);
