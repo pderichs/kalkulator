@@ -10,7 +10,6 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- BUG: Cell content should not be drawn outside of cells
 - REFA: pens and brushes and some scroll related functions are duplicated atm
 - FEAT: Undo
 - FEAT: Redo
@@ -48,6 +47,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- BUG: Cell content should not be drawn outside of cells
 - BUG: Hide scrollbars from header controls
 - BUG: Scrolling to the outer left crashes app
 - BUG: Height is fixed atm

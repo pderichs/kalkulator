@@ -446,9 +446,13 @@ void CellsViewControl::DrawTextInCenter(wxDC *dc, const wxString &s,
   int textWidth, textHeight;
   dc->GetTextExtent(s, &textWidth, &textHeight);
 
+  dc->SetClippingRegion(rect);
+
   int textX = centerX - textWidth / 2;
   int textY = centerY - textHeight / 2;
   dc->DrawText(s, textX, textY);
+
+  dc->DestroyClippingRegion();
 }
 
 void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
