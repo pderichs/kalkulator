@@ -1,4 +1,5 @@
 #include "table_control.h"
+#include "table_column_headers_control.h"
 #include "table_row_headers_control.h"
 #include <cstddef>
 #include <iostream>
@@ -29,9 +30,9 @@ TableControl::TableControl(TableWorkbookDocument *document,
 }
 
 TableControl::~TableControl() {
-  if (_column_header_control) {
-    delete _column_header_control;
-    _column_header_control = NULL;
+  if (_column_headers_control) {
+    delete _column_headers_control;
+    _column_headers_control = NULL;
   }
 
   if (_row_headers_control) {
@@ -49,7 +50,7 @@ void TableControl::Init() {
   // Create Sizer which includes Headers at top and left side
   _top_sizer = new wxBoxSizer(wxVERTICAL);
 
-  _top_sizer->Add(_column_header_control, 0, wxEXPAND | wxALL, 0);
+  _top_sizer->Add(_column_headers_control, 0, wxEXPAND | wxALL, 0);
 
   _row_cell_view_sizer = new wxBoxSizer(wxHORIZONTAL);
   _row_cell_view_sizer->Add(_row_headers_control, 0, wxALIGN_LEFT, 0);
@@ -63,8 +64,10 @@ void TableControl::Init() {
 }
 
 void TableControl::CreateHeaderControls() {
-  _column_header_control = new wxButton(this, BUTTON_TEMP_1, "Columns");
   _row_headers_control = new TableRowHeadersControl(
+      _document, _event_sink, this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+      wxWANTS_CHARS);
+  _column_headers_control = new TableColumnHeadersControl(
       _document, _event_sink, this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
       wxWANTS_CHARS);
 }
@@ -84,9 +87,10 @@ void TableControl::OnSetFocus(wxFocusEvent &event) {
   _cells_view_control->SetFocus();
 }
 
-void TableControl::update_scroll_positions(const Location& scroll_pos) {
+void TableControl::update_scroll_positions(const Location &scroll_pos) {
   wxPrintf("update scroll pos\n");
   //_column_header_control->ScrollWindow(dx, 0, rect);
   //_row_headers_control->ScrollWindow(0, dy, rect);
-  _row_headers_control->Scroll(scroll_pos.x(), scroll_pos.y());
+  _row_headers_control->Scroll(0, scroll_pos.y());
+  _column_headers_control->Scroll(scroll_pos.x(), 0);
 }

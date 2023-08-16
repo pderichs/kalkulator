@@ -8,6 +8,7 @@
 #include "../model/table/table_workbook_document.h"
 #include "cells_view_control.h"
 #include "location.h"
+#include "table_column_headers_control.h"
 #include "table_row_headers_control.h"
 
 class TableControl : public wxWindow {
@@ -23,7 +24,7 @@ public:
 
   void OnSetFocus(wxFocusEvent &event);
 
-  void update_scroll_positions(const Location& scroll_pos);
+  void update_scroll_positions(const Location &scroll_pos);
 
 protected:
   void Init();
@@ -39,9 +40,7 @@ private:
   wxSizer *_row_cell_view_sizer;
   CellsViewControl *_cells_view_control;
   TableRowHeadersControl *_row_headers_control;
-
-  // TODO Placeholders
-  wxButton *_column_header_control;
+  TableColumnHeadersControl *_column_headers_control;
 };
 
 #endif
