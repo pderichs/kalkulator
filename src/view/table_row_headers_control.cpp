@@ -9,13 +9,9 @@ TableRowHeadersControl::TableRowHeadersControl(
     KalkulatorSystemColorsPtr sys_colors, TableWorkbookDocument *document,
     EventSink *event_sink, wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style)
-    : wxScrolledWindow(parent, id, pos, size, style | ~wxVSCROLL) {
-  _document = document;
-  _event_sink = event_sink;
-
+    : TableSheetView(document, event_sink, parent, id, pos, size, style | ~wxVSCROLL) {
   _sys_colors = sys_colors;
 
-  // FIXME: Hide scroll bars
   int height = document->get_current_sheet_height();
   SetScrollRate(0, 10);
   SetVirtualSize(ROW_HEADER_WIDTH, height);
@@ -73,27 +69,6 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
 
     c++;
   }
-}
-
-// TODO: Remove duplicated code
-Location TableRowHeadersControl::GetScrollPosition() const {
-  return Location(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
-}
-
-// TODO: Remove duplicated code
-void TableRowHeadersControl::DrawTextInCenter(wxDC *dc, const wxString &s,
-                                              const wxRect &rect) {
-  // Calculate the center coordinates of the wxRect
-  int centerX = rect.GetX() + rect.GetWidth() / 2;
-  int centerY = rect.GetY() + rect.GetHeight() / 2;
-
-  // Draw the text at the center coordinates
-  int textWidth, textHeight;
-  dc->GetTextExtent(s, &textWidth, &textHeight);
-
-  int textX = centerX - textWidth / 2;
-  int textY = centerY - textHeight / 2;
-  dc->DrawText(s, textX, textY);
 }
 
 wxSize TableRowHeadersControl::DoGetBestSize() const {

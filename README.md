@@ -10,7 +10,6 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- REFA: pens and brushes and some scroll related functions are duplicated atm
 - FEAT: Undo
 - FEAT: Redo
 - FEAT: Toolbar
@@ -47,6 +46,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- REFA: pens and brushes and some scroll related functions are duplicated atm
 - BUG: Cell content should not be drawn outside of cells
 - BUG: Hide scrollbars from header controls
 - BUG: Scrolling to the outer left crashes app

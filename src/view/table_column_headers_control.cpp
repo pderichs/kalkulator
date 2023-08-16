@@ -8,10 +8,7 @@ TableColumnHeadersControl::TableColumnHeadersControl(
     KalkulatorSystemColorsPtr sys_colors, TableWorkbookDocument *document,
     EventSink *event_sink, wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style)
-    : wxScrolledWindow(parent, id, pos, size, style | ~wxHSCROLL) {
-  _document = document;
-  _event_sink = event_sink;
-
+    : TableSheetView(document, event_sink, parent, id, pos, size, style | ~wxHSCROLL) {
   _sys_colors = sys_colors;
 
   int width = _document->get_current_sheet_width() + ROW_HEADER_WIDTH;
@@ -75,27 +72,6 @@ void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
 
     c++;
   }
-}
-
-// TODO: Remove duplicated code
-Location TableColumnHeadersControl::GetScrollPosition() const {
-  return Location(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
-}
-
-// TODO: Remove duplicated code
-void TableColumnHeadersControl::DrawTextInCenter(wxDC *dc, const wxString &s,
-                                                 const wxRect &rect) {
-  // Calculate the center coordinates of the wxRect
-  int centerX = rect.GetX() + rect.GetWidth() / 2;
-  int centerY = rect.GetY() + rect.GetHeight() / 2;
-
-  // Draw the text at the center coordinates
-  int textWidth, textHeight;
-  dc->GetTextExtent(s, &textWidth, &textHeight);
-
-  int textX = centerX - textWidth / 2;
-  int textY = centerY - textHeight / 2;
-  dc->DrawText(s, textX, textY);
 }
 
 wxSize TableColumnHeadersControl::DoGetBestSize() const {

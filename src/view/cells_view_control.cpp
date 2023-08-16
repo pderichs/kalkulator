@@ -14,13 +14,7 @@ CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
                                    EventSink *event_sink, wxWindow *parent,
                                    wxWindowID id, const wxPoint &pos,
                                    const wxSize &size, long style)
-    : wxScrolledWindow(parent, id, pos, size, style) {
-  assert(event_sink);
-  assert(document);
-
-  _event_sink = event_sink;
-  _document = document;
-
+    : TableSheetView(document, event_sink, parent, id, pos, size, style) {
   _sys_colors = sys_colors;
 
   Bind(wxEVT_CHAR_HOOK, &CellsViewControl::OnKeyPress, this);
@@ -97,10 +91,6 @@ void CellsViewControl::RefreshScrollbars() {
   int height = _document->get_current_sheet_height() / SCROLL_UNIT;
 
   SetScrollbars(SCROLL_UNIT, SCROLL_UNIT, width, height);
-}
-
-Location CellsViewControl::GetScrollPosition() const {
-  return Location(GetScrollPos(wxHORIZONTAL), GetScrollPos(wxVERTICAL));
 }
 
 void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
@@ -394,25 +384,6 @@ void CellsViewControl::OnCellUpdate(const Location &location) {
   if (rect.Contains(location.x(), location.y())) {
     Refresh();
   }
-}
-
-void CellsViewControl::DrawTextInCenter(wxDC *dc, const wxString &s,
-                                        const wxRect &rect) {
-  // Calculate the center coordinates of the wxRect
-  int centerX = rect.GetX() + rect.GetWidth() / 2;
-  int centerY = rect.GetY() + rect.GetHeight() / 2;
-
-  // Draw the text at the center coordinates
-  int textWidth, textHeight;
-  dc->GetTextExtent(s, &textWidth, &textHeight);
-
-  dc->SetClippingRegion(rect);
-
-  int textX = centerX - textWidth / 2;
-  int textY = centerY - textHeight / 2;
-  dc->DrawText(s, textX, textY);
-
-  dc->DestroyClippingRegion();
 }
 
 void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
