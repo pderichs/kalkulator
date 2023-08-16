@@ -109,13 +109,13 @@ void TableWorkbookFile::close() {
   }
 }
 
-void TableWorkbookFile::read(TableWorkbookDocument &workbook) {
-  workbook.clear();
+void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
+  workbook->clear();
 
   // Read sheets
   char *err_msg = nullptr;
   int rc = sqlite3_exec(_db, "SELECT * FROM sheets ORDER BY id ASC;",
-                        read_sheet_callback, &workbook, &err_msg);
+                        read_sheet_callback, (void*)workbook.get(), &err_msg);
 
   if (rc != SQLITE_OK) {
     std::stringstream ss;
@@ -129,7 +129,7 @@ void TableWorkbookFile::read(TableWorkbookDocument &workbook) {
   rc = sqlite3_exec(_db,
                     "SELECT sheets.name, cells.row, cells.col, cells.content "
                     "FROM cells INNER JOIN sheets ON cells.sheet_id=sheets.id;",
-                    read_cells_callback, &workbook, &err_msg);
+                    read_cells_callback, (void*)workbook.get(), &err_msg);
 
   if (rc != SQLITE_OK) {
     std::stringstream ss;
@@ -139,14 +139,14 @@ void TableWorkbookFile::read(TableWorkbookDocument &workbook) {
   }
 }
 
-void TableWorkbookFile::write(const TableWorkbookDocument &workbook) {
+void TableWorkbookFile::write(const TableWorkbookDocumentPtr &workbook) {
   create_tables();
 
   execute_sql("DELETE FROM sheets;");
   execute_sql("DELETE FROM cells;");
 
   int id = 1;
-  const auto &sheets = workbook.sheets();
+  const auto &sheets = workbook->sheets();
   for (const auto &sheet : sheets) {
     save_sheet(id, sheet, workbook);
     id++;
@@ -198,8 +198,8 @@ void TableWorkbookFile::create_tables() {
 }
 
 void TableWorkbookFile::save_sheet(int id, const TableSheetPtr &sheet,
-                                   const TableWorkbookDocument &document) {
-  bool active = (sheet == document.current_sheet());
+                                   const TableWorkbookDocumentPtr &document) {
+  bool active = (sheet == document->current_sheet());
 
   std::stringstream sql;
 

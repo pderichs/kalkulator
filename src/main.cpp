@@ -61,7 +61,7 @@ private:
   bool PermitLoseChanges();
 
 private:
-  TableWorkbookDocument _document;
+  TableWorkbookDocumentPtr _document;
   TableControl *_table_control;
   wxTextCtrl *_text_control_formula;
   LispExecutionContext _execution_context;
@@ -104,14 +104,16 @@ bool MyApp::OnInit() {
 }
 
 KalkulatorMainFrame::KalkulatorMainFrame()
-    : wxFrame(NULL, wxID_ANY, "Kalkulator 0.0.1a"), _document(this) {
+    : wxFrame(NULL, wxID_ANY, "Kalkulator 0.0.1a") {
+  _document = std::make_shared<TableWorkbookDocument>(this);
+
   ValueConverter::update_execution_context(&_execution_context);
 
   _execution_context.add_function(
-      "cell", std::make_shared<LispExecutionContextCellReference>(&_document));
+      "cell", std::make_shared<LispExecutionContextCellReference>(_document));
   _execution_context.add_function(
       "cell_range",
-      std::make_shared<LispExecutionContextCellRange>(&_document));
+      std::make_shared<LispExecutionContextCellRange>(_document));
 
   wxMenu *menuFile = new wxMenu();
   menuFile->Append(ID_New, "&New\tCtrl-N",
@@ -131,7 +133,7 @@ KalkulatorMainFrame::KalkulatorMainFrame()
 
   _sys_colors = std::make_shared<KalkulatorSystemColors>();
 
-  _table_control = new TableControl(_sys_colors, &_document, this, this,
+  _table_control = new TableControl(_sys_colors, _document, this, this,
                                     wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
   _text_control_formula = new TableFormulaTextControl(
@@ -205,7 +207,7 @@ void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
 }
 
 bool KalkulatorMainFrame::PermitLoseChanges() {
-  if (_document.changed()) {
+  if (_document->changed()) {
     if (wxMessageBox(
             wxT("Current content has not been saved. Your changes will "
                 "be lost. Proceed?"),
@@ -221,7 +223,7 @@ void KalkulatorMainFrame::OnNew(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  _document.clear_and_initialize();
+  _document->clear_and_initialize();
 
   Refresh();
 }
@@ -234,8 +236,8 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   }
 
   wxString startFolder;
-  if (!_document.file_path().empty()) {
-    startFolder = wxPathOnly(_document.file_path());
+  if (!_document->file_path().empty()) {
+    startFolder = wxPathOnly(_document->file_path());
   }
 
   wxFileDialog openFileDialog(this, _("Open Kalkulator file"), startFolder, "",
@@ -260,8 +262,8 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
 void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
   wxString startFolder;
 
-  if (!_document.file_path().empty()) {
-    startFolder = wxPathOnly(_document.file_path());
+  if (!_document->file_path().empty()) {
+    startFolder = wxPathOnly(_document->file_path());
   }
 
   wxFileDialog saveFileDialog(this, _("Save Kalkulator file"), startFolder, "",
@@ -276,7 +278,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
   try {
     file.open((const char *)saveFileDialog.GetPath());
     file.write(_document);
-    _document.clear_changed_flag();
+    _document->clear_changed_flag();
   } catch (TableWorkbookFileError &twfe) {
     wxMessageBox(twfe.what(), wxT("Error"), wxICON_EXCLAMATION);
   }
@@ -314,7 +316,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
       wxPrintf("  Formula update content: %s\n", new_content);
 
       // Apply new content to cell
-      _document.update_content_current_cell(new_content);
+      _document->update_content_current_cell(new_content);
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for formula update. Event will be "
                "ignored.\n");
@@ -333,7 +335,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
       _table_control->OnCellUpdate(location);
 
-      auto cell = _document.get_current_cell();
+      auto cell = _document->get_current_cell();
 
       if (cell && cell->row() == location.y() && cell->col() == location.x()) {
         std::string formula = cell->get_formula_content();
@@ -352,7 +354,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     try {
       Location location(std::any_cast<Location>(param));
 
-      auto cell = _document.get_cell(location);
+      auto cell = _document->get_cell(location);
 
       if (cell) {
         auto unwrapped_cell = *cell;

@@ -15,7 +15,7 @@
 class TableControl : public wxWindow {
 public:
   TableControl(KalkulatorSystemColorsPtr sys_colors,
-               TableWorkbookDocument *document, EventSink *event_sink,
+               TableWorkbookDocumentPtr document, EventSink *event_sink,
                wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
@@ -36,7 +36,7 @@ protected:
 
 private:
   EventSink *_event_sink;
-  TableWorkbookDocument *_document;
+  TableWorkbookDocumentPtr _document;
 
   wxSizer *_top_sizer;
   wxSizer *_row_cell_view_sizer;

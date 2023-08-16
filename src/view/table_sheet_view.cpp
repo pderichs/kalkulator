@@ -1,6 +1,6 @@
 #include "table_sheet_view.h"
 
-TableSheetView::TableSheetView(TableWorkbookDocument *document,
+TableSheetView::TableSheetView(TableWorkbookDocumentPtr document,
                                EventSink *event_sink, wxWindow *parent,
                                wxWindowID id, const wxPoint &pos,
                                const wxSize &size, long style)

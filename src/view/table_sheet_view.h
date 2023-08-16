@@ -5,7 +5,7 @@
 #include "../model/table/table_workbook_document.h"
 class TableSheetView : public wxScrolledWindow {
 public:
-  TableSheetView(TableWorkbookDocument *document, EventSink *event_sink,
+  TableSheetView(TableWorkbookDocumentPtr document, EventSink *event_sink,
                  wxWindow *parent, wxWindowID id, const wxPoint &pos,
                  const wxSize &size, long style);
   virtual ~TableSheetView() = default;
@@ -14,7 +14,7 @@ public:
   void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);
 
 protected:
-  TableWorkbookDocument *_document;
+  TableWorkbookDocumentPtr _document;
   EventSink *_event_sink;
 
 };

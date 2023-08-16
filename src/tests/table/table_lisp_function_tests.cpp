@@ -1,4 +1,5 @@
 #include <any>
+#include <memory>
 #include <sstream>
 #include <tuple>
 
@@ -24,7 +25,7 @@ public:
 };
 
 void prepare_execution_context(LispExecutionContext *execution_context,
-                               TableWorkbookDocument *document);
+                               TableWorkbookDocumentPtr document);
 
 int run_table_lisp_function_tests() {
   RUN_TEST(run_cell_tests1);
@@ -38,18 +39,18 @@ int run_cell_tests1() {
   TestEventSink sink;
   LispExecutionContext execution_context;
   ValueConverter::update_execution_context(&execution_context);
-  TableWorkbookDocument document(&sink);
-  prepare_execution_context(&execution_context, &document);
+  TableWorkbookDocumentPtr document = std::make_shared<TableWorkbookDocument>(&sink);
+  prepare_execution_context(&execution_context, document);
 
   // Put value in cell 0 0
-  document.select_cell(Location(0, 0));
-  document.update_content_current_cell("42");
+  document->select_cell(Location(0, 0));
+  document->update_content_current_cell("42");
 
   // Put cell formula in cell 0 1
-  document.select_cell(Location(0, 1));
-  document.update_content_current_cell("=(cell 0 0)");
+  document->select_cell(Location(0, 1));
+  document->update_content_current_cell("=(cell 0 0)");
 
-  const auto &opt_cell = document.get_cell(Location(0, 1));
+  const auto &opt_cell = document->get_cell(Location(0, 1));
   TEST_ASSERT(opt_cell);
   const auto &cell = *opt_cell;
   TEST_ASSERT(cell);
@@ -65,18 +66,18 @@ int run_cell_range_tests1() {
   TestEventSink sink;
   LispExecutionContext execution_context;
   ValueConverter::update_execution_context(&execution_context);
-  TableWorkbookDocument document(&sink);
-  prepare_execution_context(&execution_context, &document);
+  TableWorkbookDocumentPtr document = std::make_shared<TableWorkbookDocument>(&sink);
+  prepare_execution_context(&execution_context, document);
 
   // Put random values in cells and store actual sum
   int actual_sum = 0;
   for (int n = 0; n <= 5; n++) {
     int rand = pdtools::generate_random_int_in_range(1, 20000);
     actual_sum += rand;
-    document.select_cell(Location(0, n));
+    document->select_cell(Location(0, n));
     std::stringstream ss;
     ss << rand;
-    document.update_content_current_cell(ss.str());
+    document->update_content_current_cell(ss.str());
   }
 
   std::stringstream actual_sum_str;
@@ -84,10 +85,10 @@ int run_cell_range_tests1() {
 
   // Put cell_range formula in cell 0 1 which sums up all values
   // in rows 0 - 5 of first column
-  document.select_cell(Location(1, 0));
-  document.update_content_current_cell("=(+ (cell_range 0 0 5 0))");
+  document->select_cell(Location(1, 0));
+  document->update_content_current_cell("=(+ (cell_range 0 0 5 0))");
 
-  const auto &opt_cell = document.get_cell(Location(1, 0));
+  const auto &opt_cell = document->get_cell(Location(1, 0));
   TEST_ASSERT(opt_cell);
   const auto &cell = *opt_cell;
   TEST_ASSERT(cell);
@@ -99,7 +100,7 @@ int run_cell_range_tests1() {
 }
 
 void prepare_execution_context(LispExecutionContext *execution_context,
-                               TableWorkbookDocument *document) {
+                               TableWorkbookDocumentPtr document) {
   execution_context->add_function(
       "cell", std::make_shared<LispExecutionContextCellReference>(document));
   execution_context->add_function(

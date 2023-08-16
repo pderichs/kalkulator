@@ -8,7 +8,7 @@
 
 class LispExecutionContextCellRange : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextCellRange(TableWorkbookDocument *document) {
+  LispExecutionContextCellRange(TableWorkbookDocumentPtr document) {
     _document = document;
   }
 
@@ -65,7 +65,7 @@ public:
   }
 
 private:
-  TableWorkbookDocument *_document;
+  TableWorkbookDocumentPtr _document;
 };
 
 #endif

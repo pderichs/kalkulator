@@ -9,7 +9,7 @@
 #include <wx/dcclient.h>
 
 TableControl::TableControl(KalkulatorSystemColorsPtr sys_colors,
-                           TableWorkbookDocument *document,
+                           TableWorkbookDocumentPtr document,
                            EventSink *event_sink, wxWindow *parent,
                            wxWindowID id, const wxPoint &pos,
                            const wxSize &size, long style)

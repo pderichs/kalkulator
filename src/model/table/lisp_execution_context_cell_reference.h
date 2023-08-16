@@ -10,8 +10,8 @@
 
 class LispExecutionContextCellReference : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextCellReference(TableWorkbookDocument *pWorkbook) {
-    _workbook = pWorkbook;
+  LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook) {
+    _workbook = workbook;
   }
 
   virtual ~LispExecutionContextCellReference() = default;
@@ -60,7 +60,7 @@ public:
   }
 
 private:
-  TableWorkbookDocument *_workbook;
+  TableWorkbookDocumentPtr _workbook;
 };
 
 #endif

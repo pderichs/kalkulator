@@ -4,6 +4,7 @@
 #include "../event_sink.h"
 #include "table_cell.h"
 #include "table_sheet.h"
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -66,5 +67,7 @@ private:
   EventSink *_event_sink;
   TableSheetPtr _current_sheet;
 };
+
+typedef std::shared_ptr<TableWorkbookDocument> TableWorkbookDocumentPtr;
 
 #endif

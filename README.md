@@ -12,6 +12,8 @@ This is one item of the "applications every software engineer should implement o
 
 - FEAT: Undo
 - FEAT: Redo
+- REFA: Streamline error handling from functions
+- MAYB: Support for integer and currency type cells? (big numbers?)
 - FEAT: Toolbar
 - FEAT: Print
 - FEAT: Add repl for lisp

@@ -5,7 +5,7 @@ const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
 
 TableColumnHeadersControl::TableColumnHeadersControl(
-    KalkulatorSystemColorsPtr sys_colors, TableWorkbookDocument *document,
+    KalkulatorSystemColorsPtr sys_colors, TableWorkbookDocumentPtr document,
     EventSink *event_sink, wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style)
     : TableSheetView(document, event_sink, parent, id, pos, size, style | ~wxHSCROLL) {

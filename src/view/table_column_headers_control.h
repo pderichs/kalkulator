@@ -7,7 +7,7 @@
 class TableColumnHeadersControl : public TableSheetView {
 public:
   TableColumnHeadersControl(KalkulatorSystemColorsPtr sys_colors,
-                            TableWorkbookDocument *document,
+                            TableWorkbookDocumentPtr document,
                             EventSink *event_sink, wxWindow *parent,
                             wxWindowID id = wxID_ANY,
                             const wxPoint &pos = wxDefaultPosition,

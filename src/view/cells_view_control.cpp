@@ -10,7 +10,7 @@
 const int SCROLL_UNIT = 10;
 
 CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
-                                   TableWorkbookDocument *document,
+                                   TableWorkbookDocumentPtr document,
                                    EventSink *event_sink, wxWindow *parent,
                                    wxWindowID id, const wxPoint &pos,
                                    const wxSize &size, long style)
@@ -39,8 +39,6 @@ void CellsViewControl::OnDraw(wxDC &dc) {
 void CellsViewControl::ScrollWindow(int dx, int dy, const wxRect *rect) {
   wxScrolledWindow::ScrollWindow(dx, dy, rect);
   wxPrintf("SCROLL EVENT: %d/%d\n", dx, dy);
-  // m_colLabels->ScrollWindow(dx, 0, rect);
-  // m_rowLabels->ScrollWindow(0, dy, rect);
   _event_sink->send_event(CELL_VIEW_SCROLL_EVENT, GetScrollPosition());
 }
 

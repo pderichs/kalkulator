@@ -8,7 +8,7 @@
 class CellsViewControl : public TableSheetView {
 public:
   CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
-                   TableWorkbookDocument *document, EventSink *event_sink,
+                   TableWorkbookDocumentPtr document, EventSink *event_sink,
                    wxWindow *parent, wxWindowID id = wxID_ANY,
                    const wxPoint &pos = wxDefaultPosition,
                    const wxSize &size = wxDefaultSize,
