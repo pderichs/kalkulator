@@ -1,4 +1,5 @@
 #include "cells_view_control.h"
+#include "kalkulator_system_colors.h"
 #include <cstddef>
 #include <iostream>
 #include <sstream>
@@ -8,7 +9,8 @@
 
 const int SCROLL_UNIT = 10;
 
-CellsViewControl::CellsViewControl(TableWorkbookDocument *document,
+CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
+                                   TableWorkbookDocument *document,
                                    EventSink *event_sink, wxWindow *parent,
                                    wxWindowID id, const wxPoint &pos,
                                    const wxSize &size, long style)
@@ -19,30 +21,15 @@ CellsViewControl::CellsViewControl(TableWorkbookDocument *document,
   _event_sink = event_sink;
   _document = document;
 
+  _sys_colors = sys_colors;
+
   Bind(wxEVT_CHAR_HOOK, &CellsViewControl::OnKeyPress, this);
   Bind(wxEVT_LEFT_DOWN, &CellsViewControl::OnLeftDown, this);
 
   RefreshScrollbars();
 
-  _window_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOW);
-  _window_text_color =
-      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-  _button_face_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
-  _button_text_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNTEXT);
-  _active_border_color =
-      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-
-  SetBackgroundColour(_window_color);
-  SetForegroundColour(_window_text_color);
-
-  _window_brush = new wxBrush(_window_color);
-
-  _caption_background_brush = new wxBrush(_button_face_color);
-  //_caption_grid_pen = new wxPen(wxColour(145, 145, 145));
-  _caption_grid_pen = new wxPen(_button_text_color);
-  _grid_pen = new wxPen(wxColour(100, 100, 100));
-  //_current_cell_pen = new wxPen(wxColour(47, 65, 163), 2);
-  _current_cell_pen = new wxPen(_active_border_color);
+  SetBackgroundColour(_sys_colors->window_color);
+  SetForegroundColour(_sys_colors->window_text_color);
 }
 
 void CellsViewControl::OnDraw(wxDC &dc) {
@@ -153,41 +140,14 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
   wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell);
   if (!current_cell_rect
            .IsEmpty() /*&& scrollArea.Contains(current_cell_rect)*/) {
-    dc->SetPen(*_current_cell_pen);
-    dc->SetBrush(*_window_brush);
+    dc->SetPen(*_sys_colors->current_cell_pen);
+    dc->SetBrush(*_sys_colors->window_brush);
     dc->DrawRectangle(current_cell_rect);
 
     auto cell = _document->get_current_cell();
     if (cell) {
       DrawTextInCenter(dc, cell->visible_content(), current_cell_rect);
     }
-  }
-}
-
-CellsViewControl::~CellsViewControl() {
-  if (_window_brush) {
-    delete _window_brush;
-    _window_brush = NULL;
-  }
-
-  if (_grid_pen) {
-    delete _grid_pen;
-    _grid_pen = NULL;
-  }
-
-  if (_caption_grid_pen) {
-    delete _caption_grid_pen;
-    _caption_grid_pen = NULL;
-  }
-
-  if (_current_cell_pen) {
-    delete _current_cell_pen;
-    _current_cell_pen = NULL;
-  }
-
-  if (_caption_background_brush) {
-    delete _caption_background_brush;
-    _caption_background_brush = NULL;
   }
 }
 

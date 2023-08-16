@@ -7,17 +7,19 @@
 #include <wx/wx.h>
 
 #include "../model/event_sink.h"
+#include "kalkulator_system_colors.h"
 #include "location.h"
 
 class CellsViewControl : public wxScrolledWindow {
 public:
-  CellsViewControl(TableWorkbookDocument *document, EventSink *event_sink,
+  CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
+                   TableWorkbookDocument *document, EventSink *event_sink,
                    wxWindow *parent, wxWindowID id = wxID_ANY,
                    const wxPoint &pos = wxDefaultPosition,
                    const wxSize &size = wxDefaultSize,
                    long style = wxTAB_TRAVERSAL);
 
-  virtual ~CellsViewControl();
+  virtual ~CellsViewControl() = default;
 
   void OnDraw(wxDC &dc);
   void OnKeyPress(wxKeyEvent &event);
@@ -54,16 +56,7 @@ private:
   TableWorkbookDocument *_document;
   EventSink *_event_sink;
 
-  wxPen *_caption_grid_pen;
-  wxPen *_grid_pen;
-  wxPen *_current_cell_pen;
-  wxBrush *_window_brush;
-  wxColour _window_color;
-  wxColour _window_text_color;
-  wxColour _button_face_color;
-  wxColour _button_text_color;
-  wxBrush *_caption_background_brush;
-  wxColour _active_border_color;
+  KalkulatorSystemColorsPtr _sys_colors;
 };
 
 #endif

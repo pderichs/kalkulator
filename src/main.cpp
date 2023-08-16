@@ -21,6 +21,7 @@
 #include "model/table/table_workbook_file.h"
 #include "model/table/table_workbook_file_error.h"
 #include "tests.h"
+#include "view/kalkulator_system_colors.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
 
@@ -64,6 +65,7 @@ private:
   TableControl *_table_control;
   wxTextCtrl *_text_control_formula;
   LispExecutionContext _execution_context;
+  KalkulatorSystemColorsPtr _sys_colors;
 };
 
 enum {
@@ -127,8 +129,10 @@ KalkulatorMainFrame::KalkulatorMainFrame()
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuHelp, "&Help");
 
-  _table_control = new TableControl(&_document, this, this, wxID_ANY,
-                                    wxDefaultPosition, wxDefaultSize);
+  _sys_colors = std::make_shared<KalkulatorSystemColors>();
+
+  _table_control = new TableControl(_sys_colors, &_document, this, this,
+                                    wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
   _text_control_formula = new TableFormulaTextControl(
       this, this, -1, "", wxDefaultPosition, wxDefaultSize);

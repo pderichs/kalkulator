@@ -1,42 +1,25 @@
 #include "table_row_headers_control.h"
+#include "kalkulator_system_colors.h"
 
 //  FIXME: Remove these as soon as possible!
 const int ROW_HEADER_WIDTH = 50;
 // const int COLUMN_HEADER_HEIGHT = 30;
 
-TableRowHeadersControl::TableRowHeadersControl(TableWorkbookDocument *document,
-                                               EventSink *event_sink,
-                                               wxWindow *parent, wxWindowID id,
-                                               const wxPoint &pos,
-                                               const wxSize &size, long style)
+TableRowHeadersControl::TableRowHeadersControl(
+    KalkulatorSystemColorsPtr sys_colors, TableWorkbookDocument *document,
+    EventSink *event_sink, wxWindow *parent, wxWindowID id, const wxPoint &pos,
+    const wxSize &size, long style)
     : wxScrolledWindow(parent, id, pos, size, style | ~wxVSCROLL) {
   _document = document;
   _event_sink = event_sink;
 
-  auto button_text_color =
-      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNTEXT);
-  auto button_face_color =
-      wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
-  _caption_background_brush = new wxBrush(button_face_color);
-  _caption_grid_pen = new wxPen(button_text_color);
+  _sys_colors = sys_colors;
 
   // FIXME: Hide scroll bars
   int height = document->get_current_sheet_height();
   SetScrollRate(0, 10);
   SetVirtualSize(ROW_HEADER_WIDTH, height);
   EnableScrolling(false, false);
-}
-
-TableRowHeadersControl::~TableRowHeadersControl() {
-  if (_caption_background_brush) {
-    delete _caption_background_brush;
-    _caption_background_brush = NULL;
-  }
-
-  if (_caption_grid_pen) {
-    delete _caption_grid_pen;
-    _caption_grid_pen = NULL;
-  }
 }
 
 void TableRowHeadersControl::OnDraw(wxDC &dc) {
@@ -63,40 +46,8 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
   int y, c;
 
   // Set pen and brushes for headers of columns and rows
-  dc->SetPen(*_caption_grid_pen);
-  dc->SetBrush(*_caption_background_brush);
-
-  // TODO for now we are drawing all available columns and rows
-  // this can possibly be optimized
-
-  // TODO: Move to other control
-  // // Columns
-  // c = 0;
-  // x = ROW_HEADER_WIDTH; // Use row header width as offset
-  //                       // for columns to leave some space
-  //                       // from left
-  // for (auto coldef : sheet->column_definitions) {
-  //   // if (x > width) {
-  //   //   break;
-  //   // }
-
-  //   auto name = coldef->caption;
-
-  //   // TODO Move to tools
-  //   if (name.empty()) {
-  //     std::stringstream ss;
-  //     ss << c;
-  //     name = ss.str();
-  //   }
-
-  //   wxRect rect(x, 2, coldef->width, COLUMN_HEADER_HEIGHT);
-  //   dc->DrawRectangle(rect);
-  //   DrawTextInCenter(dc, name, rect);
-
-  //   x += coldef->width;
-
-  //   c++;
-  // }
+  dc->SetPen(*_sys_colors->caption_grid_pen);
+  dc->SetBrush(*_sys_colors->caption_background_brush);
 
   // Rows
   c = 0;

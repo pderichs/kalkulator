@@ -8,7 +8,8 @@
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
-TableControl::TableControl(TableWorkbookDocument *document,
+TableControl::TableControl(KalkulatorSystemColorsPtr sys_colors,
+                           TableWorkbookDocument *document,
                            EventSink *event_sink, wxWindow *parent,
                            wxWindowID id, const wxPoint &pos,
                            const wxSize &size, long style)
@@ -18,6 +19,8 @@ TableControl::TableControl(TableWorkbookDocument *document,
 
   _event_sink = event_sink;
   _document = document;
+
+  _sys_colors = sys_colors;
 
   Init();
 }
@@ -58,16 +61,16 @@ void TableControl::Init() {
 
 void TableControl::CreateHeaderControls() {
   _row_headers_control = new TableRowHeadersControl(
-      _document, _event_sink, this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-      wxWANTS_CHARS);
+      _sys_colors, _document, _event_sink, this, wxID_ANY, wxDefaultPosition,
+      wxDefaultSize, wxWANTS_CHARS);
   _column_headers_control = new TableColumnHeadersControl(
-      _document, _event_sink, this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-      wxWANTS_CHARS);
+      _sys_colors, _document, _event_sink, this, wxID_ANY, wxDefaultPosition,
+      wxDefaultSize, wxWANTS_CHARS);
 }
 
 void TableControl::CreateCellsViewControl() {
   _cells_view_control =
-      new CellsViewControl(_document, _event_sink, this, wxID_ANY,
+      new CellsViewControl(_sys_colors, _document, _event_sink, this, wxID_ANY,
                            wxDefaultPosition, wxDefaultSize, wxWANTS_CHARS);
 }
 
