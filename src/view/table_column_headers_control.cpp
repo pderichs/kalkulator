@@ -9,7 +9,7 @@ TableColumnHeadersControl::TableColumnHeadersControl(TableWorkbookDocument *docu
                                                wxWindow *parent, wxWindowID id,
                                                const wxPoint &pos,
                                                const wxSize &size, long style)
-    : wxScrolledWindow(parent, id, pos, size, style) {
+    : wxScrolledWindow(parent, id, pos, size, style | ~wxHSCROLL) {
   _document = document;
   _event_sink = event_sink;
 
