@@ -21,7 +21,7 @@ TableColumnHeadersControl::TableColumnHeadersControl(TableWorkbookDocument *docu
   _caption_grid_pen = new wxPen(button_text_color);
 
   // FIXME: Hide scroll bars
-  int width = _document->get_current_sheet_width();
+  int width = _document->get_current_sheet_width() + ROW_HEADER_WIDTH;
   SetScrollRate(10, 0);
   SetVirtualSize(width, COLUMN_HEADER_HEIGHT);
   EnableScrolling(false, false);

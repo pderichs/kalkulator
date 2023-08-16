@@ -47,32 +47,44 @@ void TableWorkbookDocument::update_content_current_cell(
   update_cell_content(sheet, cell, content);
 }
 
-void TableWorkbookDocument::move_cursor_up() {
+bool TableWorkbookDocument::move_cursor_up() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_up()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    return true;
   }
+
+  return false;
 }
 
-void TableWorkbookDocument::move_cursor_down() {
+bool TableWorkbookDocument::move_cursor_down() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_down()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    return true;
   }
+
+  return false;
 }
 
-void TableWorkbookDocument::move_cursor_left() {
+bool TableWorkbookDocument::move_cursor_left() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_left()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    return true;
   }
+
+  return false;
 }
 
-void TableWorkbookDocument::move_cursor_right() {
+bool TableWorkbookDocument::move_cursor_right() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_right()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    return true;
   }
+
+  return false;
 }
 
 std::optional<TableCellPtr>
@@ -86,18 +98,24 @@ TableCellPtr TableWorkbookDocument::get_current_cell() const {
   return sheet->get_current_cell();
 }
 
-void TableWorkbookDocument::move_cursor_page_up() {
+bool TableWorkbookDocument::move_cursor_page_up() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_page_up()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    return true;
   }
+
+  return false;
 }
 
-void TableWorkbookDocument::move_cursor_page_down() {
+bool TableWorkbookDocument::move_cursor_page_down() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_page_down()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    return true;
   }
+
+  return false;
 }
 
 Location

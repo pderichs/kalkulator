@@ -28,7 +28,7 @@ private:
 private:
   TableWorkbookDocument *_document;
   EventSink *_event_sink;
-  // TODO: Move Pens and Brushes to a more central position?
+  // TODO: Move Pens and Brushes to a more central position? (duplicates)
   wxPen *_caption_grid_pen;
   wxBrush *_caption_background_brush;
 };

@@ -32,12 +32,12 @@ public:
                            const std::string &content);
   void clear_current_cell();
 
-  void move_cursor_up();
-  void move_cursor_down();
-  void move_cursor_left();
-  void move_cursor_right();
-  void move_cursor_page_up();
-  void move_cursor_page_down();
+  bool move_cursor_up();
+  bool move_cursor_down();
+  bool move_cursor_left();
+  bool move_cursor_right();
+  bool move_cursor_page_up();
+  bool move_cursor_page_down();
 
   Location get_cell_by_pos(const Location &position) const;
   void select_cell(const Location &cell);

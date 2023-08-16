@@ -267,24 +267,19 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
     cell_selection_moved = true;
     break;
   case WXK_DOWN:
-    _document->move_cursor_down();
-    cell_selection_moved = true;
+    cell_selection_moved = _document->move_cursor_down();
     break;
   case WXK_LEFT:
-    _document->move_cursor_left();
-    cell_selection_moved = true;
+    cell_selection_moved = _document->move_cursor_left();
     break;
   case WXK_RIGHT:
-    _document->move_cursor_right();
-    cell_selection_moved = true;
+    cell_selection_moved = _document->move_cursor_right();
     break;
   case WXK_PAGEUP:
-    _document->move_cursor_page_up();
-    cell_selection_moved = true;
+    cell_selection_moved = _document->move_cursor_page_up();
     break;
   case WXK_PAGEDOWN:
-    _document->move_cursor_page_down();
-    cell_selection_moved = true;
+    cell_selection_moved = _document->move_cursor_page_down();
     break;
   case WXK_DELETE:
     _document->clear_current_cell();

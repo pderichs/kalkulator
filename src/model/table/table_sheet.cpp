@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <sstream>
 
 const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
@@ -77,10 +78,9 @@ bool TableSheet::move_cursor_left() {
 }
 
 bool TableSheet::move_cursor_right() {
-  // TODO
-  // if (current_cell.x() == MAX) {
-  //   return;
-  // }
+  if ((size_t)current_cell.x() >= column_definitions.size() - 1) {
+    return false;
+  }
 
   current_cell.moveRight();
 
@@ -88,10 +88,9 @@ bool TableSheet::move_cursor_right() {
 }
 
 bool TableSheet::move_cursor_down() {
-  // TODO
-  // if (current_cell.y() == MAX) {
-  //   return;
-  // }
+  if ((size_t)current_cell.y() >= row_definitions.size() - 1) {
+    return false;
+  }
 
   current_cell.moveDown();
 
@@ -117,7 +116,10 @@ TableCellPtr TableSheet::get_current_cell() const {
 
   // assert(cell);
   if (!cell) {
-    throw std::runtime_error("Fatal: Current cell is invalid.");
+    std::stringstream ss;
+    ss << "Fatal: Current cell is invalid: ";
+    ss << current_cell.x() << ", " << current_cell.y();
+    throw std::runtime_error(ss.str());
   }
 
   return *cell;
