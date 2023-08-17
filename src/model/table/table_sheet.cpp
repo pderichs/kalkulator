@@ -78,7 +78,7 @@ bool TableSheet::move_cursor_left() {
 }
 
 bool TableSheet::move_cursor_right() {
-  if ((size_t)current_cell.x() >= column_definitions.size() - 1) {
+  if ((size_t)current_cell.x() >= get_max_col()) {
     return false;
   }
 
@@ -87,8 +87,12 @@ bool TableSheet::move_cursor_right() {
   return true;
 }
 
+size_t TableSheet::get_max_row() const {
+  return row_definitions.size() - 1;
+}
+
 bool TableSheet::move_cursor_down() {
-  if ((size_t)current_cell.y() >= row_definitions.size() - 1) {
+  if ((size_t)current_cell.y() >= get_max_row()) {
     return false;
   }
 
@@ -145,11 +149,12 @@ bool TableSheet::move_cursor_page_up() {
 }
 
 bool TableSheet::move_cursor_page_down() {
-  // TODO Check max row
-  int amount = ROW_PAGE_MOVE_AMOUNT;
-  // if (current_cell.y() - amount < 0) {
-  //   amount = current_cell.y();
-  // }
+  size_t amount = ROW_PAGE_MOVE_AMOUNT;
+  if (current_cell.y() + amount > get_max_row()) {
+    // Move to last row
+    current_cell = Location(current_cell.x(), get_max_row());
+    return true;
+  }
 
   current_cell.moveDown(amount);
   return true;
@@ -178,4 +183,8 @@ void TableSheet::clear_current_cell() {
 void TableSheet::update_content(const Location& cell_location, const std::string& content) {
   auto cell = get_cell_by_location(cell_location);
   cell->update_content(content);
+}
+
+size_t TableSheet::get_max_col() const {
+  return column_definitions.size() - 1;
 }

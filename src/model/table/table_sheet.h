@@ -51,6 +51,9 @@ struct TableSheet {
 
   void clear_current_cell();
 
+  size_t get_max_row() const;
+  size_t get_max_col() const;
+
   void update_content(const Location& cell_location, const std::string& content);
 };
 
