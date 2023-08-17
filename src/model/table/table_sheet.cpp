@@ -50,7 +50,7 @@ size_t TableSheet::row_count() const { return INITIAL_ROW_COUNT; }
 
 size_t TableSheet::col_count() const { return INITIAL_COL_COUNT; }
 
-std::optional<TableCellPtr> TableSheet::get_cell(size_t row, size_t col) const {
+TableCellPtr TableSheet::get_cell(size_t row, size_t col) const {
   if (row < rows.size()) {
     auto &table_row = rows[row];
 
@@ -122,11 +122,10 @@ TableCellPtr TableSheet::get_current_cell() const {
     throw std::runtime_error(ss.str());
   }
 
-  return *cell;
+  return cell;
 }
 
-std::optional<TableCellPtr>
-TableSheet::get_cell_by_location(const Location &location) const {
+TableCellPtr TableSheet::get_cell_by_location(const Location &location) const {
   return get_cell(location.y(), location.x());
 }
 
@@ -174,4 +173,9 @@ bool TableSheet::select_cell(const Location &cell) {
 void TableSheet::clear_current_cell() {
   auto cell = get_current_cell();
   cell->clear();
+}
+
+void TableSheet::update_content(const Location& cell_location, const std::string& content) {
+  auto cell = get_cell_by_location(cell_location);
+  cell->update_content(content);
 }

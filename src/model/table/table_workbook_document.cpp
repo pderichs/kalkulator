@@ -29,11 +29,7 @@ TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
 void TableWorkbookDocument::update_cell_content(TableSheetPtr sheet,
                                                 Location cell_location,
                                                 const std::string &content) {
-  auto opt_cell = sheet->get_cell_by_location(cell_location);
-  assert(opt_cell);
-  auto cell = *opt_cell;
-
-  cell->update_content(content);
+  sheet->update_content(cell_location, content);
 
   _changed = true;
 

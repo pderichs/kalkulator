@@ -68,12 +68,9 @@ static int read_cells_callback(void *data, int argc, char **argv,
     } else if (col == "col") {
       c = std::stoi(content);
     } else if (col == "content") {
-      const auto& opt_cell = sheet->get_cell(r, c);
-      if (opt_cell) {
-        const auto& cell = *opt_cell;
-        if (cell) {
-          workbook->update_cell_content(sheet, Location(c, r), content);
-        }
+      const auto &cell = sheet->get_cell(r, c);
+      if (cell) {
+        workbook->update_cell_content(sheet, Location(c, r), content);
       }
     }
   }
@@ -115,7 +112,7 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   // Read sheets
   char *err_msg = nullptr;
   int rc = sqlite3_exec(_db, "SELECT * FROM sheets ORDER BY id ASC;",
-                        read_sheet_callback, (void*)workbook.get(), &err_msg);
+                        read_sheet_callback, (void *)workbook.get(), &err_msg);
 
   if (rc != SQLITE_OK) {
     std::stringstream ss;
@@ -129,7 +126,7 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   rc = sqlite3_exec(_db,
                     "SELECT sheets.name, cells.row, cells.col, cells.content "
                     "FROM cells INNER JOIN sheets ON cells.sheet_id=sheets.id;",
-                    read_cells_callback, (void*)workbook.get(), &err_msg);
+                    read_cells_callback, (void *)workbook.get(), &err_msg);
 
   if (rc != SQLITE_OK) {
     std::stringstream ss;
@@ -248,13 +245,7 @@ void TableWorkbookFile::save_cells(int id, const TableSheetPtr &sheet) {
 
   for (size_t r = 0; r < rows; r++) {
     for (size_t c = 0; c < cols; c++) {
-      const auto &opt_cell = sheet->get_cell(r, c);
-      if (!opt_cell) {
-        continue;
-      }
-
-      const auto &cell = *opt_cell;
-
+      const auto &cell = sheet->get_cell(r, c);
       if (!cell || !cell->has_content()) {
         continue;
       }

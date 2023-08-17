@@ -107,8 +107,7 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
         //   break;
         // }
 
-        auto unwrapped_cell = *cell; // unwrap optional
-        DrawTextInCenter(dc, unwrapped_cell->visible_content(), cellRect);
+        DrawTextInCenter(dc, cell->visible_content(), cellRect);
       }
     }
   }
