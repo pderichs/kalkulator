@@ -72,7 +72,7 @@ static int read_cells_callback(void *data, int argc, char **argv,
       if (opt_cell) {
         const auto& cell = *opt_cell;
         if (cell) {
-          workbook->update_cell_content(sheet, cell, content);
+          workbook->update_cell_content(sheet, Location(c, r), content);
         }
       }
     }

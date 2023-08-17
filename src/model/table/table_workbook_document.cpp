@@ -27,24 +27,25 @@ TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
 }
 
 void TableWorkbookDocument::update_cell_content(TableSheetPtr sheet,
-                                                TableCellPtr cell,
+                                                Location cell_location,
                                                 const std::string &content) {
-  assert(cell);
+  auto opt_cell = sheet->get_cell_by_location(cell_location);
+  assert(opt_cell);
+  auto cell = *opt_cell;
 
   cell->update_content(content);
 
   _changed = true;
 
-  std::any param = sheet->current_cell;
+  std::any param = cell_location;
   _event_sink->send_event(CELL_UPDATED, param);
 }
 
 void TableWorkbookDocument::update_content_current_cell(
     const std::string &content) {
   TableSheetPtr sheet = _current_sheet;
-  TableCellPtr cell = sheet->get_current_cell();
 
-  update_cell_content(sheet, cell, content);
+  update_cell_content(sheet, sheet->current_cell, content);
 }
 
 bool TableWorkbookDocument::move_cursor_up() {

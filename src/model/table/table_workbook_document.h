@@ -29,7 +29,7 @@ public:
   void set_active_sheet(const std::string &name);
   void set_current_cell(const std::string &sheet_name,
                         const Location &current_cell);
-  void update_cell_content(TableSheetPtr sheet, TableCellPtr cell,
+  void update_cell_content(TableSheetPtr sheet, Location cell_location,
                            const std::string &content);
   void clear_current_cell();
 
@@ -60,6 +60,7 @@ public:
   get_definitions_for_location(const Location &location) const {
     return _current_sheet->get_definitions_for_location(location);
   }
+
 private:
   std::string _path;
   bool _changed;
