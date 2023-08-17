@@ -9,6 +9,7 @@
 
 #include "location.h"
 #include "table_cell.h"
+#include "table_change_history.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include "table_selections.h"
@@ -25,6 +26,7 @@ struct TableSheet {
   std::string name;
   TableSelections selections;
   Location current_cell;
+  TableSheetChangeHistory change_history;
 
   size_t row_count() const;
   size_t col_count() const;

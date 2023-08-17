@@ -39,7 +39,8 @@ int run_cell_tests1() {
   TestEventSink sink;
   LispExecutionContext execution_context;
   ValueConverter::update_execution_context(&execution_context);
-  TableWorkbookDocumentPtr document = std::make_shared<TableWorkbookDocument>(&sink);
+  TableWorkbookDocumentPtr document =
+      std::make_shared<TableWorkbookDocument>(&sink);
   prepare_execution_context(&execution_context, document);
 
   // Put value in cell 0 0
@@ -66,7 +67,8 @@ int run_cell_range_tests1() {
   TestEventSink sink;
   LispExecutionContext execution_context;
   ValueConverter::update_execution_context(&execution_context);
-  TableWorkbookDocumentPtr document = std::make_shared<TableWorkbookDocument>(&sink);
+  TableWorkbookDocumentPtr document =
+      std::make_shared<TableWorkbookDocument>(&sink);
   prepare_execution_context(&execution_context, document);
 
   // Put random values in cells and store actual sum

@@ -112,8 +112,7 @@ KalkulatorMainFrame::KalkulatorMainFrame()
   _execution_context.add_function(
       "cell", std::make_shared<LispExecutionContextCellReference>(_document));
   _execution_context.add_function(
-      "cell_range",
-      std::make_shared<LispExecutionContextCellRange>(_document));
+      "cell_range", std::make_shared<LispExecutionContextCellRange>(_document));
 
   wxMenu *menuFile = new wxMenu();
   menuFile->Append(ID_New, "&New\tCtrl-N",
