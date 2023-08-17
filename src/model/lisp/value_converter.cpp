@@ -109,7 +109,7 @@ std::string ValueConverter::to_string(const LispValue &value,
   }
 }
 
-void ValueConverter::update_execution_context(LispExecutionContext *context) {
+void ValueConverter::set_execution_context(LispExecutionContext *context) {
   if (!context) {
     throw std::runtime_error("Execution context is NULL");
   }

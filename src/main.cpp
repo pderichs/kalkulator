@@ -107,7 +107,7 @@ KalkulatorMainFrame::KalkulatorMainFrame()
     : wxFrame(NULL, wxID_ANY, "Kalkulator 0.0.1a") {
   _document = std::make_shared<TableWorkbookDocument>(this);
 
-  ValueConverter::update_execution_context(&_execution_context);
+  ValueConverter::set_execution_context(&_execution_context);
 
   _execution_context.add_function(
       "cell", std::make_shared<LispExecutionContextCellReference>(_document));

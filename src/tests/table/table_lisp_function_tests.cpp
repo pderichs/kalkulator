@@ -38,7 +38,7 @@ int run_cell_tests1() {
   // Test setup
   TestEventSink sink;
   LispExecutionContext execution_context;
-  ValueConverter::update_execution_context(&execution_context);
+  ValueConverter::set_execution_context(&execution_context);
   TableWorkbookDocumentPtr document =
       std::make_shared<TableWorkbookDocument>(&sink);
   prepare_execution_context(&execution_context, document);
@@ -66,7 +66,7 @@ int run_cell_range_tests1() {
   // Test setup
   TestEventSink sink;
   LispExecutionContext execution_context;
-  ValueConverter::update_execution_context(&execution_context);
+  ValueConverter::set_execution_context(&execution_context);
   TableWorkbookDocumentPtr document =
       std::make_shared<TableWorkbookDocument>(&sink);
   prepare_execution_context(&execution_context, document);
