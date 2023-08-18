@@ -176,7 +176,12 @@ bool TableSheet::select_cell(const Location &cell) {
 
 void TableSheet::clear_current_cell() {
   auto cell = get_current_cell();
+  std::string previous_content = cell->get_formula_content();
   cell->clear();
+
+  CellState state{cell->location(), previous_content, ""};
+  StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
+  change_history.push_state(item);
 }
 
 void TableSheet::update_content(const Location &cell_location,
