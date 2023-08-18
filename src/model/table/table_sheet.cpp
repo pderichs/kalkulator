@@ -193,28 +193,25 @@ void TableSheet::update_content(const Location &cell_location,
 
 size_t TableSheet::get_max_col() const { return column_definitions.size() - 1; }
 
-void TableSheet::apply_state_change_item(const StateHistoryItemPtr& state) {
-  CellStates undo_action_states;
+void TableSheet::apply_state_change_item(const StateHistoryItemPtr &state) {
   for (const auto &cell_state : state->cell_states) {
     auto cell = get_cell_by_location(cell_state.location);
-
     cell->update_content(cell_state.prev);
-
-    CellState new_state(cell_state);
-    new_state.reverse();
-    undo_action_states.push_back(new_state);
   }
-
-  change_history.push_state(
-      std::make_shared<StateHistoryItem>(undo_action_states));
 }
 
 void TableSheet::undo() {
   StateHistoryItemPtr state = change_history.undo();
+  if (!state) {
+    return;
+  }
   apply_state_change_item(state);
 }
 
 void TableSheet::redo() {
   StateHistoryItemPtr state = change_history.redo();
+  if (!state) {
+    return;
+  }
   apply_state_change_item(state);
 }

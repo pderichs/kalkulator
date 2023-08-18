@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <deque>
 #include <memory>
+#include <iostream>
 
 struct CellState {
   Location location;
@@ -31,9 +32,7 @@ struct StateHistoryItem {
     update_time();
   }
 
-  void update_time() {
-    time_stamp = std::chrono::system_clock::now();
-  }
+  void update_time() { time_stamp = std::chrono::system_clock::now(); }
 
   void reverse() {
     for (auto &state : cell_states) {
@@ -47,6 +46,10 @@ typedef std::shared_ptr<StateHistoryItem> StateHistoryItemPtr;
 class StateChangeQueue {
 public:
   StateChangeQueue(size_t max_items) { _max_items = max_items; }
+
+  bool empty() const { return _queue.empty(); }
+
+  size_t size() const { return _queue.size(); }
 
   void push_state(const StateHistoryItemPtr &state) {
     if (_queue.size() >= _max_items) {
@@ -77,10 +80,14 @@ public:
     _undo_queue.push_state(state);
   }
 
-  StateHistoryItemPtr pop_and_swap(StateChangeQueue& source, StateChangeQueue& dest) {
+  StateHistoryItemPtr pop_and_swap(StateChangeQueue &source,
+                                   StateChangeQueue &dest) {
+    if (source.empty()) { return {}; }
+
     StateHistoryItemPtr item = source.pop_state();
 
-    StateHistoryItemPtr reversed_item = std::make_shared<StateHistoryItem>(*item);
+    StateHistoryItemPtr reversed_item =
+        std::make_shared<StateHistoryItem>(*item);
     reversed_item->reverse();
     dest.push_state(reversed_item);
 
@@ -88,12 +95,13 @@ public:
   }
 
   StateHistoryItemPtr undo() {
+    std::cerr << "Undo queue count: " << _undo_queue.size() << std::endl;
+    std::cerr << "Redo queue count: " << _redo_queue.size() << std::endl;
+
     return pop_and_swap(_undo_queue, _redo_queue);
   }
 
-  StateHistoryItemPtr redo() {
-    return pop_and_swap(_redo_queue, _undo_queue);
-  }
+  StateHistoryItemPtr redo() { return pop_and_swap(_redo_queue, _undo_queue); }
 
 private:
   StateChangeQueue _undo_queue;
