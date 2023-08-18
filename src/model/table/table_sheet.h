@@ -55,6 +55,12 @@ struct TableSheet {
   size_t get_max_col() const;
 
   void update_content(const Location& cell_location, const std::string& content);
+
+  void undo();
+  void redo();
+
+private:
+  void apply_state_change_item(const StateHistoryItemPtr& state);
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

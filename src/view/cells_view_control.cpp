@@ -231,6 +231,19 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   case WXK_DELETE:
     _document->clear_current_cell();
     break;
+  case 'Z':
+    if (control) {
+      wxPrintf("UNDO!!!\n");
+      _document->undo();
+    }
+    break;
+  case 'Y':
+    if (control) {
+      wxPrintf("REDO!!!\n");
+      _document->redo();
+    }
+    break;
+
   case WXK_F3: {
     int x, y;
     GetViewStart(&x, &y);

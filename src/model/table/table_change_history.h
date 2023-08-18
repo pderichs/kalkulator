@@ -7,7 +7,7 @@
 #include <memory>
 
 struct CellState {
-  Location cell;
+  Location location;
   std::string prev;
   std::string next;
 
@@ -16,11 +16,24 @@ struct CellState {
 
 typedef std::vector<CellState> CellStates;
 
-struct WorkState {
+struct StateHistoryItem {
   std::chrono::system_clock::time_point time_stamp;
   CellStates cell_states;
 
-  WorkState() { time_stamp = std::chrono::system_clock::now(); }
+  // Constructor for single cell state item
+  StateHistoryItem(const CellState &state) {
+    update_time();
+    cell_states.push_back(state);
+  }
+
+  // Constructor for many cell state items
+  StateHistoryItem(const CellStates &states) : cell_states(states) {
+    update_time();
+  }
+
+  void update_time() {
+    time_stamp = std::chrono::system_clock::now();
+  }
 
   void reverse() {
     for (auto &state : cell_states) {
@@ -29,15 +42,13 @@ struct WorkState {
   }
 };
 
-typedef std::shared_ptr<WorkState> WorkStatePtr;
+typedef std::shared_ptr<StateHistoryItem> StateHistoryItemPtr;
 
-class TableSheetChangeHistory {
+class StateChangeQueue {
 public:
-  TableSheetChangeHistory(size_t max_items = 50) {
-    _max_items = max_items == 0 ? 50 : _max_items;
-  }
+  StateChangeQueue(size_t max_items) { _max_items = max_items; }
 
-  void push_state(WorkStatePtr state) {
+  void push_state(const StateHistoryItemPtr &state) {
     if (_queue.size() >= _max_items) {
       // Delete oldest state
       _queue.pop_back();
@@ -46,16 +57,47 @@ public:
     _queue.push_front(state);
   }
 
-  WorkStatePtr pop_state() {
+  StateHistoryItemPtr pop_state() {
     auto result = _queue.front();
     _queue.pop_front();
     return result;
   }
-  void clear() { _queue.clear(); }
 
 private:
   size_t _max_items;
-  std::deque<WorkStatePtr> _queue;
+  std::deque<StateHistoryItemPtr> _queue;
+};
+
+class TableSheetChangeHistory {
+public:
+  TableSheetChangeHistory(size_t max_items = 50)
+      : _undo_queue(max_items), _redo_queue(max_items) {}
+
+  void push_state(const StateHistoryItemPtr &state) {
+    _undo_queue.push_state(state);
+  }
+
+  StateHistoryItemPtr pop_and_swap(StateChangeQueue& source, StateChangeQueue& dest) {
+    StateHistoryItemPtr item = source.pop_state();
+
+    StateHistoryItemPtr reversed_item = std::make_shared<StateHistoryItem>(*item);
+    reversed_item->reverse();
+    dest.push_state(reversed_item);
+
+    return item;
+  }
+
+  StateHistoryItemPtr undo() {
+    return pop_and_swap(_undo_queue, _redo_queue);
+  }
+
+  StateHistoryItemPtr redo() {
+    return pop_and_swap(_redo_queue, _undo_queue);
+  }
+
+private:
+  StateChangeQueue _undo_queue;
+  StateChangeQueue _redo_queue;
 };
 
 #endif

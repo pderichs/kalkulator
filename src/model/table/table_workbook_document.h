@@ -61,6 +61,9 @@ public:
     return _current_sheet->get_definitions_for_location(location);
   }
 
+  void undo();
+  void redo();
+
 private:
   std::string _path;
   bool _changed;

@@ -1,13 +1,14 @@
 #include "table_sheet.h"
 #include "table_cell.h"
+#include "table_change_history.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include <cassert>
 #include <cstddef>
 #include <iostream>
 #include <memory>
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
 
 const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
@@ -87,9 +88,7 @@ bool TableSheet::move_cursor_right() {
   return true;
 }
 
-size_t TableSheet::get_max_row() const {
-  return row_definitions.size() - 1;
-}
+size_t TableSheet::get_max_row() const { return row_definitions.size() - 1; }
 
 bool TableSheet::move_cursor_down() {
   if ((size_t)current_cell.y() >= get_max_row()) {
@@ -180,11 +179,42 @@ void TableSheet::clear_current_cell() {
   cell->clear();
 }
 
-void TableSheet::update_content(const Location& cell_location, const std::string& content) {
+void TableSheet::update_content(const Location &cell_location,
+                                const std::string &content) {
   auto cell = get_cell_by_location(cell_location);
+
+  std::string previous_content = cell->get_formula_content();
   cell->update_content(content);
+
+  CellState state{cell_location, previous_content, content};
+  StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
+  change_history.push_state(item);
 }
 
-size_t TableSheet::get_max_col() const {
-  return column_definitions.size() - 1;
+size_t TableSheet::get_max_col() const { return column_definitions.size() - 1; }
+
+void TableSheet::apply_state_change_item(const StateHistoryItemPtr& state) {
+  CellStates undo_action_states;
+  for (const auto &cell_state : state->cell_states) {
+    auto cell = get_cell_by_location(cell_state.location);
+
+    cell->update_content(cell_state.prev);
+
+    CellState new_state(cell_state);
+    new_state.reverse();
+    undo_action_states.push_back(new_state);
+  }
+
+  change_history.push_state(
+      std::make_shared<StateHistoryItem>(undo_action_states));
+}
+
+void TableSheet::undo() {
+  StateHistoryItemPtr state = change_history.undo();
+  apply_state_change_item(state);
+}
+
+void TableSheet::redo() {
+  StateHistoryItemPtr state = change_history.redo();
+  apply_state_change_item(state);
 }

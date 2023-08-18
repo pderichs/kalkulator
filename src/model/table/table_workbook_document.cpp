@@ -270,3 +270,11 @@ void TableWorkbookDocument::clear_current_cell() {
   std::any param = _current_sheet->current_cell;
   _event_sink->send_event(CELL_UPDATED, param);
 }
+
+void TableWorkbookDocument::undo() {
+  _current_sheet->undo();
+}
+
+void TableWorkbookDocument::redo() {
+  _current_sheet->redo();
+}
