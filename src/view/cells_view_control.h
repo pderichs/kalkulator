@@ -20,6 +20,7 @@ public:
   void OnKeyPress(wxKeyEvent &event);
   void OnLeftDown(wxMouseEvent &event);
   void OnCopy();
+  void OnCopyFormula();
   void OnPaste();
   void OnCut();
 
@@ -40,6 +41,8 @@ private:
   void ScrollToCurrentCell();
   Location GetTableCellByClickPosition(const wxPoint &pos) const;
   void ScrollToCell(const Location &cell, TableCellOrientation orientation);
+
+  void CopyString(const std::string &content);
 
 private:
   KalkulatorSystemColorsPtr _sys_colors;

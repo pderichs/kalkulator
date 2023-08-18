@@ -10,8 +10,6 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- FEAT: Undo
-- FEAT: Redo
 - REFA: Streamline error handling from functions
 - MAYB: Support for integer and currency type cells? (big numbers?)
 - FEAT: Toolbar
@@ -48,6 +46,9 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- REFA: Copy/Paste should only copy values (provide alternative copy for formulas)
+- FEAT: Undo
+- FEAT: Redo
 - REFA: pens and brushes and some scroll related functions are duplicated atm
 - BUG: Cell content should not be drawn outside of cells
 - BUG: Hide scrollbars from header controls

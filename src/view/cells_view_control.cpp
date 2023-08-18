@@ -42,15 +42,19 @@ void CellsViewControl::ScrollWindow(int dx, int dy, const wxRect *rect) {
   _event_sink->send_event(CELL_VIEW_SCROLL_EVENT, GetScrollPosition());
 }
 
+void CellsViewControl::CopyString(const std::string &content) {
+  if (wxTheClipboard->Open()) {
+    wxString textToCopy = content.c_str();
+    wxTheClipboard->SetData(new wxTextDataObject(textToCopy));
+    wxTheClipboard->Close();
+  }
+}
+
 void CellsViewControl::OnCopy() {
   TableCellPtr cell = _document->get_current_cell();
   if (cell) {
-    std::string content = cell->get_formula_content();
-    if (wxTheClipboard->Open()) {
-      wxString textToCopy = content.c_str();
-      wxTheClipboard->SetData(new wxTextDataObject(textToCopy));
-      wxTheClipboard->Close();
-    }
+    std::string content = cell->visible_content();
+    CopyString(content);
   }
 }
 
@@ -202,6 +206,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   // Handle the keypress event here
   int keyCode = event.GetKeyCode();
   bool control = event.RawControlDown();
+  bool shift = event.ShiftDown();
 
   // Example: Print the keycode to the console
   // wxPrintf("Key pressed: %d\n", keyCode);
@@ -277,7 +282,11 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   }
   case 'C':
     if (control) {
-      OnCopy();
+      if (shift) {
+        OnCopyFormula();
+      } else {
+        OnCopy();
+      }
     }
     break;
   case 'V':
@@ -431,4 +440,12 @@ void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
 Location
 CellsViewControl::GetTableCellByClickPosition(const wxPoint &pos) const {
   return _document->get_cell_by_pos(Location(pos.x, pos.y));
+}
+
+void CellsViewControl::OnCopyFormula() {
+  TableCellPtr cell = _document->get_current_cell();
+  if (cell) {
+    std::string content = cell->get_formula_content();
+    CopyString(content);
+  }
 }
