@@ -26,7 +26,6 @@ The source code and documentation of this project is licensed under the [Apache 
 - MAYB: Support cell type decimal
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
-- FEAT: Update about dialog
 - FEAT: Print
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
@@ -60,6 +59,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- FEAT: Update about dialog
 - FEAT: Toolbar
 - REFA: Copy/Paste should only copy values (provide alternative copy for formulas)
 - FEAT: Undo
