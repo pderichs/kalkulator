@@ -10,9 +10,10 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- REFA: Streamline error handling from functions
-- MAYB: Support for integer and currency type cells? (big numbers?)
+- MAYB: Support high precision decimals and integers?
+- MAYB: Support for integer and currency type cells?
 - FEAT: Toolbar
+- FEAT: Update about dialog
 - FEAT: Print
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
