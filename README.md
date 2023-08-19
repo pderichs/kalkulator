@@ -10,7 +10,9 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
+- FEAT: Add "Open" action to toolbar
 - FEAT: Add "Save" menu option
+- FEAT: Add "Save" action to tool bar
 - MAYB: Support cell type integer
 - MAYB: Support cell type decimal
 - MAYB: Support cell type currency
