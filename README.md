@@ -10,9 +10,11 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- MAYB: Support high precision decimals and integers?
-- MAYB: Support for integer and currency type cells?
 - FEAT: Toolbar
+- MAYB: Support cell type integer
+- MAYB: Support cell type decimal
+- MAYB: Support cell type currency
+- MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
 - FEAT: Update about dialog
 - FEAT: Print
 - FEAT: Add repl for lisp
