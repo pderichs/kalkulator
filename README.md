@@ -2,13 +2,22 @@
 
 This is a simple and small spreadsheet application which uses a Lisp-like language for cell formulas.
 
-This is by no means bug free and / or production ready - **USE AT YOUR OWN RISK**.
+> [!WARNING]
+> This is by no means bug free and / or production ready - **USE AT YOUR OWN RISK**.
 
 I have implemented a similar application in C before ("simplecalc"), but for usability reasons I wanted to create a GUI application now.
 
-This is one item of the "applications every software engineer should implement once in their lifetime" list :)
+## License
 
-# TODO
+This project makes use of other external libraries and projects. The used parts of these external libraries and projects can be found in the `vendor` folder in this repository. Please refer to their respective LICENSES, terms and conditions on their websites:
+
+- [wxWidgets](https://www.wxwidgets.org/)
+- [SQLite](https://www.sqlite.org/index.html)
+- [Google Material Design Icons](https://github.com/google/material-design-icons)
+
+The source code and documentation of this project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
+
+## TODO List
 
 - FEAT: Add "Open" action to toolbar
 - FEAT: Add "Save" menu option

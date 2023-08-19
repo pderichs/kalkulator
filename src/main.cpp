@@ -1,7 +1,9 @@
 #include <memory>
 #include <sched.h>
+#include <sstream>
 #include <stdexcept>
 #include <tuple>
+#include <wx/aboutdlg.h>
 #include <wx/dcclient.h>
 #include <wx/event.h>
 #include <wx/filename.h>
@@ -31,12 +33,14 @@
 #include <wx/wx.h>
 #endif
 
+#define VERSION "0.0.1a"
+
 #define WIDTH 1024
 #define HEIGHT 768
 
 typedef std::pair<std::string, std::string> IconPaths;
 
-  // clang-format off
+// clang-format off
 // Map between icon_key and dark mode and bright mode icon paths.
 std::map<std::string, IconPaths> IconDictionary = {
     {"new", {"outline_insert_drive_file_white_18dp.png", "outline_insert_drive_file_black_18dp.png"}}
@@ -77,7 +81,7 @@ private:
     return s.IsDark();
   }
 
-  wxString GetIconPath(const std::string& icon_id) const;
+  wxString GetIconPath(const std::string &icon_id) const;
 
 private:
   TableWorkbookDocumentPtr _document;
@@ -125,7 +129,7 @@ bool MyApp::OnInit() {
 }
 
 KalkulatorMainFrame::KalkulatorMainFrame()
-    : wxFrame(NULL, wxID_ANY, "Kalkulator 0.0.1a") {
+    : wxFrame(NULL, wxID_ANY, "Kalkulator " VERSION) {
   _document = std::make_shared<TableWorkbookDocument>(this);
 
   ValueConverter::set_execution_context(&_execution_context);
@@ -178,7 +182,7 @@ wxString KalkulatorMainFrame::GetIconPath(const std::string &icon_key) const {
     return "not_existing";
   }
 
-  const auto& paths = it->second;
+  const auto &paths = it->second;
 
   wxString path;
   if (IsDarkUI()) {
@@ -246,7 +250,20 @@ void KalkulatorMainFrame::OnExit(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void KalkulatorMainFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
-  wxMessageBox("This is a sample!", "About", wxOK | wxICON_INFORMATION);
+  wxAboutDialogInfo aboutInfo;
+  aboutInfo.SetName("Kalkulator");
+  aboutInfo.SetVersion(VERSION);
+  aboutInfo.SetDescription(
+      _("This is a simple and small spreadsheet application which uses a "
+        "Lisp-like language for cell formulas.\n\nPlease see credits for information about the external libraries and projects used in this application."));
+  aboutInfo.SetCopyright("(C) 2023 pderichs");
+  aboutInfo.AddDeveloper("pderichs");
+  aboutInfo.AddDeveloper("");
+  aboutInfo.AddDeveloper("Kalulator uses some awesome external libraries and projects:");
+  aboutInfo.AddDeveloper("wxWidgets https://www.wxwidgets.org/");
+  aboutInfo.AddDeveloper("SQLite https://www.sqlite.org/index.html");
+  aboutInfo.AddDeveloper("Google Material Design Icons https://github.com/google/material-design-icons");
+  wxAboutBox(aboutInfo);
 }
 
 void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
