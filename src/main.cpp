@@ -4,8 +4,10 @@
 #include <tuple>
 #include <wx/dcclient.h>
 #include <wx/event.h>
+#include <wx/filename.h>
 #include <wx/msgdlg.h>
 #include <wx/rawbmp.h>
+#include <wx/stdpaths.h>
 #include <wx/timer.h>
 #include <wx/wxprec.h>
 
@@ -32,6 +34,15 @@
 #define WIDTH 1024
 #define HEIGHT 768
 
+typedef std::pair<std::string, std::string> IconPaths;
+
+  // clang-format off
+// Map between icon_key and dark mode and bright mode icon paths.
+std::map<std::string, IconPaths> IconDictionary = {
+    {"new", {"outline_insert_drive_file_white_18dp.png", "outline_insert_drive_file_black_18dp.png"}}
+};
+// clang-format on
+
 class MyApp : public wxApp {
 public:
   virtual bool OnInit();
@@ -54,11 +65,19 @@ private:
   void OnKeyPress(wxKeyEvent &event);
 
   void BindEvents();
+  void CreateToolbar();
 
   void SetupUserInterface();
   virtual void send_event(TableEvent event_id, std::any param);
 
   bool PermitLoseChanges();
+
+  bool IsDarkUI() const {
+    wxSystemAppearance s = wxSystemSettings::GetAppearance();
+    return s.IsDark();
+  }
+
+  wxString GetIconPath(const std::string& icon_id) const;
 
 private:
   TableWorkbookDocumentPtr _document;
@@ -66,6 +85,8 @@ private:
   wxTextCtrl *_text_control_formula;
   LispExecutionContext _execution_context;
   KalkulatorSystemColorsPtr _sys_colors;
+
+  wxToolBar *_toolbar;
 };
 
 enum {
@@ -145,11 +166,43 @@ KalkulatorMainFrame::KalkulatorMainFrame()
 
   BindEvents();
 
+  CreateToolbar();
+
   SetupUserInterface();
+}
+
+wxString KalkulatorMainFrame::GetIconPath(const std::string &icon_key) const {
+  auto it = IconDictionary.find(icon_key);
+  if (it == IconDictionary.end()) {
+    // TODO: Default icon path?
+    return "not_existing";
+  }
+
+  const auto& paths = it->second;
+
+  wxString path;
+  if (IsDarkUI()) {
+    path = paths.first.c_str();
+  } else {
+    path = paths.second.c_str();
+  }
+
+  wxFileName f(wxStandardPaths::Get().GetExecutablePath());
+  f.SetFullName(path);
+  return wxString(f.GetLongPath());
+}
+
+void KalkulatorMainFrame::CreateToolbar() {
+  wxBitmap icon_new(GetIconPath("new"), wxBITMAP_TYPE_PNG);
+
+  _toolbar = new wxToolBar(this, wxID_ANY);
+  _toolbar->AddTool(ID_New, wxT("Create new document"), icon_new);
 }
 
 void KalkulatorMainFrame::SetupUserInterface() {
   wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+
+  sizer->Add(_toolbar, 0, wxEXPAND | wxALL, 5);
 
   // Textctrl for formula editing (normal text control for now)
   // TODO Replace by e.g. a syntax highlighting supporting control

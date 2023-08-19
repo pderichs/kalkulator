@@ -10,7 +10,7 @@ This is one item of the "applications every software engineer should implement o
 
 # TODO
 
-- FEAT: Toolbar
+- FEAT: Add "Save" menu option
 - MAYB: Support cell type integer
 - MAYB: Support cell type decimal
 - MAYB: Support cell type currency
@@ -49,6 +49,7 @@ This is one item of the "applications every software engineer should implement o
 
 # DONE
 
+- FEAT: Toolbar
 - REFA: Copy/Paste should only copy values (provide alternative copy for formulas)
 - FEAT: Undo
 - FEAT: Redo

@@ -6,6 +6,7 @@ SRC_DIR=src
 TESTS_DIR=src/tests
 TARGET_DIR=bin
 TOOLS_DIR=src/tools
+ICONS_DIR=vendor/google-material-icons/
 
 WX_DIR=vendor/wxWidgets-3.2.2.1
 # used "vendor/wxWidgets-3.2.2.1/buildgtk/wx-config --cppflags"
@@ -70,6 +71,7 @@ vendor/sqlite3/sqlite3.o: vendor/sqlite3/sqlite3.c
 	$(CC) $(CFLAGS) -c vendor/sqlite3/sqlite3.c -o vendor/sqlite3/sqlite3.o
 
 $(TARGET): $(OBJS)
+	cp -r $(ICONS_DIR)/*.png $(TARGET_DIR)
 	$(CXX) $(LDFLAGS) -o $(TARGET) $(OBJS) $(LDLIBS)
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h
@@ -80,6 +82,7 @@ $(SRC_DIR)/tests.o: $(TESTS_DIR)/tests.cpp $(TESTS_DIR)/tests.h
 
 .PHONY: clean
 clean:
+	$(RM) $(TARGET_DIR)/*.png
 	$(RM) $(OBJS)
 	$(RM) $(TARGET)
 
