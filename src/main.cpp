@@ -237,8 +237,6 @@ void KalkulatorMainFrame::InitializeMenu() {
   item->SetBitmap(*_icon_save);
   menuFile->Append(item);
 
-  menuFile->AppendSeparator();
-
   menuFile->Append(
       ID_SaveAs, "&Save as...",
       "Saves the current workbook under a specified file name and path");
@@ -289,9 +287,15 @@ void KalkulatorMainFrame::SetupUserInterface() {
 
   sizer->Add(_toolbar, 0, wxEXPAND | wxALL, 5);
 
+  wxBoxSizer *formula_sizer = new wxBoxSizer(wxHORIZONTAL);
+
+  wxButton *pBtnFormulaSelection = new wxButton(this, wxID_ANY, wxT("f(x)"));
+  formula_sizer->Add(pBtnFormulaSelection, 0, wxEXPAND | wxALL, 2);
   // Textctrl for formula editing (normal text control for now)
   // TODO Replace by e.g. a syntax highlighting supporting control
-  sizer->Add(_text_control_formula, 0, wxEXPAND | wxALL, 5);
+  formula_sizer->Add(_text_control_formula, 1, wxEXPAND | wxALL, 2);
+
+  sizer->Add(formula_sizer, 0, wxEXPAND | wxALL, 5);
 
   // Table
   sizer->Add(_table_control, 1, wxEXPAND | wxALL, 5);
