@@ -43,7 +43,9 @@ typedef std::pair<std::string, std::string> IconPaths;
 // clang-format off
 // Map between icon_key and dark mode and bright mode icon paths.
 std::map<std::string, IconPaths> IconDictionary = {
-    {"new", {"outline_insert_drive_file_white_18dp.png", "outline_insert_drive_file_black_18dp.png"}}
+    {"new", {"outline_insert_drive_file_white_18dp.png", "outline_insert_drive_file_black_18dp.png"}},
+    {"open", {"outline_folder_open_white_18dp.png", "outline_folder_open_black_18dp.png"}}
+
 };
 // clang-format on
 
@@ -55,7 +57,7 @@ public:
 class KalkulatorMainFrame : public wxFrame, public EventSink {
 public:
   KalkulatorMainFrame();
-  virtual ~KalkulatorMainFrame() = default;
+  virtual ~KalkulatorMainFrame();
 
   virtual void OnClose(wxCloseEvent &event);
 
@@ -70,6 +72,10 @@ private:
 
   void BindEvents();
   void CreateToolbar();
+
+  void InitializeModel();
+  void InitializeMenu();
+  void InitializeIcons();
 
   void SetupUserInterface();
   virtual void send_event(TableEvent event_id, std::any param);
@@ -91,6 +97,9 @@ private:
   KalkulatorSystemColorsPtr _sys_colors;
 
   wxToolBar *_toolbar;
+
+  wxBitmap *_icon_new;
+  wxBitmap *_icon_open;
 };
 
 enum {
@@ -132,6 +141,55 @@ KalkulatorMainFrame::KalkulatorMainFrame()
     : wxFrame(NULL, wxID_ANY, "Kalkulator " VERSION) {
   _document = std::make_shared<TableWorkbookDocument>(this);
 
+  InitializeModel();
+
+  InitializeIcons();
+
+  InitializeMenu();
+
+  CreateStatusBar();
+  SetStatusText("Welcome to Kalkulator!");
+
+  BindEvents();
+
+  CreateToolbar();
+
+  SetupUserInterface();
+}
+
+KalkulatorMainFrame::~KalkulatorMainFrame() {
+  if (_icon_new) {
+    delete _icon_new;
+    _icon_new = NULL;
+  }
+
+  if (_icon_open) {
+    delete _icon_open;
+    _icon_open = NULL;
+  }
+
+  if (_toolbar) {
+    delete _toolbar;
+    _toolbar = NULL;
+  }
+
+  if (_table_control) {
+    delete _table_control;
+    _table_control = NULL;
+  }
+
+  if (_text_control_formula) {
+    delete _text_control_formula;
+    _text_control_formula = NULL;
+  }
+}
+
+void KalkulatorMainFrame::InitializeIcons() {
+  _icon_new = new wxBitmap(GetIconPath("new"), wxBITMAP_TYPE_PNG);
+  _icon_open = new wxBitmap(GetIconPath("open"), wxBITMAP_TYPE_PNG);
+}
+
+void KalkulatorMainFrame::InitializeModel() {
   ValueConverter::set_execution_context(&_execution_context);
 
   _execution_context.add_function(
@@ -139,10 +197,28 @@ KalkulatorMainFrame::KalkulatorMainFrame()
   _execution_context.add_function(
       "cell_range", std::make_shared<LispExecutionContextCellRange>(_document));
 
+  _sys_colors = std::make_shared<KalkulatorSystemColors>();
+
+  _table_control = new TableControl(_sys_colors, _document, this, this,
+                                    wxID_ANY, wxDefaultPosition, wxDefaultSize);
+
+  _text_control_formula = new TableFormulaTextControl(
+      this, this, -1, "", wxDefaultPosition, wxDefaultSize);
+}
+
+void KalkulatorMainFrame::InitializeMenu() {
+  wxMenuItem* item;
+
   wxMenu *menuFile = new wxMenu();
-  menuFile->Append(ID_New, "&New\tCtrl-N",
+  item = new wxMenuItem(menuFile, ID_New, "&New\tCtrl-N",
                    "Creates a new spreadsheet workbook");
-  menuFile->Append(ID_Open, "&Open...\tCtrl-O", "Opens a Kalkulator file");
+  item->SetBitmap(*_icon_new);
+  menuFile->Append(item);
+
+  item = new wxMenuItem(menuFile, ID_Open, "&Open...\tCtrl-O", "Opens a Kalkulator file");
+  item->SetBitmap(*_icon_open);
+  menuFile->Append(item);
+
   menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-S",
                    "Saves the current workbook");
   menuFile->AppendSeparator();
@@ -154,25 +230,7 @@ KalkulatorMainFrame::KalkulatorMainFrame()
   wxMenuBar *menuBar = new wxMenuBar();
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuHelp, "&Help");
-
-  _sys_colors = std::make_shared<KalkulatorSystemColors>();
-
-  _table_control = new TableControl(_sys_colors, _document, this, this,
-                                    wxID_ANY, wxDefaultPosition, wxDefaultSize);
-
-  _text_control_formula = new TableFormulaTextControl(
-      this, this, -1, "", wxDefaultPosition, wxDefaultSize);
-
   SetMenuBar(menuBar);
-
-  CreateStatusBar();
-  SetStatusText("Welcome to Kalkulator!");
-
-  BindEvents();
-
-  CreateToolbar();
-
-  SetupUserInterface();
 }
 
 wxString KalkulatorMainFrame::GetIconPath(const std::string &icon_key) const {
@@ -197,10 +255,9 @@ wxString KalkulatorMainFrame::GetIconPath(const std::string &icon_key) const {
 }
 
 void KalkulatorMainFrame::CreateToolbar() {
-  wxBitmap icon_new(GetIconPath("new"), wxBITMAP_TYPE_PNG);
-
   _toolbar = new wxToolBar(this, wxID_ANY);
-  _toolbar->AddTool(ID_New, wxT("Create new document"), icon_new);
+  _toolbar->AddTool(ID_New, wxT("Create new document"), *_icon_new);
+  _toolbar->AddTool(ID_Open, wxT("Open an existing document"), *_icon_open);
 }
 
 void KalkulatorMainFrame::SetupUserInterface() {
@@ -255,14 +312,18 @@ void KalkulatorMainFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
   aboutInfo.SetVersion(VERSION);
   aboutInfo.SetDescription(
       _("This is a simple and small spreadsheet application which uses a "
-        "Lisp-like language for cell formulas.\n\nPlease see credits for information about the external libraries and projects used in this application."));
+        "Lisp-like language for cell formulas.\n\nPlease see credits for "
+        "information about the external libraries and projects used in this "
+        "application."));
   aboutInfo.SetCopyright("(C) 2023 pderichs");
   aboutInfo.AddDeveloper("pderichs");
   aboutInfo.AddDeveloper("");
-  aboutInfo.AddDeveloper("Kalulator uses some awesome external libraries and projects:");
+  aboutInfo.AddDeveloper(
+      "Kalulator uses some awesome external libraries and projects:");
   aboutInfo.AddDeveloper("wxWidgets https://www.wxwidgets.org/");
   aboutInfo.AddDeveloper("SQLite https://www.sqlite.org/index.html");
-  aboutInfo.AddDeveloper("Google Material Design Icons https://github.com/google/material-design-icons");
+  aboutInfo.AddDeveloper("Google Material Design Icons "
+                         "https://github.com/google/material-design-icons");
   wxAboutBox(aboutInfo);
 }
 
