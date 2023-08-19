@@ -19,14 +19,12 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- FEAT: Add "Open" action to toolbar
-- FEAT: Add "Save" menu option
-- FEAT: Add "Save" action to tool bar
-- MAYB: Support cell type integer
-- MAYB: Support cell type decimal
+- FEAT: Go to cell function
+- FEAT: Add sheet selection
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
 - FEAT: Print
+- FEAT: Find / Replace
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
 - FEAT: Add macro support: OnLoad?
@@ -59,6 +57,9 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- FEAT: Add "Open" action to toolbar
+- FEAT: Add "Save" menu option
+- FEAT: Add "Save" action to tool bar
 - FEAT: Update about dialog
 - FEAT: Toolbar
 - REFA: Copy/Paste should only copy values (provide alternative copy for formulas)
