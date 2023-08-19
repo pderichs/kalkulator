@@ -44,7 +44,8 @@ typedef std::pair<std::string, std::string> IconPaths;
 // Map between icon_key and dark mode and bright mode icon paths.
 std::map<std::string, IconPaths> IconDictionary = {
     {"new", {"outline_insert_drive_file_white_18dp.png", "outline_insert_drive_file_black_18dp.png"}},
-    {"open", {"outline_folder_open_white_18dp.png", "outline_folder_open_black_18dp.png"}}
+    {"open", {"outline_folder_open_white_18dp.png", "outline_folder_open_black_18dp.png"}},
+    {"save", {"outline_save_white_18dp.png", "outline_save_black_18dp.png"}},
 
 };
 // clang-format on
@@ -66,6 +67,7 @@ private:
   void OnAbout(wxCommandEvent &event);
   void OnOpen(wxCommandEvent &event);
   void OnNew(wxCommandEvent &event);
+  void OnSave(wxCommandEvent &event);
   void OnSaveAs(wxCommandEvent &event);
   void OnRightDown(wxMouseEvent &event);
   void OnKeyPress(wxKeyEvent &event);
@@ -89,6 +91,8 @@ private:
 
   wxString GetIconPath(const std::string &icon_id) const;
 
+  void SaveDocument(const std::string &file_path);
+
 private:
   TableWorkbookDocumentPtr _document;
   TableControl *_table_control;
@@ -100,10 +104,12 @@ private:
 
   wxBitmap *_icon_new;
   wxBitmap *_icon_open;
+  wxBitmap *_icon_save;
 };
 
 enum {
   ID_Open = 1,
+  ID_Save,
   ID_SaveAs,
   ID_New,
 };
@@ -168,6 +174,11 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
     _icon_open = NULL;
   }
 
+  if (_icon_save) {
+    delete _icon_save;
+    _icon_save = NULL;
+  }
+
   if (_toolbar) {
     delete _toolbar;
     _toolbar = NULL;
@@ -187,6 +198,7 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
 void KalkulatorMainFrame::InitializeIcons() {
   _icon_new = new wxBitmap(GetIconPath("new"), wxBITMAP_TYPE_PNG);
   _icon_open = new wxBitmap(GetIconPath("open"), wxBITMAP_TYPE_PNG);
+  _icon_save = new wxBitmap(GetIconPath("save"), wxBITMAP_TYPE_PNG);
 }
 
 void KalkulatorMainFrame::InitializeModel() {
@@ -207,21 +219,32 @@ void KalkulatorMainFrame::InitializeModel() {
 }
 
 void KalkulatorMainFrame::InitializeMenu() {
-  wxMenuItem* item;
+  wxMenuItem *item;
 
   wxMenu *menuFile = new wxMenu();
   item = new wxMenuItem(menuFile, ID_New, "&New\tCtrl-N",
-                   "Creates a new spreadsheet workbook");
+                        "Creates a new spreadsheet workbook");
   item->SetBitmap(*_icon_new);
   menuFile->Append(item);
 
-  item = new wxMenuItem(menuFile, ID_Open, "&Open...\tCtrl-O", "Opens a Kalkulator file");
+  item = new wxMenuItem(menuFile, ID_Open, "&Open...\tCtrl-O",
+                        "Opens a Kalkulator file");
   item->SetBitmap(*_icon_open);
   menuFile->Append(item);
 
-  menuFile->Append(ID_SaveAs, "&Save as...\tCtrl-S",
-                   "Saves the current workbook");
+  item = new wxMenuItem(menuFile, ID_Save, "&Save\tCtrl-S",
+                        "Saves the current workbook");
+  item->SetBitmap(*_icon_save);
+  menuFile->Append(item);
+
   menuFile->AppendSeparator();
+
+  menuFile->Append(
+      ID_SaveAs, "&Save as...",
+      "Saves the current workbook under a specified file name and path");
+
+  menuFile->AppendSeparator();
+
   menuFile->Append(wxID_EXIT);
 
   wxMenu *menuHelp = new wxMenu();
@@ -258,6 +281,7 @@ void KalkulatorMainFrame::CreateToolbar() {
   _toolbar = new wxToolBar(this, wxID_ANY);
   _toolbar->AddTool(ID_New, wxT("Create new document"), *_icon_new);
   _toolbar->AddTool(ID_Open, wxT("Open an existing document"), *_icon_open);
+  _toolbar->AddTool(ID_Save, wxT("Save document"), *_icon_save);
 }
 
 void KalkulatorMainFrame::SetupUserInterface() {
@@ -282,6 +306,7 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnExit, this, wxID_EXIT);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnOpen, this, ID_Open);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnNew, this, ID_New);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSave, this, ID_Save);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSaveAs, this, ID_SaveAs);
 
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
@@ -380,13 +405,29 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   TableWorkbookFile file;
 
   try {
-    file.open((const char *)openFileDialog.GetPath());
+    std::string file_path((const char *)openFileDialog.GetPath());
+    file.open(file_path);
     file.read(_document);
+    _document->clear_changed_flag();
+    _document->set_file_path(file_path);
   } catch (TableWorkbookFileError &twfe) {
     wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
   }
 
   Refresh();
+}
+
+void KalkulatorMainFrame::SaveDocument(const std::string &file_path) {
+  TableWorkbookFile file;
+
+  try {
+    file.open(file_path);
+    file.write(_document);
+    _document->clear_changed_flag();
+    _document->set_file_path(file.file_path());
+  } catch (TableWorkbookFileError &twfe) {
+    wxMessageBox(twfe.what(), wxT("Error"), wxICON_EXCLAMATION);
+  }
 }
 
 void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
@@ -403,15 +444,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  TableWorkbookFile file;
-
-  try {
-    file.open((const char *)saveFileDialog.GetPath());
-    file.write(_document);
-    _document->clear_changed_flag();
-  } catch (TableWorkbookFileError &twfe) {
-    wxMessageBox(twfe.what(), wxT("Error"), wxICON_EXCLAMATION);
-  }
+  SaveDocument((const char *)saveFileDialog.GetPath());
 }
 
 void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
@@ -507,5 +540,13 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     Location scroll_pos = std::any_cast<Location>(param);
     _table_control->update_scroll_positions(scroll_pos);
     break;
+  }
+}
+
+void KalkulatorMainFrame::OnSave(wxCommandEvent &event) {
+  if (_document->file_path().empty()) {
+    OnSaveAs(event);
+  } else {
+    SaveDocument(_document->file_path());
   }
 }

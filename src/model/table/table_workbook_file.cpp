@@ -84,10 +84,6 @@ TableWorkbookFile::~TableWorkbookFile() { close(); }
 void TableWorkbookFile::open(const std::string &filename) {
   close();
 
-  //_needs_setup = !std::filesystem::exists(filename);
-  // TODO If file exists, also check meta / version to
-  // verify further need for update.
-
   int rc = sqlite3_open(filename.c_str(), &_db);
   if (rc) {
     std::stringstream ss;
@@ -96,7 +92,7 @@ void TableWorkbookFile::open(const std::string &filename) {
     throw TableWorkbookFileError(ss.str());
   }
 
-  _filename = filename;
+  _file_path = filename;
 }
 
 void TableWorkbookFile::close() {

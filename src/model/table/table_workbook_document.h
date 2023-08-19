@@ -54,6 +54,7 @@ public:
 
   TableSheets sheets() const { return _sheets; }
 
+  void set_file_path(const std::string& path) { _path = path; }
   std::string file_path() const { return _path; }
 
   std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>

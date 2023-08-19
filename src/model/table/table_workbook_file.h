@@ -18,19 +18,21 @@ public:
   void read(TableWorkbookDocumentPtr &workbook);
   void write(const TableWorkbookDocumentPtr &workbook);
 
+  std::string file_path() const { return _file_path; }
+
 private:
   void create_tables();
-  void save_sheet(int id, const TableSheetPtr &sheet, const TableWorkbookDocumentPtr &document);
+  void save_sheet(int id, const TableSheetPtr &sheet,
+                  const TableWorkbookDocumentPtr &document);
   void save_cells(int id, const TableSheetPtr &sheet);
-  std::string quote(const std::string& s) const;
-  void execute_sql(const std::string& sql);
+  std::string quote(const std::string &s) const;
+  void execute_sql(const std::string &sql);
 
   std::string lisp_value_type_to_string(LispValueType t) const;
 
 private:
-  std::string _filename;
+  std::string _file_path;
   sqlite3 *_db;
-  // bool _needs_setup;
 };
 
 #endif
