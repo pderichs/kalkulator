@@ -71,6 +71,7 @@ private:
   void OnSaveAs(wxCommandEvent &event);
   void OnRightDown(wxMouseEvent &event);
   void OnKeyPress(wxKeyEvent &event);
+  void OnSheetSelectionCombo(wxCommandEvent &event);
 
   void BindEvents();
   void CreateToolbar();
@@ -79,6 +80,7 @@ private:
   void InitializeMenu();
   void InitializeIcons();
 
+  void UpdateSheetCombo();
   void SetupUserInterface();
   virtual void send_event(TableEvent event_id, std::any param);
 
@@ -101,6 +103,8 @@ private:
   KalkulatorSystemColorsPtr _sys_colors;
 
   wxToolBar *_toolbar;
+  wxButton *_btn_formula_selection;
+  wxComboBox *_cmb_sheet_selection;
 
   wxBitmap *_icon_new;
   wxBitmap *_icon_open;
@@ -113,6 +117,8 @@ enum {
   ID_SaveAs,
   ID_New,
 };
+
+enum { ID_SHEET_SELECTION_CMB = wxID_HIGHEST + 1 };
 
 wxIMPLEMENT_APP(MyApp);
 
@@ -289,8 +295,12 @@ void KalkulatorMainFrame::SetupUserInterface() {
 
   wxBoxSizer *formula_sizer = new wxBoxSizer(wxHORIZONTAL);
 
-  wxButton *pBtnFormulaSelection = new wxButton(this, wxID_ANY, wxT("f(x)"));
-  formula_sizer->Add(pBtnFormulaSelection, 0, wxEXPAND | wxALL, 2);
+  _cmb_sheet_selection = new wxComboBox(this, ID_SHEET_SELECTION_CMB);
+  UpdateSheetCombo();
+  formula_sizer->Add(_cmb_sheet_selection, 0, wxEXPAND | wxALL, 2);
+
+  _btn_formula_selection = new wxButton(this, wxID_ANY, wxT("f(x)"));
+  formula_sizer->Add(_btn_formula_selection, 0, wxEXPAND | wxALL, 2);
   // Textctrl for formula editing (normal text control for now)
   // TODO Replace by e.g. a syntax highlighting supporting control
   formula_sizer->Add(_text_control_formula, 1, wxEXPAND | wxALL, 2);
@@ -316,6 +326,9 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
   Bind(wxEVT_CHAR_HOOK, &KalkulatorMainFrame::OnKeyPress, this);
+
+  Bind(wxEVT_COMBOBOX, &KalkulatorMainFrame::OnSheetSelectionCombo, this,
+       ID_SHEET_SELECTION_CMB);
 }
 
 void KalkulatorMainFrame::OnRightDown(wxMouseEvent &WXUNUSED(event)) {
@@ -540,10 +553,16 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
     break;
 
-  case CELL_VIEW_SCROLL_EVENT:
+  case CELL_VIEW_SCROLL_EVENT: {
     Location scroll_pos = std::any_cast<Location>(param);
     _table_control->update_scroll_positions(scroll_pos);
     break;
+  }
+
+  case SHEET_SELECTION_UPDATED: {
+    _table_control->Refresh();
+    break;
+  }
   }
 }
 
@@ -553,4 +572,30 @@ void KalkulatorMainFrame::OnSave(wxCommandEvent &event) {
   } else {
     SaveDocument(_document->file_path());
   }
+}
+
+void KalkulatorMainFrame::UpdateSheetCombo() {
+  _cmb_sheet_selection->Clear();
+
+  int n = 0;
+  int current = -1;
+  for (const auto &sheet : _document->sheets()) {
+    _cmb_sheet_selection->Append(sheet->name);
+
+    if (sheet == _document->current_sheet()) {
+      current = n;
+    }
+
+    n++;
+  }
+
+  if (current >= 0) {
+    _cmb_sheet_selection->SetSelection(current);
+  }
+}
+
+void KalkulatorMainFrame::OnSheetSelectionCombo(
+    wxCommandEvent &WXUNUSED(event)) {
+  wxString sheet_name = _cmb_sheet_selection->GetValue();
+  _document->select_sheet_by_name((const char*)sheet_name);
 }

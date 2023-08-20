@@ -20,7 +20,7 @@ The source code and documentation of this project is licensed under the [Apache 
 ## TODO List
 
 - FEAT: Go to cell function
-- FEAT: Add sheet selection
+- FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
 - FEAT: Print
@@ -57,6 +57,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- FEAT: Add sheet selection
 - FEAT: Add "Open" action to toolbar
 - FEAT: Add "Save" menu option
 - FEAT: Add "Save" action to tool bar

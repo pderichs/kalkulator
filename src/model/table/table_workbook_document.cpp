@@ -254,6 +254,7 @@ void TableWorkbookDocument::clear_and_initialize() {
 
 void TableWorkbookDocument::initialize() {
   _sheets.push_back(std::make_shared<TableSheet>("Sheet 1"));
+  //_sheets.push_back(std::make_shared<TableSheet>("Another sheet")); // TEST
   _current_sheet = _sheets[0];
   _changed = false;
 }
@@ -271,10 +272,29 @@ void TableWorkbookDocument::clear_current_cell() {
   _event_sink->send_event(CELL_UPDATED, param);
 }
 
-void TableWorkbookDocument::undo() {
-  _current_sheet->undo();
+void TableWorkbookDocument::undo() { _current_sheet->undo(); }
+
+void TableWorkbookDocument::redo() { _current_sheet->redo(); }
+
+TableSheetPtr
+TableWorkbookDocument::find_sheet_by_name(const std::string &sheet_name) const {
+  for (const auto &sheet : _sheets) {
+    if (sheet->name == sheet_name) {
+      return sheet;
+    }
+  }
+
+  return {};
 }
 
-void TableWorkbookDocument::redo() {
-  _current_sheet->redo();
+bool TableWorkbookDocument::select_sheet_by_name(
+    const std::string &sheet_name) {
+  const auto &sheet = find_sheet_by_name(sheet_name);
+  if (sheet) {
+    _current_sheet = sheet;
+    _event_sink->send_event(SHEET_SELECTION_UPDATED, sheet_name);
+    return true;
+  }
+
+  return false;
 }

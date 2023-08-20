@@ -43,6 +43,9 @@ public:
   Location get_cell_by_pos(const Location &position) const;
   void select_cell(const Location &cell);
 
+  bool select_sheet_by_name(const std::string &sheet_name);
+  TableSheetPtr find_sheet_by_name(const std::string &sheet_name) const;
+
   std::optional<TableCellPtr> get_cell(const Location &location) const;
   TableCellPtr get_current_cell() const;
   TableCellPtrVector get_range(const Location &from, const Location &to) const;
@@ -54,7 +57,7 @@ public:
 
   TableSheets sheets() const { return _sheets; }
 
-  void set_file_path(const std::string& path) { _path = path; }
+  void set_file_path(const std::string &path) { _path = path; }
   std::string file_path() const { return _path; }
 
   std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
