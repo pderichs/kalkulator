@@ -597,5 +597,5 @@ void KalkulatorMainFrame::UpdateSheetCombo() {
 void KalkulatorMainFrame::OnSheetSelectionCombo(
     wxCommandEvent &WXUNUSED(event)) {
   wxString sheet_name = _cmb_sheet_selection->GetValue();
-  _document->select_sheet_by_name((const char*)sheet_name);
+  _document->select_sheet_by_name(static_cast<const char*>(sheet_name));
 }

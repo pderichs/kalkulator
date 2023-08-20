@@ -2,12 +2,13 @@
 #include "lisp_parser_error.h"
 #include "lisp_syntax_checker.h"
 #include "lisp_tokens.h"
+#include "lisp_value.h"
+#include "tools.h"
 #include <cctype>
 #include <cstdint>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include "number_interpreter.h"
 
 LispParser::LispParser(const std::string &lisp) { _lisp = lisp; }
 
@@ -54,11 +55,11 @@ LispTokens LispParser::parse() {
   return result;
 }
 
-LispToken LispParser::create_double_token(double number) {
+LispToken LispParser::create_double_token(LispValue::DoubleType number) {
   return LispToken{DOUBLE, number};
 }
 
-LispToken LispParser::create_integer_token(int64_t number) {
+LispToken LispParser::create_integer_token(LispValue::IntegerType number) {
   return LispToken{INTEGER, number};
 }
 
@@ -136,12 +137,12 @@ LispToken LispParser::read_number() {
     }
   } while (walk());
 
-  auto opt_int = NumberInterpreter::to_integer(s);
+  auto opt_int = pdtools::convert_string_to_number<LispValue::IntegerType>(s);
   if (opt_int) {
     return create_integer_token(*opt_int);
   }
 
-  auto opt_double = NumberInterpreter::to_double(s);
+  auto opt_double = pdtools::convert_string_to_number<LispValue::DoubleType>(s);
   if (opt_double) {
     return create_double_token(*opt_double);
   }

@@ -19,6 +19,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
+- REFA: Refactor all casts
 - FEAT: Provide possibility to change column width
 - FEAT: Provide possibility to change row height
 - FEAT: Go to cell function

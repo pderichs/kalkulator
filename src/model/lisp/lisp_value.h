@@ -34,6 +34,9 @@ private:
   std::any _content;
 
 public:
+  typedef double DoubleType;
+  typedef int64_t IntegerType;
+
   explicit LispValue(LispValueType type) { _type = type; }
 
   LispValueType type() const { return _type; }
@@ -50,27 +53,27 @@ public:
   bool is_identifier() const { return _type == LVT_IDENTIFIER; }
   bool is_boolean() const { return _type == LVT_BOOL; }
 
-  double explicit_double_value() const {
-    return std::any_cast<double>(_content);
+  DoubleType explicit_double_value() const {
+    return std::any_cast<DoubleType>(_content);
   }
 
-  int64_t explicit_integer_value() const {
-    return std::any_cast<int64_t>(_content);
+  IntegerType explicit_integer_value() const {
+    return std::any_cast<IntegerType>(_content);
   }
 
   std::string string() const { return std::any_cast<std::string>(_content); }
 
-  double to_double() const {
+  DoubleType to_double() const {
     if (is_integer()) {
-      return static_cast<double>(explicit_integer_value());
+      return static_cast<DoubleType>(explicit_integer_value());
     }
 
     return explicit_double_value();
   }
 
-  double to_integer() const {
+  IntegerType to_integer() const {
     if (is_double()) {
-      return static_cast<int64_t>(explicit_double_value());
+      return static_cast<IntegerType>(explicit_double_value());
     }
 
     return explicit_integer_value();
@@ -88,7 +91,7 @@ public:
     return std::any_cast<LispValuePtrVector>(_content);
   }
 
-  bool operator==(const double &other) const {
+  bool operator==(const DoubleType &other) const {
     if (!is_number()) {
       return false;
     }

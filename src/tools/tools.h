@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <optional>
 
 #define RUN_TEST(testproc)                                                     \
   {                                                                            \
@@ -42,6 +43,21 @@ std::string intVectorToString(const IntVector &v);
 std::string locationToString(const Location &l);
 std::string rectangleToString(const Rectangle &rect);
 int generate_random_int_in_range(int min, int max);
+
+template <typename T>
+std::optional<T> convert_string_to_number(const std::string &str) {
+  std::istringstream iss(str);
+  T value;
+  char leftover;
+  bool is_valid = (iss >> value) && !(iss >> leftover);
+  if (!is_valid) {
+    return {};
+  }
+
+  return value;
+}
+
+
 }; // namespace pdtools
 
 // Thanks to

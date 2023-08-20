@@ -29,7 +29,7 @@ LispValuePtr LispFunctionExecutionContext::expect_number(
     std::stringstream ss;
     ss << "Unable to perform this operation with this lisp value (expecting "
           "number) "
-       << (int)value->type();
+       << static_cast<int>(value->type());
     throw LispExecutionContextError(ss.str());
   }
 

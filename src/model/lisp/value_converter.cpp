@@ -6,16 +6,15 @@
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
 #include "lisp_value_parser.h"
-#include "number_interpreter.h"
 #include "tools.h"
 #include "value_conversion_error.h"
+#include <iomanip>
 #include <ios>
 #include <iostream>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <iomanip>
 
 LispExecutionContext *ValueConverter::execution_context = nullptr;
 
@@ -54,13 +53,15 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
   }
 
   // Check for integer
-  auto opt_int = NumberInterpreter::to_integer(input);
+  auto opt_int =
+      pdtools::convert_string_to_number<LispValue::IntegerType>(input);
   if (opt_int) {
     return LispValueFactory::new_integer(*opt_int);
   }
 
   // Check for double
-  auto opt_double = NumberInterpreter::to_double(input);
+  auto opt_double =
+      pdtools::convert_string_to_number<LispValue::DoubleType>(input);
   if (opt_double) {
     return LispValueFactory::new_double(*opt_double);
   }
@@ -109,7 +110,8 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
     }
   } else {
     std::stringstream ss;
-    ss << "Unable to convert lisp value of type " << (int)value->type();
+    ss << "Unable to convert lisp value of type "
+       << static_cast<int>(value->type());
     throw ValueConversionError(ss.str());
   }
 }
