@@ -14,7 +14,7 @@ private:
   }
 
 public:
-  static LispValuePtr new_double(double value) {
+  static LispValuePtr new_double(LispValue::DoubleType value) {
     return new_value_ptr(LVT_DOUBLE, value);
   }
 
@@ -34,7 +34,7 @@ public:
     return new_value_ptr(LVT_BOOL, value);
   }
 
-  static LispValuePtr new_integer(int64_t value) {
+  static LispValuePtr new_integer(LispValue::IntegerType value) {
     return new_value_ptr(LVT_INTEGER, value);
   }
 

@@ -18,7 +18,7 @@ public:
                           const std::any &context_param) {
     ensure_params(func);
 
-    double result;
+    LispValue::DoubleType result;
 
     LispValuePtrVector params = execute_functions_and_extract_list_results(
         func.params(), execution_context, context_param);

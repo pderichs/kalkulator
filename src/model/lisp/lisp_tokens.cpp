@@ -1,4 +1,6 @@
 #include "lisp_tokens.h"
+#include "lisp_value.h"
+
 #include <sstream>
 
 void LispTokens::debug_print(std::ostream &oss) const {
@@ -36,7 +38,7 @@ std::string token_id_to_string(TokenID token_id) {
 
 std::string printable_content_of_token(const LispToken &token) {
   std::string s;
-  double d;
+  LispValue::DoubleType d;
 
   switch (token.id) {
   case IDENTIFIER:
@@ -44,14 +46,14 @@ std::string printable_content_of_token(const LispToken &token) {
     s = std::any_cast<std::string>(token.content);
     return s;
   case DOUBLE: {
-    d = std::any_cast<double>(token.content);
+    d = std::any_cast<LispValue::DoubleType>(token.content);
 
     std::stringstream ss;
     ss << d;
     return ss.str();
   }
   case INTEGER: {
-    d = std::any_cast<int64_t>(token.content);
+    d = std::any_cast<LispValue::IntegerType>(token.content);
 
     std::stringstream ss;
     ss << d;

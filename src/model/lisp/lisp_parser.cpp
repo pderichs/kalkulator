@@ -2,7 +2,6 @@
 #include "lisp_parser_error.h"
 #include "lisp_syntax_checker.h"
 #include "lisp_tokens.h"
-#include "lisp_value.h"
 #include "tools.h"
 #include <cctype>
 #include <cstdint>

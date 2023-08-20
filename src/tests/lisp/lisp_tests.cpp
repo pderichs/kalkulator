@@ -206,11 +206,11 @@ int run_lisp_tests_parsing2() {
     TEST_ASSERT(s == "Hello \\\"World\\\"");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == INTEGER);
-    double d = std::any_cast<int64_t>(tokens[5].content);
+    LispValue::IntegerType d = std::any_cast<LispValue::IntegerType>(tokens[5].content);
     TEST_ASSERT(d == 22.0);
     TEST_ASSERT(tokens[6].id == SPACE);
     TEST_ASSERT(tokens[7].id == INTEGER);
-    d = std::any_cast<int64_t>(tokens[7].content);
+    d = std::any_cast<LispValue::IntegerType>(tokens[7].content);
     TEST_ASSERT(d == 4.0);
     TEST_ASSERT(tokens[8].id == CLOSE_BRACKET);
     TEST_ASSERT(tokens.size() == 9);
@@ -242,7 +242,7 @@ int run_lisp_tests_parsing3() {
     TEST_ASSERT(s == "8282");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == DOUBLE);
-    double d = std::any_cast<double>(tokens[5].content);
+    LispValue::DoubleType d = std::any_cast<LispValue::DoubleType>(tokens[5].content);
     TEST_ASSERT(d == -484.32);
     TEST_ASSERT(tokens[6].id == CLOSE_BRACKET);
     TEST_ASSERT(tokens.size() == 7);
@@ -304,7 +304,7 @@ int run_lisp_tests_expression1() {
     TEST_ASSERT(val.is_function());
     LispFunction expr = val.function();
 
-    double d;
+    LispValue::DoubleType d;
     std::string s;
 
     TEST_ASSERT(expr.identifier() == "hello");

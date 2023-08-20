@@ -19,7 +19,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- REFA: Refactor all casts
 - FEAT: Go to cell function
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
