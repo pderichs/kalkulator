@@ -19,6 +19,8 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
+- FEAT: Provide possibility to change column width
+- FEAT: Provide possibility to change row height
 - FEAT: Go to cell function
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
@@ -29,8 +31,6 @@ The source code and documentation of this project is licensed under the [Apache 
 - FEAT: Add code editor for macros?
 - FEAT: Add macro support: OnLoad?
 - FEAT: Macros: Add OnTimer and Timer start functionality
-- FEAT: Provide possibility to change column width
-- FEAT: Provide possibility to change row height
 - FEAT: Direct editing? (without the need of pressing F2)
 - FEAT: Lisp progn
 - FEAT: Lisp abs
@@ -39,6 +39,8 @@ The source code and documentation of this project is licensed under the [Apache 
 - FEAT: Lisp cos
 - FEAT: Lisp sin
 - FEAT: Lisp root
+- FEAT: Lisp ceil
+- FEAT: Lisp floor
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
