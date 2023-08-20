@@ -321,6 +321,9 @@ void KalkulatorMainFrame::CreateToolbar() {
   _toolbar->AddTool(ID_New, wxT("Create new document"), *_icon_new);
   _toolbar->AddTool(ID_Open, wxT("Open an existing document"), *_icon_open);
   _toolbar->AddTool(ID_Save, wxT("Save document"), *_icon_save);
+  _toolbar->AddSeparator();
+  _toolbar->AddTool(ID_ResizeColumn, wxT("Resize column"), *_icon_width);
+  _toolbar->AddTool(ID_ResizeRow, wxT("Resize row"), *_icon_height);
 }
 
 void KalkulatorMainFrame::SetupUserInterface() {
@@ -596,10 +599,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     break;
   }
 
-  case SHEET_SELECTION_UPDATED: {
-    _table_control->Refresh();
-    break;
-  }
+  case SHEET_SELECTION_UPDATED:
   case ROW_HEIGHT_UPDATED:
   case COLUMN_WIDTH_UPDATED:
     _table_control->Refresh();
@@ -645,7 +645,7 @@ void KalkulatorMainFrame::OnResizeColumn(wxCommandEvent &WXUNUSED(event)) {
   size_t current_width = _document->get_current_column_width();
 
   long entry = wxGetNumberFromUser("Resize column.", "Width:", "Resize column",
-                                   current_width, 0, 1000);
+                                   current_width, 20, 1000);
 
   if (entry < 0) {
     return;
@@ -658,7 +658,7 @@ void KalkulatorMainFrame::OnResizeRow(wxCommandEvent &WXUNUSED(event)) {
   size_t current_height = _document->get_current_row_height();
 
   long entry = wxGetNumberFromUser("Resize row.", "Height:", "Resize row",
-                                   current_height, 0, 1000);
+                                   current_height, 20, 1000);
 
   if (entry < 0) {
     return;

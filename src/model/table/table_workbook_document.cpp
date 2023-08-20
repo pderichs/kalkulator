@@ -309,11 +309,12 @@ size_t TableWorkbookDocument::get_current_row_height() const {
 
 void TableWorkbookDocument::set_current_column_width(size_t width) {
   _current_sheet->set_current_column_width(width);
-
+  _changed = true;
   _event_sink->send_event(COLUMN_WIDTH_UPDATED, {});
 }
 
 void TableWorkbookDocument::set_current_row_height(size_t height) {
   _current_sheet->set_current_row_height(height);
+  _changed = true;
   _event_sink->send_event(ROW_HEIGHT_UPDATED, {});
 }

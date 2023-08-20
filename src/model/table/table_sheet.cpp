@@ -21,10 +21,6 @@ TableSheet::TableSheet(const std::string &name) : current_cell(0, 0) {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     auto col = std::make_shared<TableColumnDefinition>();
 
-    if (n == 2) {
-      col->width = 200;
-    }
-
     column_definitions.push_back(col);
     n++;
   }
