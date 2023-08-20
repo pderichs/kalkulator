@@ -6,11 +6,11 @@
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
 #include "lisp_value_parser.h"
+#include "number_interpreter.h"
 #include "tools.h"
 #include "value_conversion_error.h"
 #include <iostream>
 #include <memory>
-#include <regex>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -18,8 +18,6 @@
 LispExecutionContext *ValueConverter::execution_context = nullptr;
 
 LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
-  LispValuePtr result;
-
   std::string input = pdtools::trim(s);
 
   if (input.empty()) {
@@ -29,6 +27,8 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 
   if (input[0] == '=') {
     // Formula
+
+    LispValuePtr result;
 
     // strip equal sign
     std::string formula = input.substr(1);
@@ -47,21 +47,24 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
     if (!result->is_function()) {
       throw ValueConversionError("Expression is not a function");
     }
-  } else {
-    // Check for number
-    std::regex exp_number("^-?(0|[1-9]\\d*)(\\.\\d+)?$");
-    std::smatch sm;
 
-    if (std::regex_search(input, sm, exp_number)) {
-      double d = std::stod(s);
-      result = LispValueFactory::new_double(d);
-    } else {
-      // Must be a string
-      result = LispValueFactory::new_string(s);
-    }
+    return result;
   }
 
-  return result;
+  // Check for integer
+  auto opt_int = NumberInterpreter::to_integer(input);
+  if (opt_int) {
+    return LispValueFactory::new_integer(*opt_int);
+  }
+
+  // Check for double
+  auto opt_double = NumberInterpreter::to_double(input);
+  if (opt_double) {
+    return LispValueFactory::new_double(*opt_double);
+  }
+
+  // Must be a string
+  return LispValueFactory::new_string(s);
 }
 
 std::string ValueConverter::to_string(const LispValuePtr &value,

@@ -4,8 +4,10 @@
 #include "lisp_tokens.h"
 #include <cctype>
 #include <cstdint>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+#include "number_interpreter.h"
 
 LispParser::LispParser(const std::string &lisp) { _lisp = lisp; }
 
@@ -134,31 +136,20 @@ LispToken LispParser::read_number() {
     }
   } while (walk());
 
-  if (dot) {
-    double n = 0.0;
-
-    try {
-      n = std::stod(s);
-    } catch (std::invalid_argument &iarg) {
-      throw LispParserError("Unable to parse double (invalid argument)", s);
-    } catch (std::out_of_range &oor) {
-      throw LispParserError("Unable to parse double (out of range)", s);
-    }
-
-    return create_double_token(n);
-  } else {
-    int64_t n = 0.0;
-
-    try {
-      n = std::stoll(s);
-    } catch (std::invalid_argument &iarg) {
-      throw LispParserError("Unable to parse integer (invalid argument)", s);
-    } catch (std::out_of_range &oor) {
-      throw LispParserError("Unable to parse integer (out of range)", s);
-    }
-
-    return create_integer_token(n);
+  auto opt_int = NumberInterpreter::to_integer(s);
+  if (opt_int) {
+    return create_integer_token(*opt_int);
   }
+
+  auto opt_double = NumberInterpreter::to_double(s);
+  if (opt_double) {
+    return create_double_token(*opt_double);
+  }
+
+  std::stringstream ss;
+  ss << "Unable to convert string to number: \"";
+  ss << s << "\"";
+  throw LispParserError(ss.str());
 }
 
 bool LispParser::walk() {
