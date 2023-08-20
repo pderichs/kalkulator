@@ -6,13 +6,14 @@
 #include "lisp_execution_context_error.h"
 #include "lisp_function.h"
 #include "lisp_value.h"
+#include "lisp_value_factory.h"
 
 class LispExecutionContextXor : public LispFunctionExecutionContext {
 public:
   LispExecutionContextXor() = default;
   virtual ~LispExecutionContextXor() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     if (func.param_count() != 2) {
@@ -33,10 +34,10 @@ public:
     bool p2 = param2->boolean();
 
     if (p1 != p2) {
-      return LispValue(LISP_BOOL_TRUE);
+      return LispValueFactory::new_bool(LISP_BOOL_TRUE);
     }
 
-    return LispValue(LISP_BOOL_FALSE);
+    return LispValueFactory::new_bool(LISP_BOOL_FALSE);
   }
 };
 

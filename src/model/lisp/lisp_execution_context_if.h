@@ -14,9 +14,9 @@ public:
   LispExecutionContextIf() = default;
   virtual ~LispExecutionContextIf() = default;
 
-  virtual LispValue value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+  virtual LispValuePtr value(const LispFunction &func,
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     if (func.param_count() < 2 || func.param_count() > 3) {
       throw LispExecutionContextError("Unexpected parameter count for if");
     }
@@ -24,8 +24,7 @@ public:
     LispValuePtr condition = expect_parameter_at(func, 0);
 
     if (condition->is_function()) {
-      condition = std::make_shared<LispValue>(
-          execution_context.execute(*condition, context_param));
+      condition = execution_context.execute(condition, context_param);
     }
 
     LispValuePtr result;
@@ -36,7 +35,7 @@ public:
       result = execute_result_param(func, 2, execution_context, context_param);
     }
 
-    return *result;
+    return result;
   }
 
   LispValuePtr
@@ -48,8 +47,7 @@ public:
     const auto &result_param = expect_parameter_at(func, index);
 
     if (result_param->is_function()) {
-      result = std::make_shared<LispValue>(
-          execution_context.execute(*result_param, context_param));
+      result = execution_context.execute(result_param, context_param);
     } else {
       result = result_param;
     }

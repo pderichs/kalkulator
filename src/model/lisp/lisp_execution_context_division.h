@@ -11,7 +11,7 @@ public:
   LispExecutionContextDivision() = default;
   virtual ~LispExecutionContextDivision() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -23,24 +23,24 @@ public:
 
     const auto &first_param = params[0];
 
-    LispValue value(expect_number(first_param, execution_context, context_param));
+    LispValuePtr value(expect_number(first_param, execution_context, context_param));
 
     // First parameter of subtraction is base value
-    result = value.number();
+    result = value->number();
 
     // Skip first param
     for (size_t n = 1; n < params.size(); n++) {
       const auto &param = params[n];
-      LispValue value(expect_number(param, execution_context, context_param));
+      LispValuePtr value(expect_number(param, execution_context, context_param));
 
-      if (value.number() == 0.0) {
+      if (value->number() == 0.0) {
         throw LispExecutionContextError("Division by zero");
       }
 
-      result /= value.number();
+      result /= value->number();
     }
 
-    return LispValue(result);
+    return LispValueFactory::new_double(result);
   }
 };
 

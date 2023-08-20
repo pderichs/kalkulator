@@ -3,6 +3,7 @@
 #include "lisp_execution_context_error.h"
 #include "lisp_function.h"
 #include "lisp_value.h"
+#include "lisp_value_factory.h"
 #include <memory>
 #include <sstream>
 
@@ -13,20 +14,21 @@ void LispFunctionExecutionContext::ensure_params(
   }
 }
 
-LispValue LispFunctionExecutionContext::expect_number(
+LispValuePtr LispFunctionExecutionContext::expect_number(
     const LispValuePtr &value, const LispExecutionContext &execution_context,
     const std::any &context_param) const {
-  LispValue result;
+  LispValuePtr result;
 
   if (value->is_function()) {
-    result = execution_context.execute(*value, context_param);
+    result = execution_context.execute(value, context_param);
   } else if (value->is_number()) {
-    result = *value;
+    result = value;
   } else if (value->is_none()) {
-    result = LispValue(0);
+    result = LispValueFactory::new_double(0);
   } else {
     std::stringstream ss;
-    ss << "Unable to perform this operation with this lisp value (expecting number) "
+    ss << "Unable to perform this operation with this lisp value (expecting "
+          "number) "
        << (int)value->type();
     throw LispExecutionContextError(ss.str());
   }
@@ -42,10 +44,10 @@ LispValuePtrVector LispFunctionExecutionContext::execute_functions(
 
   for (const auto &param : params) {
     if (param->is_function()) {
-      LispValue function_result(
-          execution_context.execute(*param, context_param));
+      LispValuePtr function_result(
+          execution_context.execute(param, context_param));
 
-      result.push_back(std::make_shared<LispValue>(function_result));
+      result.push_back(function_result);
     } else {
       result.push_back(param);
     }

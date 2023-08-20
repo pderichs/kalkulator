@@ -2,6 +2,7 @@
 #define LISP_EXECUTION_CONTEXT_CELL_RANGE_INCLUDED
 
 #include "../lisp/lisp_function_execution_context.h"
+#include "../lisp/lisp_value_factory.h"
 #include "table_workbook_document.h"
 #include <sstream>
 #include <variant>
@@ -14,7 +15,7 @@ public:
 
   virtual ~LispExecutionContextCellRange() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -36,8 +37,8 @@ public:
     int ranges[4]; // from_row, from_col, to_row, to_col
     int n = 0;
     for (const auto &param : params) {
-      LispValue value(expect_number(param, execution_context, context_param));
-      ranges[n] = (int)value.number();
+      LispValuePtr value(expect_number(param, execution_context, context_param));
+      ranges[n] = (int)value->number();
       n++;
     }
 
@@ -52,7 +53,7 @@ public:
       }
 
       if (cell->row() == this_cell.y() && cell->col() == this_cell.x()) {
-        return LispValue("#CIRCULARREFERR");
+        return LispValueFactory::new_string("#CIRCULARREFERR");
       }
 
       LispValuePtr value(cell->lisp_value());
@@ -61,7 +62,7 @@ public:
       }
     }
 
-    return LispValue(result);
+    return LispValueFactory::new_list(result);
   }
 
 private:

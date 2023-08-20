@@ -10,7 +10,7 @@ public:
   LispExecutionContextEq(bool extract_lists) { _extract_lists = extract_lists; }
   virtual ~LispExecutionContextEq() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -28,13 +28,13 @@ public:
     LispValuePtr last;
     for (const auto &param : params) {
       if (last && !last->content_equals(*param)) {
-        return LispValue(LISP_BOOL_FALSE);
+        return LispValueFactory::new_bool(LISP_BOOL_FALSE);
       }
 
       last = param;
     }
 
-    return LispValue(LISP_BOOL_TRUE);
+    return LispValueFactory::new_bool(LISP_BOOL_TRUE);
   }
 
 private:

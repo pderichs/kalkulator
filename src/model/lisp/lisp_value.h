@@ -3,6 +3,7 @@
 
 #include <any>
 #include <cstddef>
+#include <cstdint>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -14,11 +15,12 @@
 enum LispValueType {
   LVT_NONE = 0,
   LVT_STRING = 1,
-  LVT_NUMBER = 2,
+  LVT_DOUBLE = 2,
   LVT_FUNCTION = 3,
   LVT_LIST = 4,
   LVT_IDENTIFIER = 5,
   LVT_BOOL = 6,
+  LVT_INTEGER = 7,
 };
 
 enum LispBool {
@@ -32,45 +34,15 @@ private:
   std::any _content;
 
 public:
-  explicit LispValue() { _type = LVT_NONE; }
-
-  explicit LispValue(const std::string &s) : LispValue(s, false) {}
-
-  explicit LispValue(const std::string &s, bool identifier) {
-    if (!identifier) {
-      _type = LVT_STRING;
-    } else {
-      _type = LVT_IDENTIFIER;
-    }
-
-    _content = s;
-  }
-
-  explicit LispValue(LispBool b) {
-    _type = LVT_BOOL;
-    _content = b;
-  }
-
-  explicit LispValue(double number) {
-    _type = LVT_NUMBER;
-    _content = number;
-  }
-
-  explicit LispValue(const LispFunction &function) {
-    _type = LVT_FUNCTION;
-    _content = function;
-  }
-
-  explicit LispValue(const LispValuePtrVector &list) {
-    _type = LVT_LIST;
-    _content = list;
-  }
+  explicit LispValue(LispValueType type) { _type = type; }
 
   LispValueType type() const { return _type; }
 
+  void set_content(const std::any &content) { _content = content; }
+
   bool is_none() const { return _type == LVT_NONE; }
   bool is_string() const { return _type == LVT_STRING; }
-  bool is_number() const { return _type == LVT_NUMBER; }
+  bool is_number() const { return _type == LVT_DOUBLE; } // TODO
   bool is_function() const { return _type == LVT_FUNCTION; }
   bool is_list() const { return _type == LVT_LIST; }
   bool is_identifier() const { return _type == LVT_IDENTIFIER; }
@@ -164,7 +136,7 @@ public:
       return string() == other.string();
     case LVT_LIST:
       return lists_equals(other);
-    case LVT_NUMBER:
+    case LVT_DOUBLE:
       return number() == other.number();
     default:
       throw std::runtime_error(

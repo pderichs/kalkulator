@@ -3,13 +3,14 @@
 
 #include "lisp_function.h"
 #include "lisp_function_execution_context.h"
+#include "lisp_value_factory.h"
 
 class LispExecutionContextRest : public LispFunctionExecutionContext {
 public:
   LispExecutionContextRest() = default;
   virtual ~LispExecutionContextRest() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -21,7 +22,7 @@ public:
 
     params.erase(params.begin());
 
-    return LispValue(params);
+    return LispValueFactory::new_list(params);
   }
 };
 

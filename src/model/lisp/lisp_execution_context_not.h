@@ -5,13 +5,14 @@
 #include "lisp_execution_context_error.h"
 #include "lisp_function.h"
 #include "lisp_value.h"
+#include "lisp_value_factory.h"
 
 class LispExecutionContextNot : public LispFunctionExecutionContext {
 public:
   LispExecutionContextNot() = default;
   virtual ~LispExecutionContextNot() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -21,11 +22,11 @@ public:
 
     for (const auto &param : params) {
       if (param->is_truthy()) {
-        return LispValue(LISP_BOOL_FALSE);
+        return LispValueFactory::new_bool(LISP_BOOL_FALSE);
       }
     }
 
-    return LispValue(LISP_BOOL_TRUE);
+    return LispValueFactory::new_bool(LISP_BOOL_TRUE);
   }
 };
 

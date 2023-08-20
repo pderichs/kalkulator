@@ -19,13 +19,13 @@ private:
 
 public:
   LispExecutionContext();
-  LispValue execute(const LispValue &value,
-                    const std::any &context_param) const;
+  LispValuePtr execute(const LispValuePtr &value,
+                       const std::any &context_param) const;
   void add_function(const std::string &identifier,
                     const LispFunctionExecutionContextPtr func);
 
 private:
-  LispValue eval_function(const LispFunction &func,
+  LispValuePtr eval_function(const LispFunction &func,
                           const std::any &context_param = {}) const;
 };
 

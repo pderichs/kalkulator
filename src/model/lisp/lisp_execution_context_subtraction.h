@@ -4,6 +4,7 @@
 #include "lisp_execution_context.h"
 #include "lisp_execution_context_error.h"
 #include "lisp_function_execution_context.h"
+#include "lisp_value_factory.h"
 #include <cstddef>
 #include <sstream>
 
@@ -12,7 +13,7 @@ public:
   LispExecutionContextSubtraction() = default;
   virtual ~LispExecutionContextSubtraction() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -24,19 +25,19 @@ public:
 
     const auto &first_param = params[0];
 
-    LispValue value(expect_number(first_param, execution_context, context_param));
+    LispValuePtr value(expect_number(first_param, execution_context, context_param));
 
     // First parameter of subtraction is base value
-    result = value.number();
+    result = value->number();
 
     // Skip first param
     for (size_t n = 1; n < params.size(); n++) {
       const auto &param = params[n];
-      LispValue value(expect_number(param, execution_context, context_param));
-      result -= value.number();
+      LispValuePtr value(expect_number(param, execution_context, context_param));
+      result -= value->number();
     }
 
-    return LispValue(result);
+    return LispValueFactory::new_double(result);
   }
 };
 

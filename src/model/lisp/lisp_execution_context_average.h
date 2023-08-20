@@ -8,7 +8,7 @@ public:
   LispExecutionContextAvg() = default;
   virtual ~LispExecutionContextAvg() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -21,11 +21,11 @@ public:
     size_t param_count = params.size();
 
     for (const auto &param : params) {
-      LispValue value(expect_number(param, execution_context, context_param));
-      result += value.number();
+      LispValuePtr value(expect_number(param, execution_context, context_param));
+      result += value->number();
     }
 
-    return LispValue(result / param_count);
+    return LispValueFactory::new_double(result / param_count);
   }
 };
 

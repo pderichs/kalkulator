@@ -1,5 +1,6 @@
 #include "lisp_tests.h"
 #include "../../model/lisp/lisp_execution_context.h"
+#include "../../model/lisp/lisp_value_factory.h"
 #include "../../model/lisp/lisp_execution_context_error.h"
 #include "../../model/lisp/lisp_function.h"
 #include "../../model/lisp/lisp_function_execution_context.h"
@@ -15,7 +16,7 @@
 #include <tuple>
 #include <wx/wx.h>
 
-int run_lisp_tests(const std::map<std::string, LispValue> tests,
+int run_lisp_tests(const std::map<std::string, LispValuePtr> tests,
                    const std::string &test_name);
 
 int run_lisp_tests_parsing1();
@@ -75,7 +76,7 @@ public:
   virtual ~TestLispFunctionExecutionContext() = default;
 
   // Adds "Hello " to the front of the provided string
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     std::ignore = execution_context;
@@ -100,7 +101,7 @@ public:
     std::stringstream ss;
     ss << "Hello " << param->string() << "!";
 
-    return LispValue(ss.str());
+    return LispValueFactory::new_string(ss.str());
   }
 };
 
@@ -421,15 +422,13 @@ int run_lisp_tests_executor1() {
 
     LispValueParser parser(tokens);
 
-    auto optvalue = parser.next();
-    TEST_ASSERT(optvalue);
-
-    auto value = *optvalue;
+    auto value = parser.next();
+    TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == -416.32);
+    TEST_ASSERT(*result == -416.32);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -453,15 +452,13 @@ int run_lisp_tests_executor2() {
 
     LispValueParser parser(tokens);
 
-    auto optvalue = parser.next();
-    TEST_ASSERT(optvalue);
-
-    auto value = *optvalue;
+    auto value = parser.next();
+    TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == 32.0);
+    TEST_ASSERT(*result == 32.0);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -485,17 +482,15 @@ int run_lisp_tests_custom_function1() {
 
     LispValueParser parser(tokens);
 
-    auto optvalue = parser.next();
-    TEST_ASSERT(optvalue);
-
-    auto value = *optvalue;
+    auto value = parser.next();
+    TEST_ASSERT(value);
 
     LispExecutionContext executor;
     executor.add_function("say_hello_test",
                           std::make_shared<TestLispFunctionExecutionContext>());
-    LispValue result = executor.execute(value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == "Hello Franzi!");
+    TEST_ASSERT(*result == "Hello Franzi!");
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -519,17 +514,15 @@ int run_lisp_tests_list1() {
 
     LispValueParser parser(tokens);
 
-    auto optvalue = parser.next();
-    TEST_ASSERT(optvalue);
-
-    auto value = *optvalue;
+    auto value = parser.next();
+    TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result.is_list());
+    TEST_ASSERT(result->is_list());
 
-    LispValuePtrVector lst = result.list();
+    LispValuePtrVector lst = result->list();
     TEST_ASSERT(lst.size() == 3);
 
     LispValuePtr item;
@@ -618,9 +611,9 @@ int run_lisp_tests_addition() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == -7);
+    TEST_ASSERT(*result == -7);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -643,9 +636,9 @@ int run_lisp_tests_subtraction() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == 45);
+    TEST_ASSERT(*result == 45);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -668,9 +661,9 @@ int run_lisp_tests_multiplication() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == -3648);
+    TEST_ASSERT(*result == -3648);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -693,9 +686,9 @@ int run_lisp_tests_division() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == 100);
+    TEST_ASSERT(*result == 100);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -718,9 +711,9 @@ int run_lisp_tests_addition_with_list1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == 2036);
+    TEST_ASSERT(*result == 2036);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -743,9 +736,9 @@ int run_lisp_tests_subtraction_with_list1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == 7974);
+    TEST_ASSERT(*result == 7974);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -768,9 +761,9 @@ int run_lisp_tests_multiplication_with_list1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == 4800000);
+    TEST_ASSERT(*result == 4800000);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -793,9 +786,9 @@ int run_lisp_tests_division_with_list1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == 10);
+    TEST_ASSERT(*result == 10);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -818,9 +811,9 @@ int run_lisp_tests_first1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result == 24000);
+    TEST_ASSERT(*result == 24000);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -843,11 +836,11 @@ int run_lisp_tests_rest1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result.is_list());
+    TEST_ASSERT(result->is_list());
 
-    const auto &lst = result.list();
+    const auto &lst = result->list();
 
     TEST_ASSERT(*lst[0] == 20);
     TEST_ASSERT(*lst[1] == 10);
@@ -874,11 +867,11 @@ int run_lisp_tests_join1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result.is_list());
+    TEST_ASSERT(result->is_list());
 
-    const auto &lst = result.list();
+    const auto &lst = result->list();
 
     TEST_ASSERT(*lst[0] == 39);
     TEST_ASSERT(*lst[1] == 345);
@@ -911,11 +904,11 @@ int run_lisp_tests_cons1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result.is_list());
+    TEST_ASSERT(result->is_list());
 
-    const auto &lst = result.list();
+    const auto &lst = result->list();
 
     TEST_ASSERT(*lst[0] == 42);
     TEST_ASSERT(*lst[1] == "Hello");
@@ -941,11 +934,11 @@ int run_lisp_tests_if1() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result.is_string());
+    TEST_ASSERT(result->is_string());
 
-    TEST_ASSERT(result == "OK");
+    TEST_ASSERT(*result == "OK");
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -968,11 +961,11 @@ int run_lisp_tests_if2() {
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
-    LispValue result = executor.execute(*value, {});
+    LispValuePtr result = executor.execute(value, {});
 
-    TEST_ASSERT(result.is_string());
+    TEST_ASSERT(result->is_string());
 
-    TEST_ASSERT(result == "GOOD!");
+    TEST_ASSERT(*result == "GOOD!");
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -985,16 +978,16 @@ int run_lisp_tests_if2() {
 
 int run_lisp_tests_eq1() {
   // clang-format off
-  std::map<std::string, LispValue> tests = {
-      {"(eq 1 1)", LispValue(LISP_BOOL_TRUE)},
-      {"(eq \"Hase\" 1)", LispValue(LISP_BOOL_FALSE)},
-      {"(eq \"Hase\" \"Bär\")", LispValue(LISP_BOOL_FALSE)},
-      {"(eq \"Hase\" \"Hase\")", LispValue(LISP_BOOL_TRUE)},
-      {"(eq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValue(LISP_BOOL_TRUE)},
-      {"(eq (list 54 2 66 9.326) (list 54 3 66 9.326))", LispValue(LISP_BOOL_FALSE)},
-      {"(eq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValue(LISP_BOOL_TRUE)},
-      {"(eq (list 6 6 6) (list 6 6 6) 6)", LispValue(LISP_BOOL_FALSE)},
-      {"(eq (list 6 6 6) (list 6 6 6) 5)", LispValue(LISP_BOOL_FALSE)}};
+  std::map<std::string, LispValuePtr> tests = {
+      {"(eq 1 1)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(eq \"Hase\" 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(eq \"Hase\" \"Bär\")", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(eq \"Hase\" \"Hase\")", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(eq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(eq (list 54 2 66 9.326) (list 54 3 66 9.326))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(eq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(eq (list 6 6 6) (list 6 6 6) 6)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(eq (list 6 6 6) (list 6 6 6) 5)", LispValueFactory::new_bool(LISP_BOOL_FALSE)}};
   // clang-format on
 
   return run_lisp_tests(tests, "eq");
@@ -1002,15 +995,15 @@ int run_lisp_tests_eq1() {
 
 int run_lisp_tests_xeq1() {
   // clang-format off
-  std::map<std::string, LispValue> tests = {
-      {"(xeq 1 1)", LispValue(LISP_BOOL_TRUE)},
-      {"(xeq \"Hase\" 1)", LispValue(LISP_BOOL_FALSE)},
-      {"(xeq \"Hase\" \"Bär\")", LispValue(LISP_BOOL_FALSE)},
-      {"(xeq \"Hase\" \"Hase\")", LispValue(LISP_BOOL_TRUE)},
-      {"(xeq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValue(LISP_BOOL_FALSE)},
-      {"(xeq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValue(LISP_BOOL_TRUE)},
-      {"(xeq (list 6 6 6) (list 6 6 6) 6)", LispValue(LISP_BOOL_TRUE)},
-      {"(xeq (list 6 6 6) (list 6 6 6) 5)", LispValue(LISP_BOOL_FALSE)}};
+  std::map<std::string, LispValuePtr> tests = {
+      {"(xeq 1 1)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(xeq \"Hase\" 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(xeq \"Hase\" \"Bär\")", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(xeq \"Hase\" \"Hase\")", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(xeq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(xeq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(xeq (list 6 6 6) (list 6 6 6) 6)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(xeq (list 6 6 6) (list 6 6 6) 5)", LispValueFactory::new_bool(LISP_BOOL_FALSE)}};
   // clang-format on
 
   return run_lisp_tests(tests, "xeq");
@@ -1018,11 +1011,11 @@ int run_lisp_tests_xeq1() {
 
 int run_lisp_tests_not1() {
   // clang-format off
-  std::map<std::string, LispValue> tests = {
-     {"(not (= 1 0))", LispValue(LISP_BOOL_TRUE)},
-     {"(not (= 1 0) (= 0 1))", LispValue(LISP_BOOL_TRUE)},
-     {"(not (= 1 1))", LispValue(LISP_BOOL_FALSE)},
-     {"(not (= 1 1) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
+  std::map<std::string, LispValuePtr> tests = {
+     {"(not (= 1 0))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(not (= 1 0) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(not (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(not (= 1 1) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
   };
   // clang-format on
 
@@ -1031,13 +1024,13 @@ int run_lisp_tests_not1() {
 
 int run_lisp_tests_or1() {
   // clang-format off
-  std::map<std::string, LispValue> tests = {
-     {"(or (= 1 0))", LispValue(LISP_BOOL_FALSE)},
-     {"(or (= 1 0) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
-     {"(or (= 1 1))", LispValue(LISP_BOOL_TRUE)},
-     {"(or (= 1 1) (= 0 1))", LispValue(LISP_BOOL_TRUE)},
-     {"(or (= 1 0) (= 1 1))", LispValue(LISP_BOOL_TRUE)},
-     {"(or (= 1 1) (= 1 1))", LispValue(LISP_BOOL_TRUE)},
+  std::map<std::string, LispValuePtr> tests = {
+     {"(or (= 1 0))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(or (= 1 0) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(or (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(or (= 1 1) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(or (= 1 0) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(or (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
   };
   // clang-format on
 
@@ -1046,13 +1039,13 @@ int run_lisp_tests_or1() {
 
 int run_lisp_tests_and1() {
   // clang-format off
-  std::map<std::string, LispValue> tests = {
-     {"(and (= 1 0))", LispValue(LISP_BOOL_FALSE)},
-     {"(and (= 1 0) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
-     {"(and (= 1 1))", LispValue(LISP_BOOL_TRUE)},
-     {"(and (= 1 1) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
-     {"(and (= 1 0) (= 1 1))", LispValue(LISP_BOOL_FALSE)},
-     {"(and (= 1 1) (= 1 1))", LispValue(LISP_BOOL_TRUE)},
+  std::map<std::string, LispValuePtr> tests = {
+     {"(and (= 1 0))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(and (= 1 0) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(and (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(and (= 1 1) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(and (= 1 0) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(and (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
   };
   // clang-format on
 
@@ -1061,11 +1054,11 @@ int run_lisp_tests_and1() {
 
 int run_lisp_tests_xor1() {
   // clang-format off
-  std::map<std::string, LispValue> tests = {
-     {"(xor (= 1 0) (= 0 1))", LispValue(LISP_BOOL_FALSE)},
-     {"(xor (= 1 1) (= 0 1))", LispValue(LISP_BOOL_TRUE)},
-     {"(xor (= 1 0) (= 1 1))", LispValue(LISP_BOOL_TRUE)},
-     {"(xor (= 1 1) (= 1 1))", LispValue(LISP_BOOL_FALSE)},
+  std::map<std::string, LispValuePtr> tests = {
+     {"(xor (= 1 0) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(xor (= 1 1) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(xor (= 1 0) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(xor (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
   };
   // clang-format on
 
@@ -1074,16 +1067,16 @@ int run_lisp_tests_xor1() {
 
 int run_lisp_tests_avg1() {
   // clang-format off
-  std::map<std::string, LispValue> tests = {
-     {"(avg 2 2 2)", LispValue(2)},
-     {"(avg 42)", LispValue(42)},
+  std::map<std::string, LispValuePtr> tests = {
+     {"(avg 2 2 2)", LispValueFactory::new_double(2)},
+     {"(avg 42)", LispValueFactory::new_double(42)},
   };
   // clang-format on
 
   return run_lisp_tests(tests, "avg");
 }
 
-int run_lisp_tests(const std::map<std::string, LispValue> tests,
+int run_lisp_tests(const std::map<std::string, LispValuePtr> tests,
                    const std::string &test_name) {
   for (const auto &it : tests) {
     std::string test = it.first;
@@ -1102,9 +1095,9 @@ int run_lisp_tests(const std::map<std::string, LispValue> tests,
       TEST_ASSERT(value);
 
       LispExecutionContext executor;
-      LispValue result = executor.execute(*value, {});
+      LispValuePtr result = executor.execute(value, {});
 
-      TEST_ASSERT(result == expected_result);
+      TEST_ASSERT(*result == *expected_result);
     } catch (LispParserError &lpe) {
       std::cerr << "*** Caught lisp parser error: " << lpe.what()
                 << " (item: \"" << lpe.item() << "\")" << std::endl;

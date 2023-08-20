@@ -3,12 +3,13 @@
 #include "lisp_parser_error.h"
 #include "lisp_tokens.h"
 #include "lisp_value.h"
+#include "lisp_value_factory.h"
 #include <any>
 #include <iostream>
 #include <memory>
 #include <sstream>
 
-std::optional<LispValue> LispValueParser::next() {
+LispValuePtr LispValueParser::next() {
   if (!has_next()) {
     return {};
   }
@@ -17,19 +18,19 @@ std::optional<LispValue> LispValueParser::next() {
 
   LispToken token = current_token();
 
-  if (token.is_number()) {
+  if (token.is_number()) { // TODO: Add support for integers
     double d = std::any_cast<double>(token.content);
     _pos++;
-    return LispValue(d);
+    return LispValueFactory::new_double(d);
   } else if (token.is_string()) {
     std::string s = std::any_cast<std::string>(token.content);
     _pos++;
-    return LispValue(s);
+    return LispValueFactory::new_string(s);
   } else if (token.is_identifier()) {
     // Same as string but with identifier flag set to true
     std::string s = std::any_cast<std::string>(token.content);
     _pos++;
-    return LispValue(s, true);
+    return LispValueFactory::new_identifier(s);
   }
 
   // Check for function
@@ -50,7 +51,7 @@ void LispValueParser::skip_spaces() {
   }
 }
 
-LispValue LispValueParser::parse_function() {
+LispValuePtr LispValueParser::parse_function() {
   LispTokens function_tokens = collect_current_function_tokens();
 
   // std::cerr << "Function tokens:" << std::endl;
@@ -131,7 +132,7 @@ LispValue LispValueParser::parse_function() {
     params.push_back(std::make_shared<LispValue>(value));
   }
 
-  return LispValue(LispFunction(identifier, params));
+  return LispValueFactory::new_function(LispFunction(identifier, params));
 }
 
 LispTokens LispValueParser::collect_current_function_tokens() {

@@ -10,7 +10,7 @@ public:
   LispExecutionContextAnd() = default;
   virtual ~LispExecutionContextAnd() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -20,11 +20,11 @@ public:
 
     for (const auto &param : params) {
       if (!param->is_truthy()) {
-        return LispValue(LISP_BOOL_FALSE);
+        return LispValueFactory::new_bool(LISP_BOOL_FALSE);
       }
     }
 
-    return LispValue(LISP_BOOL_TRUE);
+    return LispValueFactory::new_bool(LISP_BOOL_TRUE);
   }
 };
 

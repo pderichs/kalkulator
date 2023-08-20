@@ -4,6 +4,7 @@
 #include "lisp_parser.h"
 #include "lisp_tokens.h"
 #include "lisp_value.h"
+#include "lisp_value_factory.h"
 #include "lisp_value_parser.h"
 #include "tools.h"
 #include "value_conversion_error.h"
@@ -23,7 +24,7 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 
   if (input.empty()) {
     // Create none value
-    return std::make_shared<LispValue>();
+    return LispValueFactory::new_none();
   }
 
   if (input[0] == '=') {
@@ -53,10 +54,10 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 
     if (std::regex_search(input, sm, exp_number)) {
       double d = std::stod(s);
-      result = std::make_shared<LispValue>(d);
+      result = LispValueFactory::new_double(d);
     } else {
       // Must be a string
-      result = std::make_shared<LispValue>(s);
+      result = LispValueFactory::new_string(s);
     }
   }
 
@@ -65,46 +66,41 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 
 std::string ValueConverter::to_string(const LispValuePtr &value,
                                       const std::any &context_param) {
-  if (!value) {
-    return "";
-  }
-
-  return ValueConverter::to_string(*value, context_param);
-}
-
-std::string ValueConverter::to_string(const LispValue &value,
-                                      const std::any &context_param) {
   if (!execution_context) {
     throw std::runtime_error("to_string: Execution context is NULL");
   }
 
-  if (value.is_string()) {
-    return value.string();
-  } else if (value.is_number()) {
-    std::stringstream ss;
-    ss << value.number();
-    return ss.str();
-  } else if (value.is_none()) {
+  if (!value) {
     return "";
-  } else if (value.is_function()) {
+  }
+
+  if (value->is_string()) {
+    return value->string();
+  } else if (value->is_number()) {
+    std::stringstream ss;
+    ss << value->number();
+    return ss.str();
+  } else if (value->is_none()) {
+    return "";
+  } else if (value->is_function()) {
     // Execute function
     try {
-      LispValue result = execution_context->execute(value, context_param);
+      LispValuePtr result = execution_context->execute(value, context_param);
       return ValueConverter::to_string(result, context_param);
     } catch (const std::runtime_error &) {
       return "#ERR";
     }
-  } else if (value.is_list()) {
+  } else if (value->is_list()) {
     return "#LIST";
-  } else if (value.is_boolean()) {
-    if (value.boolean()) {
+  } else if (value->is_boolean()) {
+    if (value->boolean()) {
       return "TRUE";
     } else {
       return "FALSE";
     }
   } else {
     std::stringstream ss;
-    ss << "Unable to convert lisp value of type " << (int)value.type();
+    ss << "Unable to convert lisp value of type " << (int)value->type();
     throw ValueConversionError(ss.str());
   }
 }

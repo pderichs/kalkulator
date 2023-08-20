@@ -16,7 +16,7 @@ public:
 
   virtual ~LispExecutionContextCellReference() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     if (func.param_count() != 2) {
@@ -42,21 +42,21 @@ public:
     if (row == cell_location.y() && col == cell_location.x()) {
       // This would be a circular reference - cancel operation
       // throw LispExecutionContextError("Detected circular reference.");
-      return LispValue("#CIRCULARREFERR");
+      return LispValueFactory::new_string("#CIRCULARREFERR");
     }
 
     auto opt_cell = _workbook->get_cell(Location(col, row));
     if (!opt_cell) {
-      return LispValue();
+      return LispValueFactory::new_none();
     }
 
     auto cell = *opt_cell;
 
     if (!cell || !cell->has_content()) {
-      return LispValue();
+      return LispValueFactory::new_none();
     }
 
-    return *(cell->lisp_value());
+    return cell->lisp_value();
   }
 
 private:

@@ -45,18 +45,18 @@ LispExecutionContext::LispExecutionContext() {
   _functions["avg"] = std::make_shared<LispExecutionContextAvg>();
 }
 
-LispValue
-LispExecutionContext::execute(const LispValue &value,
+LispValuePtr
+LispExecutionContext::execute(const LispValuePtr &value,
                               const std::any &context_param = {}) const {
-  if (!value.is_function()) {
+  if (!value->is_function()) {
     return value;
   }
 
-  LispValue execution_result = eval_function(value.function(), context_param);
+  LispValuePtr execution_result = eval_function(value->function(), context_param);
   return execution_result;
 }
 
-LispValue
+LispValuePtr
 LispExecutionContext::eval_function(const LispFunction &func,
                                     const std::any &context_param) const {
   const auto &execution_context_it = _functions.find(func.identifier());

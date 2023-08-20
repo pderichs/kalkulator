@@ -3,13 +3,14 @@
 
 #include "lisp_function.h"
 #include "lisp_function_execution_context.h"
+#include "lisp_value_factory.h"
 
 class LispExecutionContextJoin : public LispFunctionExecutionContext {
 public:
   LispExecutionContextJoin() = default;
   virtual ~LispExecutionContextJoin() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     LispValuePtrVector result;
@@ -21,7 +22,7 @@ public:
         result.push_back(param);
     }
 
-    return LispValue(result);
+    return LispValueFactory::new_list(result);
   }
 };
 

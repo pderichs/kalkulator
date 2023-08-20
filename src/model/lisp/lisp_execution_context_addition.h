@@ -4,13 +4,14 @@
 #include "lisp_execution_context_error.h"
 #include "lisp_function.h"
 #include "lisp_function_execution_context.h"
+#include "lisp_value_factory.h"
 
 class LispExecutionContextAddition : public LispFunctionExecutionContext {
 public:
   LispExecutionContextAddition() = default;
   virtual ~LispExecutionContextAddition() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     ensure_params(func);
@@ -21,11 +22,11 @@ public:
         func.params(), execution_context, context_param);
 
     for (const auto &param : params) {
-      LispValue value(expect_number(param, execution_context, context_param));
-      result += value.number();
+      LispValuePtr value(expect_number(param, execution_context, context_param));
+      result += value->number();
     }
 
-    return LispValue(result);
+    return LispValueFactory::new_double(result);
   }
 };
 

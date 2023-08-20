@@ -3,6 +3,7 @@
 
 #include "lisp_execution_context_error.h"
 #include "lisp_function.h"
+#include "lisp_value_factory.h"
 #include <tuple>
 
 class LispExecutionContextCons : public LispFunctionExecutionContext {
@@ -10,7 +11,7 @@ public:
   LispExecutionContextCons() = default;
   virtual ~LispExecutionContextCons() = default;
 
-  virtual LispValue value(const LispFunction &func,
+  virtual LispValuePtr value(const LispFunction &func,
                           const LispExecutionContext &execution_context,
                           const std::any &context_param) {
     std::ignore = execution_context;
@@ -26,7 +27,7 @@ public:
         result.push_back(param);
     }
 
-    return LispValue(result);
+    return LispValueFactory::new_list(result);
   }
 };
 
