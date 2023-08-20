@@ -6,7 +6,7 @@ SRC_DIR=src
 TESTS_DIR=src/tests
 TARGET_DIR=bin
 TOOLS_DIR=src/tools
-ICONS_DIR=vendor/google-material-icons/
+ICONS_DIR=vendor/google-material-icons
 
 WX_DIR=vendor/wxWidgets-3.2.2.1
 # used "vendor/wxWidgets-3.2.2.1/buildgtk/wx-config --cppflags"
