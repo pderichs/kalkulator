@@ -26,18 +26,18 @@ public:
     LispValuePtr value(expect_number(first_param, execution_context, context_param));
 
     // First parameter of subtraction is base value
-    result = value->number();
+    result = value->to_double();
 
     // Skip first param
     for (size_t n = 1; n < params.size(); n++) {
       const auto &param = params[n];
       LispValuePtr value(expect_number(param, execution_context, context_param));
 
-      if (value->number() == 0.0) {
+      if (value->to_double() == 0.0) {
         throw LispExecutionContextError("Division by zero");
       }
 
-      result /= value->number();
+      result /= value->to_double();
     }
 
     return LispValueFactory::new_double(result);

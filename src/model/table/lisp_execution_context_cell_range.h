@@ -38,7 +38,7 @@ public:
     int n = 0;
     for (const auto &param : params) {
       LispValuePtr value(expect_number(param, execution_context, context_param));
-      ranges[n] = (int)value->number();
+      ranges[n] = (int)value->to_double();
       n++;
     }
 

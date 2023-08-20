@@ -36,8 +36,8 @@ public:
     LispValuePtrVector params = execute_functions_and_extract_list_results(
         func.params(), execution_context, context_param);
 
-    row = (int)params[0]->number();
-    col = (int)params[1]->number();
+    row = (int)params[0]->to_double();
+    col = (int)params[1]->to_double();
 
     if (row == cell_location.y() && col == cell_location.x()) {
       // This would be a circular reference - cancel operation

@@ -76,9 +76,13 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
 
   if (value->is_string()) {
     return value->string();
-  } else if (value->is_number()) {
+  } else if (value->is_double()) {
     std::stringstream ss;
-    ss << value->number();
+    ss << value->to_double();
+    return ss.str();
+  } else if (value->is_integer()) {
+    std::stringstream ss;
+    ss << value->to_integer();
     return ss.str();
   } else if (value->is_none()) {
     return "";

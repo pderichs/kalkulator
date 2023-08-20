@@ -322,7 +322,7 @@ int run_lisp_tests_expression1() {
       const auto &value = expr.param_at(1);
       TEST_ASSERT(value);
       TEST_ASSERT((*value)->is_number());
-      d = (*value)->number();
+      d = (*value)->to_double();
       TEST_ASSERT(d == -484.32);
     }
   } catch (LispParserError &lpe) {
@@ -370,7 +370,7 @@ int run_lisp_tests_expression2() {
 
     param = *optparam;
     TEST_ASSERT(param->is_number());
-    TEST_ASSERT(param->number() == -484.32);
+    TEST_ASSERT(param->to_double() == -484.32);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;

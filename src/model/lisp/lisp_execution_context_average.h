@@ -22,7 +22,7 @@ public:
 
     for (const auto &param : params) {
       LispValuePtr value(expect_number(param, execution_context, context_param));
-      result += value->number();
+      result += value->to_double();
     }
 
     return LispValueFactory::new_double(result / param_count);

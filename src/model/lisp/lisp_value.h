@@ -42,14 +42,17 @@ public:
 
   bool is_none() const { return _type == LVT_NONE; }
   bool is_string() const { return _type == LVT_STRING; }
-  bool is_number() const { return _type == LVT_DOUBLE; } // TODO
+  bool is_number() const { return _type == LVT_DOUBLE || _type == LVT_INTEGER; }
+  bool is_double() const { return _type == LVT_DOUBLE; }
+  bool is_integer() const { return _type == LVT_INTEGER; }
   bool is_function() const { return _type == LVT_FUNCTION; }
   bool is_list() const { return _type == LVT_LIST; }
   bool is_identifier() const { return _type == LVT_IDENTIFIER; }
   bool is_boolean() const { return _type == LVT_BOOL; }
 
   std::string string() const { return std::any_cast<std::string>(_content); }
-  double number() const { return std::any_cast<double>(_content); }
+  double to_double() const { return std::any_cast<double>(_content); }
+  double to_integer() const { return std::any_cast<int64_t>(_content); }
   bool boolean() const {
     return std::any_cast<LispBool>(_content) == LISP_BOOL_TRUE;
   }
@@ -65,7 +68,7 @@ public:
       return false;
     }
 
-    return number() == other;
+    return to_double() == other;
   }
 
   bool operator==(const std::string &other) const {
@@ -94,7 +97,7 @@ public:
     }
 
     if (is_number()) {
-      return number() != 0.0;
+      return to_integer() != 0;
     }
 
     return true;
@@ -137,7 +140,9 @@ public:
     case LVT_LIST:
       return lists_equals(other);
     case LVT_DOUBLE:
-      return number() == other.number();
+      return to_double() == other.to_double();
+    case LVT_INTEGER:
+      return to_integer() == other.to_integer();
     default:
       throw std::runtime_error(
           "Equality check is not implemented for this type");
