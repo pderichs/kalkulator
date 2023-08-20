@@ -17,12 +17,8 @@ const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 TableSheet::TableSheet(const std::string &name) : current_cell(0, 0) {
   this->name = name;
 
-  int n = 0;
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
-    auto col = std::make_shared<TableColumnDefinition>();
-
-    column_definitions.push_back(col);
-    n++;
+    column_definitions.push_back(std::make_shared<TableColumnDefinition>());
   }
 
   for (size_t c = 0; c < INITIAL_ROW_COUNT; c++) {
