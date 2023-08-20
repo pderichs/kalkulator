@@ -19,7 +19,8 @@ private:
   size_t _pos;
 
 private:
-  LispToken create_number_token(double d);
+  LispToken create_double_token(double d);
+  LispToken create_integer_token(int64_t d);
   LispToken create_string_token(const std::string &s);
   LispToken create_identifier_token(const std::string &s);
   LispToken create_open_bracket_token();

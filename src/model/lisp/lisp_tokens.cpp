@@ -19,8 +19,10 @@ std::string token_id_to_string(TokenID token_id) {
     return "identifier";
   case STRING:
     return "string";
-  case NUMBER:
-    return "number";
+  case INTEGER:
+    return "integer";
+  case DOUBLE:
+    return "double";
   case OPEN_BRACKET:
     return "open bracket";
   case CLOSE_BRACKET:
@@ -41,8 +43,15 @@ std::string printable_content_of_token(const LispToken &token) {
   case STRING:
     s = std::any_cast<std::string>(token.content);
     return s;
-  case NUMBER: {
+  case DOUBLE: {
     d = std::any_cast<double>(token.content);
+
+    std::stringstream ss;
+    ss << d;
+    return ss.str();
+  }
+  case INTEGER: {
+    d = std::any_cast<int64_t>(token.content);
 
     std::stringstream ss;
     ss << d;

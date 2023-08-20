@@ -10,7 +10,8 @@ enum TokenID {
   CLOSE_BRACKET,
   IDENTIFIER,
   STRING,
-  NUMBER,
+  DOUBLE,
+  INTEGER,
   SPACE
 };
 
@@ -30,8 +31,12 @@ struct LispToken {
     return id == STRING;
   }
 
-  bool is_number() const {
-    return id == NUMBER;
+  bool is_integer() const {
+    return id == INTEGER;
+  }
+
+  bool is_double() const {
+    return id == DOUBLE;
   }
 
   bool is_open_bracket() const {

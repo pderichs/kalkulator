@@ -3,6 +3,7 @@
 #include "lisp_syntax_checker.h"
 #include "lisp_tokens.h"
 #include <cctype>
+#include <cstdint>
 #include <stdexcept>
 #include <string>
 
@@ -51,8 +52,12 @@ LispTokens LispParser::parse() {
   return result;
 }
 
-LispToken LispParser::create_number_token(double number) {
-  return LispToken{NUMBER, number};
+LispToken LispParser::create_double_token(double number) {
+  return LispToken{DOUBLE, number};
+}
+
+LispToken LispParser::create_integer_token(int64_t number) {
+  return LispToken{INTEGER, number};
 }
 
 LispToken LispParser::create_string_token(const std::string &s) {
@@ -129,17 +134,31 @@ LispToken LispParser::read_number() {
     }
   } while (walk());
 
-  double n = 0.0;
+  if (dot) {
+    double n = 0.0;
 
-  try {
-    n = std::stod(s);
-  } catch (std::invalid_argument &iarg) {
-    throw LispParserError("Unable to parse number (invalid argument)", s);
-  } catch (std::out_of_range &oor) {
-    throw LispParserError("Unable to parse number (out of range)", s);
+    try {
+      n = std::stod(s);
+    } catch (std::invalid_argument &iarg) {
+      throw LispParserError("Unable to parse double (invalid argument)", s);
+    } catch (std::out_of_range &oor) {
+      throw LispParserError("Unable to parse double (out of range)", s);
+    }
+
+    return create_double_token(n);
+  } else {
+    int64_t n = 0.0;
+
+    try {
+      n = std::stoll(s);
+    } catch (std::invalid_argument &iarg) {
+      throw LispParserError("Unable to parse integer (invalid argument)", s);
+    } catch (std::out_of_range &oor) {
+      throw LispParserError("Unable to parse integer (out of range)", s);
+    }
+
+    return create_integer_token(n);
   }
-
-  return create_number_token(n);
 }
 
 bool LispParser::walk() {

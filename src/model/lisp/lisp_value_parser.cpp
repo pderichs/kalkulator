@@ -18,10 +18,14 @@ LispValuePtr LispValueParser::next() {
 
   LispToken token = current_token();
 
-  if (token.is_number()) { // TODO: Add support for integers
+  if (token.is_double()) {
     double d = std::any_cast<double>(token.content);
     _pos++;
     return LispValueFactory::new_double(d);
+  } else if (token.is_integer()) {
+    int64_t d = std::any_cast<int64_t>(token.content);
+    _pos++;
+    return LispValueFactory::new_integer(d);
   } else if (token.is_string()) {
     std::string s = std::any_cast<std::string>(token.content);
     _pos++;

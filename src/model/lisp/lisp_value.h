@@ -50,15 +50,40 @@ public:
   bool is_identifier() const { return _type == LVT_IDENTIFIER; }
   bool is_boolean() const { return _type == LVT_BOOL; }
 
+  double explicit_double_value() const {
+    return std::any_cast<double>(_content);
+  }
+
+  int64_t explicit_integer_value() const {
+    return std::any_cast<int64_t>(_content);
+  }
+
   std::string string() const { return std::any_cast<std::string>(_content); }
-  double to_double() const { return std::any_cast<double>(_content); }
-  double to_integer() const { return std::any_cast<int64_t>(_content); }
+
+  double to_double() const {
+    if (is_integer()) {
+      return static_cast<double>(explicit_integer_value());
+    }
+
+    return explicit_double_value();
+  }
+
+  double to_integer() const {
+    if (is_double()) {
+      return static_cast<int64_t>(explicit_double_value());
+    }
+
+    return explicit_integer_value();
+  }
+
   bool boolean() const {
     return std::any_cast<LispBool>(_content) == LISP_BOOL_TRUE;
   }
+
   LispFunction function() const {
     return std::any_cast<LispFunction>(_content);
   }
+
   LispValuePtrVector list() const {
     return std::any_cast<LispValuePtrVector>(_content);
   }

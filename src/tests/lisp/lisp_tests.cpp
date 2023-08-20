@@ -173,9 +173,9 @@ int run_lisp_tests_parsing1() {
     TEST_ASSERT(tokens[0].id == OPEN_BRACKET);
     TEST_ASSERT(tokens[1].id == IDENTIFIER);
     TEST_ASSERT(tokens[2].id == SPACE);
-    TEST_ASSERT(tokens[3].id == NUMBER);
+    TEST_ASSERT(tokens[3].id == INTEGER);
     TEST_ASSERT(tokens[4].id == SPACE);
-    TEST_ASSERT(tokens[5].id == NUMBER);
+    TEST_ASSERT(tokens[5].id == INTEGER);
     TEST_ASSERT(tokens[6].id == CLOSE_BRACKET);
     TEST_ASSERT(tokens.size() == 7);
   } catch (LispParserError &lpe) {
@@ -205,12 +205,12 @@ int run_lisp_tests_parsing2() {
     s = std::any_cast<std::string>(tokens[3].content);
     TEST_ASSERT(s == "Hello \\\"World\\\"");
     TEST_ASSERT(tokens[4].id == SPACE);
-    TEST_ASSERT(tokens[5].id == NUMBER);
-    double d = std::any_cast<double>(tokens[5].content);
+    TEST_ASSERT(tokens[5].id == INTEGER);
+    double d = std::any_cast<int64_t>(tokens[5].content);
     TEST_ASSERT(d == 22.0);
     TEST_ASSERT(tokens[6].id == SPACE);
-    TEST_ASSERT(tokens[7].id == NUMBER);
-    d = std::any_cast<double>(tokens[7].content);
+    TEST_ASSERT(tokens[7].id == INTEGER);
+    d = std::any_cast<int64_t>(tokens[7].content);
     TEST_ASSERT(d == 4.0);
     TEST_ASSERT(tokens[8].id == CLOSE_BRACKET);
     TEST_ASSERT(tokens.size() == 9);
@@ -241,7 +241,7 @@ int run_lisp_tests_parsing3() {
     s = std::any_cast<std::string>(tokens[3].content);
     TEST_ASSERT(s == "8282");
     TEST_ASSERT(tokens[4].id == SPACE);
-    TEST_ASSERT(tokens[5].id == NUMBER);
+    TEST_ASSERT(tokens[5].id == DOUBLE);
     double d = std::any_cast<double>(tokens[5].content);
     TEST_ASSERT(d == -484.32);
     TEST_ASSERT(tokens[6].id == CLOSE_BRACKET);
