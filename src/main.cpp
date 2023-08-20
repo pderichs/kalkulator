@@ -8,6 +8,7 @@
 #include <wx/event.h>
 #include <wx/filename.h>
 #include <wx/msgdlg.h>
+#include <wx/numdlg.h>
 #include <wx/rawbmp.h>
 #include <wx/stdpaths.h>
 #include <wx/timer.h>
@@ -46,6 +47,7 @@ std::map<std::string, IconPaths> IconDictionary = {
     {"new", {"outline_insert_drive_file_white_18dp.png", "outline_insert_drive_file_black_18dp.png"}},
     {"open", {"outline_folder_open_white_18dp.png", "outline_folder_open_black_18dp.png"}},
     {"save", {"outline_save_white_18dp.png", "outline_save_black_18dp.png"}},
+    {"height", {"outline_height_white_18dp.png", "outline_height_black_18dp.png"}},
 
 };
 // clang-format on
@@ -72,6 +74,8 @@ private:
   void OnRightDown(wxMouseEvent &event);
   void OnKeyPress(wxKeyEvent &event);
   void OnSheetSelectionCombo(wxCommandEvent &event);
+  void OnResizeColumn(wxCommandEvent &event);
+  void OnResizeRow(wxCommandEvent &event);
 
   void BindEvents();
   void CreateToolbar();
@@ -109,6 +113,8 @@ private:
   wxBitmap *_icon_new;
   wxBitmap *_icon_open;
   wxBitmap *_icon_save;
+  wxBitmap *_icon_height;
+  wxBitmap *_icon_width;
 };
 
 enum {
@@ -116,6 +122,8 @@ enum {
   ID_Save,
   ID_SaveAs,
   ID_New,
+  ID_ResizeColumn,
+  ID_ResizeRow,
 };
 
 enum { ID_SHEET_SELECTION_CMB = wxID_HIGHEST + 1 };
@@ -175,6 +183,16 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
     _icon_new = NULL;
   }
 
+  if (_icon_height) {
+    delete _icon_height;
+    _icon_height = NULL;
+  }
+
+  if (_icon_width) {
+    delete _icon_width;
+    _icon_width = NULL;
+  }
+
   if (_icon_open) {
     delete _icon_open;
     _icon_open = NULL;
@@ -205,6 +223,12 @@ void KalkulatorMainFrame::InitializeIcons() {
   _icon_new = new wxBitmap(GetIconPath("new"), wxBITMAP_TYPE_PNG);
   _icon_open = new wxBitmap(GetIconPath("open"), wxBITMAP_TYPE_PNG);
   _icon_save = new wxBitmap(GetIconPath("save"), wxBITMAP_TYPE_PNG);
+  _icon_height = new wxBitmap(GetIconPath("height"), wxBITMAP_TYPE_PNG);
+
+  wxBitmap temp(GetIconPath("height"), wxBITMAP_TYPE_PNG);
+  wxImage image = temp.ConvertToImage();
+  image = image.Rotate90();
+  _icon_width = new wxBitmap(image);
 }
 
 void KalkulatorMainFrame::InitializeModel() {
@@ -251,11 +275,22 @@ void KalkulatorMainFrame::InitializeMenu() {
 
   menuFile->Append(wxID_EXIT);
 
+  wxMenu *menuTable = new wxMenu();
+  item = new wxMenuItem(menuTable, ID_ResizeColumn, "Resize column...",
+                        "Provides possibility to change current column width.");
+  item->SetBitmap(*_icon_width);
+  menuTable->Append(item);
+  item = new wxMenuItem(menuTable, ID_ResizeRow, "Resize row...",
+                        "Provides possibility to change current row height.");
+  item->SetBitmap(*_icon_height);
+  menuTable->Append(item);
+
   wxMenu *menuHelp = new wxMenu();
   menuHelp->Append(wxID_ABOUT);
 
   wxMenuBar *menuBar = new wxMenuBar();
   menuBar->Append(menuFile, "&File");
+  menuBar->Append(menuTable, "&Table");
   menuBar->Append(menuHelp, "&Help");
   SetMenuBar(menuBar);
 }
@@ -322,6 +357,8 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnNew, this, ID_New);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSave, this, ID_Save);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSaveAs, this, ID_SaveAs);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnResizeColumn, this, ID_ResizeColumn);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnResizeRow, this, ID_ResizeRow);
 
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
@@ -563,6 +600,10 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     _table_control->Refresh();
     break;
   }
+  case ROW_HEIGHT_UPDATED:
+  case COLUMN_WIDTH_UPDATED:
+    _table_control->Refresh();
+    break;
   }
 }
 
@@ -597,5 +638,31 @@ void KalkulatorMainFrame::UpdateSheetCombo() {
 void KalkulatorMainFrame::OnSheetSelectionCombo(
     wxCommandEvent &WXUNUSED(event)) {
   wxString sheet_name = _cmb_sheet_selection->GetValue();
-  _document->select_sheet_by_name(static_cast<const char*>(sheet_name));
+  _document->select_sheet_by_name(static_cast<const char *>(sheet_name));
+}
+
+void KalkulatorMainFrame::OnResizeColumn(wxCommandEvent &WXUNUSED(event)) {
+  size_t current_width = _document->get_current_column_width();
+
+  long entry = wxGetNumberFromUser("Resize column.", "Width:", "Resize column",
+                                   current_width, 0, 1000);
+
+  if (entry < 0) {
+    return;
+  }
+
+  _document->set_current_column_width(static_cast<size_t>(entry));
+}
+
+void KalkulatorMainFrame::OnResizeRow(wxCommandEvent &WXUNUSED(event)) {
+  size_t current_height = _document->get_current_row_height();
+
+  long entry = wxGetNumberFromUser("Resize row.", "Height:", "Resize row",
+                                   current_height, 0, 1000);
+
+  if (entry < 0) {
+    return;
+  }
+
+  _document->set_current_row_height(static_cast<size_t>(entry));
 }

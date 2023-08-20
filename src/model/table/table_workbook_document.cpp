@@ -298,3 +298,22 @@ bool TableWorkbookDocument::select_sheet_by_name(
 
   return false;
 }
+
+size_t TableWorkbookDocument::get_current_column_width() const {
+  return _current_sheet->get_current_column_width();
+}
+
+size_t TableWorkbookDocument::get_current_row_height() const {
+  return _current_sheet->get_current_row_height();
+}
+
+void TableWorkbookDocument::set_current_column_width(size_t width) {
+  _current_sheet->set_current_column_width(width);
+
+  _event_sink->send_event(COLUMN_WIDTH_UPDATED, {});
+}
+
+void TableWorkbookDocument::set_current_row_height(size_t height) {
+  _current_sheet->set_current_row_height(height);
+  _event_sink->send_event(ROW_HEIGHT_UPDATED, {});
+}

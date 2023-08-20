@@ -55,6 +55,12 @@ public:
   int get_current_sheet_width() const;
   int get_current_sheet_height() const;
 
+  size_t get_current_column_width() const;
+  size_t get_current_row_height() const;
+
+  void set_current_column_width(size_t width);
+  void set_current_row_height(size_t height);
+
   TableSheets sheets() const { return _sheets; }
 
   void set_file_path(const std::string &path) { _path = path; }

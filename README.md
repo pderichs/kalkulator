@@ -20,8 +20,6 @@ The source code and documentation of this project is licensed under the [Apache 
 ## TODO List
 
 - REFA: Refactor all casts
-- FEAT: Provide possibility to change column width
-- FEAT: Provide possibility to change row height
 - FEAT: Go to cell function
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
@@ -60,6 +58,8 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- FEAT: Provide possibility to change column width
+- FEAT: Provide possibility to change row height
 - FEAT: Add sheet selection
 - FEAT: Add "Open" action to toolbar
 - FEAT: Add "Save" menu option

@@ -220,3 +220,23 @@ void TableSheet::redo() {
   }
   apply_state_change_item(state);
 }
+
+size_t TableSheet::get_current_column_width() const {
+  TableColumnDefinitionPtr col_def = column_definitions[current_cell.x()];
+  return col_def->width;
+}
+
+size_t TableSheet::get_current_row_height() const {
+  TableRowDefinitionPtr row_def = row_definitions[current_cell.y()];
+  return row_def->height;
+}
+
+void TableSheet::set_current_column_width(size_t width) {
+  TableColumnDefinitionPtr col_def = column_definitions[current_cell.x()];
+  col_def->width = width;
+}
+
+void TableSheet::set_current_row_height(size_t height) {
+  TableRowDefinitionPtr row_def = row_definitions[current_cell.y()];
+  row_def->height = height;
+}

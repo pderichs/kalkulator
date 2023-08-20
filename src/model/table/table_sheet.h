@@ -59,6 +59,12 @@ struct TableSheet {
   void undo();
   void redo();
 
+  size_t get_current_column_width() const;
+  size_t get_current_row_height() const;
+
+  void set_current_column_width(size_t width);
+  void set_current_row_height(size_t height);
+
 private:
   void apply_state_change_item(const StateHistoryItemPtr& state);
 };
