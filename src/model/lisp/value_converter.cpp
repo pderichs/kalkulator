@@ -9,11 +9,13 @@
 #include "number_interpreter.h"
 #include "tools.h"
 #include "value_conversion_error.h"
+#include <ios>
 #include <iostream>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <iomanip>
 
 LispExecutionContext *ValueConverter::execution_context = nullptr;
 
@@ -85,7 +87,7 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
     return ss.str();
   } else if (value->is_integer()) {
     std::stringstream ss;
-    ss << value->to_integer();
+    ss << std::fixed << std::setprecision(0) << value->to_integer();
     return ss.str();
   } else if (value->is_none()) {
     return "";
