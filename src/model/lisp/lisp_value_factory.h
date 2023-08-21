@@ -38,7 +38,7 @@ public:
     return new_value_ptr(LVT_INTEGER, value);
   }
 
-  static LispValuePtr new_function(const LispFunction& function) {
+  static LispValuePtr new_function(const LispFunction &function) {
     return new_value_ptr(LVT_FUNCTION, function);
   }
 

@@ -17,7 +17,7 @@ public:
   virtual LispValuePtr value(const LispFunction &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) {
-    if (func.param_count() < 2 || func.param_count() > 3) {
+    if (func.param_count() != 2) {
       throw LispExecutionContextError("Unexpected parameter count for if");
     }
 

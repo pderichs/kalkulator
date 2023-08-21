@@ -14,9 +14,6 @@ typedef std::shared_ptr<LispFunctionExecutionContext>
 typedef std::map<std::string, LispFunctionExecutionContextPtr> LispFunctionMap;
 
 class LispExecutionContext {
-private:
-  LispFunctionMap _functions;
-
 public:
   LispExecutionContext();
   LispValuePtr execute(const LispValuePtr &value,
@@ -26,7 +23,10 @@ public:
 
 private:
   LispValuePtr eval_function(const LispFunction &func,
-                          const std::any &context_param = {}) const;
+                             const std::any &context_param = {}) const;
+
+private:
+  LispFunctionMap _functions;
 };
 
 #endif

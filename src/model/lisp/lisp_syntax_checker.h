@@ -2,17 +2,18 @@
 #define LISP_SYNTAX_CHECKER_INCLUDED
 
 #include "lisp_tokens.h"
-class LispSyntaxChecker {
-private:
-  LispTokens _tokens;
 
+class LispSyntaxChecker {
 public:
-  LispSyntaxChecker(const LispTokens& tokens);
+  LispSyntaxChecker(const LispTokens &tokens);
   void check() const;
 
 private:
   void check_matching_brackets() const;
   void check_valid_functions() const;
+
+private:
+  LispTokens _tokens;
 };
 
 #endif

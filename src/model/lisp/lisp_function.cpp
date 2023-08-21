@@ -1,14 +1,13 @@
-#include <algorithm>
 #include <any>
 #include <memory>
-#include <iostream>
 
 #include "lisp_function.h"
 #include "lisp_tokens.h"
 
 #include "lisp_value.h"
 
-LispFunction::LispFunction(const std::string& identifier, const LispValuePtrVector& params) {
+LispFunction::LispFunction(const std::string &identifier,
+                           const LispValuePtrVector &params) {
   _identifier = identifier;
   _params = params;
 }
@@ -25,4 +24,3 @@ LispFunction::param_at(size_t t) const {
 
   return result;
 }
-

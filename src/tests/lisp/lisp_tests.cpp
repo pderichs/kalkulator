@@ -1,12 +1,12 @@
 #include "lisp_tests.h"
 #include "../../model/lisp/lisp_execution_context.h"
-#include "../../model/lisp/lisp_value_factory.h"
 #include "../../model/lisp/lisp_execution_context_error.h"
 #include "../../model/lisp/lisp_function.h"
 #include "../../model/lisp/lisp_function_execution_context.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
 #include "../../model/lisp/lisp_value.h"
+#include "../../model/lisp/lisp_value_factory.h"
 #include "../../model/lisp/lisp_value_parser.h"
 #include "tools.h"
 
@@ -77,8 +77,8 @@ public:
 
   // Adds "Hello " to the front of the provided string
   virtual LispValuePtr value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     std::ignore = execution_context;
     std::ignore = context_param;
 
@@ -206,7 +206,8 @@ int run_lisp_tests_parsing2() {
     TEST_ASSERT(s == "Hello \\\"World\\\"");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == INTEGER);
-    LispValue::IntegerType d = std::any_cast<LispValue::IntegerType>(tokens[5].content);
+    LispValue::IntegerType d =
+        std::any_cast<LispValue::IntegerType>(tokens[5].content);
     TEST_ASSERT(d == 22.0);
     TEST_ASSERT(tokens[6].id == SPACE);
     TEST_ASSERT(tokens[7].id == INTEGER);
@@ -242,7 +243,8 @@ int run_lisp_tests_parsing3() {
     TEST_ASSERT(s == "8282");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == DOUBLE);
-    LispValue::DoubleType d = std::any_cast<LispValue::DoubleType>(tokens[5].content);
+    LispValue::DoubleType d =
+        std::any_cast<LispValue::DoubleType>(tokens[5].content);
     TEST_ASSERT(d == -484.32);
     TEST_ASSERT(tokens[6].id == CLOSE_BRACKET);
     TEST_ASSERT(tokens.size() == 7);
@@ -398,11 +400,6 @@ int run_lisp_tests_wrong_form1() {
       LispValueParser parser(tokens);
       exception = false;
     } catch (LispParserError &lpe) {
-      // std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item:
-      // \""
-      //           << lpe.item() << "\")" << std::endl;
-
-      // We expect an exception for the given form.
       exception = true;
     }
 

@@ -38,7 +38,7 @@ void CellsViewControl::OnDraw(wxDC &dc) {
 
 void CellsViewControl::ScrollWindow(int dx, int dy, const wxRect *rect) {
   wxScrolledWindow::ScrollWindow(dx, dy, rect);
-  wxPrintf("SCROLL EVENT: %d/%d\n", dx, dy);
+  // wxPrintf("SCROLL EVENT: %d/%d\n", dx, dy);
   _event_sink->send_event(CELL_VIEW_SCROLL_EVENT, GetScrollPosition());
 }
 
@@ -63,7 +63,6 @@ void CellsViewControl::OnPaste() {
     if (wxTheClipboard->IsSupported(wxDF_TEXT)) {
       wxTextDataObject data;
       wxTheClipboard->GetData(data);
-      // wxMessageBox(data.GetText());
       std::string content(data.GetText());
       _document->update_content_current_cell(content);
     }
@@ -208,7 +207,6 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   bool control = event.RawControlDown();
   bool shift = event.ShiftDown();
 
-  // Example: Print the keycode to the console
   // wxPrintf("Key pressed: %d\n", keyCode);
 
   bool handled = true;
@@ -264,7 +262,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
     break;
   }
   case WXK_F4: {
-    // TEST
+    // TEST START
     Location loc(50, 40);
     _document->select_cell(loc);
 
@@ -277,7 +275,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
 
     ScrollToCell(loc, TOP);
 
-    // TEST
+    // TEST END
     break;
   }
   case 'C':

@@ -19,11 +19,13 @@ LispValuePtr LispValueParser::next() {
   LispToken token = current_token();
 
   if (token.is_double()) {
-    LispValue::DoubleType d = std::any_cast<LispValue::DoubleType>(token.content);
+    LispValue::DoubleType d =
+        std::any_cast<LispValue::DoubleType>(token.content);
     _pos++;
     return LispValueFactory::new_double(d);
   } else if (token.is_integer()) {
-    LispValue::IntegerType d = std::any_cast<LispValue::IntegerType>(token.content);
+    LispValue::IntegerType d =
+        std::any_cast<LispValue::IntegerType>(token.content);
     _pos++;
     return LispValueFactory::new_integer(d);
   } else if (token.is_string()) {

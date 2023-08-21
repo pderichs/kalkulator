@@ -14,8 +14,8 @@ public:
   virtual ~LispExecutionContextSubtraction() = default;
 
   virtual LispValuePtr value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     ensure_params(func);
 
     LispValue::DoubleType result;
@@ -25,7 +25,8 @@ public:
 
     const auto &first_param = params[0];
 
-    LispValuePtr value(expect_number(first_param, execution_context, context_param));
+    LispValuePtr value(
+        expect_number(first_param, execution_context, context_param));
 
     // First parameter of subtraction is base value
     result = value->to_double();
@@ -33,7 +34,8 @@ public:
     // Skip first param
     for (size_t n = 1; n < params.size(); n++) {
       const auto &param = params[n];
-      LispValuePtr value(expect_number(param, execution_context, context_param));
+      LispValuePtr value(
+          expect_number(param, execution_context, context_param));
       result -= value->to_double();
     }
 

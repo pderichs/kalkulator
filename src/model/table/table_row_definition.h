@@ -6,10 +6,10 @@
 #include <vector>
 
 struct TableRowDefinition {
-    std::string caption;
-    size_t height;
+  std::string caption;
+  size_t height;
 
-  TableRowDefinition();
+  TableRowDefinition() { height = 30; }
 };
 
 typedef std::shared_ptr<TableRowDefinition> TableRowDefinitionPtr;

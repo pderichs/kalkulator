@@ -12,8 +12,8 @@ public:
   virtual ~LispExecutionContextCons() = default;
 
   virtual LispValuePtr value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     std::ignore = execution_context;
     std::ignore = context_param;
 
@@ -23,8 +23,8 @@ public:
 
     LispValuePtrVector result;
 
-    for (const auto& param: func.params()) {
-        result.push_back(param);
+    for (const auto &param : func.params()) {
+      result.push_back(param);
     }
 
     return LispValueFactory::new_list(result);

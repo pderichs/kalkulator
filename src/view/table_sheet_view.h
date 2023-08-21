@@ -1,8 +1,10 @@
 #ifndef TABLE_SHEET_VIEW_INCLUDED
 #define TABLE_SHEET_VIEW_INCLUDED
+
+#include "../model/table/table_workbook_document.h"
 #include "tools.h"
 #include <wx/wx.h>
-#include "../model/table/table_workbook_document.h"
+
 class TableSheetView : public wxScrolledWindow {
 public:
   TableSheetView(TableWorkbookDocumentPtr document, EventSink *event_sink,
@@ -16,7 +18,6 @@ public:
 protected:
   TableWorkbookDocumentPtr _document;
   EventSink *_event_sink;
-
 };
 
 #endif

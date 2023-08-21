@@ -1,15 +1,17 @@
 #include "table_row_headers_control.h"
 #include "kalkulator_system_colors.h"
 
-//  FIXME: Remove these as soon as possible!
+//  TODO: Remove these as soon as possible!
 const int ROW_HEADER_WIDTH = 50;
 // const int COLUMN_HEADER_HEIGHT = 30;
 
+// NOTE Vertical scrolling is disabled by style
 TableRowHeadersControl::TableRowHeadersControl(
     KalkulatorSystemColorsPtr sys_colors, TableWorkbookDocumentPtr document,
     EventSink *event_sink, wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style)
-    : TableSheetView(document, event_sink, parent, id, pos, size, style | ~wxVSCROLL) {
+    : TableSheetView(document, event_sink, parent, id, pos, size,
+                     style | ~wxVSCROLL) {
   _sys_colors = sys_colors;
 
   int height = document->get_current_sheet_height();

@@ -12,8 +12,8 @@ public:
   virtual ~LispExecutionContextAddition() = default;
 
   virtual LispValuePtr value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     ensure_params(func);
 
     LispValue::DoubleType result = 0.0;
@@ -22,7 +22,8 @@ public:
         func.params(), execution_context, context_param);
 
     for (const auto &param : params) {
-      LispValuePtr value(expect_number(param, execution_context, context_param));
+      LispValuePtr value(
+          expect_number(param, execution_context, context_param));
       result += value->to_double();
     }
 

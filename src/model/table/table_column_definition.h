@@ -9,7 +9,7 @@ struct TableColumnDefinition {
   std::string caption;
   size_t width;
 
-  TableColumnDefinition();
+  TableColumnDefinition() { width = 100; }
 };
 
 typedef std::shared_ptr<TableColumnDefinition> TableColumnDefinitionPtr;

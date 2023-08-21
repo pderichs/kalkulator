@@ -3,6 +3,6 @@
 
 #include "location.h"
 
-class TableSelections: public LocationVector {};
+class TableSelections : public LocationVector {};
 
 #endif

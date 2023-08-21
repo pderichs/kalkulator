@@ -36,7 +36,8 @@ void LispSyntaxChecker::check_matching_brackets() const {
 
   if (open_brackets != closed_brackets) {
     std::stringstream ss;
-    ss << "Brackets count mismatch: " << open_brackets << "/" << closed_brackets;
+    ss << "Brackets count mismatch: " << open_brackets << "/"
+       << closed_brackets;
     throw LispParserError(ss.str());
   }
 
@@ -48,7 +49,7 @@ void LispSyntaxChecker::check_matching_brackets() const {
 void LispSyntaxChecker::check_valid_functions() const {
   bool next_identifier = false;
 
-  for (const auto& token : _tokens) {
+  for (const auto &token : _tokens) {
     if (token.is_open_bracket()) {
       next_identifier = true;
     } else if (next_identifier) {

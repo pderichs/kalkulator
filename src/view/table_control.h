@@ -20,17 +20,14 @@ public:
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
                long style = wxTAB_TRAVERSAL);
-
   virtual ~TableControl();
+
   void OnCellUpdate(const Location &location);
-
   void OnSetFocus(wxFocusEvent &event);
-
   void update_scroll_positions(const Location &scroll_pos);
 
 protected:
   void Init();
-
   void CreateHeaderControls();
   void CreateCellsViewControl();
 

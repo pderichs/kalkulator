@@ -35,9 +35,8 @@ LispExecutionContext::LispExecutionContext() {
   _functions["if"] = std::make_shared<LispExecutionContextIf>();
   _functions["eq"] = std::make_shared<LispExecutionContextEq>(false);
   _functions["xeq"] = std::make_shared<LispExecutionContextEq>(
-      true); // read as: extracted equal
-  _functions["="] =
-      std::make_shared<LispExecutionContextEq>(true); // Same as xeq
+      true); // read as: "extracted equal"
+  _functions["="] = _functions["xeq"];
   _functions["not"] = std::make_shared<LispExecutionContextNot>();
   _functions["or"] = std::make_shared<LispExecutionContextOr>();
   _functions["xor"] = std::make_shared<LispExecutionContextXor>();
@@ -52,7 +51,8 @@ LispExecutionContext::execute(const LispValuePtr &value,
     return value;
   }
 
-  LispValuePtr execution_result = eval_function(value->function(), context_param);
+  LispValuePtr execution_result =
+      eval_function(value->function(), context_param);
   return execution_result;
 }
 

@@ -13,12 +13,6 @@ typedef std::shared_ptr<LispValue> LispValuePtr;
 typedef std::vector<LispValuePtr> LispValuePtrVector;
 
 class LispFunction {
-private:
-  std::string _identifier;
-  LispValuePtrVector _params;
-
-  // TODO: Evaluate cached result
-
 public:
   LispFunction(const std::string &identifier, const LispValuePtrVector &params);
 
@@ -28,6 +22,12 @@ public:
   size_t param_count() const { return _params.size(); }
 
   std::optional<LispValuePtr> param_at(size_t t) const;
+
+private:
+  std::string _identifier;
+  LispValuePtrVector _params;
+
+  // TODO: Evaluate cached result
 };
 
 #endif

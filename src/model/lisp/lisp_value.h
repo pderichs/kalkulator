@@ -9,7 +9,6 @@
 #include <string>
 #include <vector>
 
-#include "../not_implemented_error.h"
 #include "lisp_function.h"
 
 enum LispValueType {

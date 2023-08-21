@@ -16,8 +16,8 @@ public:
   virtual ~LispExecutionContextCellRange() = default;
 
   virtual LispValuePtr value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     ensure_params(func);
 
     Location this_cell = std::any_cast<Location>(context_param);
@@ -37,7 +37,8 @@ public:
     int ranges[4]; // from_row, from_col, to_row, to_col
     int n = 0;
     for (const auto &param : params) {
-      LispValuePtr value(expect_number(param, execution_context, context_param));
+      LispValuePtr value(
+          expect_number(param, execution_context, context_param));
       ranges[n] = value->to_integer();
       n++;
     }

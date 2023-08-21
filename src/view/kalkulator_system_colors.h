@@ -9,10 +9,8 @@ struct KalkulatorSystemColors {
     window_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOW);
     window_text_color =
         wxSystemSettingsNative::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-    button_face_color =
-        wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
-    button_text_color =
-        wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNTEXT);
+    button_face_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNFACE);
+    button_text_color = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_BTNTEXT);
     active_border_color =
         wxSystemSettingsNative::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 

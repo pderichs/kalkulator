@@ -4,11 +4,11 @@
 #include "rectangle.h"
 #include <deque>
 #include <iostream>
+#include <optional>
 #include <set>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <optional>
 
 #define RUN_TEST(testproc)                                                     \
   {                                                                            \
@@ -56,7 +56,6 @@ std::optional<T> convert_string_to_number(const std::string &str) {
 
   return value;
 }
-
 
 }; // namespace pdtools
 

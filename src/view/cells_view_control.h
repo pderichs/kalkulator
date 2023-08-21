@@ -27,7 +27,6 @@ public:
   void RefreshScrollbars();
 
   void DrawTable(wxDC *dc, TableSheetPtr sheet);
-
   void OnCellUpdate(const Location &location);
 
   virtual void ScrollWindow(int dx, int dy, const wxRect *rect);

@@ -17,7 +17,6 @@ public:
 
   bool changed() const { return _changed; }
 
-public:
   TableSheetPtr table_sheet_by_name(const std::string &name) const;
   TableSheetPtr current_sheet() const { return _current_sheet; }
 

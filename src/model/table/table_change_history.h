@@ -4,8 +4,8 @@
 #include <chrono>
 #include <cstddef>
 #include <deque>
-#include <memory>
 #include <iostream>
+#include <memory>
 
 struct CellState {
   Location location;
@@ -82,7 +82,9 @@ public:
 
   StateHistoryItemPtr pop_and_swap(StateChangeQueue &source,
                                    StateChangeQueue &dest) {
-    if (source.empty()) { return {}; }
+    if (source.empty()) {
+      return {};
+    }
 
     StateHistoryItemPtr item = source.pop_state();
 

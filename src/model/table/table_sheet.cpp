@@ -37,8 +37,6 @@ TableSheet::TableSheet(const std::string &name) : current_cell(0, 0) {
   }
 }
 
-TableSheet::~TableSheet() {}
-
 size_t TableSheet::row_count() const { return INITIAL_ROW_COUNT; }
 
 size_t TableSheet::col_count() const { return INITIAL_COL_COUNT; }

@@ -1,5 +1,6 @@
 #ifndef TABLE_ROW_HEADERS_CONTROL_INCLUDED
 #define TABLE_ROW_HEADERS_CONTROL_INCLUDED
+
 #include "kalkulator_system_colors.h"
 #include "table_sheet_view.h"
 #include <wx/wx.h>
@@ -7,8 +8,9 @@
 class TableRowHeadersControl : public TableSheetView {
 public:
   TableRowHeadersControl(KalkulatorSystemColorsPtr sys_colors,
-                         TableWorkbookDocumentPtr document, EventSink *event_sink,
-                         wxWindow *parent, wxWindowID id = wxID_ANY,
+                         TableWorkbookDocumentPtr document,
+                         EventSink *event_sink, wxWindow *parent,
+                         wxWindowID id = wxID_ANY,
                          const wxPoint &pos = wxDefaultPosition,
                          const wxSize &size = wxDefaultSize,
                          long style = wxTAB_TRAVERSAL);

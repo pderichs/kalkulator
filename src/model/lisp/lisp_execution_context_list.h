@@ -12,8 +12,8 @@ public:
   virtual ~LispExecutionContextList() = default;
 
   virtual LispValuePtr value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     std::ignore = execution_context;
     std::ignore = context_param;
 

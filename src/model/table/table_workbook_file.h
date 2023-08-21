@@ -7,7 +7,6 @@
 #include <string>
 
 class TableWorkbookFile {
-private:
 public:
   TableWorkbookFile();
   ~TableWorkbookFile();

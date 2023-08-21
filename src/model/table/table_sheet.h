@@ -17,7 +17,6 @@ typedef std::vector<TableRowPtr> TableRows;
 
 struct TableSheet {
   TableSheet(const std::string &name);
-  ~TableSheet();
 
   TableColumnDefinitions column_definitions;
   TableRowDefinitions row_definitions;
@@ -54,7 +53,8 @@ struct TableSheet {
   size_t get_max_row() const;
   size_t get_max_col() const;
 
-  void update_content(const Location& cell_location, const std::string& content);
+  void update_content(const Location &cell_location,
+                      const std::string &content);
 
   void undo();
   void redo();
@@ -66,7 +66,7 @@ struct TableSheet {
   void set_current_row_height(size_t height);
 
 private:
-  void apply_state_change_item(const StateHistoryItemPtr& state);
+  void apply_state_change_item(const StateHistoryItemPtr &state);
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

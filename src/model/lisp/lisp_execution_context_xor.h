@@ -14,8 +14,8 @@ public:
   virtual ~LispExecutionContextXor() = default;
 
   virtual LispValuePtr value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     if (func.param_count() != 2) {
       throw LispExecutionContextError("Xor: Expected 2 parameters");
     }
@@ -23,11 +23,12 @@ public:
     LispValuePtrVector params = execute_functions_and_extract_list_results(
         func.params(), execution_context, context_param);
 
-    const auto& param1 = params[0];
-    const auto& param2 = params[1];
+    const auto &param1 = params[0];
+    const auto &param2 = params[1];
 
     if (!param1->is_boolean() || !param2->is_boolean()) {
-      throw LispExecutionContextError("Xor: Parameters must be of type boolean");
+      throw LispExecutionContextError(
+          "Xor: Parameters must be of type boolean");
     }
 
     bool p1 = param1->boolean();

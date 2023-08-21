@@ -15,17 +15,12 @@ public:
   TableCell(int row, int col) : _location(col, row) {}
 
   void update_content(const std::string &content);
-
   std::string visible_content() const;
   std::string get_formula_content() const;
   bool is_formula() const;
-
   LispValuePtr lisp_value() const { return _lisp_value; }
-
   bool has_content() const;
-
   void clear();
-
   long row() const { return _location.y(); }
   long col() const { return _location.x(); }
   Location location() const { return _location; }
@@ -36,7 +31,7 @@ private:
   LispValuePtr _lisp_value;
 
   // Cell knows about its position
-  Location _location; // TODO can be const!
+  const Location _location;
 };
 
 typedef std::shared_ptr<TableCell> TableCellPtr;

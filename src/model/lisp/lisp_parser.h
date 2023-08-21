@@ -7,17 +7,11 @@
 #include <string>
 
 class LispParser {
-private:
-  std::string _lisp;
-
 public:
   LispParser(const std::string &lisp);
   ~LispParser() = default;
 
   LispTokens parse();
-
-private:
-  size_t _pos;
 
 private:
   LispToken create_double_token(LispValue::DoubleType d);
@@ -34,6 +28,10 @@ private:
   LispToken read_identifier();
   bool walk();
   char current_char() const;
+
+private:
+  size_t _pos;
+  std::string _lisp;
 };
 
 #endif

@@ -7,10 +7,6 @@
 #include <optional>
 
 class LispValueParser {
-private:
-  LispTokens _tokens;
-  size_t _pos;
-
 public:
   LispValueParser(const LispTokens &tokens, size_t start = 0) {
     _pos = start;
@@ -25,6 +21,10 @@ private:
   void skip_spaces();
   LispValuePtr parse_function();
   LispTokens collect_current_function_tokens();
+
+private:
+  LispTokens _tokens;
+  size_t _pos;
 };
 
 #endif

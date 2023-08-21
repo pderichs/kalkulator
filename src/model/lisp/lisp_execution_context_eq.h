@@ -11,8 +11,8 @@ public:
   virtual ~LispExecutionContextEq() = default;
 
   virtual LispValuePtr value(const LispFunction &func,
-                          const LispExecutionContext &execution_context,
-                          const std::any &context_param) {
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) {
     ensure_params(func);
 
     LispValuePtrVector params;

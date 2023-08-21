@@ -3,9 +3,9 @@
 
 #include <stdexcept>
 
-class ValueConversionError: public std::runtime_error {
+class ValueConversionError : public std::runtime_error {
 public:
-    ValueConversionError(const std::string& msg) : std::runtime_error(msg) {}
+  ValueConversionError(const std::string &msg) : std::runtime_error(msg) {}
 };
 
 #endif

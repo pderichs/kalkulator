@@ -344,8 +344,6 @@ void KalkulatorMainFrame::SetupUserInterface() {
   formula_sizer->Add(_text_control_formula, 1, wxEXPAND | wxALL, 2);
 
   sizer->Add(formula_sizer, 0, wxEXPAND | wxALL, 5);
-
-  // Table
   sizer->Add(_table_control, 1, wxEXPAND | wxALL, 5);
 
   SetSizerAndFit(sizer);
@@ -375,13 +373,7 @@ void KalkulatorMainFrame::OnRightDown(wxMouseEvent &WXUNUSED(event)) {
   // int x = event.GetPosition().x;
   // int y = event.GetPosition().y;
 
-  // KFigure *p = _document.getFigureAtPosition(x, y);
-  // if (p) {
-  //   wxMenu figureMenu;
-  //   figureMenu.Append(ID_FIGURE_PROPERTIES, wxT("&Properties..."),
-  //                     wxT("Properties"));
-  //   PopupMenu(&figureMenu);
-  // }
+  // TODO
 }
 
 void KalkulatorMainFrame::OnExit(wxCommandEvent &WXUNUSED(event)) {

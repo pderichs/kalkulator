@@ -4,10 +4,8 @@
 #include <stdexcept>
 
 class LispRunTimeError : public std::runtime_error {
-private:
 public:
-    LispRunTimeError(const std::string& msg): std::runtime_error(msg) {
-    }
+  LispRunTimeError(const std::string &msg) : std::runtime_error(msg) {}
 };
 
 #endif
