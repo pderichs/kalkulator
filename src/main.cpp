@@ -48,7 +48,6 @@ std::map<std::string, IconPaths> IconDictionary = {
     {"open", {"outline_folder_open_white_18dp.png", "outline_folder_open_black_18dp.png"}},
     {"save", {"outline_save_white_18dp.png", "outline_save_black_18dp.png"}},
     {"height", {"outline_height_white_18dp.png", "outline_height_black_18dp.png"}},
-
 };
 // clang-format on
 
