@@ -7,6 +7,7 @@
 #include "lisp_execution_context_eq.h"
 #include "lisp_execution_context_error.h"
 #include "lisp_execution_context_first.h"
+#include "lisp_execution_context_floor.h"
 #include "lisp_execution_context_if.h"
 #include "lisp_execution_context_join.h"
 #include "lisp_execution_context_list.h"
@@ -42,6 +43,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["xor"] = std::make_shared<LispExecutionContextXor>();
   _functions["and"] = std::make_shared<LispExecutionContextAnd>();
   _functions["avg"] = std::make_shared<LispExecutionContextAvg>();
+  _functions["floor"] = std::make_shared<LispExecutionContextFloor>();
 }
 
 LispValuePtr

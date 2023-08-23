@@ -19,6 +19,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
+- BUG: Delete button throws exception
 - BUG: Store row and column sizes
 - FEAT: Go to cell function
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
@@ -39,7 +40,6 @@ The source code and documentation of this project is licensed under the [Apache 
 - FEAT: Lisp sin
 - FEAT: Lisp root
 - FEAT: Lisp ceil
-- FEAT: Lisp floor
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
@@ -58,12 +58,13 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- FEAT: Lisp floor
 - FEAT: Provide possibility to change column width
 - FEAT: Provide possibility to change row height
 - FEAT: Add sheet selection
 - FEAT: Add "Open" action to toolbar
 - FEAT: Add "Save" menu option
-- FEAT: Add "Save" action to tool bar
+- FEAT: Add "Save" action to toolbar
 - FEAT: Update about dialog
 - FEAT: Toolbar
 - REFA: Copy/Paste should only copy values (provide alternative copy for formulas)

@@ -70,6 +70,7 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
   return LispValueFactory::new_string(s);
 }
 
+// TODO Maybe add cell specific formats
 std::string ValueConverter::to_string(const LispValuePtr &value,
                                       const std::any &context_param) {
   if (!execution_context) {
@@ -84,11 +85,13 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
     return value->string();
   } else if (value->is_double()) {
     std::stringstream ss;
-    ss << value->to_double();
+    ss << std::setprecision(
+              std::numeric_limits<LispValue::DoubleType>::max_digits10 - 1)
+       << value->to_double();
     return ss.str();
   } else if (value->is_integer()) {
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(0) << value->to_integer();
+    ss << value->to_integer();
     return ss.str();
   } else if (value->is_none()) {
     return "";
