@@ -24,6 +24,7 @@ private:
   void save_sheet(int id, const TableSheetPtr &sheet,
                   const TableWorkbookDocumentPtr &document);
   void save_cells(int id, const TableSheetPtr &sheet);
+  void save_sheet_sizes(int id, const TableSheetPtr sheet);
   std::string quote(const std::string &s) const;
   void execute_sql(const std::string &sql);
 

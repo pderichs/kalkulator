@@ -5,11 +5,13 @@
 #include <string>
 #include <vector>
 
+#define DEFAULT_ROW_HEIGHT 30
+
 struct TableRowDefinition {
   std::string caption;
   size_t height;
 
-  TableRowDefinition() { height = 30; }
+  TableRowDefinition() { height = DEFAULT_ROW_HEIGHT; }
 };
 
 typedef std::shared_ptr<TableRowDefinition> TableRowDefinitionPtr;

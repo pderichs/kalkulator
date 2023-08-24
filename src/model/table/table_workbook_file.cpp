@@ -7,10 +7,15 @@
 #include <filesystem>
 #include <sstream>
 #include <string>
+#include <tuple>
 
 static int read_sheet_callback(void *data, int argc, char **argv,
                                char **col_names) {
-  TableWorkbookDocument *workbook = (TableWorkbookDocument *)data;
+  auto param = static_cast<
+      std::tuple<TableWorkbookDocumentPtr, std::map<int, TableSheetPtr>> *>(
+      data);
+  TableWorkbookDocumentPtr workbook = std::get<0>(*param);
+  std::map<int, TableSheetPtr> *table_id_map = std::get<1>(*param);
 
   std::string curr_sheet;
   std::string active_sheet;
@@ -44,6 +49,41 @@ static int read_sheet_callback(void *data, int argc, char **argv,
   return 0;
 }
 
+static int read_sheet_size_callback(void *data, int argc, char **argv,
+                                    char **col_names) {
+  TableWorkbookDocument *workbook = (TableWorkbookDocument *)data;
+
+  std::string curr_sheet;
+  std::string active_sheet;
+  int r;
+  int c;
+
+  for (int i = 0; i < argc; i++) {
+    std::string col(col_names[i]);
+    std::string content;
+
+    if (argv[i]) {
+      content = argv[i];
+    }
+
+    if (col == "name") {
+      workbook->add_sheet(content);
+      curr_sheet = content;
+    } else if (col == "active" && content == "1") {
+      active_sheet = curr_sheet;
+    } else if (col == "current_cell_row") {
+      r = std::stoi(content);
+    } else if (col == "current_cell_col") {
+      c = std::stoi(content);
+    }
+
+    workbook->set_current_cell(curr_sheet, Location(c, r));
+  }
+
+  workbook->set_active_sheet(active_sheet);
+
+  return 0;
+}
 static int read_cells_callback(void *data, int argc, char **argv,
                                char **col_names) {
   TableWorkbookDocument *workbook = (TableWorkbookDocument *)data;
@@ -105,14 +145,30 @@ void TableWorkbookFile::close() {
 void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   workbook->clear();
 
-  // Read sheets
   char *err_msg = nullptr;
+
+  std::map<int, TableSheetPtr> table_id_map;
+
+  // Read sheets
+  auto param = std::make_tuple(workbook, &table_id_map);
   int rc = sqlite3_exec(_db, "SELECT * FROM sheets ORDER BY id ASC;",
-                        read_sheet_callback, (void *)workbook.get(), &err_msg);
+                        read_sheet_callback, (void *)&param, &err_msg);
 
   if (rc != SQLITE_OK) {
     std::stringstream ss;
     ss << "Error while reading sheet data: " << err_msg;
+    sqlite3_free(err_msg);
+    throw TableWorkbookFileError(ss.str());
+  }
+
+  // Read column and row sizes
+  param = std::make_tuple(workbook, &table_id_map);
+  rc = sqlite3_exec(_db, "SELECT * FROM sheet_sizes;", read_sheet_size_callback,
+                    (void *)&param, &err_msg);
+
+  if (rc != SQLITE_OK) {
+    std::stringstream ss;
+    ss << "Error while reading sheet sizes data: " << err_msg;
     sqlite3_free(err_msg);
     throw TableWorkbookFileError(ss.str());
   }
@@ -132,15 +188,45 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   }
 }
 
+void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr sheet) {
+  size_t s = 0;
+  for (auto col_def : sheet->column_definitions) {
+    if (col_def->width != DEFAULT_COLUMN_WIDTH) {
+      std::stringstream sql;
+      sql << "INSERT INTO sheet_sizes (sheet_id, row, col, size)"
+          << "VALUES (";
+      sql << id << ", NULL, " << s << "," << col_def->width;
+      sql << ");";
+
+      execute_sql(sql.str());
+    }
+
+    s++;
+  }
+
+  s = 0;
+  for (auto row_def : sheet->row_definitions) {
+    if (row_def->height != DEFAULT_ROW_HEIGHT) {
+      std::stringstream sql;
+      sql << "INSERT INTO sheet_sizes (sheet_id, row, col, size)"
+          << "VALUES (";
+      sql << id << ", " << s << ", NULL, " << row_def->height;
+      sql << ");";
+
+      execute_sql(sql.str());
+    }
+
+    s++;
+  }
+}
+
 void TableWorkbookFile::write(const TableWorkbookDocumentPtr &workbook) {
   create_tables();
-
-  execute_sql("DELETE FROM sheets;");
-  execute_sql("DELETE FROM cells;");
 
   int id = 1;
   const auto &sheets = workbook->sheets();
   for (const auto &sheet : sheets) {
+    save_sheet_sizes(id, sheet);
     save_sheet(id, sheet, workbook);
     id++;
   }
@@ -161,6 +247,16 @@ void TableWorkbookFile::create_tables() {
       "    current_cell_col INT NOT NULL,"
       "    active BOOL NOT NULL);"
       ""
+      "CREATE TABLE IF NOT EXISTS sheet_sizes ("
+      "    sheet_id INT NOT NULL,"
+      "    row INT,"
+      "    col INT,"
+      "    size INT NOT NULL,"
+      ""
+      "    FOREIGN KEY (sheet_id)"
+      "    REFERENCES sheets (id)"
+      "    ON DELETE CASCADE);"
+      ""
       "CREATE TABLE IF NOT EXISTS cells ("
       "    sheet_id INT NOT NULL,"
       "    row INT NOT NULL,"
@@ -177,8 +273,9 @@ void TableWorkbookFile::create_tables() {
       "DELETE FROM meta;"
       "DELETE FROM sheets;"
       "DELETE FROM cells;"
+      "DELETE FROM sheet_sizes;"
       ""
-      "INSERT INTO meta (property, value) VALUES ('version', '0.0.1a');";
+      "INSERT INTO meta (property, value) VALUES ('version', '0.0.2a');";
 
   int rc = sqlite3_exec(_db, sql.c_str(), nullptr, nullptr, &err_msg);
 

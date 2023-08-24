@@ -5,11 +5,13 @@
 #include <string>
 #include <vector>
 
+#define DEFAULT_COLUMN_WIDTH 100
+
 struct TableColumnDefinition {
   std::string caption;
   size_t width;
 
-  TableColumnDefinition() { width = 100; }
+  TableColumnDefinition() { width = DEFAULT_COLUMN_WIDTH; }
 };
 
 typedef std::shared_ptr<TableColumnDefinition> TableColumnDefinitionPtr;

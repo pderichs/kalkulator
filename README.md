@@ -19,7 +19,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- BUG: Delete button throws exception
 - BUG: Store row and column sizes
 - FEAT: Go to cell function
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
