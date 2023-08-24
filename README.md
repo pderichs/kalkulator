@@ -19,7 +19,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- BUG: Store row and column sizes
 - FEAT: Go to cell function
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
@@ -57,6 +56,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- BUG: Store row and column sizes
 - FEAT: Lisp floor
 - FEAT: Provide possibility to change column width
 - FEAT: Provide possibility to change row height

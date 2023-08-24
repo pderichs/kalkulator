@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <locale>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 
@@ -78,12 +79,14 @@ static int read_sheet_size_callback(void *data, int argc, char **argv,
       content = argv[i];
     }
 
-    if (col == "id") {
+    if (col == "sheet_id") {
       int id = std::stoi(content);
       auto it = table_id_map->find(id);
-      if (it != table_id_map->end()) {
-        referenced_sheet = it->second;
+      if (it == table_id_map->end()) {
+        throw std::runtime_error("Unexpected: Unknown sheet id");
       }
+
+      referenced_sheet = it->second;
     } else if (col == "row") {
       if (!content.empty()) {
         r = std::stoi(content);
@@ -96,6 +99,8 @@ static int read_sheet_size_callback(void *data, int argc, char **argv,
       size = std::stoi(content);
     }
   }
+
+  assert(referenced_sheet);
 
   if (r != -1) {
     referenced_sheet->set_row_height(r, size);
