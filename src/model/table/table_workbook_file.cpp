@@ -3,8 +3,10 @@
 #include "table_sheet.h"
 #include "table_workbook_document.h"
 #include "table_workbook_file_error.h"
+#include <cassert>
 #include <cstddef>
 #include <filesystem>
+#include <locale>
 #include <sstream>
 #include <string>
 #include <tuple>
@@ -12,13 +14,15 @@
 static int read_sheet_callback(void *data, int argc, char **argv,
                                char **col_names) {
   auto param = static_cast<
-      std::tuple<TableWorkbookDocumentPtr, std::map<int, TableSheetPtr>> *>(
+      std::tuple<TableWorkbookDocumentPtr, std::map<int, TableSheetPtr> *> *>(
       data);
   TableWorkbookDocumentPtr workbook = std::get<0>(*param);
   std::map<int, TableSheetPtr> *table_id_map = std::get<1>(*param);
 
+  TableSheetPtr current_sheet_ptr;
   std::string curr_sheet;
   std::string active_sheet;
+  int id = 0;
   int r;
   int c;
 
@@ -31,7 +35,7 @@ static int read_sheet_callback(void *data, int argc, char **argv,
     }
 
     if (col == "name") {
-      workbook->add_sheet(content);
+      current_sheet_ptr = workbook->add_sheet(content);
       curr_sheet = content;
     } else if (col == "active" && content == "1") {
       active_sheet = curr_sheet;
@@ -39,24 +43,32 @@ static int read_sheet_callback(void *data, int argc, char **argv,
       r = std::stoi(content);
     } else if (col == "current_cell_col") {
       c = std::stoi(content);
+    } else if (col == "id") {
+      id = std::stoi(content);
     }
-
-    workbook->set_current_cell(curr_sheet, Location(c, r));
   }
 
   workbook->set_active_sheet(active_sheet);
+  workbook->set_current_cell(curr_sheet, Location(c, r));
+
+  assert(id > 0);
+  (*table_id_map)[id] = current_sheet_ptr;
 
   return 0;
 }
 
 static int read_sheet_size_callback(void *data, int argc, char **argv,
                                     char **col_names) {
-  TableWorkbookDocument *workbook = (TableWorkbookDocument *)data;
+  auto param = static_cast<
+      std::tuple<TableWorkbookDocumentPtr, std::map<int, TableSheetPtr> *> *>(
+      data);
+  TableWorkbookDocumentPtr workbook = std::get<0>(*param);
+  std::map<int, TableSheetPtr> *table_id_map = std::get<1>(*param);
 
-  std::string curr_sheet;
-  std::string active_sheet;
-  int r;
-  int c;
+  TableSheetPtr referenced_sheet;
+  int r = -1;
+  int c = -1;
+  int size = -1;
 
   for (int i = 0; i < argc; i++) {
     std::string col(col_names[i]);
@@ -66,21 +78,30 @@ static int read_sheet_size_callback(void *data, int argc, char **argv,
       content = argv[i];
     }
 
-    if (col == "name") {
-      workbook->add_sheet(content);
-      curr_sheet = content;
-    } else if (col == "active" && content == "1") {
-      active_sheet = curr_sheet;
-    } else if (col == "current_cell_row") {
-      r = std::stoi(content);
-    } else if (col == "current_cell_col") {
-      c = std::stoi(content);
+    if (col == "id") {
+      int id = std::stoi(content);
+      auto it = table_id_map->find(id);
+      if (it != table_id_map->end()) {
+        referenced_sheet = it->second;
+      }
+    } else if (col == "row") {
+      if (!content.empty()) {
+        r = std::stoi(content);
+      }
+    } else if (col == "col") {
+      if (!content.empty()) {
+        c = std::stoi(content);
+      }
+    } else if (col == "size") {
+      size = std::stoi(content);
     }
-
-    workbook->set_current_cell(curr_sheet, Location(c, r));
   }
 
-  workbook->set_active_sheet(active_sheet);
+  if (r != -1) {
+    referenced_sheet->set_row_height(r, size);
+  } else if (c != -1) {
+    referenced_sheet->set_column_width(c, size);
+  }
 
   return 0;
 }

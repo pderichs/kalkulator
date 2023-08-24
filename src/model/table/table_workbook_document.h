@@ -23,7 +23,7 @@ public:
   void initialize();
   void clear_and_initialize();
   void clear();
-  void add_sheet(const std::string &name);
+  TableSheetPtr add_sheet(const std::string &name);
   void clear_changed_flag() { _changed = false; }
   void set_active_sheet(const std::string &name);
   void set_current_cell(const std::string &sheet_name,

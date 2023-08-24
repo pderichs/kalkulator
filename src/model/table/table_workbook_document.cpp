@@ -221,9 +221,12 @@ void TableWorkbookDocument::clear() {
   _current_sheet = {};
 }
 
-void TableWorkbookDocument::add_sheet(const std::string &name) {
-  _sheets.push_back(std::make_shared<TableSheet>(name));
+TableSheetPtr TableWorkbookDocument::add_sheet(const std::string &name) {
+  const auto& result = std::make_shared<TableSheet>(name);
+  _sheets.push_back(result);
   _changed = true;
+
+  return result;
 }
 
 void TableWorkbookDocument::set_active_sheet(const std::string &name) {

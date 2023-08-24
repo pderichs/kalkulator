@@ -221,12 +221,20 @@ size_t TableSheet::get_current_row_height() const {
   return row_def->height;
 }
 
-void TableSheet::set_current_column_width(size_t width) {
-  TableColumnDefinitionPtr col_def = column_definitions[current_cell.x()];
+void TableSheet::set_column_width(size_t idx, size_t width) {
+  TableColumnDefinitionPtr col_def = column_definitions[idx];
   col_def->width = width;
 }
 
-void TableSheet::set_current_row_height(size_t height) {
-  TableRowDefinitionPtr row_def = row_definitions[current_cell.y()];
+void TableSheet::set_row_height(size_t idx, size_t height) {
+  TableRowDefinitionPtr row_def = row_definitions[idx];
   row_def->height = height;
+}
+
+void TableSheet::set_current_column_width(size_t width) {
+  set_column_width(current_cell.x(), width);
+}
+
+void TableSheet::set_current_row_height(size_t height) {
+  set_row_height(current_cell.y(), height);
 }

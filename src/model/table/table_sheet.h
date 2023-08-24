@@ -62,6 +62,8 @@ struct TableSheet {
   size_t get_current_column_width() const;
   size_t get_current_row_height() const;
 
+  void set_column_width(size_t idx, size_t width);
+  void set_row_height(size_t idx, size_t height);
   void set_current_column_width(size_t width);
   void set_current_row_height(size_t height);
 
