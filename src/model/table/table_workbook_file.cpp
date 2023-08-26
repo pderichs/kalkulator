@@ -143,6 +143,7 @@ static int read_cells_callback(void *data, int argc, char **argv,
 
   return 0;
 }
+
 TableWorkbookFile::TableWorkbookFile() { _db = nullptr; }
 
 TableWorkbookFile::~TableWorkbookFile() { close(); }
