@@ -98,6 +98,8 @@ private:
 
   void SaveDocument(const std::string &file_path);
 
+  void UpdateFormulaBySelectedCell(const Location &location);
+
 private:
   TableWorkbookDocumentPtr _document;
   TableControl *_table_control;
@@ -510,6 +512,18 @@ void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
   event.Skip();
 }
 
+void KalkulatorMainFrame::UpdateFormulaBySelectedCell(
+    const Location &location) {
+  auto cell = _document->get_current_cell();
+
+  if (cell && cell->row() == location.y() && cell->col() == location.x()) {
+    std::string formula = cell->get_formula_content();
+    _text_control_formula->SetValue(formula);
+  } else {
+    _text_control_formula->SetValue("");
+  }
+}
+
 void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
   // wxPrintf("* EVENT: ");
 
@@ -540,20 +554,29 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
     break;
 
+  case FORMULA_CANCEL: {
+    if (_text_control_formula->IsModified() &&
+        wxMessageBox(
+            wxT("Current content has not been applied. Your changes will "
+                "be lost. Proceed?"),
+            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxYES) {
+      _table_control->SetFocus();
+
+      std::optional<Location> location =
+          _document->current_sheet_selected_cell();
+      if (location) {
+        UpdateFormulaBySelectedCell(*location);
+      }
+    }
+  } break;
+
   case CELL_UPDATED:
     try {
       Location location(std::any_cast<Location>(param));
 
       _table_control->OnCellUpdate(location);
 
-      auto cell = _document->get_current_cell();
-
-      if (cell && cell->row() == location.y() && cell->col() == location.x()) {
-        std::string formula = cell->get_formula_content();
-        _text_control_formula->SetValue(formula);
-      } else {
-        _text_control_formula->SetValue("");
-      }
+      UpdateFormulaBySelectedCell(location);
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for cell update. Event will be "
                "ignored.\n");

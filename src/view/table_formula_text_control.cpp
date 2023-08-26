@@ -21,6 +21,15 @@ void TableFormulaTextControl::OnKeyPress(wxKeyEvent &event) {
       _event_sink->send_event(FORMULA_UPDATE, content);
     }
     break;
+
+  case WXK_ESCAPE:
+    // Does nothing. Moved handling to main frame.
+    // if (IsModified()) {
+    //   Undo();
+    // }
+
+    _event_sink->send_event(FORMULA_CANCEL, {});
+    break;
   }
 
   event.Skip();

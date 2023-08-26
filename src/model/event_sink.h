@@ -11,6 +11,7 @@ enum TableEvent {
   SHEET_SELECTION_UPDATED,
   COLUMN_WIDTH_UPDATED,
   ROW_HEIGHT_UPDATED,
+  FORMULA_CANCEL,
 };
 
 class EventSink {

@@ -39,6 +39,8 @@ public:
   bool move_cursor_page_up();
   bool move_cursor_page_down();
 
+  std::optional<Location> current_sheet_selected_cell() const;
+
   Location get_cell_by_pos(const Location &position) const;
   void select_cell(const Location &cell);
 

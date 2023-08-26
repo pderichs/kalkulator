@@ -56,6 +56,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- FEAT: Pressing Escape in editor control should move focus back to cells view
 - BUG: Store row and column sizes
 - FEAT: Lisp floor
 - FEAT: Provide possibility to change column width

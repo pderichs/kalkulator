@@ -321,3 +321,11 @@ void TableWorkbookDocument::set_current_row_height(size_t height) {
   _changed = true;
   _event_sink->send_event(ROW_HEIGHT_UPDATED, {});
 }
+
+std::optional<Location> TableWorkbookDocument::current_sheet_selected_cell() const {
+  if (_current_sheet) {
+    return _current_sheet->current_cell;
+  }
+
+  return {};
+}
