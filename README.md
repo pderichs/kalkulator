@@ -20,6 +20,9 @@ The source code and documentation of this project is licensed under the [Apache 
 ## TODO List
 
 - FEAT: Go to cell function
+- FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
+  - @ x y (goto cell)
+  - ...
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/

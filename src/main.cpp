@@ -1,4 +1,5 @@
 #include <memory>
+#include <regex>
 #include <sched.h>
 #include <sstream>
 #include <stdexcept>
@@ -75,6 +76,7 @@ private:
   void OnSheetSelectionCombo(wxCommandEvent &event);
   void OnResizeColumn(wxCommandEvent &event);
   void OnResizeRow(wxCommandEvent &event);
+  void OnGotoCell(wxCommandEvent &WXUNUSED(event));
 
   void BindEvents();
   void CreateToolbar();
@@ -125,6 +127,7 @@ enum {
   ID_New,
   ID_ResizeColumn,
   ID_ResizeRow,
+  ID_GotoCell,
 };
 
 enum { ID_SHEET_SELECTION_CMB = wxID_HIGHEST + 1 };
@@ -286,6 +289,12 @@ void KalkulatorMainFrame::InitializeMenu() {
   item->SetBitmap(*_icon_height);
   menuTable->Append(item);
 
+  menuTable->AppendSeparator();
+
+  item = new wxMenuItem(menuTable, ID_GotoCell, "&Goto cell...\tCtrl-G",
+                        "Select cell by entering the desired coordinates.");
+  menuTable->Append(item);
+
   wxMenu *menuHelp = new wxMenu();
   menuHelp->Append(wxID_ABOUT);
 
@@ -361,6 +370,7 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSaveAs, this, ID_SaveAs);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnResizeColumn, this, ID_ResizeColumn);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnResizeRow, this, ID_ResizeRow);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnGotoCell, this, ID_GotoCell);
 
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
@@ -568,7 +578,9 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
         UpdateFormulaBySelectedCell(*location);
       }
     }
-  } break;
+  }
+
+  break;
 
   case CELL_UPDATED:
     try {
@@ -679,4 +691,37 @@ void KalkulatorMainFrame::OnResizeRow(wxCommandEvent &WXUNUSED(event)) {
   }
 
   _document->set_current_row_height(static_cast<size_t>(entry));
+}
+
+void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
+  wxString raw_input =
+      wxGetTextFromUser(wxT("Please enter row and col:"), wxT("Goto cell"), "");
+
+  if (raw_input.IsEmpty()) {
+    return;
+  }
+
+  int row;
+  int col;
+
+  std::string input{(const char *)raw_input};
+
+  std::regex exp{"(\\d+) (\\d+)"};
+  std::smatch sm;
+
+  if (!std::regex_search(input, sm, exp)) {
+    wxMessageBox("Invalid input. Please enter the coordinates row and col "
+                 "separated by space.",
+                 "Goto cell error", wxICON_EXCLAMATION);
+
+    return;
+  }
+
+  row = std::stoi(sm[1].str());
+  col = std::stoi(sm[2].str());
+
+  _document->select_cell(Location(col, row));
+
+  _table_control->ScrollToCurrentCell(); // TODO Add option to scroll cell to
+                                         // center of view?
 }

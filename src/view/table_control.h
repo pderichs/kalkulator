@@ -25,6 +25,7 @@ public:
   void OnCellUpdate(const Location &location);
   void OnSetFocus(wxFocusEvent &event);
   void update_scroll_positions(const Location &scroll_pos);
+  void ScrollToCurrentCell();
 
 protected:
   void Init();

@@ -30,6 +30,7 @@ public:
   void OnCellUpdate(const Location &location);
 
   virtual void ScrollWindow(int dx, int dy, const wxRect *rect);
+  void ScrollToCurrentCell();
 
 private:
   void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height,
@@ -37,7 +38,6 @@ private:
   wxRect GetCellRectByLocation(const Location &cell);
   wxRect GetCurrentScrollArea() const;
 
-  void ScrollToCurrentCell();
   Location GetTableCellByClickPosition(const wxPoint &pos) const;
   void ScrollToCell(const Location &cell, TableCellOrientation orientation);
 
