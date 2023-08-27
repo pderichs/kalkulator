@@ -471,7 +471,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
     _document->clear_changed_flag();
     _document->set_file_path(file_path);
   } catch (TableWorkbookFileError &twfe) {
-    wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
+    wxLogError("Cannot open file '%s'.\n\nMessage: %s", openFileDialog.GetPath(), twfe.what());
   }
 
   Refresh();

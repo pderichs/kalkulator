@@ -4,6 +4,7 @@
 #include "sqlite3.h"
 #include "table_sheet.h"
 #include "table_workbook_document.h"
+#include "tools.h"
 #include <string>
 
 class TableWorkbookFile {
@@ -30,9 +31,13 @@ private:
 
   std::string lisp_value_type_to_string(LispValueType t) const;
 
+  void read_tables();
+  bool has_table(const std::string &name);
+
 private:
   std::string _file_path;
   sqlite3 *_db;
+  StringVector _tables;
 };
 
 #endif

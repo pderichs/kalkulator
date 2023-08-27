@@ -19,7 +19,12 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- FEAT: Go to cell function
+- FEAT: Add simple format: bold
+- FEAT: Add simple format: italic
+- FEAT: Add simple format: underlined
+- FEAT: Add simple format: background color
+- FEAT: Add simple format: foreground color
+- FEAT: Add simple format: font size
 - FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
   - @ x y (goto cell)
   - ...
@@ -48,17 +53,13 @@ The source code and documentation of this project is licensed under the [Apache 
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - lambda
 - MAYB: Cache function results (see field _func_result on LispValue)
-- FEAT: Add simple format: bold
-- FEAT: Add simple format: italic
-- FEAT: Add simple format: underlined
-- FEAT: Add simple format: background color
-- FEAT: Add simple format: foreground color
-- FEAT: Add simple format: font size
 - FEAT: Add application settings (e.g. size of undo steps)
 - DOC: Add explanation of functions (especially behaviour of eq)
+- FEAT: Cell comments
 
 # DONE
 
+- FEAT: Go to cell function
 - FEAT: Pressing Escape in editor control should move focus back to cells view
 - BUG: Store row and column sizes
 - FEAT: Lisp floor

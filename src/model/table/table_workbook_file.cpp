@@ -3,6 +3,7 @@
 #include "table_sheet.h"
 #include "table_workbook_document.h"
 #include "table_workbook_file_error.h"
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <filesystem>
@@ -11,6 +12,21 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
+
+static int read_tables_callback(void *data, int argc, char **argv,
+                                char **col_names) {
+  auto tables = static_cast<StringVector *>(data);
+
+  for (int i = 0; i < argc; i++) {
+    std::string col(col_names[i]);
+
+    if (col == "name" && argv[i]) {
+      tables->push_back(argv[i]);
+    }
+  }
+
+  return 0;
+}
 
 static int read_sheet_callback(void *data, int argc, char **argv,
                                char **col_names) {
@@ -110,6 +126,7 @@ static int read_sheet_size_callback(void *data, int argc, char **argv,
 
   return 0;
 }
+
 static int read_cells_callback(void *data, int argc, char **argv,
                                char **col_names) {
   TableWorkbookDocument *workbook = (TableWorkbookDocument *)data;
@@ -160,6 +177,12 @@ void TableWorkbookFile::open(const std::string &filename) {
   }
 
   _file_path = filename;
+
+  read_tables();
+
+  if (!has_table("meta") || !has_table("sheets") || !has_table("cells")) {
+    throw TableWorkbookFileError("Invalid file structure.");
+  }
 }
 
 void TableWorkbookFile::close() {
@@ -189,15 +212,17 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   }
 
   // Read column and row sizes
-  param = std::make_tuple(workbook, &table_id_map);
-  rc = sqlite3_exec(_db, "SELECT * FROM sheet_sizes;", read_sheet_size_callback,
-                    (void *)&param, &err_msg);
+  if (has_table("sheet_sizes")) {
+    param = std::make_tuple(workbook, &table_id_map);
+    rc = sqlite3_exec(_db, "SELECT * FROM sheet_sizes;",
+                      read_sheet_size_callback, (void *)&param, &err_msg);
 
-  if (rc != SQLITE_OK) {
-    std::stringstream ss;
-    ss << "Error while reading sheet sizes data: " << err_msg;
-    sqlite3_free(err_msg);
-    throw TableWorkbookFileError(ss.str());
+    if (rc != SQLITE_OK) {
+      std::stringstream ss;
+      ss << "Error while reading sheet sizes data: " << err_msg;
+      sqlite3_free(err_msg);
+      throw TableWorkbookFileError(ss.str());
+    }
   }
 
   // Read cells
@@ -378,4 +403,25 @@ void TableWorkbookFile::save_cells(int id, const TableSheetPtr &sheet) {
   }
 
   execute_sql(ss.str());
+}
+
+void TableWorkbookFile::read_tables() {
+  _tables.clear();
+
+  char *err_msg;
+
+  int rc =
+      sqlite3_exec(_db, "SELECT name FROM sqlite_schema WHERE type='table';",
+                   read_tables_callback, (void *)&_tables, &err_msg);
+
+  if (rc != SQLITE_OK) {
+    std::stringstream ss;
+    ss << "Error while reading tables: " << err_msg;
+    sqlite3_free(err_msg);
+    throw TableWorkbookFileError(ss.str());
+  }
+}
+
+bool TableWorkbookFile::has_table(const std::string &name) {
+  return std::find(_tables.begin(), _tables.end(), name) != _tables.end();
 }
