@@ -238,3 +238,8 @@ void TableSheet::set_current_column_width(size_t width) {
 void TableSheet::set_current_row_height(size_t height) {
   set_row_height(current_cell.y(), height);
 }
+
+void TableSheet::set_current_cell_format(const TableCellFormat& format) {
+  TableCellPtr cell = get_current_cell();
+  cell->set_format(format);
+}

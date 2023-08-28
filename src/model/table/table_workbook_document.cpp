@@ -329,3 +329,9 @@ std::optional<Location> TableWorkbookDocument::current_sheet_selected_cell() con
 
   return {};
 }
+
+void TableWorkbookDocument::set_current_cell_format(const TableCellFormat& format) {
+  if (_current_sheet) {
+    _current_sheet->set_current_cell_format(format);
+  }
+}

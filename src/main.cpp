@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <memory>
 #include <regex>
 #include <sched.h>
@@ -8,6 +9,7 @@
 #include <wx/dcclient.h>
 #include <wx/event.h>
 #include <wx/filename.h>
+#include <wx/fontdlg.h>
 #include <wx/msgdlg.h>
 #include <wx/numdlg.h>
 #include <wx/rawbmp.h>
@@ -23,6 +25,7 @@
 #include "model/lisp/value_converter.h"
 #include "model/table/lisp_execution_context_cell_range.h"
 #include "model/table/lisp_execution_context_cell_reference.h"
+#include "model/table/table_cell_format.h"
 #include "model/table/table_workbook_document.h"
 #include "model/table/table_workbook_file.h"
 #include "model/table/table_workbook_file_error.h"
@@ -76,7 +79,8 @@ private:
   void OnSheetSelectionCombo(wxCommandEvent &event);
   void OnResizeColumn(wxCommandEvent &event);
   void OnResizeRow(wxCommandEvent &event);
-  void OnGotoCell(wxCommandEvent &WXUNUSED(event));
+  void OnGotoCell(wxCommandEvent &event);
+  void OnFormatCell(wxCommandEvent &event);
 
   void BindEvents();
   void CreateToolbar();
@@ -90,6 +94,8 @@ private:
   virtual void send_event(TableEvent event_id, std::any param);
 
   bool PermitLoseChanges();
+
+  TableCellFormat ConvertToTableCellFormat(const wxFont& font);
 
   bool IsDarkUI() const {
     wxSystemAppearance s = wxSystemSettings::GetAppearance();
@@ -128,6 +134,7 @@ enum {
   ID_ResizeColumn,
   ID_ResizeRow,
   ID_GotoCell,
+  ID_FormatCell,
 };
 
 enum { ID_SHEET_SELECTION_CMB = wxID_HIGHEST + 1 };
@@ -295,6 +302,10 @@ void KalkulatorMainFrame::InitializeMenu() {
                         "Select cell by entering the desired coordinates.");
   menuTable->Append(item);
 
+  item = new wxMenuItem(menuTable, ID_FormatCell, "&Format Cell...",
+                        "Edit format options for current cell.");
+  menuTable->Append(item);
+
   wxMenu *menuHelp = new wxMenu();
   menuHelp->Append(wxID_ABOUT);
 
@@ -371,6 +382,7 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnResizeColumn, this, ID_ResizeColumn);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnResizeRow, this, ID_ResizeRow);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnGotoCell, this, ID_GotoCell);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnFormatCell, this, ID_FormatCell);
 
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
@@ -471,7 +483,8 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
     _document->clear_changed_flag();
     _document->set_file_path(file_path);
   } catch (TableWorkbookFileError &twfe) {
-    wxLogError("Cannot open file '%s'.\n\nMessage: %s", openFileDialog.GetPath(), twfe.what());
+    wxLogError("Cannot open file '%s'.\n\nMessage: %s",
+               openFileDialog.GetPath(), twfe.what());
   }
 
   Refresh();
@@ -728,4 +741,31 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
 
   _table_control->ScrollToCurrentCell(); // TODO Add option to scroll cell to
                                          // center of view?
+}
+
+TableCellFormat KalkulatorMainFrame::ConvertToTableCellFormat(const wxFont& font) {
+  TableCellFormat format;
+
+  format.font_size = static_cast<size_t>(font.GetPointSize());
+  format.font_name = static_cast<const char*>(font.GetFaceName());
+  format.underlined = font.GetUnderlined();
+  format.bold = font.GetWeight() == wxFONTWEIGHT_BOLD;
+  format.italic = font.GetStyle() == wxFONTSTYLE_ITALIC;
+  // TODO: Colors
+
+  return format;
+}
+
+void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
+  // TODO Use specialized dialog instead of standard one
+  // TODO Set font / format options of current cell
+
+  wxFontDialog *fontDialog = new wxFontDialog(this);
+
+  if (fontDialog->ShowModal() == wxID_OK) {
+    wxFont font = fontDialog->GetFontData().GetChosenFont();
+
+    TableCellFormat format = ConvertToTableCellFormat(font);
+    _document->set_current_cell_format(format);
+  }
 }

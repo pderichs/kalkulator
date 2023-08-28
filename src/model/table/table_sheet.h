@@ -67,6 +67,8 @@ struct TableSheet {
   void set_current_column_width(size_t width);
   void set_current_row_height(size_t height);
 
+  void set_current_cell_format(const TableCellFormat& format);
+
 private:
   void apply_state_change_item(const StateHistoryItemPtr &state);
 };

@@ -3,6 +3,7 @@
 
 #include "../event_sink.h"
 #include "table_cell.h"
+#include "table_cell_format.h"
 #include "table_sheet.h"
 #include <memory>
 #include <string>
@@ -74,6 +75,8 @@ public:
 
   void undo();
   void redo();
+
+  void set_current_cell_format(const TableCellFormat& format);
 
 private:
   std::string _path;

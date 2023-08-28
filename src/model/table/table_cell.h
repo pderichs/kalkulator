@@ -9,6 +9,7 @@
 #include "../lisp/value_converter.h"
 
 #include "location.h"
+#include "table_cell_format.h"
 
 class TableCell {
 public:
@@ -25,6 +26,10 @@ public:
   long col() const { return _location.x(); }
   Location location() const { return _location; }
 
+  bool has_format() const { return static_cast<bool>(_format); }
+  TableCellFormat format() const { return *_format; }
+  void set_format(const TableCellFormat &format) { _format = format; }
+
 private:
   std::string _formula_content;
 
@@ -32,6 +37,8 @@ private:
 
   // Cell knows about its position
   const Location _location;
+
+  std::optional<TableCellFormat> _format;
 };
 
 typedef std::shared_ptr<TableCell> TableCellPtr;
