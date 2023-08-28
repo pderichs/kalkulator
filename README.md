@@ -19,7 +19,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- BUG: Icon of app in GNOME shows "Unknown" in the tooltip when hovering over the icon
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
 - FEAT: Add simple format: underlined
