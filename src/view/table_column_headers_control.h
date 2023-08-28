@@ -17,6 +17,7 @@ public:
 
   void OnDraw(wxDC &dc);
   virtual wxSize DoGetBestSize() const;
+  void OnFocus(wxFocusEvent& WXUNUSED(event));
 
 private:
   void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height,

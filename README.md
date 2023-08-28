@@ -19,6 +19,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
+- BUG: Icon of app in GNOME shows "Unknown" in the tooltip when hovering over the icon
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
 - FEAT: Add simple format: underlined
@@ -59,6 +60,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- BUG: When header controls get focus, they handle key presses by themselves - switch focus back to cells as soon as header gets focused
 - FEAT: Go to cell function
 - FEAT: Pressing Escape in editor control should move focus back to cells view
 - BUG: Store row and column sizes

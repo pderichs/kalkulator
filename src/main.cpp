@@ -630,6 +630,10 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
   case COLUMN_WIDTH_UPDATED:
     _table_control->Refresh();
     break;
+
+  case HEADER_GOT_FOCUS:
+    _table_control->SetFocus();
+    break;
   }
 }
 

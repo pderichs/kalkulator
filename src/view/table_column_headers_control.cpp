@@ -17,6 +17,8 @@ TableColumnHeadersControl::TableColumnHeadersControl(
   SetScrollRate(10, 0);
   SetVirtualSize(width, COLUMN_HEADER_HEIGHT);
   EnableScrolling(false, false);
+
+  Bind(wxEVT_SET_FOCUS, &TableColumnHeadersControl::OnFocus, this);
 }
 
 void TableColumnHeadersControl::OnDraw(wxDC &dc) {
@@ -78,4 +80,8 @@ void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
 
 wxSize TableColumnHeadersControl::DoGetBestSize() const {
   return wxSize(100, COLUMN_HEADER_HEIGHT);
+}
+
+void TableColumnHeadersControl::OnFocus(wxFocusEvent &WXUNUSED(event)) {
+  _event_sink->send_event(HEADER_GOT_FOCUS, {});
 }

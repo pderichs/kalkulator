@@ -12,6 +12,7 @@ enum TableEvent {
   COLUMN_WIDTH_UPDATED,
   ROW_HEIGHT_UPDATED,
   FORMULA_CANCEL,
+  HEADER_GOT_FOCUS,
 };
 
 class EventSink {

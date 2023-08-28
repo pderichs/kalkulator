@@ -18,6 +18,12 @@ TableRowHeadersControl::TableRowHeadersControl(
   SetScrollRate(0, 10);
   SetVirtualSize(ROW_HEADER_WIDTH, height);
   EnableScrolling(false, false);
+
+  Bind(wxEVT_SET_FOCUS, &TableRowHeadersControl::OnFocus, this);
+}
+
+void TableRowHeadersControl::OnFocus(wxFocusEvent& WXUNUSED(event)) {
+  _event_sink->send_event(HEADER_GOT_FOCUS, {});
 }
 
 void TableRowHeadersControl::OnDraw(wxDC &dc) {
