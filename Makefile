@@ -28,6 +28,7 @@ SRCS+=$(SRC_DIR)/view/table_row_headers_control.cpp
 SRCS+=$(SRC_DIR)/view/table_column_headers_control.cpp
 SRCS+=$(SRC_DIR)/view/table_sheet_view.cpp
 SRCS+=$(SRC_DIR)/view/table_formula_text_control.cpp
+SRCS+=$(SRC_DIR)/view/table_cell_format_dlg.cpp
 SRCS+=$(SRC_DIR)/model/table/table_sheet.cpp
 SRCS+=$(SRC_DIR)/model/table/table_cell.cpp
 SRCS+=$(SRC_DIR)/model/table/table_workbook_document.cpp
