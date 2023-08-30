@@ -1,6 +1,7 @@
 #ifndef TABLE_CELL_FORMAT_DLG_INCLUDED
 #define TABLE_CELL_FORMAT_DLG_INCLUDED
 
+#include <optional>
 #include <wx/artprov.h>
 #include <wx/bitmap.h>
 #include <wx/button.h>
@@ -18,6 +19,8 @@
 #include <wx/stattext.h>
 #include <wx/string.h>
 #include <wx/xrc/xmlres.h>
+
+#include "../model/table/table_cell_format.h"
 
 class TableCellFormatDlg : public wxDialog {
 protected:
@@ -37,6 +40,9 @@ protected:
   wxButton *m_btnOK;
   wxButton *m_btnCancel;
 
+  void OnOK(wxCommandEvent &event);
+  void OnCancel(wxCommandEvent &event);
+
 public:
   TableCellFormatDlg(wxWindow *parent, wxWindowID id = wxID_ANY,
                      const wxString &title = wxT("Format Cell"),
@@ -45,6 +51,18 @@ public:
                      long style = wxDEFAULT_DIALOG_STYLE);
 
   ~TableCellFormatDlg();
+
+  void InitializeFontCombo();
+
+  TableCellFormat GetFormat() const;
+
+  TableCellColor wxColourToTableCellColor(const wxColour &color) const;
+  void OnSelectForegroundColor(wxCommandEvent &WXUNUSED(event));
+  void OnSelectBackgroundColor(wxCommandEvent &WXUNUSED(event));
+
+private:
+  std::optional<wxColour> _background_color;
+  std::optional<wxColour> _foreground_color;
 };
 
 #endif

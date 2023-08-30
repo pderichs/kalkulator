@@ -1,4 +1,7 @@
 #include "table_cell_format_dlg.h"
+#include <wx/colordlg.h>
+#include <wx/fontenum.h>
+#include <wx/wx.h>
 
 TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent, wxWindowID id,
                                        const wxString &title,
@@ -35,8 +38,8 @@ TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent, wxWindowID id,
   m_lblFontName->Wrap(-1);
   bSizerFontName->Add(m_lblFontName, 0, wxALL, 5);
 
-  m_cmbFontName = new wxComboBox(this, wxID_ANY, wxT("Combo!"),
-                                 wxDefaultPosition, wxDefaultSize, 0, NULL, 0);
+  m_cmbFontName = new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition,
+                                 wxDefaultSize, 0, NULL, 0);
   bSizerFontName->Add(m_cmbFontName, 1, wxALL, 5);
 
   bSizerGlobal->Add(bSizerFontName, 0, wxEXPAND, 5);
@@ -115,6 +118,82 @@ TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent, wxWindowID id,
   this->Layout();
 
   this->Centre(wxBOTH);
+
+  m_btnOK->Bind(wxEVT_BUTTON, &TableCellFormatDlg::OnOK, this);
+  m_btnCancel->Bind(wxEVT_BUTTON, &TableCellFormatDlg::OnCancel, this);
+  m_btnSelectBackgroundColor->Bind(
+      wxEVT_BUTTON, &TableCellFormatDlg::OnSelectBackgroundColor, this);
+  m_btnSelectForegroundColor->Bind(
+      wxEVT_BUTTON, &TableCellFormatDlg::OnSelectForegroundColor, this);
+
+  InitializeFontCombo();
 }
 
 TableCellFormatDlg::~TableCellFormatDlg() {}
+
+void TableCellFormatDlg::InitializeFontCombo() {
+  m_cmbFontName->Insert(wxFontEnumerator::GetFacenames(), 0);
+}
+
+void TableCellFormatDlg::OnOK(wxCommandEvent &WXUNUSED(event)) {
+  EndModal(wxID_OK);
+}
+
+void TableCellFormatDlg::OnCancel(wxCommandEvent &WXUNUSED(event)) {
+  EndModal(wxID_CANCEL);
+}
+
+TableCellFormat TableCellFormatDlg::GetFormat() const {
+  TableCellFormat result;
+
+  if (_background_color) {
+    result.background_color = wxColourToTableCellColor(*_background_color);
+  }
+
+  if (_foreground_color) {
+    result.foreground_color = wxColourToTableCellColor(*_foreground_color);
+  }
+
+  if (!m_cmbFontName->GetValue().IsEmpty()) {
+    wxPrintf("Font name is not empty.\n");
+  }
+
+  return result;
+}
+
+TableCellColor
+TableCellFormatDlg::wxColourToTableCellColor(const wxColour &color) const {
+  TableCellColor result;
+
+  result.r = color.Red();
+  result.b = color.Blue();
+  result.g = color.Green();
+
+  return result;
+}
+
+void TableCellFormatDlg::OnSelectForegroundColor(
+    wxCommandEvent &WXUNUSED(event)) {
+  wxColourDialog *dlg = new wxColourDialog(this);
+
+  if (dlg->ShowModal() == wxID_OK) {
+    _foreground_color = dlg->GetColourData().GetColour();
+
+    m_lblForegroundColorVisualization->SetBackgroundColour(*_foreground_color);
+  }
+
+  delete dlg;
+}
+
+void TableCellFormatDlg::OnSelectBackgroundColor(
+    wxCommandEvent &WXUNUSED(event)) {
+  wxColourDialog *dlg = new wxColourDialog(this);
+
+  if (dlg->ShowModal() == wxID_OK) {
+    _background_color = dlg->GetColourData().GetColour();
+
+    m_lblBackgroundColorVisualization->SetBackgroundColour(*_background_color);
+  }
+
+  delete dlg;
+}

@@ -110,6 +110,26 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
         //   break;
         // }
 
+        if (cell->has_format()) {
+          const auto& format = cell->format();
+
+          if (format.background_color) {
+            wxColour color = fromTableCellColor(*(format.background_color));
+
+            // TODO Store brush for later usage (maybe map of color -> brush)
+            wxBrush oldBrush = dc->GetBrush();
+            wxBrush* brush = new wxBrush(color);
+            dc->SetBrush(*brush);
+
+            // Use brush with that color and fill rect of cell
+            dc->DrawRectangle(cellRect);
+
+            dc->SetBrush(oldBrush);
+
+            delete brush;
+          }
+        }
+
         DrawTextInCenter(dc, cell->visible_content(), cellRect);
       }
     }
@@ -446,4 +466,8 @@ void CellsViewControl::OnCopyFormula() {
     std::string content = cell->get_formula_content();
     CopyString(content);
   }
+}
+
+wxColour CellsViewControl::fromTableCellColor(const TableCellColor& color) {
+  return wxColour(color.r, color.g, color.b);
 }

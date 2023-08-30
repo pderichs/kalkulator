@@ -31,6 +31,7 @@
 #include "model/table/table_workbook_file_error.h"
 #include "tests.h"
 #include "view/kalkulator_system_colors.h"
+#include "view/table_cell_format_dlg.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
 
@@ -95,7 +96,7 @@ private:
 
   bool PermitLoseChanges();
 
-  TableCellFormat ConvertToTableCellFormat(const wxFont& font);
+  TableCellFormat ConvertToTableCellFormat(const wxFont &font);
 
   bool IsDarkUI() const {
     wxSystemAppearance s = wxSystemSettings::GetAppearance();
@@ -743,11 +744,12 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
                                          // center of view?
 }
 
-TableCellFormat KalkulatorMainFrame::ConvertToTableCellFormat(const wxFont& font) {
+TableCellFormat
+KalkulatorMainFrame::ConvertToTableCellFormat(const wxFont &font) {
   TableCellFormat format;
 
   format.font_size = static_cast<size_t>(font.GetPointSize());
-  format.font_name = static_cast<const char*>(font.GetFaceName());
+  format.font_name = static_cast<const char *>(font.GetFaceName());
   format.underlined = font.GetUnderlined();
   format.bold = font.GetWeight() == wxFONTWEIGHT_BOLD;
   format.italic = font.GetStyle() == wxFONTSTYLE_ITALIC;
@@ -757,15 +759,26 @@ TableCellFormat KalkulatorMainFrame::ConvertToTableCellFormat(const wxFont& font
 }
 
 void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
-  // TODO Use specialized dialog instead of standard one
   // TODO Set font / format options of current cell
 
-  wxFontDialog *fontDialog = new wxFontDialog(this);
+  TableCellFormatDlg *format_dialog = new TableCellFormatDlg(this);
 
-  if (fontDialog->ShowModal() == wxID_OK) {
-    wxFont font = fontDialog->GetFontData().GetChosenFont();
+  if (format_dialog->ShowModal() == wxID_OK) {
+    wxPrintf("OK\n");
 
-    TableCellFormat format = ConvertToTableCellFormat(font);
+    TableCellFormat format = format_dialog->GetFormat();
+
     _document->set_current_cell_format(format);
   }
+
+  delete format_dialog;
+
+  // wxFontDialog *fontDialog = new wxFontDialog(this);
+
+  // if (fontDialog->ShowModal() == wxID_OK) {
+  //   wxFont font = fontDialog->GetFontData().GetChosenFont();
+
+  //   TableCellFormat format = ConvertToTableCellFormat(font);
+  //   _document->set_current_cell_format(format);
+  // }
 }

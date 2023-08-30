@@ -42,6 +42,7 @@ private:
   void ScrollToCell(const Location &cell, TableCellOrientation orientation);
 
   void CopyString(const std::string &content);
+  wxColour fromTableCellColor(const TableCellColor& color);
 
 private:
   KalkulatorSystemColorsPtr _sys_colors;
