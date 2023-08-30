@@ -118,15 +118,13 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
 
             // TODO Store brush for later usage (maybe map of color -> brush)
             wxBrush oldBrush = dc->GetBrush();
-            wxBrush* brush = new wxBrush(color);
-            dc->SetBrush(*brush);
+            wxBrush brush(color);
+            dc->SetBrush(brush);
 
             // Use brush with that color and fill rect of cell
             dc->DrawRectangle(cellRect);
 
             dc->SetBrush(oldBrush);
-
-            delete brush;
           }
         }
 
