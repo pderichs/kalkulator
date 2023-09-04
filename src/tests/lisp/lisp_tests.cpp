@@ -73,6 +73,8 @@ int run_lisp_tests_avg1();
 
 int run_lisp_tests_progn();
 
+int run_lisp_tests_lambda_parsing();
+
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
   virtual ~TestLispFunctionExecutionContext() = default;
@@ -162,6 +164,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_avg1);
 
   RUN_TEST(run_lisp_tests_progn);
+
+  RUN_TEST(run_lisp_tests_lambda_parsing);
 
   return 0;
 }
@@ -1124,4 +1128,40 @@ int run_lisp_tests_progn() {
   // clang-format on
 
   return run_lisp_tests(tests, "progn");
+}
+
+int run_lisp_tests_lambda_parsing() {
+  LispParser parser("((lambda (x) (+ x 10)) 22)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    TEST_ASSERT(tokens[0].id == OPEN_BRACKET);
+    TEST_ASSERT(tokens[1].id == OPEN_BRACKET);
+    TEST_ASSERT(tokens[2].id == IDENTIFIER);
+    TEST_ASSERT(tokens[3].id == SPACE);
+    TEST_ASSERT(tokens[4].id == OPEN_BRACKET);
+    TEST_ASSERT(tokens[5].id == IDENTIFIER);
+    TEST_ASSERT(tokens[6].id == CLOSE_BRACKET);
+    TEST_ASSERT(tokens[7].id == SPACE);
+    TEST_ASSERT(tokens[8].id == OPEN_BRACKET);
+    TEST_ASSERT(tokens[9].id == IDENTIFIER);
+    TEST_ASSERT(tokens[10].id == SPACE);
+    TEST_ASSERT(tokens[11].id == IDENTIFIER);
+    TEST_ASSERT(tokens[12].id == SPACE);
+    TEST_ASSERT(tokens[13].id == INTEGER);
+    TEST_ASSERT(tokens[14].id == CLOSE_BRACKET);
+    TEST_ASSERT(tokens[15].id == CLOSE_BRACKET);
+    TEST_ASSERT(tokens[16].id == SPACE);
+    TEST_ASSERT(tokens[17].id == INTEGER);
+    TEST_ASSERT(tokens[18].id == CLOSE_BRACKET);
+    TEST_ASSERT(tokens.size() == 19);
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
 }

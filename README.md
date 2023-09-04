@@ -19,7 +19,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- FEAT: Lisp progn
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
   - lambda
 - BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
@@ -61,6 +60,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- FEAT: Lisp progn
 - BUG: When header controls get focus, they handle key presses by themselves - switch focus back to cells as soon as header gets focused
 - FEAT: Go to cell function
 - FEAT: Pressing Escape in editor control should move focus back to cells view
