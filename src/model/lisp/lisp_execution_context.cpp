@@ -14,6 +14,7 @@
 #include "lisp_execution_context_multiplication.h"
 #include "lisp_execution_context_not.h"
 #include "lisp_execution_context_or.h"
+#include "lisp_execution_context_progn.h"
 #include "lisp_execution_context_rest.h"
 #include "lisp_execution_context_subtraction.h"
 #include "lisp_execution_context_xor.h"
@@ -44,6 +45,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["and"] = std::make_shared<LispExecutionContextAnd>();
   _functions["avg"] = std::make_shared<LispExecutionContextAvg>();
   _functions["floor"] = std::make_shared<LispExecutionContextFloor>();
+  _functions["progn"] = std::make_shared<LispExecutionContextProgn>();
 }
 
 LispValuePtr

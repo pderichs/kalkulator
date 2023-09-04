@@ -19,6 +19,11 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
+- FEAT: Lisp progn
+- FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
+  - lambda
+- BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
+- BUG: Moving current cell to the bottom or right seems to not check boundaries of cell correctly
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
 - FEAT: Add simple format: underlined
@@ -38,7 +43,6 @@ The source code and documentation of this project is licensed under the [Apache 
 - FEAT: Add macro support: OnLoad?
 - FEAT: Macros: Add OnTimer and Timer start functionality
 - FEAT: Direct editing? (without the need of pressing F2)
-- FEAT: Lisp progn
 - FEAT: Lisp abs
 - FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon())
 - FEAT: Lisp tan
@@ -50,8 +54,6 @@ The source code and documentation of this project is licensed under the [Apache 
 - FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
 - FEAT: isnone
-- FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
-  - lambda
 - MAYB: Cache function results (see field _func_result on LispValue)
 - FEAT: Add application settings (e.g. size of undo steps)
 - DOC: Add explanation of functions (especially behaviour of eq)

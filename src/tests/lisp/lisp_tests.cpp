@@ -71,6 +71,8 @@ int run_lisp_tests_xor1();
 
 int run_lisp_tests_avg1();
 
+int run_lisp_tests_progn();
+
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
   virtual ~TestLispFunctionExecutionContext() = default;
@@ -158,6 +160,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_xor1);
 
   RUN_TEST(run_lisp_tests_avg1);
+
+  RUN_TEST(run_lisp_tests_progn);
 
   return 0;
 }
@@ -1108,4 +1112,16 @@ int run_lisp_tests(const std::map<std::string, LispValuePtr> tests,
   }
 
   return 0;
+}
+
+int run_lisp_tests_progn() {
+  // clang-format off
+  std::map<std::string, LispValuePtr> tests = {
+     {"(progn 2 2 9)", LispValueFactory::new_integer(9)},
+     {"(progn 42)", LispValueFactory::new_integer(42)},
+     {"(progn 1 1 \"Hello!\")", LispValueFactory::new_string("Hello!")},
+  };
+  // clang-format on
+
+  return run_lisp_tests(tests, "progn");
 }
