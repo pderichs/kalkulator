@@ -23,6 +23,8 @@ The source code and documentation of this project is licensed under the [Apache 
   - lambda
 - BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
 - BUG: Moving current cell to the bottom or right seems to not check boundaries of cell correctly
+- FEAT: Add < function
+- FEAT: Add > function
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
 - FEAT: Add simple format: underlined
