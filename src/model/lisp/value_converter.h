@@ -2,7 +2,6 @@
 #define VALUE_CONVERTER_INCLUDED
 
 #include "lisp_execution_context.h"
-#include "lisp_function.h"
 
 class ValueConverter {
 public:

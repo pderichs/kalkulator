@@ -6,14 +6,13 @@
 
 #include "lisp_execution_context.h"
 #include "lisp_execution_context_error.h"
-#include "lisp_function.h"
 #include "lisp_value.h"
 
 class LispFunctionExecutionContext {
 public:
   LispFunctionExecutionContext() = default;
   virtual ~LispFunctionExecutionContext() = default;
-  virtual LispValuePtr value(const LispFunction &func,
+  virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) = 0;
 
@@ -27,11 +26,11 @@ protected:
       const LispExecutionContext &execution_context,
       const std::any &context_param) const;
 
-  void ensure_params(const LispFunction &func) const;
+  void ensure_params(const LispValuePtrVector &func) const;
   LispValuePtr expect_number(const LispValuePtr &value,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) const;
-  LispValuePtr expect_parameter_at(const LispFunction &func,
+  LispValuePtr expect_parameter_at(const LispValuePtrVector &func,
                                    size_t index) const;
 };
 

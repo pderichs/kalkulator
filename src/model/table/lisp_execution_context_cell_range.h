@@ -15,7 +15,7 @@ public:
 
   virtual ~LispExecutionContextCellRange() = default;
 
-  virtual LispValuePtr value(const LispFunction &func,
+  virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) {
     ensure_params(func);

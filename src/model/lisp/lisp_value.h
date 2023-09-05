@@ -9,17 +9,18 @@
 #include <string>
 #include <vector>
 
-#include "lisp_function.h"
+class LispValue;
+typedef std::shared_ptr<LispValue> LispValuePtr;
+typedef std::vector<LispValuePtr> LispValuePtrVector;
 
 enum LispValueType {
   LVT_NONE = 0,
   LVT_STRING = 1,
   LVT_DOUBLE = 2,
-  LVT_FUNCTION = 3,
-  LVT_LIST = 4,
-  LVT_IDENTIFIER = 5,
-  LVT_BOOL = 6,
-  LVT_INTEGER = 7,
+  LVT_LIST = 3,
+  LVT_IDENTIFIER = 4,
+  LVT_BOOL = 5,
+  LVT_INTEGER = 6,
 };
 
 enum LispBool {
@@ -47,7 +48,6 @@ public:
   bool is_number() const { return is_double() || is_integer(); }
   bool is_double() const { return _type == LVT_DOUBLE; }
   bool is_integer() const { return _type == LVT_INTEGER; }
-  bool is_function() const { return _type == LVT_FUNCTION; }
   bool is_list() const { return _type == LVT_LIST; }
   bool is_identifier() const { return _type == LVT_IDENTIFIER; }
   bool is_boolean() const { return _type == LVT_BOOL; }
@@ -82,10 +82,6 @@ public:
     return std::any_cast<LispBool>(_content) == LISP_BOOL_TRUE;
   }
 
-  LispFunction function() const {
-    return std::any_cast<LispFunction>(_content);
-  }
-
   LispValuePtrVector list() const {
     return std::any_cast<LispValuePtrVector>(_content);
   }
@@ -112,6 +108,21 @@ public:
     }
 
     return boolean() == other;
+  }
+
+  bool is_function() const {
+    if (!is_list()) {
+      return false;
+    }
+
+    const auto &lst = list();
+
+    if (lst.empty()) {
+      return false;
+    }
+
+    const auto &first = lst[0];
+    return first->is_identifier();
   }
 
   bool is_truthy() const {

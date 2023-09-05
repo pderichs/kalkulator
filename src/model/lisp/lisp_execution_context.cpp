@@ -56,12 +56,12 @@ LispExecutionContext::execute(const LispValuePtr &value,
   }
 
   LispValuePtr execution_result =
-      eval_function(value->function(), context_param);
+      eval_function(value->list(), context_param);
   return execution_result;
 }
 
 LispValuePtr
-LispExecutionContext::eval_function(const LispFunction &func,
+LispExecutionContext::eval_function(const LispValuePtrVector &func,
                                     const std::any &context_param) const {
   const auto &execution_context_it = _functions.find(func.identifier());
   if (execution_context_it == _functions.end()) {

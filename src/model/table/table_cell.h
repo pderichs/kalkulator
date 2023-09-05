@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 
-#include "../lisp/lisp_function.h"
 #include "../lisp/value_converter.h"
 
 #include "location.h"

@@ -1,7 +1,6 @@
 #ifndef LISP_VALUE_FACTORY_INCLUDED
 #define LISP_VALUE_FACTORY_INCLUDED
 
-#include "lisp_function.h"
 #include "lisp_value.h"
 #include <memory>
 
@@ -36,10 +35,6 @@ public:
 
   static LispValuePtr new_integer(LispValue::IntegerType value) {
     return new_value_ptr(LVT_INTEGER, value);
-  }
-
-  static LispValuePtr new_function(const LispFunction &function) {
-    return new_value_ptr(LVT_FUNCTION, function);
   }
 
   static LispValuePtr new_none() {

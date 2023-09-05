@@ -3,7 +3,6 @@
 
 #include <map>
 
-#include "lisp_function.h"
 #include "lisp_value.h"
 
 class LispFunctionExecutionContext;
@@ -22,7 +21,7 @@ public:
                     const LispFunctionExecutionContextPtr func);
 
 private:
-  LispValuePtr eval_function(const LispFunction &func,
+  LispValuePtr eval_function(const LispValuePtrVector &func,
                              const std::any &context_param = {}) const;
 
 private:
