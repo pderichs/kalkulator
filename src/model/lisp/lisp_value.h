@@ -44,7 +44,7 @@ public:
 
   bool is_none() const { return _type == LVT_NONE; }
   bool is_string() const { return _type == LVT_STRING; }
-  bool is_number() const { return _type == LVT_DOUBLE || _type == LVT_INTEGER; }
+  bool is_number() const { return is_double() || is_integer(); }
   bool is_double() const { return _type == LVT_DOUBLE; }
   bool is_integer() const { return _type == LVT_INTEGER; }
   bool is_function() const { return _type == LVT_FUNCTION; }

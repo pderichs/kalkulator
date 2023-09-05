@@ -2,7 +2,7 @@
 #include "../lisp/lisp_value.h"
 
 void TableCell::update_content(const std::string &content) {
-  _lisp_value = ValueConverter::to_lisp_value(content); // TODO: Lisp Value must be more generic to support lambda expressions?
+  _lisp_value = ValueConverter::to_lisp_value(content);
 
   if (_lisp_value->is_function()) {
     _formula_content = content;
