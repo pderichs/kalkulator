@@ -1,6 +1,5 @@
 #include "value_converter.h"
 #include "lisp_execution_context.h"
-#include "lisp_function.h"
 #include "lisp_parser.h"
 #include "lisp_tokens.h"
 #include "lisp_value.h"

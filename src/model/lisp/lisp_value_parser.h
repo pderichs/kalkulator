@@ -1,8 +1,8 @@
 #ifndef LISP_FUNCTION_PARSER_INCLUDED
 #define LISP_FUNCTION_PARSER_INCLUDED
 
-#include "lisp_function.h"
 #include "lisp_tokens.h"
+#include "lisp_value.h"
 #include <cstddef>
 #include <optional>
 
@@ -19,7 +19,7 @@ private:
   bool has_next() const { return _pos < _tokens.size(); }
   LispToken current_token() const { return _tokens[_pos]; }
   void skip_spaces();
-  LispValuePtr parse_function();
+  LispValuePtr parse_list();
   LispTokens collect_current_function_tokens();
 
 private:

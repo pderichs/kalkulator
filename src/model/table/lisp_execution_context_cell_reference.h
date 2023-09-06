@@ -16,10 +16,12 @@ public:
 
   virtual ~LispExecutionContextCellReference() = default;
 
-  virtual LispValuePtr value(const LispFunction &func,
+  virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) {
-    if (func.param_count() != 2) {
+    LispValuePtrVector params = extract_params(func);
+
+    if (params.size() != 2) {
       throw LispExecutionContextError(
           "cell function needs 2 parameters (row and colum)");
     }
@@ -33,8 +35,8 @@ public:
 
     int row, col;
 
-    LispValuePtrVector params = execute_functions_and_extract_list_results(
-        func.params(), execution_context, context_param);
+    params = execute_functions_and_extract_list_results(
+        params, execution_context, context_param);
 
     row = params[0]->to_integer();
     col = params[1]->to_integer();

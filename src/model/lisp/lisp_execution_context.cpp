@@ -18,7 +18,6 @@
 #include "lisp_execution_context_rest.h"
 #include "lisp_execution_context_subtraction.h"
 #include "lisp_execution_context_xor.h"
-#include "lisp_function.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include <memory>
@@ -63,7 +62,7 @@ LispExecutionContext::execute(const LispValuePtr &value,
 LispValuePtr
 LispExecutionContext::eval_function(const LispValuePtrVector &func,
                                     const std::any &context_param) const {
-  const auto &execution_context_it = _functions.find(func.identifier());
+  const auto &execution_context_it = _functions.find(func.at(0)->string());
   if (execution_context_it == _functions.end()) {
     throw LispExecutionContextError("Unknown function identifier");
   }

@@ -1,15 +1,14 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_execution_context.h"
 #include "lisp_execution_context_error.h"
-#include "lisp_function.h"
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
 #include <memory>
 #include <sstream>
 
 void LispFunctionExecutionContext::ensure_params(
-    const LispFunction &func) const {
-  if (func.param_count() == 0) {
+    const LispValuePtrVector &func) const {
+  if (func.size() <= 1) {
     throw LispExecutionContextError("Unexpected: No params given");
   }
 }
@@ -78,25 +77,19 @@ LispFunctionExecutionContext::execute_functions_and_extract_list_results(
   return result;
 }
 
-LispValuePtr
-LispFunctionExecutionContext::expect_parameter_at(const LispFunction &func,
-                                                  size_t index) const {
-  const auto &opt_param = func.param_at(index);
-
-  if (!opt_param) {
+LispValuePtr LispFunctionExecutionContext::expect_parameter_at(
+    const LispValuePtrVector &params, size_t index) const {
+  try {
+    const auto &param = params.at(index);
+    return param;
+  } catch (std::out_of_range const &exc) {
     std::stringstream ss;
     ss << "Expected parameter at position " << index;
     throw LispExecutionContextError(ss.str());
   }
+}
 
-  const auto &value = *opt_param;
-
-  if (!value) {
-    std::stringstream ss;
-    ss << "Expected parameter at position " << index;
-    ss << " is invalid.";
-    throw LispExecutionContextError(ss.str());
-  }
-
-  return *opt_param;
+LispValuePtrVector LispFunctionExecutionContext::extract_params(
+    const LispValuePtrVector &func) const {
+  return LispValuePtrVector(func.begin() + 1, func.end());
 }

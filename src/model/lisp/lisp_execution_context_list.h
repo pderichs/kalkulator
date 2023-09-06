@@ -1,8 +1,8 @@
 #ifndef LISP_EXECUTION_CONTEXT_LIST_INCLUDED
 #define LISP_EXECUTION_CONTEXT_LIST_INCLUDED
 
-#include "lisp_function.h"
 #include "lisp_function_execution_context.h"
+#include "lisp_value.h"
 #include "lisp_value_factory.h"
 #include <tuple>
 
@@ -11,13 +11,13 @@ public:
   LispExecutionContextList() = default;
   virtual ~LispExecutionContextList() = default;
 
-  virtual LispValuePtr value(const LispFunction &func,
+  virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) {
     std::ignore = execution_context;
     std::ignore = context_param;
 
-    return LispValueFactory::new_list(func.params()); // ;)
+    return LispValueFactory::new_list(extract_params(func)); // ;)
   }
 };
 

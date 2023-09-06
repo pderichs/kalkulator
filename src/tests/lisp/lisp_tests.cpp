@@ -1,7 +1,6 @@
 #include "lisp_tests.h"
 #include "../../model/lisp/lisp_execution_context.h"
 #include "../../model/lisp/lisp_execution_context_error.h"
-#include "../../model/lisp/lisp_function.h"
 #include "../../model/lisp/lisp_function_execution_context.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
@@ -80,7 +79,7 @@ public:
   virtual ~TestLispFunctionExecutionContext() = default;
 
   // Adds "Hello " to the front of the provided string
-  virtual LispValuePtr value(const LispFunction &func,
+  virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) {
     std::ignore = execution_context;
@@ -88,16 +87,13 @@ public:
 
     ensure_params(func);
 
-    if (func.param_count() != 1) {
+    LispValuePtrVector params = extract_params(func);
+
+    if (params.size() != 1) {
       throw LispExecutionContextError("Unexpected parameter count");
     }
 
-    auto param_opt = func.param_at(0);
-    if (!param_opt) {
-      throw LispExecutionContextError("Unable to get first parameter");
-    }
-
-    auto param = *param_opt;
+    auto param = params.at(0);
     if (!param->is_string()) {
       throw LispExecutionContextError("Parameter must be of type string");
     }

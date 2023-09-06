@@ -2,7 +2,6 @@
 #define LISP_EXECUTION_CONTEXT_MULTIPLICATION_INCLUDED
 
 #include "lisp_execution_context_error.h"
-#include "lisp_function.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
@@ -12,15 +11,17 @@ public:
   LispExecutionContextMultiplication() = default;
   virtual ~LispExecutionContextMultiplication() = default;
 
-  virtual LispValuePtr value(const LispFunction &func,
+  virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) {
     ensure_params(func);
 
+    LispValuePtrVector params = extract_params(func);
+
     LispValue::DoubleType result = 1.0;
 
-    LispValuePtrVector params = execute_functions_and_extract_list_results(
-        func.params(), execution_context, context_param);
+    params = execute_functions_and_extract_list_results(
+        params, execution_context, context_param);
 
     for (const auto &param : params) {
       LispValuePtr value(

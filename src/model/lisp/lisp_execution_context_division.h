@@ -2,7 +2,6 @@
 #define LISP_EXECUTION_CONTEXT_DIVISION_INCLUDED
 
 #include "lisp_execution_context_error.h"
-#include "lisp_function.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 
@@ -11,15 +10,17 @@ public:
   LispExecutionContextDivision() = default;
   virtual ~LispExecutionContextDivision() = default;
 
-  virtual LispValuePtr value(const LispFunction &func,
+  virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) {
     ensure_params(func);
 
+    LispValuePtrVector params = extract_params(func);
+
     LispValue::DoubleType result;
 
-    LispValuePtrVector params = execute_functions_and_extract_list_results(
-        func.params(), execution_context, context_param);
+    params = execute_functions_and_extract_list_results(
+        params, execution_context, context_param);
 
     const auto &first_param = params[0];
 

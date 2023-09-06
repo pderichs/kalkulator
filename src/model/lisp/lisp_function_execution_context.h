@@ -32,6 +32,8 @@ protected:
                              const std::any &context_param) const;
   LispValuePtr expect_parameter_at(const LispValuePtrVector &func,
                                    size_t index) const;
+
+  LispValuePtrVector extract_params(const LispValuePtrVector& func) const;
 };
 
 #endif

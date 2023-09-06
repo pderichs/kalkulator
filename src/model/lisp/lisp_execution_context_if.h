@@ -3,7 +3,6 @@
 
 #include "lisp_execution_context.h"
 #include "lisp_execution_context_error.h"
-#include "lisp_function.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include <cstddef>
@@ -14,14 +13,16 @@ public:
   LispExecutionContextIf() = default;
   virtual ~LispExecutionContextIf() = default;
 
-  virtual LispValuePtr value(const LispFunction &func,
+  virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) {
-    if (func.param_count() < 2 || func.param_count() > 3) {
+    LispValuePtrVector params = extract_params(func);
+
+    if (params.size() < 2 || params.size() > 3) {
       throw LispExecutionContextError("Unexpected parameter count for if");
     }
 
-    LispValuePtr condition = expect_parameter_at(func, 0);
+    LispValuePtr condition = expect_parameter_at(params, 0);
 
     if (condition->is_function()) {
       condition = execution_context.execute(condition, context_param);
@@ -39,12 +40,14 @@ public:
   }
 
   LispValuePtr
-  execute_result_param(const LispFunction &func, size_t index,
+  execute_result_param(const LispValuePtrVector &func, size_t index,
                        const LispExecutionContext &execution_context,
                        const std::any &context_param) const {
     LispValuePtr result;
 
-    const auto &result_param = expect_parameter_at(func, index);
+    LispValuePtrVector params = extract_params(func);
+
+    const auto &result_param = expect_parameter_at(params, index);
 
     if (result_param->is_function()) {
       result = execution_context.execute(result_param, context_param);

@@ -24,8 +24,10 @@ public:
 
     LispValuePtrVector result;
 
-    LispValuePtrVector params = execute_functions_and_extract_list_results(
-        func.params(), execution_context, context_param);
+    LispValuePtrVector params = extract_params(func);
+
+    params = execute_functions_and_extract_list_results(
+        params, execution_context, context_param);
 
     if (params.size() != 4) {
       std::stringstream ss;

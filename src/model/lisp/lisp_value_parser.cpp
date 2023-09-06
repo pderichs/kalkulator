@@ -1,5 +1,4 @@
 #include "lisp_value_parser.h"
-#include "lisp_function.h"
 #include "lisp_parser_error.h"
 #include "lisp_tokens.h"
 #include "lisp_value.h"
@@ -41,7 +40,7 @@ LispValuePtr LispValueParser::next() {
 
   // Check for function
   if (token.is_open_bracket()) {
-    return parse_function();
+    return parse_list();
   }
 
   return {};
@@ -57,19 +56,16 @@ void LispValueParser::skip_spaces() {
   }
 }
 
-LispValuePtr LispValueParser::parse_function() {
+LispValuePtr LispValueParser::parse_list() {
   LispTokens function_tokens = collect_current_function_tokens();
 
   // std::cerr << "Function tokens:" << std::endl;
   // function_tokens.debug_print(std::cerr);
 
-  bool identifier_search = false;
   bool first_bracket_found = false;
   bool in_params = false;
 
   int in_param_bracket_level = 0;
-
-  std::string identifier;
 
   LispTokens param_tokens;
 
@@ -81,27 +77,11 @@ LispValuePtr LispValueParser::parse_function() {
     if (!first_bracket_found) {
       if (token.is_open_bracket()) {
         first_bracket_found = true;
-        identifier_search = true;
+        in_params = true;
+        in_param_bracket_level = 0;
         continue;
       } else {
         throw LispParserError("Unexpected token");
-      }
-    }
-
-    if (identifier_search) {
-      if (token.is_identifier()) {
-        identifier_search = false;
-        in_params = true;
-        in_param_bracket_level = 0;
-
-        identifier = std::any_cast<std::string>(token.content);
-
-        continue;
-      } else {
-        std::stringstream ss;
-        ss << "Expected function identifier but got type ";
-        ss << token.id;
-        throw LispParserError(ss.str());
       }
     }
 
@@ -138,7 +118,7 @@ LispValuePtr LispValueParser::parse_function() {
     params.push_back(std::make_shared<LispValue>(value));
   }
 
-  return LispValueFactory::new_function(LispFunction(identifier, params));
+  return LispValueFactory::new_list(params);
 }
 
 LispTokens LispValueParser::collect_current_function_tokens() {
