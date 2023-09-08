@@ -12,6 +12,7 @@
 
 #define RUN_TEST(testproc)                                                     \
   {                                                                            \
+    std::cerr << "Running test " << #testproc << "..." << std::endl;           \
     int ___test_res = testproc();                                              \
     if (___test_res) {                                                         \
       std::cerr << "TEST " << #testproc << " failed." << std::endl;            \
