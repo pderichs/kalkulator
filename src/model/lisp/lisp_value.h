@@ -122,7 +122,7 @@ public:
     }
 
     const auto &first = lst[0];
-    return first->is_identifier();
+    return first->is_identifier(); // FIXME: Extend for lambda function (list -> identifier "lambda")
   }
 
   bool is_truthy() const {

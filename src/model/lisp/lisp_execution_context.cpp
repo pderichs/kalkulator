@@ -21,6 +21,7 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include <memory>
+#include <stdexcept>
 
 LispExecutionContext::LispExecutionContext() {
   // Prepare functions
@@ -54,21 +55,51 @@ LispExecutionContext::execute(const LispValuePtr &value,
     return value;
   }
 
-  LispValuePtr execution_result =
-      eval_function(value->list(), context_param);
+  LispValuePtr execution_result = eval_function(value->list(), context_param);
   return execution_result;
+}
+
+bool LispExecutionContext::is_lambda_function(const LispValuePtrVector &func) const {
+  if (func.empty()) {
+    return false;
+  }
+
+  LispValuePtr first = func[0];
+
+  if (!first->is_list()) {
+    return false;
+  }
+
+  const auto& list = first->list();
+
+  if (list.empty()) {
+    return false;
+  }
+
+  LispValuePtr identifier = list[0];
+
+  if (!identifier->is_identifier()) {
+    return false;
+  }
+
+  return identifier->string() == "lambda";
 }
 
 LispValuePtr
 LispExecutionContext::eval_function(const LispValuePtrVector &func,
                                     const std::any &context_param) const {
-  const auto &execution_context_it = _functions.find(func.at(0)->string());
-  if (execution_context_it == _functions.end()) {
-    throw LispExecutionContextError("Unknown function identifier");
-  }
+  if (is_lambda_function(func)) {
+    // HBI
+    throw std::runtime_error("Lambda functions Not implemented yet");
+  } else {
+    const auto &execution_context_it = _functions.find(func.at(0)->string());
+    if (execution_context_it == _functions.end()) {
+      throw LispExecutionContextError("Unknown function identifier");
+    }
 
-  const auto &function_context = execution_context_it->second;
-  return function_context->value(func, *this, context_param);
+    const auto &function_context = execution_context_it->second;
+    return function_context->value(func, *this, context_param);
+  }
 }
 
 void LispExecutionContext::add_function(

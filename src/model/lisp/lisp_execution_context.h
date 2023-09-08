@@ -24,6 +24,7 @@ private:
   LispValuePtr eval_function(const LispValuePtrVector &func,
                              const std::any &context_param = {}) const;
 
+  bool is_lambda_function(const LispValuePtrVector &func) const;
 private:
   LispFunctionMap _functions;
 };
