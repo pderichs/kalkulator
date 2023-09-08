@@ -25,6 +25,9 @@ private:
                              const std::any &context_param = {}) const;
 
   bool is_lambda_function(const LispValuePtrVector &func) const;
+  LispValuePtr execute_lambda(const LispValuePtrVector &func,
+                              const std::any &context_param) const;
+
 private:
   LispFunctionMap _functions;
 };

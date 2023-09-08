@@ -59,7 +59,8 @@ LispExecutionContext::execute(const LispValuePtr &value,
   return execution_result;
 }
 
-bool LispExecutionContext::is_lambda_function(const LispValuePtrVector &func) const {
+bool LispExecutionContext::is_lambda_function(
+    const LispValuePtrVector &func) const {
   if (func.empty()) {
     return false;
   }
@@ -70,7 +71,7 @@ bool LispExecutionContext::is_lambda_function(const LispValuePtrVector &func) co
     return false;
   }
 
-  const auto& list = first->list();
+  const auto &list = first->list();
 
   if (list.empty()) {
     return false;
@@ -86,20 +87,30 @@ bool LispExecutionContext::is_lambda_function(const LispValuePtrVector &func) co
 }
 
 LispValuePtr
+LispExecutionContext::execute_lambda(const LispValuePtrVector &func,
+                                     const std::any &context_param) const {
+  std::ignore = func;
+  std::ignore = context_param;
+
+  // HBI
+  throw std::runtime_error("Lambda functions Not implemented yet");
+}
+
+LispValuePtr
 LispExecutionContext::eval_function(const LispValuePtrVector &func,
                                     const std::any &context_param) const {
   if (is_lambda_function(func)) {
-    // HBI
-    throw std::runtime_error("Lambda functions Not implemented yet");
-  } else {
-    const auto &execution_context_it = _functions.find(func.at(0)->string());
-    if (execution_context_it == _functions.end()) {
-      throw LispExecutionContextError("Unknown function identifier");
-    }
-
-    const auto &function_context = execution_context_it->second;
-    return function_context->value(func, *this, context_param);
+    return execute_lambda(func, context_param);
   }
+
+  // Not a lambda.
+  const auto &execution_context_it = _functions.find(func.at(0)->string());
+  if (execution_context_it == _functions.end()) {
+    throw LispExecutionContextError("Unknown function identifier");
+  }
+
+  const auto &function_context = execution_context_it->second;
+  return function_context->value(func, *this, context_param);
 }
 
 void LispExecutionContext::add_function(
