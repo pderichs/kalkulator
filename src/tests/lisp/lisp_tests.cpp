@@ -74,6 +74,8 @@ int run_lisp_tests_progn();
 
 int run_lisp_tests_lambda_parsing();
 
+int run_lisp_lambda_parser_test1();
+
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
   virtual ~TestLispFunctionExecutionContext() = default;
@@ -162,6 +164,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_progn);
 
   RUN_TEST(run_lisp_tests_lambda_parsing);
+
+  RUN_TEST(run_lisp_lambda_parser_test1);
 
   return 0;
 }
@@ -1158,6 +1162,56 @@ int run_lisp_tests_lambda_parsing() {
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  }
+
+  return 0;
+}
+
+int run_lisp_lambda_parser_test1() {
+  LispParser parser("((lambda (x) (+ x 10)) 22)");
+
+  try {
+    LispTokens tokens = parser.parse();
+
+    LispValueParser parser(tokens);
+
+    auto value = parser.next();
+    TEST_ASSERT(value);
+
+    TEST_ASSERT(value->is_list());
+
+    LispValuePtrVector list = value->list();
+
+    TEST_ASSERT(list[0]->is_list());
+
+    LispValuePtrVector lambda_list = list[0]->list();
+
+    TEST_ASSERT(lambda_list[0]->is_identifier());
+    TEST_ASSERT(lambda_list[1]->is_list());
+
+    LispValuePtrVector params_list = lambda_list[1]->list();
+    TEST_ASSERT(params_list[0]->is_identifier());
+
+    TEST_ASSERT(lambda_list[2]->is_list());
+    LispValuePtrVector definition_list = lambda_list[2]->list();
+    TEST_ASSERT(definition_list[0]->is_identifier()); // +
+    TEST_ASSERT(definition_list[0]->string() == "+"); // +
+    TEST_ASSERT(definition_list[1]->is_identifier()); // x
+    TEST_ASSERT(definition_list[1]->string() == "x"); // x
+    TEST_ASSERT(definition_list[2]->is_integer());    // 10
+    TEST_ASSERT(definition_list[2]->to_integer() == 10);    // 10
+
+    TEST_ASSERT(list[1]->is_integer());
+    TEST_ASSERT(list[1]->to_integer() == 22);    // 22
+  } catch (LispParserError &lpe) {
+    std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
+              << lpe.item() << "\")" << std::endl;
+
+    TEST_ASSERT(false);
+  } catch (LispExecutionContextError &lece) {
+    std::cerr << "*** Caught lisp parser error: " << lece.what() << std::endl;
 
     TEST_ASSERT(false);
   }
