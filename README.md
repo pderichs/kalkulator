@@ -19,8 +19,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
-  - lambda
 - BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
 - BUG: Moving current cell to the bottom or right seems to not check boundaries of cell correctly
 - FEAT: Add < function
@@ -90,6 +88,7 @@ The source code and documentation of this project is licensed under the [Apache 
 - BUG: Add tests for cell function
 - BUG: Add tests for cell_range function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
+  - lambda
   - DONE and
   - DONE or
   - DONE xor
