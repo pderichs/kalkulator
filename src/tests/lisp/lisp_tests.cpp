@@ -315,31 +315,30 @@ int run_lisp_tests_expression1() {
 
     LispValue val = *func;
 
-    TEST_ASSERT(val.is_list());
+    TEST_ASSERT(val.is_function());
     LispValuePtrVector expr = val.list();
 
-    // FIXME Test should be working again
-    // LispValue::DoubleType d;
-    // std::string s;
+    LispValue::DoubleType d;
+    std::string s;
 
-    // TEST_ASSERT(expr.identifier() == "hello");
-    // TEST_ASSERT(expr.param_count() == 2);
+    TEST_ASSERT(expr[0]->string() == "hello");
+    TEST_ASSERT(expr.size() == 3);
 
-    // {
-    //   const auto &value = expr.param_at(0);
-    //   TEST_ASSERT(value);
-    //   TEST_ASSERT((*value)->is_string());
-    //   s = (*value)->string();
-    //   TEST_ASSERT(s == "8282");
-    // }
+    {
+      const auto &value = expr[1];
+      TEST_ASSERT(value);
+      TEST_ASSERT(value->is_string());
+      s = value->string();
+      TEST_ASSERT(s == "8282");
+    }
 
-    // {
-    //   const auto &value = expr.param_at(1);
-    //   TEST_ASSERT(value);
-    //   TEST_ASSERT((*value)->is_number());
-    //   d = (*value)->to_double();
-    //   TEST_ASSERT(d == -484.32);
-    // }
+    {
+      const auto &value = expr[2];
+      TEST_ASSERT(value);
+      TEST_ASSERT(value->is_number());
+      d = value->to_double();
+      TEST_ASSERT(d == -484.32);
+    }
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -369,24 +368,21 @@ int run_lisp_tests_expression2() {
 
     LispValuePtrVector expr = val.list();
 
-    // FIXME Test must be working again
-    // TEST_ASSERT(expr.identifier() == "hello");
-    // // std::cerr << expr.param_count() << std::endl;
-    // TEST_ASSERT(expr.param_count() == 2);
+    TEST_ASSERT(expr[0]->string() == "hello");
+    // std::cerr << expr.param_count() << std::endl;
+    TEST_ASSERT(expr.size() == 3);
 
-    // std::optional<LispValuePtr> optparam = expr.param_at(0);
-    // TEST_ASSERT(optparam);
+    LispValuePtr param = expr[1];
+    TEST_ASSERT(param);
 
-    // auto param = *optparam;
-    // TEST_ASSERT(param->is_function());
-    // TEST_ASSERT(param->function().identifier() == "-");
+    TEST_ASSERT(param->is_function());
+    TEST_ASSERT(param->list()[0]->string() == "-");
 
-    // optparam = expr.param_at(1);
-    // TEST_ASSERT(optparam);
+    param = expr[2];
+    TEST_ASSERT(param);
 
-    // param = *optparam;
-    // TEST_ASSERT(param->is_number());
-    // TEST_ASSERT(param->to_double() == -484.32);
+    TEST_ASSERT(param->is_number());
+    TEST_ASSERT(param->to_double() == -484.32);
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
@@ -576,31 +572,26 @@ int run_lisp_tests_expression_with_identifier1() {
 
     LispValuePtrVector expr = val.list();
 
-    // FIXME Test must be working again
-    // TEST_ASSERT(expr.identifier() == "hello");
-    // // std::cerr << expr.param_count() << std::endl;
-    // TEST_ASSERT(expr.param_count() == 3);
+    TEST_ASSERT(expr[0]->string() == "hello");
+    TEST_ASSERT(expr.size() == 4);
 
-    // std::optional<LispValuePtr> optparam = expr.param_at(0);
-    // TEST_ASSERT(optparam);
+    LispValuePtr param = expr[1];
+    TEST_ASSERT(param);
 
-    // auto param = *optparam;
-    // TEST_ASSERT(param->is_number());
-    // TEST_ASSERT((*param) == 33);
+    TEST_ASSERT(param->is_number());
+    TEST_ASSERT(param->to_integer() == 33);
 
-    // optparam = expr.param_at(1);
-    // TEST_ASSERT(optparam);
+    param = expr[2];
+    TEST_ASSERT(param);
 
-    // param = *optparam;
-    // TEST_ASSERT(param->is_identifier());
-    // TEST_ASSERT((*param) == "some-variable");
+    TEST_ASSERT(param->is_identifier());
+    TEST_ASSERT(param->string() == "some-variable");
 
-    // optparam = expr.param_at(2);
-    // TEST_ASSERT(optparam);
+    param = expr[3];
+    TEST_ASSERT(param);
 
-    // param = *optparam;
-    // TEST_ASSERT(param->is_string());
-    // TEST_ASSERT((*param) == "Hello world");
+    TEST_ASSERT(param->is_string());
+    TEST_ASSERT(param->string() == "Hello world");
   } catch (LispParserError &lpe) {
     std::cerr << "*** Caught lisp parser error: " << lpe.what() << " (item: \""
               << lpe.item() << "\")" << std::endl;
