@@ -110,6 +110,22 @@ public:
     return boolean() == other;
   }
 
+  bool is_lambda() const {
+    if (!is_list()) {
+      return false;
+    }
+
+    // Check for lambda
+    const auto &possible_lambda_definition = list();
+
+    if (possible_lambda_definition.empty()) {
+      return false;
+    }
+
+    const auto &id = possible_lambda_definition[0];
+    return id->is_identifier() && id->string() == "lambda";
+  }
+
   bool is_function() const {
     if (!is_list()) {
       return false;
@@ -122,7 +138,12 @@ public:
     }
 
     const auto &first = lst[0];
-    return first->is_identifier(); // FIXME: Extend for lambda function (list -> identifier "lambda")
+
+    if (first->is_lambda()) {
+      return true;
+    }
+
+    return first->is_identifier();
   }
 
   bool is_truthy() const {

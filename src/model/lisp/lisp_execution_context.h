@@ -21,10 +21,9 @@ public:
                     const LispFunctionExecutionContextPtr func);
 
 private:
-  LispValuePtr eval_function(const LispValuePtrVector &func,
+  LispValuePtr eval_function(const LispValuePtr &func,
                              const std::any &context_param = {}) const;
 
-  bool is_lambda_function(const LispValuePtrVector &func) const;
   LispValuePtr execute_lambda(const LispValuePtrVector &func,
                               const std::any &context_param) const;
 

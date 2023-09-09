@@ -55,35 +55,8 @@ LispExecutionContext::execute(const LispValuePtr &value,
     return value;
   }
 
-  LispValuePtr execution_result = eval_function(value->list(), context_param);
+  LispValuePtr execution_result = eval_function(value, context_param);
   return execution_result;
-}
-
-bool LispExecutionContext::is_lambda_function(
-    const LispValuePtrVector &func) const {
-  if (func.empty()) {
-    return false;
-  }
-
-  LispValuePtr first = func[0];
-
-  if (!first->is_list()) {
-    return false;
-  }
-
-  const auto &list = first->list();
-
-  if (list.empty()) {
-    return false;
-  }
-
-  LispValuePtr identifier = list[0];
-
-  if (!identifier->is_identifier()) {
-    return false;
-  }
-
-  return identifier->string() == "lambda";
 }
 
 LispValuePtr
@@ -97,20 +70,22 @@ LispExecutionContext::execute_lambda(const LispValuePtrVector &func,
 }
 
 LispValuePtr
-LispExecutionContext::eval_function(const LispValuePtrVector &func,
+LispExecutionContext::eval_function(const LispValuePtr &func,
                                     const std::any &context_param) const {
-  if (is_lambda_function(func)) {
-    return execute_lambda(func, context_param);
+  if (func->is_lambda()) {
+    return execute_lambda(func->list(), context_param);
   }
 
+  const auto& func_list = func->list();
+
   // Not a lambda.
-  const auto &execution_context_it = _functions.find(func.at(0)->string());
+  const auto &execution_context_it = _functions.find(func_list.at(0)->string());
   if (execution_context_it == _functions.end()) {
     throw LispExecutionContextError("Unknown function identifier");
   }
 
   const auto &function_context = execution_context_it->second;
-  return function_context->value(func, *this, context_param);
+  return function_context->value(func_list, *this, context_param);
 }
 
 void LispExecutionContext::add_function(
