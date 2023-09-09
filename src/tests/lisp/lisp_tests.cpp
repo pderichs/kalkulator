@@ -76,6 +76,8 @@ int run_lisp_tests_lambda_parsing();
 
 int run_lisp_lambda_parser_test1();
 
+int run_lisp_lambda_execution_test1();
+
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
   virtual ~TestLispFunctionExecutionContext() = default;
@@ -166,6 +168,8 @@ int run_lisp_tests() {
   RUN_TEST(run_lisp_tests_lambda_parsing);
 
   RUN_TEST(run_lisp_lambda_parser_test1);
+
+  RUN_TEST(run_lisp_lambda_execution_test1);
 
   return 0;
 }
@@ -1217,4 +1221,14 @@ int run_lisp_lambda_parser_test1() {
   }
 
   return 0;
+}
+
+int run_lisp_lambda_execution_test1() {
+  // clang-format off
+  std::map<std::string, LispValuePtr> tests = {
+     {"((lambda (x) (+ x 10)) 22)", LispValueFactory::new_integer(32)},
+  };
+  // clang-format on
+
+  return run_lisp_tests(tests, "lambda");
 }

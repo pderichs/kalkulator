@@ -21,6 +21,7 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 
 LispExecutionContext::LispExecutionContext() {
@@ -84,9 +85,14 @@ LispExecutionContext::eval_function(const LispValuePtr &func,
 
   const auto &func_list = func_to_execute->list();
 
-  const auto &execution_context_it = _functions.find(func_list.at(0)->string());
+  std::string identifier = func_list.at(0)->string();
+  const auto &execution_context_it = _functions.find(identifier);
   if (execution_context_it == _functions.end()) {
-    throw LispExecutionContextError("Unknown function identifier");
+    std::stringstream ss;
+    ss << "Unknown function identifier: \"";
+    ss << identifier;
+    ss << "\"";
+    throw LispExecutionContextError(ss.str());
   }
 
   const auto &function_context = execution_context_it->second;
