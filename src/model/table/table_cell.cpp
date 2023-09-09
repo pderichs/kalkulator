@@ -4,7 +4,7 @@
 void TableCell::update_content(const std::string &content) {
   _lisp_value = ValueConverter::to_lisp_value(content);
 
-  if (_lisp_value->is_function()) {
+  if (_lisp_value->is_function_or_possible_lambda()) {
     _formula_content = content;
   } else {
     _formula_content = "";
@@ -24,7 +24,7 @@ std::string TableCell::get_formula_content() const {
 }
 
 bool TableCell::is_formula() const {
-  return _lisp_value && _lisp_value->is_function();
+  return _lisp_value && _lisp_value->is_function_or_possible_lambda();
 }
 
 bool TableCell::has_content() const {
