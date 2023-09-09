@@ -72,13 +72,19 @@ LispExecutionContext::execute_lambda(const LispValuePtrVector &func,
 LispValuePtr
 LispExecutionContext::eval_function(const LispValuePtr &func,
                                     const std::any &context_param) const {
-  if (func->is_lambda()) {
-    return execute_lambda(func->list(), context_param);
+  auto func_to_execute = func;
+
+  if (func_to_execute->is_lambda()) {
+    // In order to get the function definition, we need to execute one extra
+    // step here - the lambda needs to be executed with the given parameters
+    // so it can create the "real" function execution body upfront.
+
+    // Override function to execute structure with lambda function result.
+    func_to_execute = execute_lambda(func_to_execute->list(), context_param);
   }
 
-  const auto& func_list = func->list();
+  const auto& func_list = func_to_execute->list();
 
-  // Not a lambda.
   const auto &execution_context_it = _functions.find(func_list.at(0)->string());
   if (execution_context_it == _functions.end()) {
     throw LispExecutionContextError("Unknown function identifier");
