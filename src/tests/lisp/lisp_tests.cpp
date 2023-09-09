@@ -1226,7 +1226,8 @@ int run_lisp_lambda_parser_test1() {
 int run_lisp_lambda_execution_test1() {
   // clang-format off
   std::map<std::string, LispValuePtr> tests = {
-     {"((lambda (x) (+ x 10)) 22)", LispValueFactory::new_integer(32)},
+     {"((lambda (x) (+ x 10)) 22)", LispValueFactory::new_double(32)},
+     {"((lambda (x) (+ (- 100 x) 10)) 20)", LispValueFactory::new_double(90)},
   };
   // clang-format on
 

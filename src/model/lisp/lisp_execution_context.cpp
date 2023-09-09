@@ -19,6 +19,7 @@
 #include "lisp_execution_context_subtraction.h"
 #include "lisp_execution_context_xor.h"
 #include "lisp_function_execution_context.h"
+#include "lisp_lambda_executor.h"
 #include "lisp_value.h"
 #include <memory>
 #include <sstream>
@@ -70,11 +71,8 @@ LispExecutionContext::eval_function(const LispValuePtr &func,
     // step here - the lambda needs to be executed with the given parameters
     // so it can create the "real" function execution body upfront.
 
-    auto possible_lambda = func_to_execute->list()[0];
-
-    // Call this function recursively and override function to execute
-    // structure with lambda function result.
-    func_to_execute = eval_function(possible_lambda, context_param);
+    // Override function to execute structure with lambda function result.
+    func_to_execute = eval_lambda(func_to_execute->list(), context_param);
 
     // We expect a function as a result here.
     if (!func_to_execute->is_function()) {
@@ -111,4 +109,12 @@ void LispExecutionContext::add_function(
   }
 
   _functions[identifier] = func;
+}
+
+LispValuePtr
+LispExecutionContext::eval_lambda(const LispValuePtrVector &func,
+                                  const std::any &context_param) const {
+  // Use Lambda executor
+  LispLambdaExecutor executor;
+  return executor.value(func, *this, context_param);
 }

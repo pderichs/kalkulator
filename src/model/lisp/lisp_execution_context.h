@@ -24,7 +24,7 @@ private:
   LispValuePtr eval_function(const LispValuePtr &func,
                              const std::any &context_param = {}) const;
 
-  LispValuePtr execute_lambda(const LispValuePtrVector &func,
+  LispValuePtr eval_lambda(const LispValuePtrVector &func,
                               const std::any &context_param) const;
 
 private:
