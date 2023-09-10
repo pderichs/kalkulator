@@ -480,6 +480,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   try {
     std::string file_path((const char *)openFileDialog.GetPath());
     file.open(file_path);
+    _document->set_file_path("");
     file.read(_document);
     _document->clear_changed_flag();
     _document->set_file_path(file_path);
