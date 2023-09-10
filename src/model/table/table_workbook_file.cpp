@@ -177,12 +177,6 @@ void TableWorkbookFile::open(const std::string &filename) {
   }
 
   _file_path = filename;
-
-  read_tables();
-
-  if (!has_table("meta") || !has_table("sheets") || !has_table("cells")) {
-    throw TableWorkbookFileError("Invalid file structure.");
-  }
 }
 
 void TableWorkbookFile::close() {
@@ -196,6 +190,12 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   workbook->clear();
 
   char *err_msg = nullptr;
+
+  read_tables();
+
+  if (!has_table("meta") || !has_table("sheets") || !has_table("cells")) {
+    throw TableWorkbookFileError("Invalid file structure.");
+  }
 
   std::map<int, TableSheetPtr> table_id_map;
 
