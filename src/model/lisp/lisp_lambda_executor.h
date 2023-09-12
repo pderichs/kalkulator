@@ -40,7 +40,7 @@ public:
 
     LispValuePtr expanded_body = replace_names_with_values(def, named_params);
 
-    return execute_actual_body(def, execution_context, context_param);
+    return execute_actual_body(expanded_body->list(), execution_context, context_param);
   }
 
   LispValuePtr
