@@ -10,6 +10,7 @@
 #include "lisp_execution_context_floor.h"
 #include "lisp_execution_context_if.h"
 #include "lisp_execution_context_join.h"
+#include "lisp_execution_context_lambda.h"
 #include "lisp_execution_context_list.h"
 #include "lisp_execution_context_multiplication.h"
 #include "lisp_execution_context_not.h"
@@ -48,6 +49,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["avg"] = std::make_shared<LispExecutionContextAvg>();
   _functions["floor"] = std::make_shared<LispExecutionContextFloor>();
   _functions["progn"] = std::make_shared<LispExecutionContextProgn>();
+  _functions["lambda"] = std::make_shared<LispExecutionContextLambda>();
 }
 
 LispValuePtr
@@ -66,20 +68,20 @@ LispExecutionContext::eval_function(const LispValuePtr &func,
                                     const std::any &context_param) const {
   auto func_to_execute = func;
 
-  if (func_to_execute->is_possible_lambda()) {
-    // In order to get the function definition, we need to execute one extra
-    // step here - the lambda needs to be executed with the given parameters
-    // so it can create the "real" function execution body upfront.
+  // if (func_to_execute->is_possible_lambda()) {
+  //   // In order to get the function definition, we need to execute one extra
+  //   // step here - the lambda needs to be executed with the given parameters
+  //   // so it can create the "real" function execution body upfront.
 
-    // Override function to execute structure with lambda function result.
-    func_to_execute = eval_lambda(func_to_execute->list(), context_param);
+  //   // Override function to execute structure with lambda function result.
+  //   func_to_execute = eval_lambda(func_to_execute->list(), context_param);
 
-    // We expect a function as a result here.
-    if (!func_to_execute->is_function()) {
-      throw LispExecutionContextError(
-          "First function does not expand to executable context.");
-    }
-  }
+  //   // We expect a function as a result here.
+  //   if (!func_to_execute->is_function()) {
+  //     throw LispExecutionContextError(
+  //         "First function does not expand to executable context.");
+  //   }
+  // }
 
   const auto &func_list = func_to_execute->list();
 

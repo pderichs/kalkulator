@@ -1,5 +1,5 @@
-#ifndef LISP_EXECUTION_CONTEXT_LAMBDA_INCLUDED
-#define LISP_EXECUTION_CONTEXT_LAMBDA_INCLUDED
+#ifndef LISP_LAMBDA_EXECUTOR_INCLUDED
+#define LISP_LAMBDA_EXECUTOR_INCLUDED
 
 #include "lisp_execution_context_error.h"
 #include "lisp_function_execution_context.h"

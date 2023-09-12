@@ -1,17 +1,14 @@
 #ifndef LISP_VALUE_INCLUDED
 #define LISP_VALUE_INCLUDED
 
+#include "lisp_function_definition.h"
 #include <any>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
-class LispValue;
-typedef std::shared_ptr<LispValue> LispValuePtr;
-typedef std::vector<LispValuePtr> LispValuePtrVector;
+#include "lisp_value_ptr.h"
 
 enum LispValueType {
   LVT_NONE = 0,
@@ -21,6 +18,7 @@ enum LispValueType {
   LVT_IDENTIFIER = 4,
   LVT_BOOL = 5,
   LVT_INTEGER = 6,
+  LVT_FUNCTION_DEFINITION = 7, // non native lisp function
 };
 
 enum LispBool {
@@ -51,6 +49,9 @@ public:
   bool is_list() const { return _type == LVT_LIST; }
   bool is_identifier() const { return _type == LVT_IDENTIFIER; }
   bool is_boolean() const { return _type == LVT_BOOL; }
+  bool is_function_definition() const {
+    return _type == LVT_FUNCTION_DEFINITION;
+  }
 
   DoubleType explicit_double_value() const {
     return std::any_cast<DoubleType>(_content);
@@ -84,6 +85,10 @@ public:
 
   LispValuePtrVector list() const {
     return std::any_cast<LispValuePtrVector>(_content);
+  }
+
+  LispFunctionDefinition function_definition() const {
+    return std::any_cast<LispFunctionDefinition>(_content);
   }
 
   bool operator==(const DoubleType &other) const {
