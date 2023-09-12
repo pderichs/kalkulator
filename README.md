@@ -19,7 +19,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- BUG: Lambda implementation somewhat feels like a hack
+- FEAT: defun (with newly added lambda support, this should be doable now)
 - BUG: Moving current cell to the bottom or right seems to not check boundaries of cell correctly
 - BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
 - FEAT: Add < function
@@ -61,6 +61,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- BUG: Lambda implementation somewhat feels like a hack
 - BUG: "Invalid file structure" error on save
 - FEAT: Lisp progn
 - BUG: When header controls get focus, they handle key presses by themselves - switch focus back to cells as soon as header gets focused
