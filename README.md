@@ -19,7 +19,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- BUG: Lambda implementation somewhat feels like a hack (Consider from groundup Refactoring)
+- BUG: Lambda implementation somewhat feels like a hack
 - BUG: Moving current cell to the bottom or right seems to not check boundaries of cell correctly
 - BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
 - FEAT: Add < function
