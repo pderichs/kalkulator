@@ -45,7 +45,7 @@ public:
     lambda_params.erase(lambda_params.begin());
 
     LispLambdaExecutor executor(definition, lambda_params);
-    return executor.value();
+    return executor.value(execution_context, context_param);
   }
 };
 

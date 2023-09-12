@@ -4,6 +4,7 @@
 #include <map>
 
 #include "lisp_value.h"
+#include "lisp_value_ptr.h"
 
 class LispFunctionExecutionContext;
 
@@ -17,15 +18,14 @@ public:
   LispExecutionContext();
   LispValuePtr execute(const LispValuePtr &value,
                        const std::any &context_param) const;
+  LispValuePtr execute(const LispValuePtrVector &func,
+                       const std::any &context_param) const;
   void add_function(const std::string &identifier,
                     const LispFunctionExecutionContextPtr func);
 
 private:
   LispValuePtr eval_function(const LispValuePtr &func,
                              const std::any &context_param = {}) const;
-
-  LispValuePtr eval_lambda(const LispValuePtrVector &func,
-                              const std::any &context_param) const;
 
 private:
   LispFunctionMap _functions;

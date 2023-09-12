@@ -8,6 +8,7 @@
 #include "lisp_execution_context_error.h"
 #include "lisp_execution_context_first.h"
 #include "lisp_execution_context_floor.h"
+#include "lisp_execution_context_funcall.h"
 #include "lisp_execution_context_if.h"
 #include "lisp_execution_context_join.h"
 #include "lisp_execution_context_lambda.h"
@@ -51,6 +52,7 @@ LispExecutionContext::LispExecutionContext() {
   _functions["floor"] = std::make_shared<LispExecutionContextFloor>();
   _functions["progn"] = std::make_shared<LispExecutionContextProgn>();
   _functions["lambda"] = std::make_shared<LispExecutionContextLambda>();
+  _functions["funcall"] = std::make_shared<LispExecutionContextFuncall>();
 }
 
 LispValuePtr
@@ -67,11 +69,15 @@ LispExecutionContext::execute(const LispValuePtr &value,
 LispValuePtr
 LispExecutionContext::eval_function(const LispValuePtr &func,
                                     const std::any &context_param) const {
-  auto func_to_execute = func;
+  const auto &func_list = func->list();
 
-  const auto &func_list = func_to_execute->list();
+  return execute(func_list, context_param);
+}
 
-  std::string identifier = func_list.at(0)->string();
+LispValuePtr
+LispExecutionContext::execute(const LispValuePtrVector &func,
+                              const std::any &context_param) const {
+  std::string identifier = func.at(0)->string();
   const auto &execution_context_it = _functions.find(identifier);
   if (execution_context_it == _functions.end()) {
     std::stringstream ss;
@@ -82,7 +88,7 @@ LispExecutionContext::eval_function(const LispValuePtr &func,
   }
 
   const auto &function_context = execution_context_it->second;
-  return function_context->value(func_list, *this, context_param);
+  return function_context->value(func, *this, context_param);
 }
 
 void LispExecutionContext::add_function(
@@ -97,12 +103,4 @@ void LispExecutionContext::add_function(
   }
 
   _functions[identifier] = func;
-}
-
-LispValuePtr
-LispExecutionContext::eval_lambda(const LispValuePtrVector &func,
-                                  const std::any &context_param) const {
-  // Use Lambda executor
-  LispLambdaExecutor executor;
-  return executor.value(func, *this, context_param);
 }
