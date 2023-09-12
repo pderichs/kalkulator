@@ -32,7 +32,7 @@ public:
     }
 
     LispValuePtr body = params[1];
-    if (!body->is_function_or_possible_lambda()) { // TODO: Lambda allowed here?
+    if (!body->is_function()) {
       throw LispExecutionContextError("Lambda: Body has unexpected type.");
     }
 

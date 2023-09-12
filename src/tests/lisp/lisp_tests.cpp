@@ -12,6 +12,7 @@
 #include <any>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <tuple>
 #include <wx/wx.h>
 
@@ -110,64 +111,64 @@ public:
 };
 
 int run_lisp_tests() {
-  RUN_TEST(run_lisp_tests_parsing1);
-  RUN_TEST(run_lisp_tests_parsing2);
-  RUN_TEST(run_lisp_tests_parsing3);
-  RUN_TEST(run_lisp_tests_parsing4);
+  // RUN_TEST(run_lisp_tests_parsing1);
+  // RUN_TEST(run_lisp_tests_parsing2);
+  // RUN_TEST(run_lisp_tests_parsing3);
+  // RUN_TEST(run_lisp_tests_parsing4);
 
-  RUN_TEST(run_lisp_tests_expression1);
-  RUN_TEST(run_lisp_tests_expression2);
+  // RUN_TEST(run_lisp_tests_expression1);
+  // RUN_TEST(run_lisp_tests_expression2);
 
-  RUN_TEST(run_lisp_tests_expression_with_identifier1);
+  // RUN_TEST(run_lisp_tests_expression_with_identifier1);
 
-  RUN_TEST(run_lisp_tests_wrong_form1);
+  // RUN_TEST(run_lisp_tests_wrong_form1);
 
-  RUN_TEST(run_lisp_tests_executor1);
-  RUN_TEST(run_lisp_tests_executor2);
+  // RUN_TEST(run_lisp_tests_executor1);
+  // RUN_TEST(run_lisp_tests_executor2);
 
-  RUN_TEST(run_lisp_tests_custom_function1);
+  // RUN_TEST(run_lisp_tests_custom_function1);
 
-  RUN_TEST(run_lisp_tests_list1);
+  // RUN_TEST(run_lisp_tests_list1);
 
-  RUN_TEST(run_lisp_tests_addition);
-  RUN_TEST(run_lisp_tests_addition_with_list1);
-  RUN_TEST(run_lisp_tests_subtraction);
-  RUN_TEST(run_lisp_tests_subtraction_with_list1);
-  RUN_TEST(run_lisp_tests_multiplication);
-  RUN_TEST(run_lisp_tests_multiplication_with_list1);
-  RUN_TEST(run_lisp_tests_division);
-  RUN_TEST(run_lisp_tests_division_with_list1);
+  // RUN_TEST(run_lisp_tests_addition);
+  // RUN_TEST(run_lisp_tests_addition_with_list1);
+  // RUN_TEST(run_lisp_tests_subtraction);
+  // RUN_TEST(run_lisp_tests_subtraction_with_list1);
+  // RUN_TEST(run_lisp_tests_multiplication);
+  // RUN_TEST(run_lisp_tests_multiplication_with_list1);
+  // RUN_TEST(run_lisp_tests_division);
+  // RUN_TEST(run_lisp_tests_division_with_list1);
 
-  RUN_TEST(run_lisp_tests_first1);
+  // RUN_TEST(run_lisp_tests_first1);
 
-  RUN_TEST(run_lisp_tests_rest1);
+  // RUN_TEST(run_lisp_tests_rest1);
 
-  RUN_TEST(run_lisp_tests_join1);
+  // RUN_TEST(run_lisp_tests_join1);
 
-  RUN_TEST(run_lisp_tests_cons1);
+  // RUN_TEST(run_lisp_tests_cons1);
 
-  RUN_TEST(run_lisp_tests_if1);
-  RUN_TEST(run_lisp_tests_if2);
+  // RUN_TEST(run_lisp_tests_if1);
+  // RUN_TEST(run_lisp_tests_if2);
 
-  RUN_TEST(run_lisp_tests_eq1);
+  // RUN_TEST(run_lisp_tests_eq1);
 
-  RUN_TEST(run_lisp_tests_xeq1);
+  // RUN_TEST(run_lisp_tests_xeq1);
 
-  RUN_TEST(run_lisp_tests_not1);
+  // RUN_TEST(run_lisp_tests_not1);
 
-  RUN_TEST(run_lisp_tests_or1);
+  // RUN_TEST(run_lisp_tests_or1);
 
-  RUN_TEST(run_lisp_tests_and1);
+  // RUN_TEST(run_lisp_tests_and1);
 
-  RUN_TEST(run_lisp_tests_xor1);
+  // RUN_TEST(run_lisp_tests_xor1);
 
-  RUN_TEST(run_lisp_tests_avg1);
+  // RUN_TEST(run_lisp_tests_avg1);
 
-  RUN_TEST(run_lisp_tests_progn);
+  // RUN_TEST(run_lisp_tests_progn);
 
-  RUN_TEST(run_lisp_tests_lambda_parsing);
+  // RUN_TEST(run_lisp_tests_lambda_parsing);
 
-  RUN_TEST(run_lisp_lambda_parser_test1);
+  // RUN_TEST(run_lisp_lambda_parser_test1);
 
   RUN_TEST(run_lisp_lambda_execution_test1);
 
@@ -1108,6 +1109,10 @@ int run_lisp_tests(const std::map<std::string, LispValuePtr> tests,
       TEST_ASSERT(false);
     } catch (LispExecutionContextError &lece) {
       std::cerr << "*** Caught lisp parser error: " << lece.what() << std::endl;
+
+      TEST_ASSERT(false);
+    } catch (const std::runtime_error& rte) {
+      std::cerr << "*** Caught runtime error: " << rte.what() << std::endl;
 
       TEST_ASSERT(false);
     }

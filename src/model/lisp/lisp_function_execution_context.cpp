@@ -18,7 +18,7 @@ LispValuePtr LispFunctionExecutionContext::expect_number(
     const std::any &context_param) const {
   LispValuePtr result;
 
-  if (value->is_function_or_possible_lambda()) {
+  if (value->is_function()) {
     result = execution_context.execute(value, context_param);
   } else if (value->is_number()) {
     result = value;
@@ -42,7 +42,7 @@ LispValuePtrVector LispFunctionExecutionContext::execute_functions(
   LispValuePtrVector result;
 
   for (const auto &param : params) {
-    if (param->is_function_or_possible_lambda()) {
+    if (param->is_function()) {
       LispValuePtr function_result(
           execution_context.execute(param, context_param));
 

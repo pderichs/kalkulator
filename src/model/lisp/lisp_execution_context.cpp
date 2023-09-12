@@ -22,6 +22,7 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_lambda_executor.h"
 #include "lisp_value.h"
+#include "lisp_value_ptr.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -55,7 +56,7 @@ LispExecutionContext::LispExecutionContext() {
 LispValuePtr
 LispExecutionContext::execute(const LispValuePtr &value,
                               const std::any &context_param = {}) const {
-  if (!value->is_function_or_possible_lambda()) {
+  if (!value->is_function()) {
     return value;
   }
 
@@ -67,21 +68,6 @@ LispValuePtr
 LispExecutionContext::eval_function(const LispValuePtr &func,
                                     const std::any &context_param) const {
   auto func_to_execute = func;
-
-  // if (func_to_execute->is_possible_lambda()) {
-  //   // In order to get the function definition, we need to execute one extra
-  //   // step here - the lambda needs to be executed with the given parameters
-  //   // so it can create the "real" function execution body upfront.
-
-  //   // Override function to execute structure with lambda function result.
-  //   func_to_execute = eval_lambda(func_to_execute->list(), context_param);
-
-  //   // We expect a function as a result here.
-  //   if (!func_to_execute->is_function()) {
-  //     throw LispExecutionContextError(
-  //         "First function does not expand to executable context.");
-  //   }
-  // }
 
   const auto &func_list = func_to_execute->list();
 

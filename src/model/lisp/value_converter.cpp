@@ -44,7 +44,7 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 
     result = std::make_shared<LispValue>(*opt_value);
 
-    if (!result->is_function_or_possible_lambda()) {
+    if (!result->is_function()) {
       throw ValueConversionError("Expression is not a function");
     }
 
@@ -94,7 +94,7 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
     return ss.str();
   } else if (value->is_none()) {
     return "";
-  } else if (value->is_function_or_possible_lambda()) {
+  } else if (value->is_function()) {
     // Execute function
     try {
       LispValuePtr result = execution_context->execute(value, context_param);

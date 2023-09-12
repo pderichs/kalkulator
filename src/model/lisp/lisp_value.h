@@ -115,21 +115,21 @@ public:
     return boolean() == other;
   }
 
-  // A possible lambda is a list, with a function at position 0.
-  bool is_possible_lambda() const {
-    if (!is_list()) {
-      return false;
-    }
+  // // A possible lambda is a list, with a function at position 0.
+  // bool is_possible_lambda() const {
+  //   if (!is_list()) {
+  //     return false;
+  //   }
 
-    const auto &possible_lambda_definition = list();
+  //   const auto &possible_lambda_definition = list();
 
-    if (possible_lambda_definition.empty()) {
-      return false;
-    }
+  //   if (possible_lambda_definition.empty()) {
+  //     return false;
+  //   }
 
-    const auto &first = possible_lambda_definition[0];
-    return first->is_function();
-  }
+  //   const auto &first = possible_lambda_definition[0];
+  //   return first->is_function();
+  // }
 
   // A function is a list with an identifier at position 0.
   bool is_function() const {
@@ -146,10 +146,6 @@ public:
     const auto &first = lst[0];
 
     return first->is_identifier();
-  }
-
-  bool is_function_or_possible_lambda() const {
-    return is_function() || is_possible_lambda();
   }
 
   bool is_truthy() const {
