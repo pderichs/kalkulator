@@ -1,17 +1,15 @@
 #ifndef LISP_VALUE_INCLUDED
 #define LISP_VALUE_INCLUDED
 
+#include "lisp_function_definition.h"
 #include <any>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
+#include <ostream>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
-class LispValue;
-typedef std::shared_ptr<LispValue> LispValuePtr;
-typedef std::vector<LispValuePtr> LispValuePtrVector;
+#include "lisp_value_ptr.h"
 
 enum LispValueType {
   LVT_NONE = 0,
@@ -21,6 +19,7 @@ enum LispValueType {
   LVT_IDENTIFIER = 4,
   LVT_BOOL = 5,
   LVT_INTEGER = 6,
+  LVT_FUNCTION_DEFINITION = 7, // non native lisp function
 };
 
 enum LispBool {
@@ -51,6 +50,9 @@ public:
   bool is_list() const { return _type == LVT_LIST; }
   bool is_identifier() const { return _type == LVT_IDENTIFIER; }
   bool is_boolean() const { return _type == LVT_BOOL; }
+  bool is_function_definition() const {
+    return _type == LVT_FUNCTION_DEFINITION;
+  }
 
   DoubleType explicit_double_value() const {
     return std::any_cast<DoubleType>(_content);
@@ -86,6 +88,10 @@ public:
     return std::any_cast<LispValuePtrVector>(_content);
   }
 
+  LispFunctionDefinition function_definition() const {
+    return std::any_cast<LispFunctionDefinition>(_content);
+  }
+
   bool operator==(const DoubleType &other) const {
     if (!is_number()) {
       return false;
@@ -110,21 +116,21 @@ public:
     return boolean() == other;
   }
 
-  // A possible lambda is a list, with a function at position 0.
-  bool is_possible_lambda() const {
-    if (!is_list()) {
-      return false;
-    }
+  // // A possible lambda is a list, with a function at position 0.
+  // bool is_possible_lambda() const {
+  //   if (!is_list()) {
+  //     return false;
+  //   }
 
-    const auto &possible_lambda_definition = list();
+  //   const auto &possible_lambda_definition = list();
 
-    if (possible_lambda_definition.empty()) {
-      return false;
-    }
+  //   if (possible_lambda_definition.empty()) {
+  //     return false;
+  //   }
 
-    const auto &first = possible_lambda_definition[0];
-    return first->is_function();
-  }
+  //   const auto &first = possible_lambda_definition[0];
+  //   return first->is_function();
+  // }
 
   // A function is a list with an identifier at position 0.
   bool is_function() const {
@@ -141,10 +147,6 @@ public:
     const auto &first = lst[0];
 
     return first->is_identifier();
-  }
-
-  bool is_function_or_possible_lambda() const {
-    return is_function() || is_possible_lambda();
   }
 
   bool is_truthy() const {

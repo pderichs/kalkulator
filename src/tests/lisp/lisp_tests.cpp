@@ -12,6 +12,7 @@
 #include <any>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <tuple>
 #include <wx/wx.h>
 
@@ -1110,6 +1111,10 @@ int run_lisp_tests(const std::map<std::string, LispValuePtr> tests,
       std::cerr << "*** Caught lisp parser error: " << lece.what() << std::endl;
 
       TEST_ASSERT(false);
+    } catch (const std::runtime_error& rte) {
+      std::cerr << "*** Caught runtime error: " << rte.what() << std::endl;
+
+      TEST_ASSERT(false);
     }
   }
 
@@ -1217,8 +1222,8 @@ int run_lisp_lambda_parser_test1() {
 int run_lisp_lambda_execution_test1() {
   // clang-format off
   std::map<std::string, LispValuePtr> tests = {
-     {"((lambda (x) (+ x 10)) 22)", LispValueFactory::new_double(32)},
-     {"((lambda (x) (+ (- 100 x) 10)) 20)", LispValueFactory::new_double(90)},
+     {"(funcall (lambda (x) (+ x 10)) 22)", LispValueFactory::new_double(32)},
+     {"(funcall (lambda (x) (+ (- 100 x) 10)) 20)", LispValueFactory::new_double(90)},
   };
   // clang-format on
 

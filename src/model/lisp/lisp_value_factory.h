@@ -1,7 +1,9 @@
 #ifndef LISP_VALUE_FACTORY_INCLUDED
 #define LISP_VALUE_FACTORY_INCLUDED
 
+#include "lisp_function_definition.h"
 #include "lisp_value.h"
+#include "lisp_value_ptr.h"
 #include <memory>
 
 class LispValueFactory {
@@ -39,6 +41,11 @@ public:
 
   static LispValuePtr new_none() {
     return std::make_shared<LispValue>(LVT_NONE);
+  }
+
+  static LispValuePtr
+  new_function_definition(const LispFunctionDefinition &func) {
+    return new_value_ptr(LVT_FUNCTION_DEFINITION, func);
   }
 };
 

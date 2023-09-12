@@ -1,89 +1,53 @@
-#ifndef LISP_EXECUTION_CONTEXT_LAMBDA_INCLUDED
-#define LISP_EXECUTION_CONTEXT_LAMBDA_INCLUDED
+#ifndef LISP_LAMBDA_EXECUTOR_INCLUDED
+#define LISP_LAMBDA_EXECUTOR_INCLUDED
 
+#include "lisp_execution_context.h"
 #include "lisp_execution_context_error.h"
+#include "lisp_function_definition.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
+#include "lisp_value_ptr.h"
 #include <cstddef>
 #include <sstream>
+#include <type_traits>
 
-// Specialized execution context like class, which expands
-// a lambda expression and its parameters to an executable
-// function.
-class LispLambdaExecutor : public LispFunctionExecutionContext {
+// TODO Maybe rename: We are not just executing lambdas here.
+class LispLambdaExecutor {
 public:
-  LispLambdaExecutor() = default;
+  LispLambdaExecutor(const LispFunctionDefinition &function_definition,
+                     const LispValuePtrVector &params) {
+    _definition = function_definition;
+    _params = params;
+  }
   virtual ~LispLambdaExecutor() = default;
 
-  // NOTE This function behaves a bit differently than other function
-  // execution contexts. It needs not only the lambda function expression
-  // but also the parameters to create the correct function list as a
-  // result.
-  //
-  // So the func parameter is the lambda definition + the parameters here.
-  virtual LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
+  virtual LispValuePtr value(const LispExecutionContext &execution_context,
                              const std::any &context_param) {
-
-    std::ignore = execution_context;
-    std::ignore = context_param;
-
-    ensure_params(func);
-
-    if (!func[0]->is_list()) {
+    if (_definition.parameter_definitions.size() != _params.size()) {
       throw LispExecutionContextError(
-          "Lambda: Expected function as first parameter.");
+          "Lambda Execution: Parameter count mismatch.");
     }
-
-    const auto &lambda_definition = func[0]->list();
-
-    if (lambda_definition.size() != 3) {
-      throw LispExecutionContextError("Lambda: Expected 2 parameters");
-    }
-
-    if (!lambda_definition[1]->is_list()) {
-      throw LispExecutionContextError(
-          "Lambda: first parameter of definition must be parameter list.");
-    }
-
-    const auto &lambda_definition_parameters = lambda_definition[1]->list();
-    LispValuePtrVector lambda_factory_params = extract_params(func);
-
-    if (lambda_definition_parameters.size() != lambda_factory_params.size()) {
-      throw LispExecutionContextError("Lambda: Parameter count mismatch.");
-    }
-
-    LispValuePtrVector result;
 
     // Match parameter names in lambda definition with actual
     // parameter values.
-    std::map<std::string, LispValuePtr> named_params;
+    std::map<std::string, LispValuePtr> named_params =
+        match_params_names_with_values();
 
-    size_t n = 0;
-    for (const auto &fac_param : lambda_factory_params) {
-      const auto &def_param = lambda_definition_parameters[n];
+    // Replace parameter names with actual values for that call.
+    // We are creating a copy of the definition list for that purpose.
+    LispValuePtrVector def = _definition.body;
 
-      if (!def_param->is_identifier()) {
-        throw LispExecutionContextError(
-            "Lambda: All definition parameters must be identifiers.");
-      }
+    LispValuePtr expanded_body = replace_names_with_values(def, named_params);
 
-      std::string param_name = def_param->string();
-      named_params[param_name] = fac_param;
+    return execute_actual_body(expanded_body->list(), execution_context, context_param);
+  }
 
-      n++;
-    }
-
-    if (!lambda_definition[2]->is_list()) {
-      throw LispExecutionContextError(
-          "Lambda: Definition must be of type list.");
-    }
-
-    const auto &def_body = lambda_definition[2]->list();
-    LispValuePtr expanded_body = replace_names_with_values(def_body, named_params);
-
-    return expanded_body;
+  LispValuePtr
+  execute_actual_body(const LispValuePtrVector& def,
+                      const LispExecutionContext &execution_context,
+                      const std::any &context_param) const {
+    return execution_context.execute(def, context_param);
   }
 
   LispValuePtr replace_names_with_values(
@@ -102,7 +66,8 @@ public:
         }
       } else if (item->is_list()) {
         // Recursion
-        LispValuePtr sub_list = replace_names_with_values(item->list(), named_params);
+        LispValuePtr sub_list =
+            replace_names_with_values(item->list(), named_params);
         result.push_back(sub_list);
       } else {
         result.push_back(item);
@@ -111,6 +76,23 @@ public:
 
     return LispValueFactory::new_list(result);
   }
+
+  std::map<std::string, LispValuePtr> match_params_names_with_values() const {
+    std::map<std::string, LispValuePtr> result;
+
+    size_t n = 0;
+    for (const auto &param_name : _definition.parameter_definitions) {
+      const auto &param_value = _params[n];
+      result[param_name] = param_value;
+      n++;
+    }
+
+    return result;
+  }
+
+private:
+  LispValuePtrVector _params;
+  LispFunctionDefinition _definition;
 };
 
 #endif
