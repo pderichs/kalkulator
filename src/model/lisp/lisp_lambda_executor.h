@@ -2,52 +2,26 @@
 #define LISP_LAMBDA_EXECUTOR_INCLUDED
 
 #include "lisp_execution_context_error.h"
+#include "lisp_function_definition.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
+#include "lisp_value_ptr.h"
 #include <cstddef>
 #include <sstream>
 
-// Specialized execution context like class, which expands
-// a lambda expression and its parameters to an executable
-// function.
-class LispLambdaExecutor : public LispFunctionExecutionContext {
+class LispLambdaExecutor {
 public:
-  LispLambdaExecutor() = default;
+  LispLambdaExecutor(const LispFunctionDefinition &function_definition,
+                     const LispValuePtrVector &params) {
+    _definition = function_definition;
+    _params = params;
+  }
   virtual ~LispLambdaExecutor() = default;
 
-  // NOTE This function behaves a bit differently than other function
-  // execution contexts. It needs not only the lambda function expression
-  // but also the parameters to create the correct function list as a
-  // result.
-  //
-  // So the func parameter is the lambda definition + the parameters here.
-  virtual LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
+  virtual LispValuePtr value(const LispExecutionContext &execution_context,
                              const std::any &context_param) {
-
-    std::ignore = execution_context;
-    std::ignore = context_param;
-
-    ensure_params(func);
-
-    if (!func[0]->is_list()) {
-      throw LispExecutionContextError(
-          "Lambda: Expected function as first parameter.");
-    }
-
-    const auto &lambda_definition = func[0]->list();
-
-    if (lambda_definition.size() != 3) {
-      throw LispExecutionContextError("Lambda: Expected 2 parameters");
-    }
-
-    if (!lambda_definition[1]->is_list()) {
-      throw LispExecutionContextError(
-          "Lambda: first parameter of definition must be parameter list.");
-    }
-
-    const auto &lambda_definition_parameters = lambda_definition[1]->list();
+    const auto &lambda_definition_parameters = _params;
     LispValuePtrVector lambda_factory_params = extract_params(func);
 
     if (lambda_definition_parameters.size() != lambda_factory_params.size()) {
@@ -81,7 +55,8 @@ public:
     }
 
     const auto &def_body = lambda_definition[2]->list();
-    LispValuePtr expanded_body = replace_names_with_values(def_body, named_params);
+    LispValuePtr expanded_body =
+        replace_names_with_values(def_body, named_params);
 
     return expanded_body;
   }
@@ -102,7 +77,8 @@ public:
         }
       } else if (item->is_list()) {
         // Recursion
-        LispValuePtr sub_list = replace_names_with_values(item->list(), named_params);
+        LispValuePtr sub_list =
+            replace_names_with_values(item->list(), named_params);
         result.push_back(sub_list);
       } else {
         result.push_back(item);
@@ -111,6 +87,10 @@ public:
 
     return LispValueFactory::new_list(result);
   }
+
+private:
+  LispValuePtrVector _params;
+  LispFunctionDefinition _definition;
 };
 
 #endif
