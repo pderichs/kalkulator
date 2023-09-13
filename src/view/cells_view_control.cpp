@@ -105,6 +105,9 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
 
   for (size_t r = 0; r < sheet->row_count(); r++) {
     for (size_t c = 0; c < sheet->col_count(); c++) {
+      wxPen oldPen;
+      bool pen_reset_required = false;
+
       auto cell = sheet->get_cell(r, c);
       if (cell) {
         wxRect cellRect = GetCellRectByLocation(Location(c, r));
@@ -134,9 +137,26 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
 
             dc->SetBrush(oldBrush);
           }
+
+          if (format.foreground_color) {
+            wxPrintf("Foreground color set!\n");
+
+            wxColour color = fromTableCellColor(*(format.foreground_color));
+
+            oldPen = dc->GetPen();
+            pen_reset_required = true;
+
+            wxPen pen(color);
+            wxPrintf("Pen initialized? %d\n", pen.IsOk() ? 1 : 0);
+            dc->SetPen(pen);
+          }
         }
 
         DrawTextInCenter(dc, cell->visible_content(), cellRect);
+
+        if (pen_reset_required) {
+          dc->SetPen(oldPen);
+        }
       }
     }
   }

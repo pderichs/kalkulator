@@ -174,26 +174,22 @@ TableCellFormatDlg::wxColourToTableCellColor(const wxColour &color) const {
 
 void TableCellFormatDlg::OnSelectForegroundColor(
     wxCommandEvent &WXUNUSED(event)) {
-  wxColourDialog *dlg = new wxColourDialog(this);
+  wxColourDialog dlg(this);
 
-  if (dlg->ShowModal() == wxID_OK) {
-    _foreground_color = dlg->GetColourData().GetColour();
+  if (dlg.ShowModal() == wxID_OK) {
+    _foreground_color = dlg.GetColourData().GetColour();
 
     m_lblForegroundColorVisualization->SetBackgroundColour(*_foreground_color);
   }
-
-  delete dlg;
 }
 
 void TableCellFormatDlg::OnSelectBackgroundColor(
     wxCommandEvent &WXUNUSED(event)) {
-  wxColourDialog *dlg = new wxColourDialog(this);
+  wxColourDialog dlg(this);
 
-  if (dlg->ShowModal() == wxID_OK) {
-    _background_color = dlg->GetColourData().GetColour();
+  if (dlg.ShowModal() == wxID_OK) {
+    _background_color = dlg.GetColourData().GetColour();
 
     m_lblBackgroundColorVisualization->SetBackgroundColour(*_background_color);
   }
-
-  delete dlg;
 }
