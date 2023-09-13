@@ -770,6 +770,8 @@ void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
     TableCellFormat format = format_dialog->GetFormat();
 
     _document->set_current_cell_format(format);
+
+    Refresh();
   }
 
   delete format_dialog;

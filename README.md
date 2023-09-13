@@ -19,7 +19,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
 - FEAT: Add > function
@@ -47,7 +46,7 @@ The source code and documentation of this project is licensed under the [Apache 
 - FEAT: Lisp tan
 - FEAT: Lisp cos
 - FEAT: Lisp sin
-- FEAT: Lisp root
+- FEAT: Lisp root (sqrt etc)
 - FEAT: Lisp ceil
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp map (after lambda)
@@ -60,6 +59,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
 - BUG: Moving current cell to the bottom or right seems to not check boundaries of cell correctly
 - BUG: Lambda implementation somewhat feels like a hack
 - BUG: "Invalid file structure" error on save

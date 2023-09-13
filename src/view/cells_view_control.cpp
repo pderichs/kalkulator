@@ -101,6 +101,8 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
 
   // TODO Only draw visible ones
 
+  wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell);
+
   for (size_t r = 0; r < sheet->row_count(); r++) {
     for (size_t c = 0; c < sheet->col_count(); c++) {
       auto cell = sheet->get_cell(r, c);
@@ -110,8 +112,14 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
         //   break;
         // }
 
+        if (cellRect == current_cell_rect) {
+          dc->SetPen(*_sys_colors->current_cell_pen);
+          dc->SetBrush(*_sys_colors->window_brush);
+          dc->DrawRectangle(current_cell_rect);
+        }
+
         if (cell->has_format()) {
-          const auto& format = cell->format();
+          const auto &format = cell->format();
 
           if (format.background_color) {
             wxColour color = fromTableCellColor(*(format.background_color));
@@ -143,20 +151,6 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
 
   //   // TODO draw cursor
   // }
-
-  // Current cell
-  wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell);
-  if (!current_cell_rect
-           .IsEmpty() /*&& scrollArea.Contains(current_cell_rect)*/) {
-    dc->SetPen(*_sys_colors->current_cell_pen);
-    dc->SetBrush(*_sys_colors->window_brush);
-    dc->DrawRectangle(current_cell_rect);
-
-    auto cell = _document->get_current_cell();
-    if (cell) {
-      DrawTextInCenter(dc, cell->visible_content(), current_cell_rect);
-    }
-  }
 }
 
 wxRect CellsViewControl::GetCellRectByLocation(const Location &cell) {
@@ -466,6 +460,6 @@ void CellsViewControl::OnCopyFormula() {
   }
 }
 
-wxColour CellsViewControl::fromTableCellColor(const TableCellColor& color) {
+wxColour CellsViewControl::fromTableCellColor(const TableCellColor &color) {
   return wxColour(color.r, color.g, color.b);
 }
