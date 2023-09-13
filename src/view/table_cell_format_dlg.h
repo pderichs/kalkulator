@@ -59,8 +59,15 @@ public:
   TableCellFormat GetFormat() const;
 
   TableCellColor wxColourToTableCellColor(const wxColour &color) const;
+  wxColour tableCellColorTowxColour(const TableCellColor &color) const;
+
+  void UpdateByTableCellFormat();
+
   void OnSelectForegroundColor(wxCommandEvent &WXUNUSED(event));
   void OnSelectBackgroundColor(wxCommandEvent &WXUNUSED(event));
+
+  void SetBackgroundColor(const wxColour& color);
+  void SetForegroundColor(const wxColour& color);
 
 private:
   std::optional<wxColour> _background_color;

@@ -137,6 +137,8 @@ TableCellFormatDlg::TableCellFormatDlg(
       wxEVT_BUTTON, &TableCellFormatDlg::OnSelectForegroundColor, this);
 
   InitializeFontCombo();
+
+  UpdateByTableCellFormat();
 }
 
 TableCellFormatDlg::~TableCellFormatDlg() {}
@@ -196,14 +198,17 @@ TableCellFormatDlg::wxColourToTableCellColor(const wxColour &color) const {
   return result;
 }
 
+wxColour TableCellFormatDlg::tableCellColorTowxColour(
+    const TableCellColor &color) const {
+  return wxColour(color.r, color.g, color.b);
+}
+
 void TableCellFormatDlg::OnSelectForegroundColor(
     wxCommandEvent &WXUNUSED(event)) {
   wxColourDialog dlg(this);
 
   if (dlg.ShowModal() == wxID_OK) {
-    _foreground_color = dlg.GetColourData().GetColour();
-
-    m_lblForegroundColorVisualization->SetBackgroundColour(*_foreground_color);
+    SetForegroundColor(dlg.GetColourData().GetColour());
   }
 }
 
@@ -212,8 +217,48 @@ void TableCellFormatDlg::OnSelectBackgroundColor(
   wxColourDialog dlg(this);
 
   if (dlg.ShowModal() == wxID_OK) {
-    _background_color = dlg.GetColourData().GetColour();
-
-    m_lblBackgroundColorVisualization->SetBackgroundColour(*_background_color);
+    SetBackgroundColor(dlg.GetColourData().GetColour());
   }
+}
+
+void TableCellFormatDlg::UpdateByTableCellFormat() {
+  if (!_cell_format) {
+    return;
+  }
+
+  if (_cell_format->background_color) {
+    wxColour color = tableCellColorTowxColour(*_cell_format->background_color);
+    SetBackgroundColor(color);
+  }
+
+  if (_cell_format->foreground_color) {
+    wxColour color = tableCellColorTowxColour(*_cell_format->foreground_color);
+    SetForegroundColor(color);
+  }
+
+  if (_cell_format->font_name) {
+    m_cmbFontName->SetValue(*_cell_format->font_name);
+  }
+
+  if (_cell_format->bold) {
+    m_chkBold->SetValue(*_cell_format->bold);
+  }
+
+  if (_cell_format->italic) {
+    m_chkItalic->SetValue(*_cell_format->italic);
+  }
+
+  if (_cell_format->underlined) {
+    m_chkUnderlined->SetValue(*_cell_format->underlined);
+  }
+}
+
+void TableCellFormatDlg::SetBackgroundColor(const wxColour &color) {
+  _background_color = color;
+  m_lblBackgroundColorVisualization->SetBackgroundColour(*_background_color);
+}
+
+void TableCellFormatDlg::SetForegroundColor(const wxColour &color) {
+  _foreground_color = color;
+  m_lblForegroundColorVisualization->SetBackgroundColour(*_foreground_color);
 }
