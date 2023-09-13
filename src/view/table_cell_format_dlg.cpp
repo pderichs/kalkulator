@@ -41,8 +41,8 @@ TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent,
   m_lblFontName->Wrap(-1);
   bSizerFontName->Add(m_lblFontName, 0, wxALL, 5);
 
-  m_cmbFontName = new wxComboBox(this, wxID_ANY, _cell_view_font.GetFaceName(), wxDefaultPosition,
-                                 wxDefaultSize, 0, NULL, 0);
+  m_cmbFontName = new wxComboBox(this, wxID_ANY, _cell_view_font.GetFaceName(),
+                                 wxDefaultPosition, wxDefaultSize, 0, NULL, 0);
   bSizerFontName->Add(m_cmbFontName, 1, wxALL, 5);
 
   bSizerGlobal->Add(bSizerFontName, 0, wxEXPAND, 5);
@@ -57,7 +57,8 @@ TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent,
 
   m_spnFontSize =
       new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                     wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0);
+                     wxDefaultSize, wxSP_ARROW_KEYS, 0, 50, 0);
+  m_spnFontSize->SetValue(_cell_view_font.GetPointSize());
   bSizerFontSize->Add(m_spnFontSize, 0, wxALL, 5);
 
   bSizerGlobal->Add(bSizerFontSize, 0, wxEXPAND, 5);
