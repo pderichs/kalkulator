@@ -356,10 +356,10 @@ void CellsViewControl::ScrollToCell(const Location &cell,
     break;
   case BOTTOM:
     x = scrollArea.GetLeft();
-    y = rect.GetBottom() - scrollArea.GetHeight();
+    y = rect.GetBottom() - scrollArea.GetHeight() + 10;
     break;
   case RIGHT:
-    x = rect.GetRight() - scrollArea.GetWidth();
+    x = rect.GetRight() - scrollArea.GetWidth() + 10;
     y = scrollArea.GetTop();
     break;
   default:
