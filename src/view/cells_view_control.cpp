@@ -108,6 +108,9 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
       wxColour oldForegroundColor;
       bool foreground_color_reset_required = false;
 
+      wxFont oldFont;
+      bool font_reset_required = false;
+
       auto cell = sheet->get_cell(r, c);
       if (cell) {
         wxRect cellRect = GetCellRectByLocation(Location(c, r));
@@ -146,12 +149,41 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
 
             dc->SetTextForeground(color);
           }
+
+          wxFont font = dc->GetFont();
+          oldFont = font;
+          if (format.bold) {
+            font.MakeBold();
+          }
+
+          if (format.italic) {
+            font.MakeItalic();
+          }
+
+          if (format.underlined) {
+            font.MakeUnderlined();
+          }
+
+          if (format.font_size) {
+            font.Scale(*format.font_size);
+          }
+
+          if (format.font_name) {
+            font.SetFaceName(*format.font_name);
+          }
+
+          dc->SetFont(font);
+          font_reset_required = true;
         }
 
         DrawTextInCenter(dc, cell->visible_content(), cellRect);
 
         if (foreground_color_reset_required) {
           dc->SetTextForeground(oldForegroundColor);
+        }
+
+        if (font_reset_required) {
+          dc->SetFont(oldFont);
         }
       }
     }
