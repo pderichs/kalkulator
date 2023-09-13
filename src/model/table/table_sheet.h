@@ -8,6 +8,7 @@
 
 #include "location.h"
 #include "table_cell.h"
+#include "table_cell_format.h"
 #include "table_change_history.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
@@ -68,6 +69,7 @@ struct TableSheet {
   void set_current_row_height(size_t height);
 
   void set_current_cell_format(const TableCellFormat& format);
+  std::optional<TableCellFormat> get_current_cell_format() const;
 
 private:
   void apply_state_change_item(const StateHistoryItemPtr &state);

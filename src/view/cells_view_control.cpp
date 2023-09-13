@@ -165,7 +165,7 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
           }
 
           if (format.font_size) {
-            font.Scale(*format.font_size);
+            font.SetPointSize(*format.font_size);
           }
 
           if (format.font_name) {

@@ -222,7 +222,7 @@ void TableWorkbookDocument::clear() {
 }
 
 TableSheetPtr TableWorkbookDocument::add_sheet(const std::string &name) {
-  const auto& result = std::make_shared<TableSheet>(name);
+  const auto &result = std::make_shared<TableSheet>(name);
   _sheets.push_back(result);
   _changed = true;
 
@@ -322,7 +322,8 @@ void TableWorkbookDocument::set_current_row_height(size_t height) {
   _event_sink->send_event(ROW_HEIGHT_UPDATED, {});
 }
 
-std::optional<Location> TableWorkbookDocument::current_sheet_selected_cell() const {
+std::optional<Location>
+TableWorkbookDocument::current_sheet_selected_cell() const {
   if (_current_sheet) {
     return _current_sheet->current_cell;
   }
@@ -330,8 +331,13 @@ std::optional<Location> TableWorkbookDocument::current_sheet_selected_cell() con
   return {};
 }
 
-void TableWorkbookDocument::set_current_cell_format(const TableCellFormat& format) {
+void TableWorkbookDocument::set_current_cell_format(
+    const TableCellFormat &format) {
   if (_current_sheet) {
     _current_sheet->set_current_cell_format(format);
   }
+}
+
+std::optional<TableCellFormat> TableWorkbookDocument::get_current_cell_format() const {
+  return _current_sheet->get_current_cell_format();
 }

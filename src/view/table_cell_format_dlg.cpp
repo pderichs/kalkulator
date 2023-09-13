@@ -3,12 +3,12 @@
 #include <wx/fontenum.h>
 #include <wx/wx.h>
 
-TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent,
-                                       const wxFont &cell_view_font,
-                                       wxWindowID id, const wxString &title,
-                                       const wxPoint &pos, const wxSize &size,
-                                       long style)
+TableCellFormatDlg::TableCellFormatDlg(
+    wxWindow *parent, const std::optional<TableCellFormat> &cell_format,
+    const wxFont &cell_view_font, wxWindowID id, const wxString &title,
+    const wxPoint &pos, const wxSize &size, long style)
     : wxDialog(parent, id, title, pos, size, style) {
+  _cell_format = cell_format;
   _cell_view_font = cell_view_font;
 
   this->SetSizeHints(wxDefaultSize, wxDefaultSize);
@@ -55,10 +55,16 @@ TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent,
   m_lblFontSize->Wrap(-1);
   bSizerFontSize->Add(m_lblFontSize, 0, wxALL, 5);
 
+  size_t font_size;
+  if (_cell_format && _cell_format->font_size) {
+    font_size = *(_cell_format->font_size);
+  } else {
+    font_size = _cell_view_font.GetPointSize();
+  }
   m_spnFontSize =
       new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                      wxDefaultSize, wxSP_ARROW_KEYS, 0, 50, 0);
-  m_spnFontSize->SetValue(_cell_view_font.GetPointSize());
+  m_spnFontSize->SetValue(font_size);
   bSizerFontSize->Add(m_spnFontSize, 0, wxALL, 5);
 
   bSizerGlobal->Add(bSizerFontSize, 0, wxEXPAND, 5);

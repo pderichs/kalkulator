@@ -77,6 +77,7 @@ public:
   void redo();
 
   void set_current_cell_format(const TableCellFormat& format);
+  std::optional<TableCellFormat> get_current_cell_format() const;
 
 private:
   std::string _path;
