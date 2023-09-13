@@ -3,11 +3,14 @@
 #include <wx/fontenum.h>
 #include <wx/wx.h>
 
-TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent, wxWindowID id,
-                                       const wxString &title,
+TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent,
+                                       const wxFont &cell_view_font,
+                                       wxWindowID id, const wxString &title,
                                        const wxPoint &pos, const wxSize &size,
                                        long style)
     : wxDialog(parent, id, title, pos, size, style) {
+  _cell_view_font = cell_view_font;
+
   this->SetSizeHints(wxDefaultSize, wxDefaultSize);
 
   wxBoxSizer *bSizerGlobal;
@@ -38,7 +41,7 @@ TableCellFormatDlg::TableCellFormatDlg(wxWindow *parent, wxWindowID id,
   m_lblFontName->Wrap(-1);
   bSizerFontName->Add(m_lblFontName, 0, wxALL, 5);
 
-  m_cmbFontName = new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition,
+  m_cmbFontName = new wxComboBox(this, wxID_ANY, _cell_view_font.GetFaceName(), wxDefaultPosition,
                                  wxDefaultSize, 0, NULL, 0);
   bSizerFontName->Add(m_cmbFontName, 1, wxALL, 5);
 

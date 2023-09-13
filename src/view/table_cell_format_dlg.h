@@ -44,7 +44,8 @@ protected:
   void OnCancel(wxCommandEvent &event);
 
 public:
-  TableCellFormatDlg(wxWindow *parent, wxWindowID id = wxID_ANY,
+  TableCellFormatDlg(wxWindow *parent, const wxFont &cell_view_font,
+                     wxWindowID id = wxID_ANY,
                      const wxString &title = wxT("Format Cell"),
                      const wxPoint &pos = wxDefaultPosition,
                      const wxSize &size = wxSize(716, 451),
@@ -63,6 +64,8 @@ public:
 private:
   std::optional<wxColour> _background_color;
   std::optional<wxColour> _foreground_color;
+
+  wxFont _cell_view_font;
 };
 
 #endif

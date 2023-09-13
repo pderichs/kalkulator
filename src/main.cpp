@@ -762,7 +762,7 @@ KalkulatorMainFrame::ConvertToTableCellFormat(const wxFont &font) {
 void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
   // TODO Set font / format options of current cell in dialog
 
-  TableCellFormatDlg format_dialog(this);
+  TableCellFormatDlg format_dialog(this, _table_control->GetCellViewFont());
 
   if (format_dialog.ShowModal() == wxID_OK) {
     wxPrintf("OK\n");
