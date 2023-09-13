@@ -155,8 +155,22 @@ TableCellFormat TableCellFormatDlg::GetFormat() const {
   }
 
   if (!m_cmbFontName->GetValue().IsEmpty()) {
-    wxPrintf("Font name is not empty.\n");
+    result.font_name = (const char *)m_cmbFontName->GetValue();
   }
+
+  if (m_chkBold->GetValue()) {
+    result.bold = true;
+  }
+
+  if (m_chkItalic->GetValue()) {
+    result.italic = true;
+  }
+
+  if (m_chkUnderlined->GetValue()) {
+    result.underlined = true;
+  }
+
+  result.font_size = static_cast<size_t>(m_spnFontSize->GetValue());
 
   return result;
 }
