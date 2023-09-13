@@ -760,21 +760,19 @@ KalkulatorMainFrame::ConvertToTableCellFormat(const wxFont &font) {
 }
 
 void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
-  // TODO Set font / format options of current cell
+  // TODO Set font / format options of current cell in dialog
 
-  TableCellFormatDlg *format_dialog = new TableCellFormatDlg(this);
+  TableCellFormatDlg format_dialog(this);
 
-  if (format_dialog->ShowModal() == wxID_OK) {
+  if (format_dialog.ShowModal() == wxID_OK) {
     wxPrintf("OK\n");
 
-    TableCellFormat format = format_dialog->GetFormat();
+    TableCellFormat format = format_dialog.GetFormat();
 
     _document->set_current_cell_format(format);
 
     Refresh();
   }
-
-  delete format_dialog;
 
   // wxFontDialog *fontDialog = new wxFontDialog(this);
 

@@ -19,6 +19,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
+- BUG: Format dialog does not show current format of cell
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
 - FEAT: Add > function
