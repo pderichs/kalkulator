@@ -19,7 +19,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- BUG: Format dialog does not show current format of cell
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
 - FEAT: Add > function
@@ -60,6 +59,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- BUG: Format dialog does not show current format of cell
 - BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
 - BUG: Moving current cell to the bottom or right seems to not check boundaries of cell correctly
 - BUG: Lambda implementation somewhat feels like a hack
