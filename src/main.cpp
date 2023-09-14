@@ -96,8 +96,6 @@ private:
 
   bool PermitLoseChanges();
 
-  TableCellFormat ConvertToTableCellFormat(const wxFont &font);
-
   bool IsDarkUI() const {
     wxSystemAppearance s = wxSystemSettings::GetAppearance();
     return s.IsDark();
@@ -745,24 +743,11 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
                                          // center of view?
 }
 
-TableCellFormat
-KalkulatorMainFrame::ConvertToTableCellFormat(const wxFont &font) {
-  TableCellFormat format;
-
-  format.font_size = static_cast<size_t>(font.GetPointSize());
-  format.font_name = static_cast<const char *>(font.GetFaceName());
-  format.underlined = font.GetUnderlined();
-  format.bold = font.GetWeight() == wxFONTWEIGHT_BOLD;
-  format.italic = font.GetStyle() == wxFONTSTYLE_ITALIC;
-  // TODO: Colors
-
-  return format;
-}
-
 void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
   // TODO Set font / format options of current cell in dialog
 
-  TableCellFormatDlg format_dialog(this, _document->get_current_cell_format(), _table_control->GetCellViewFont());
+  TableCellFormatDlg format_dialog(this, _document->get_current_cell_format(),
+                                   _table_control->GetCellViewFont());
 
   if (format_dialog.ShowModal() == wxID_OK) {
     wxPrintf("OK\n");
@@ -773,13 +758,4 @@ void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
 
     Refresh();
   }
-
-  // wxFontDialog *fontDialog = new wxFontDialog(this);
-
-  // if (fontDialog->ShowModal() == wxID_OK) {
-  //   wxFont font = fontDialog->GetFontData().GetChosenFont();
-
-  //   TableCellFormat format = ConvertToTableCellFormat(font);
-  //   _document->set_current_cell_format(format);
-  // }
 }
