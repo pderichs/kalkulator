@@ -34,6 +34,7 @@
 #include "view/table_cell_format_dlg.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
+#include "view/icons.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
@@ -44,15 +45,15 @@
 #define WIDTH 1024
 #define HEIGHT 768
 
-typedef std::pair<std::string, std::string> IconPaths;
+typedef std::pair<const char**, const char**> IconPaths;
 
 // clang-format off
 // Map between icon_key and dark mode and bright mode icon paths.
 std::map<std::string, IconPaths> IconDictionary = {
-    {"new", {"outline_insert_drive_file_white_18dp.png", "outline_insert_drive_file_black_18dp.png"}},
-    {"open", {"outline_folder_open_white_18dp.png", "outline_folder_open_black_18dp.png"}},
-    {"save", {"outline_save_white_18dp.png", "outline_save_black_18dp.png"}},
-    {"height", {"outline_height_white_18dp.png", "outline_height_black_18dp.png"}},
+    {"new", {outline_insert_drive_file_white_18dp_xpm, outline_insert_drive_file_black_18dp_xpm}},
+    {"open", {outline_folder_open_white_18dp_xpm, outline_folder_open_black_18dp_xpm}},
+    {"save", {outline_save_white_18dp_xpm, outline_save_black_18dp_xpm}},
+    {"height", {outline_height_white_18dp_xpm, outline_height_black_18dp_xpm}}
 };
 // clang-format on
 
@@ -101,7 +102,7 @@ private:
     return s.IsDark();
   }
 
-  wxString GetIconPath(const std::string &icon_id) const;
+  const char** GetIcon(const std::string &icon_id) const;
 
   void SaveDocument(const std::string &file_path);
 
@@ -230,12 +231,12 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
 }
 
 void KalkulatorMainFrame::InitializeIcons() {
-  _icon_new = new wxBitmap(GetIconPath("new"), wxBITMAP_TYPE_PNG);
-  _icon_open = new wxBitmap(GetIconPath("open"), wxBITMAP_TYPE_PNG);
-  _icon_save = new wxBitmap(GetIconPath("save"), wxBITMAP_TYPE_PNG);
-  _icon_height = new wxBitmap(GetIconPath("height"), wxBITMAP_TYPE_PNG);
+  _icon_new = new wxBitmap(GetIcon("new"));
+  _icon_open = new wxBitmap(GetIcon("open"));
+  _icon_save = new wxBitmap(GetIcon("save"));
+  _icon_height = new wxBitmap(GetIcon("height"));
 
-  wxBitmap temp(GetIconPath("height"), wxBITMAP_TYPE_PNG);
+  wxBitmap temp(GetIcon("height"));
   wxImage image = temp.ConvertToImage();
   image = image.Rotate90();
   _icon_width = new wxBitmap(image);
@@ -315,25 +316,25 @@ void KalkulatorMainFrame::InitializeMenu() {
   SetMenuBar(menuBar);
 }
 
-wxString KalkulatorMainFrame::GetIconPath(const std::string &icon_key) const {
+const char** KalkulatorMainFrame::GetIcon(const std::string &icon_key) const {
   auto it = IconDictionary.find(icon_key);
   if (it == IconDictionary.end()) {
-    // TODO: Default icon path?
-    return "not_existing";
+    std::stringstream ss;
+    ss << "Icon ";
+    ss << icon_key << " does not exist.";
+    throw std::runtime_error(ss.str());
   }
 
-  const auto &paths = it->second;
+  const auto &icons = it->second;
 
-  wxString path;
+  const char** icon;
   if (IsDarkUI()) {
-    path = paths.first.c_str();
+    icon = icons.first;
   } else {
-    path = paths.second.c_str();
+    icon = icons.second;
   }
 
-  wxFileName f(wxStandardPaths::Get().GetExecutablePath());
-  f.SetFullName(path);
-  return wxString(f.GetLongPath());
+  return icon;
 }
 
 void KalkulatorMainFrame::CreateToolbar() {

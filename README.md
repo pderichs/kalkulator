@@ -20,6 +20,7 @@ The source code and documentation of this project is licensed under the [Apache 
 ## TODO List
 
 - REFA: CMake
+- REFA: eval CMake Tests (enable_testing etc)
 - REFA: License update
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
