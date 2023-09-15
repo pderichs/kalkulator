@@ -7,6 +7,12 @@ This is a simple and small spreadsheet application which uses a Lisp-like langua
 
 I have implemented a similar application in C before ("simplecalc"), but for usability reasons I wanted to create a GUI application now.
 
+## Build
+
+Install dependencies in debian:
+
+apt install libwxgtk3.2-dev libsqlite3-dev
+
 ## License
 
 This project makes use of other external libraries and projects. The used parts of these external libraries and projects can be found in the `vendor` folder in this repository. Please refer to their respective LICENSES, terms and conditions on their websites:
