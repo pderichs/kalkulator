@@ -1,3 +1,8 @@
+/**
+ * These are some icons from the Google Material Design icons converted to xpm.
+ * For more information see: https://github.com/google/material-design-icons
+ */
+
 #ifndef KALKULATOR_ICONS_INCLUDED
 #define KALKULATOR_ICONS_INCLUDED
 
