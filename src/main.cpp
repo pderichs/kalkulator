@@ -30,11 +30,11 @@
 #include "model/table/table_workbook_file.h"
 #include "model/table/table_workbook_file_error.h"
 #include "tests.h"
+#include "view/icons.h"
 #include "view/kalkulator_system_colors.h"
 #include "view/table_cell_format_dlg.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
-#include "view/icons.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
@@ -45,7 +45,7 @@
 #define WIDTH 1024
 #define HEIGHT 768
 
-typedef std::pair<const char**, const char**> IconPaths;
+typedef std::pair<const char **, const char **> IconPaths;
 
 // clang-format off
 // Map between icon_key and dark mode and bright mode icon paths.
@@ -102,7 +102,7 @@ private:
     return s.IsDark();
   }
 
-  const char** GetIcon(const std::string &icon_id) const;
+  const char **GetIcon(const std::string &icon_id) const;
 
   void SaveDocument(const std::string &file_path);
 
@@ -316,7 +316,7 @@ void KalkulatorMainFrame::InitializeMenu() {
   SetMenuBar(menuBar);
 }
 
-const char** KalkulatorMainFrame::GetIcon(const std::string &icon_key) const {
+const char **KalkulatorMainFrame::GetIcon(const std::string &icon_key) const {
   auto it = IconDictionary.find(icon_key);
   if (it == IconDictionary.end()) {
     std::stringstream ss;
@@ -327,7 +327,7 @@ const char** KalkulatorMainFrame::GetIcon(const std::string &icon_key) const {
 
   const auto &icons = it->second;
 
-  const char** icon;
+  const char **icon;
   if (IsDarkUI()) {
     icon = icons.first;
   } else {
