@@ -9,9 +9,11 @@ I have implemented a similar application in C before ("simplecalc"), but for usa
 
 ## Build
 
-Install dependencies in debian:
+Install dependencies in Debian:
 
-apt install libwxgtk3.2-dev libsqlite3-dev
+``` sh
+  apt install libwxgtk3.2-dev libsqlite3-dev
+```
 
 ## License
 
