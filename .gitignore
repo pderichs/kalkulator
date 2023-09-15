@@ -7,3 +7,8 @@ vendor/wxWidgets-3.2.2.1/buildgtk/
 vendor/wxWidgets-3.2.2.1/config.log
 
 vendor/sqlite3/*.o
+
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
