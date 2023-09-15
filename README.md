@@ -27,7 +27,6 @@ The source code and documentation of this project is licensed under the [Apache 
 
 ## TODO List
 
-- REFA: CMake
 - REFA: eval CMake Tests (enable_testing etc)
 - REFA: License update
 - FEAT: defun (with newly added lambda support, this should be doable now)
@@ -70,6 +69,7 @@ The source code and documentation of this project is licensed under the [Apache 
 
 # DONE
 
+- REFA: CMake
 - BUG: Format dialog does not show current format of cell
 - BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
 - BUG: Moving current cell to the bottom or right seems to not check boundaries of cell correctly
