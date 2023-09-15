@@ -17,13 +17,13 @@ Install dependencies in Debian:
 
 ## License
 
-This project makes use of other external libraries and projects. The used parts of these external libraries and projects can be found in the `vendor` folder in this repository. Please refer to their respective LICENSES, terms and conditions on their websites:
+The source code and documentation of this project is licensed under the [GNU GENERAL PUBLIC LICENSE version 3](https://www.gnu.org/licenses/gpl-3.0.txt).
+
+This project makes use of other external libraries and projects. Please refer to their respective LICENSES, terms and conditions on their websites:
 
 - [wxWidgets](https://www.wxwidgets.org/)
 - [SQLite](https://www.sqlite.org/index.html)
 - [Google Material Design Icons](https://github.com/google/material-design-icons)
-
-The source code and documentation of this project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
 ## TODO List
 
