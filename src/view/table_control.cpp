@@ -47,12 +47,12 @@ TableControl::TableControl(KalkulatorSystemColorsPtr sys_colors,
 TableControl::~TableControl() {
   if (_column_headers_control) {
     delete _column_headers_control;
-    _column_headers_control = NULL;
+    _column_headers_control = nullptr;
   }
 
   if (_row_headers_control) {
     delete _row_headers_control;
-    _row_headers_control = NULL;
+    _row_headers_control = nullptr;
   }
 }
 

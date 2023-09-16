@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef KALKULATOR_SYSTEM_COLORS_INCLUDED
 #define KALKULATOR_SYSTEM_COLORS_INCLUDED
@@ -43,27 +42,27 @@ struct KalkulatorSystemColors {
   ~KalkulatorSystemColors() {
     if (window_brush) {
       delete window_brush;
-      window_brush = NULL;
+      window_brush = nullptr;
     }
 
     if (grid_pen) {
       delete grid_pen;
-      grid_pen = NULL;
+      grid_pen = nullptr;
     }
 
     if (caption_grid_pen) {
       delete caption_grid_pen;
-      caption_grid_pen = NULL;
+      caption_grid_pen = nullptr;
     }
 
     if (current_cell_pen) {
       delete current_cell_pen;
-      current_cell_pen = NULL;
+      current_cell_pen = nullptr;
     }
 
     if (caption_background_brush) {
       delete caption_background_brush;
-      caption_background_brush = NULL;
+      caption_background_brush = nullptr;
     }
   }
 

@@ -6,6 +6,8 @@
 #ifndef KALKULATOR_ICONS_INCLUDED
 #define KALKULATOR_ICONS_INCLUDED
 
+// clang-format off
+
 /* XPM */
 static const char * outline_save_black_18dp_xpm[] = {
 "18 18 2 1",
@@ -197,5 +199,7 @@ static const char * outline_insert_drive_file_white_18dp_xpm[] = {
 "   ............   ",
 "     ........     ",
 "                  "};
+
+// clang-format on
 
 #endif

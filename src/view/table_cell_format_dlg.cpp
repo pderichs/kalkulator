@@ -61,7 +61,7 @@ TableCellFormatDlg::TableCellFormatDlg(
   bSizerFontName->Add(m_lblFontName, 0, wxALL, 5);
 
   m_cmbFontName = new wxComboBox(this, wxID_ANY, _cell_view_font.GetFaceName(),
-                                 wxDefaultPosition, wxDefaultSize, 0, NULL, 0);
+                                 wxDefaultPosition, wxDefaultSize, 0, nullptr, 0);
   bSizerFontName->Add(m_cmbFontName, 1, wxALL, 5);
 
   bSizerGlobal->Add(bSizerFontName, 0, wxEXPAND, 5);

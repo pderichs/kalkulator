@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include <cstddef>
 #include <memory>
@@ -188,7 +187,7 @@ bool MyApp::OnInit() {
 }
 
 KalkulatorMainFrame::KalkulatorMainFrame()
-    : wxFrame(NULL, wxID_ANY, "Kalkulator " VERSION) {
+    : wxFrame(nullptr, wxID_ANY, "Kalkulator " VERSION) {
   _document = std::make_shared<TableWorkbookDocument>(this);
 
   InitializeModel();
@@ -210,42 +209,42 @@ KalkulatorMainFrame::KalkulatorMainFrame()
 KalkulatorMainFrame::~KalkulatorMainFrame() {
   if (_icon_new) {
     delete _icon_new;
-    _icon_new = NULL;
+    _icon_new = nullptr;
   }
 
   if (_icon_height) {
     delete _icon_height;
-    _icon_height = NULL;
+    _icon_height = nullptr;
   }
 
   if (_icon_width) {
     delete _icon_width;
-    _icon_width = NULL;
+    _icon_width = nullptr;
   }
 
   if (_icon_open) {
     delete _icon_open;
-    _icon_open = NULL;
+    _icon_open = nullptr;
   }
 
   if (_icon_save) {
     delete _icon_save;
-    _icon_save = NULL;
+    _icon_save = nullptr;
   }
 
   if (_toolbar) {
     delete _toolbar;
-    _toolbar = NULL;
+    _toolbar = nullptr;
   }
 
   if (_table_control) {
     delete _table_control;
-    _table_control = NULL;
+    _table_control = nullptr;
   }
 
   if (_text_control_formula) {
     delete _text_control_formula;
-    _text_control_formula = NULL;
+    _text_control_formula = nullptr;
   }
 }
 
