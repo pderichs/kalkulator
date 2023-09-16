@@ -17,7 +17,7 @@ Install dependencies in Debian:
 
 ## License
 
-The source code and documentation of this project is licensed under the [GNU GENERAL PUBLIC LICENSE version 3](https://www.gnu.org/licenses/gpl-3.0.txt).
+This project is licensed under the [GNU GENERAL PUBLIC LICENSE v3](https://www.gnu.org/licenses/gpl-3.0.txt).
 
 This project makes use of other external libraries and projects. Please refer to their respective LICENSES, terms and conditions on their websites:
 
@@ -27,11 +27,13 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- REFA: License update
+- EVAL: Is recalculation dependent on repaint events? -> if so, change it. Should only be a concern of the model.
 - REFA: eval CMake Tests (enable_testing etc)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
 - FEAT: Add > function
+- FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
+- FEAT: Replace
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
 - FEAT: Add simple format: underlined
@@ -69,6 +71,7 @@ This project makes use of other external libraries and projects. Please refer to
 
 # DONE
 
+- REFA: License update
 - REFA: CMake
 - BUG: Format dialog does not show current format of cell
 - BUG: Newly applied format of cell (e.g. background color) is not visible when cell is selected
