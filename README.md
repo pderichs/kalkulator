@@ -45,6 +45,7 @@ This project makes use of other external libraries and projects. Please refer to
 ## TODO List
 
 - REFA: eval tests refactoring (boost, CMake: enable_testing etc)
+- FEAT: ScrollToCell -> Cell should be in center of view
 - EVAL: Is recalculation dependent on repaint events? -> if so, change it. Should only be a concern of the model.
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
