@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "table_control.h"
 #include "table_column_headers_control.h"
@@ -32,15 +31,10 @@ TableControl::TableControl(KalkulatorSystemColorsPtr sys_colors,
                            EventSink *event_sink, wxWindow *parent,
                            wxWindowID id, const wxPoint &pos,
                            const wxSize &size, long style)
-    : wxWindow(parent, id, pos, size, style) {
-  assert(event_sink);
-  assert(document);
-
-  _event_sink = event_sink;
-  _document = document;
-
-  _sys_colors = sys_colors;
-
+    : wxWindow(parent, id, pos, size, style), _event_sink(event_sink),
+      _document(document), _sys_colors(sys_colors), _top_sizer(nullptr),
+      _row_cell_view_sizer(nullptr), _cells_view_control(nullptr),
+      _row_headers_control(nullptr), _column_headers_control(nullptr) {
   Init();
 }
 

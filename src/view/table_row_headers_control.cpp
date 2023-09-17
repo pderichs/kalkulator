@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "table_row_headers_control.h"
 #include "kalkulator_system_colors.h"
@@ -30,9 +29,8 @@ TableRowHeadersControl::TableRowHeadersControl(
     EventSink *event_sink, wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style)
     : TableSheetView(document, event_sink, parent, id, pos, size,
-                     style | ~wxVSCROLL) {
-  _sys_colors = sys_colors;
-
+                     style | ~wxVSCROLL),
+      _sys_colors(sys_colors) {
   int height = document->get_current_sheet_height();
   SetScrollRate(0, 10);
   SetVirtualSize(ROW_HEADER_WIDTH, height);
@@ -41,7 +39,7 @@ TableRowHeadersControl::TableRowHeadersControl(
   Bind(wxEVT_SET_FOCUS, &TableRowHeadersControl::OnFocus, this);
 }
 
-void TableRowHeadersControl::OnFocus(wxFocusEvent& WXUNUSED(event)) {
+void TableRowHeadersControl::OnFocus(wxFocusEvent &WXUNUSED(event)) {
   _event_sink->send_event(HEADER_GOT_FOCUS, {});
 }
 

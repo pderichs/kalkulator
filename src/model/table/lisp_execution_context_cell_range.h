@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_EXECUTION_CONTEXT_CELL_RANGE_INCLUDED
 #define LISP_EXECUTION_CONTEXT_CELL_RANGE_INCLUDED
@@ -28,10 +27,8 @@
 
 class LispExecutionContextCellRange : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextCellRange(TableWorkbookDocumentPtr document) {
-    _document = document;
-  }
-
+  LispExecutionContextCellRange(TableWorkbookDocumentPtr document)
+      : _document(document) {}
   virtual ~LispExecutionContextCellRange() = default;
 
   virtual LispValuePtr value(const LispValuePtrVector &func,

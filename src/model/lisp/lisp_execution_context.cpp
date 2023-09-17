@@ -47,7 +47,7 @@
 #include <sstream>
 #include <stdexcept>
 
-LispExecutionContext::LispExecutionContext() {
+LispExecutionContext::LispExecutionContext(): _functions() {
   // Prepare functions
   _functions["+"] = std::make_shared<LispExecutionContextAddition>();
   _functions["-"] = std::make_shared<LispExecutionContextSubtraction>();

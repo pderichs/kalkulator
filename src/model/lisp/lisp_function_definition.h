@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_CLOSURE_DEFINITION_INCLUDED
 #define LISP_CLOSURE_DEFINITION_INCLUDED
@@ -23,18 +22,19 @@
 #include <map>
 #include <string>
 
-#include "tools.h"
 #include "lisp_value_ptr.h"
+#include "tools.h"
 
-//typedef std::map<std::string, LispValuePtr> LispFunctionParameterDefinitions;
+// typedef std::map<std::string, LispValuePtr> LispFunctionParameterDefinitions;
 
 // Used for function definitions and closure definitions.
 // If used for closure definitions, name is empty.
 struct LispFunctionDefinition {
   std::string name;
-
   StringVector parameter_definitions;
   LispValuePtrVector body;
+
+  LispFunctionDefinition() : name(), parameter_definitions(), body() {}
 };
 
 #endif

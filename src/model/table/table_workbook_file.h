@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLE_WORKBOOK_FILE_INCLUDED
 #define TABLE_WORKBOOK_FILE_INCLUDED
@@ -30,6 +29,10 @@ class TableWorkbookFile {
 public:
   TableWorkbookFile();
   ~TableWorkbookFile();
+
+  // Delete copy constructor and assignemnt operator
+  TableWorkbookFile(const TableWorkbookFile &other) = delete;
+  TableWorkbookFile &operator=(const TableWorkbookFile &other) = delete;
 
   void open(const std::string &filename);
   void close();

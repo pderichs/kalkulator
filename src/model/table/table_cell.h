@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLE_CELL_INCLUDED
 #define TABLE_CELL_INCLUDED
@@ -31,7 +30,8 @@
 
 class TableCell {
 public:
-  TableCell(int row, int col) : _location(col, row) {}
+  TableCell(int row, int col)
+      : _formula_content(), _lisp_value(), _location(col, row), _format() {}
 
   void update_content(const std::string &content);
   std::string visible_content() const;

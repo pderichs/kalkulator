@@ -14,14 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "table_sheet.h"
 #include "table_cell.h"
 #include "table_change_history.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
+#include "table_selections.h"
 #include <cassert>
 #include <cstddef>
 #include <iostream>
@@ -33,9 +33,9 @@ const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
 const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
-TableSheet::TableSheet(const std::string &name) : current_cell(0, 0) {
-  this->name = name;
-
+TableSheet::TableSheet(const std::string &param_name)
+    : column_definitions(), row_definitions(), rows(), name(param_name),
+      selections(), current_cell(0, 0), change_history() {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     column_definitions.push_back(std::make_shared<TableColumnDefinition>());
   }

@@ -30,14 +30,10 @@ private:
   long x_, y_;
 
 public:
-  Location() {
-    x_ = 0;
-    y_ = 0;
+  Location(): x_(0), y_(0) {
   }
 
-  explicit Location(long x, long y) {
-    x_ = x;
-    y_ = y;
+  explicit Location(long x, long y): x_(x), y_(y) {
   }
 
   long x() const { return x_; }

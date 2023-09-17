@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "table_cell_format_dlg.h"
 #include <wx/colordlg.h>
@@ -26,7 +25,15 @@ TableCellFormatDlg::TableCellFormatDlg(
     wxWindow *parent, const std::optional<TableCellFormat> &cell_format,
     const wxFont &cell_view_font, wxWindowID id, const wxString &title,
     const wxPoint &pos, const wxSize &size, long style)
-    : wxDialog(parent, id, title, pos, size, style) {
+    : wxDialog(parent, id, title, pos, size, style), m_chkBold(nullptr),
+      m_chkItalic(nullptr), m_chkUnderlined(nullptr), m_lblFontName(nullptr),
+      m_cmbFontName(nullptr), m_lblFontSize(nullptr), m_spnFontSize(nullptr),
+      m_lblBackgroundColor(nullptr), m_lblBackgroundColorVisualization(nullptr),
+      m_btnSelectBackgroundColor(nullptr), m_lblForegroundColor(nullptr),
+      m_lblForegroundColorVisualization(nullptr),
+      m_btnSelectForegroundColor(nullptr), m_btnOK(nullptr),
+      m_btnCancel(nullptr), _background_color(), _foreground_color(),
+      _cell_view_font(), _cell_format() {
   _cell_format = cell_format;
   _cell_view_font = cell_view_font;
 
@@ -60,8 +67,9 @@ TableCellFormatDlg::TableCellFormatDlg(
   m_lblFontName->Wrap(-1);
   bSizerFontName->Add(m_lblFontName, 0, wxALL, 5);
 
-  m_cmbFontName = new wxComboBox(this, wxID_ANY, _cell_view_font.GetFaceName(),
-                                 wxDefaultPosition, wxDefaultSize, 0, nullptr, 0);
+  m_cmbFontName =
+      new wxComboBox(this, wxID_ANY, _cell_view_font.GetFaceName(),
+                     wxDefaultPosition, wxDefaultSize, 0, nullptr, 0);
   bSizerFontName->Add(m_cmbFontName, 1, wxALL, 5);
 
   bSizerGlobal->Add(bSizerFontName, 0, wxEXPAND, 5);

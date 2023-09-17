@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "table_workbook_file.h"
 #include "table_cell.h"
@@ -180,7 +179,8 @@ static int read_cells_callback(void *data, int argc, char **argv,
   return 0;
 }
 
-TableWorkbookFile::TableWorkbookFile() { _db = nullptr; }
+TableWorkbookFile::TableWorkbookFile()
+    : _file_path(), _db(nullptr), _tables() {}
 
 TableWorkbookFile::~TableWorkbookFile() { close(); }
 

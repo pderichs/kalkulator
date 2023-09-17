@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLE_SHEET_VIEW_INCLUDED
 #define TABLE_SHEET_VIEW_INCLUDED
@@ -30,6 +29,10 @@ public:
                  wxWindow *parent, wxWindowID id, const wxPoint &pos,
                  const wxSize &size, long style);
   virtual ~TableSheetView() = default;
+
+  // Delete copy constructor and assignment operator
+  TableSheetView(const TableSheetView &other) = delete;
+  TableSheetView &operator=(const TableSheetView &other) = delete;
 
   Location GetScrollPosition() const;
   void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);

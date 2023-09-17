@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "table_column_headers_control.h"
 
@@ -29,9 +28,8 @@ TableColumnHeadersControl::TableColumnHeadersControl(
     EventSink *event_sink, wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style)
     : TableSheetView(document, event_sink, parent, id, pos, size,
-                     style | ~wxHSCROLL) {
-  _sys_colors = sys_colors;
-
+                     style | ~wxHSCROLL),
+      _sys_colors(sys_colors) {
   int width = _document->get_current_sheet_width() + ROW_HEADER_WIDTH;
   SetScrollRate(10, 0);
   SetVirtualSize(width, COLUMN_HEADER_HEIGHT);

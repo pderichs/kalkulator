@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLE_CHANGE_HISTORY_INCLUDED
 #define TABLE_CHANGE_HISTORY_INCLUDED
@@ -42,17 +41,12 @@ struct StateHistoryItem {
   CellStates cell_states;
 
   // Constructor for single cell state item
-  StateHistoryItem(const CellState &state) {
-    update_time();
-    cell_states.push_back(state);
-  }
+  StateHistoryItem(const CellState &state)
+      : time_stamp(std::chrono::system_clock::now()), cell_states({state}) {}
 
   // Constructor for many cell state items
-  StateHistoryItem(const CellStates &states) : cell_states(states) {
-    update_time();
-  }
-
-  void update_time() { time_stamp = std::chrono::system_clock::now(); }
+  StateHistoryItem(const CellStates &states)
+      : time_stamp(std::chrono::system_clock::now()), cell_states(states) {}
 
   void reverse() {
     for (auto &state : cell_states) {
@@ -65,7 +59,7 @@ typedef std::shared_ptr<StateHistoryItem> StateHistoryItemPtr;
 
 class StateChangeQueue {
 public:
-  StateChangeQueue(size_t max_items) { _max_items = max_items; }
+  StateChangeQueue(size_t max_items): _max_items(max_items), _queue() {}
 
   bool empty() const { return _queue.empty(); }
 

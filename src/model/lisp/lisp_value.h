@@ -54,7 +54,7 @@ public:
   typedef double DoubleType;
   typedef int64_t IntegerType;
 
-  explicit LispValue(LispValueType type) { _type = type; }
+  explicit LispValue(LispValueType type) : _type(type), _content({}) {}
 
   LispValueType type() const { return _type; }
 

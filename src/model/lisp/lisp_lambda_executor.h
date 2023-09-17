@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_LAMBDA_EXECUTOR_INCLUDED
 #define LISP_LAMBDA_EXECUTOR_INCLUDED
@@ -35,10 +34,8 @@
 class LispLambdaExecutor {
 public:
   LispLambdaExecutor(const LispFunctionDefinition &function_definition,
-                     const LispValuePtrVector &params) {
-    _definition = function_definition;
-    _params = params;
-  }
+                     const LispValuePtrVector &params)
+      : _definition(function_definition), _params(params) {}
   virtual ~LispLambdaExecutor() = default;
 
   virtual LispValuePtr value(const LispExecutionContext &execution_context,
@@ -59,11 +56,12 @@ public:
 
     LispValuePtr expanded_body = replace_names_with_values(def, named_params);
 
-    return execute_actual_body(expanded_body->list(), execution_context, context_param);
+    return execute_actual_body(expanded_body->list(), execution_context,
+                               context_param);
   }
 
   LispValuePtr
-  execute_actual_body(const LispValuePtrVector& def,
+  execute_actual_body(const LispValuePtrVector &def,
                       const LispExecutionContext &execution_context,
                       const std::any &context_param) const {
     return execution_context.execute(def, context_param);
@@ -110,8 +108,8 @@ public:
   }
 
 private:
-  LispValuePtrVector _params;
   LispFunctionDefinition _definition;
+  LispValuePtrVector _params;
 };
 
 #endif

@@ -30,7 +30,7 @@ struct TableRowDefinition {
   std::string caption;
   size_t height;
 
-  TableRowDefinition() { height = DEFAULT_ROW_HEIGHT; }
+  TableRowDefinition(): caption(), height(DEFAULT_ROW_HEIGHT) {}
 };
 
 typedef std::shared_ptr<TableRowDefinition> TableRowDefinitionPtr;

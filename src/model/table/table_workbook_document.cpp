@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "table_workbook_document.h"
 #include "table_cell.h"
@@ -28,9 +27,9 @@
 #include <tuple>
 #include <utility>
 
-TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink) {
-  _event_sink = event_sink;
-
+TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink)
+    : _path(), _changed(false), _sheets(), _event_sink(event_sink),
+      _current_sheet() {
   initialize();
 }
 
@@ -357,6 +356,7 @@ void TableWorkbookDocument::set_current_cell_format(
   }
 }
 
-std::optional<TableCellFormat> TableWorkbookDocument::get_current_cell_format() const {
+std::optional<TableCellFormat>
+TableWorkbookDocument::get_current_cell_format() const {
   return _current_sheet->get_current_cell_format();
 }

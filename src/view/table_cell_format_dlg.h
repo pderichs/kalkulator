@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLE_CELL_FORMAT_DLG_INCLUDED
 #define TABLE_CELL_FORMAT_DLG_INCLUDED
@@ -73,6 +72,10 @@ public:
 
   ~TableCellFormatDlg();
 
+  // Delete copy constructor and assignment operator
+  TableCellFormatDlg(const TableCellFormatDlg &other) = delete;
+  TableCellFormatDlg &operator=(const TableCellFormatDlg &other) = delete;
+
   void InitializeFontCombo();
 
   TableCellFormat GetFormat() const;
@@ -85,8 +88,8 @@ public:
   void OnSelectForegroundColor(wxCommandEvent &WXUNUSED(event));
   void OnSelectBackgroundColor(wxCommandEvent &WXUNUSED(event));
 
-  void SetBackgroundColor(const wxColour& color);
-  void SetForegroundColor(const wxColour& color);
+  void SetBackgroundColor(const wxColour &color);
+  void SetForegroundColor(const wxColour &color);
 
 private:
   std::optional<wxColour> _background_color;

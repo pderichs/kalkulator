@@ -85,6 +85,10 @@ public:
   KalkulatorMainFrame();
   virtual ~KalkulatorMainFrame();
 
+  // Delete copy constructor and assignment operator
+  KalkulatorMainFrame(const KalkulatorMainFrame &other) = delete;
+  KalkulatorMainFrame &operator=(const KalkulatorMainFrame &other) = delete;
+
   virtual void OnClose(wxCloseEvent &event);
 
 private:
@@ -187,9 +191,13 @@ bool MyApp::OnInit() {
 }
 
 KalkulatorMainFrame::KalkulatorMainFrame()
-    : wxFrame(nullptr, wxID_ANY, "Kalkulator " VERSION) {
-  _document = std::make_shared<TableWorkbookDocument>(this);
-
+    : wxFrame(nullptr, wxID_ANY, "Kalkulator " VERSION),
+      _document(std::make_shared<TableWorkbookDocument>(this)),
+      _table_control(nullptr), _text_control_formula(nullptr),
+      _execution_context(), _sys_colors(), _toolbar(nullptr),
+      _btn_formula_selection(nullptr), _cmb_sheet_selection(nullptr),
+      _icon_new(nullptr), _icon_open(nullptr), _icon_save(nullptr),
+      _icon_height(nullptr), _icon_width(nullptr) {
   InitializeModel();
 
   InitializeIcons();

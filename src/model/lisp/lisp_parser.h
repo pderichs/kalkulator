@@ -49,8 +49,8 @@ private:
   char current_char() const;
 
 private:
-  size_t _pos;
   std::string _lisp;
+  size_t _pos;
 };
 
 #endif

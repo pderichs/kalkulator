@@ -33,8 +33,7 @@ CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
                                    EventSink *event_sink, wxWindow *parent,
                                    wxWindowID id, const wxPoint &pos,
                                    const wxSize &size, long style)
-    : TableSheetView(document, event_sink, parent, id, pos, size, style) {
-  _sys_colors = sys_colors;
+    : TableSheetView(document, event_sink, parent, id, pos, size, style), _sys_colors(sys_colors) {
 
   Bind(wxEVT_CHAR_HOOK, &CellsViewControl::OnKeyPress, this);
   Bind(wxEVT_LEFT_DOWN, &CellsViewControl::OnLeftDown, this);

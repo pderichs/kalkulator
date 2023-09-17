@@ -30,7 +30,7 @@ struct TableColumnDefinition {
   std::string caption;
   size_t width;
 
-  TableColumnDefinition() { width = DEFAULT_COLUMN_WIDTH; }
+  TableColumnDefinition(): caption(), width(DEFAULT_COLUMN_WIDTH) {}
 };
 
 typedef std::shared_ptr<TableColumnDefinition> TableColumnDefinitionPtr;

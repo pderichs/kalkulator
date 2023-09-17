@@ -35,6 +35,10 @@ public:
   TableWorkbookDocument(EventSink *event_sink);
   ~TableWorkbookDocument() = default;
 
+  // Delete copy constructor and assignment operator
+  TableWorkbookDocument(const TableWorkbookDocument& other) = delete;
+  TableWorkbookDocument& operator=(const TableWorkbookDocument& other) = delete;
+
   bool changed() const { return _changed; }
 
   TableSheetPtr table_sheet_by_name(const std::string &name) const;

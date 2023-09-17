@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLE_FORMULA_TEXT_CONTROL_INCLUDED
 #define TABLE_FORMULA_TEXT_CONTROL_INCLUDED
@@ -32,6 +31,12 @@ public:
                           const wxSize &size = wxDefaultSize, long style = 0,
                           const wxValidator &validator = wxDefaultValidator,
                           const wxString &name = wxTextCtrlNameStr);
+
+  // Delete copy constructor and assignment operator
+  TableFormulaTextControl(const TableFormulaTextControl &other) = delete;
+  TableFormulaTextControl &
+  operator=(const TableFormulaTextControl &other) = delete;
+
   void OnKeyPress(wxKeyEvent &event);
 
 private:

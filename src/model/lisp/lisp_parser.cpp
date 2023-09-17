@@ -28,7 +28,7 @@
 #include <stdexcept>
 #include <string>
 
-LispParser::LispParser(const std::string &lisp) { _lisp = lisp; }
+LispParser::LispParser(const std::string &lisp): _lisp(lisp), _pos(0) {}
 
 LispTokens LispParser::parse() {
   LispTokens result;

@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLECONTROL_INCLUDED
 #define TABLECONTROL_INCLUDED
@@ -41,12 +40,16 @@ public:
                long style = wxTAB_TRAVERSAL);
   virtual ~TableControl();
 
+  // Delete copy constructor and assignment operator
+  TableControl(const TableControl &other) = delete;
+  TableControl &operator=(const TableControl &other) = delete;
+
   void OnCellUpdate(const Location &location);
   void OnSetFocus(wxFocusEvent &event);
   void update_scroll_positions(const Location &scroll_pos);
   void ScrollToCurrentCell();
 
-    wxFont GetCellViewFont() const { return _cells_view_control->GetFont(); }
+  wxFont GetCellViewFont() const { return _cells_view_control->GetFont(); }
 
 protected:
   void Init();
@@ -56,13 +59,13 @@ protected:
 private:
   EventSink *_event_sink;
   TableWorkbookDocumentPtr _document;
+  KalkulatorSystemColorsPtr _sys_colors;
 
   wxSizer *_top_sizer;
   wxSizer *_row_cell_view_sizer;
   CellsViewControl *_cells_view_control;
   TableRowHeadersControl *_row_headers_control;
   TableColumnHeadersControl *_column_headers_control;
-  KalkulatorSystemColorsPtr _sys_colors;
 };
 
 #endif

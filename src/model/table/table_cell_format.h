@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLE_CELL_FORMAT_INCLUDED
 #define TABLE_CELL_FORMAT_INCLUDED
@@ -34,6 +33,10 @@ struct TableCellFormat {
   // Colors
   std::optional<TableCellColor> background_color;
   std::optional<TableCellColor> foreground_color;
+
+  TableCellFormat()
+      : font_size(), font_name(), bold(), italic(), underlined(),
+        background_color(), foreground_color() {}
 };
 
 #endif

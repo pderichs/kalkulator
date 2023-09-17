@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_FUNCTION_PARSER_INCLUDED
 #define LISP_FUNCTION_PARSER_INCLUDED
@@ -27,10 +26,8 @@
 
 class LispValueParser {
 public:
-  LispValueParser(const LispTokens &tokens, size_t start = 0) {
-    _pos = start;
-    _tokens = tokens;
-  }
+  LispValueParser(const LispTokens &tokens, size_t start = 0)
+      : _pos(start), _tokens(tokens) {}
 
   LispValuePtr next();
 
@@ -42,8 +39,8 @@ private:
   LispTokens collect_current_function_tokens();
 
 private:
-  LispTokens _tokens;
   size_t _pos;
+  LispTokens _tokens;
 };
 
 #endif

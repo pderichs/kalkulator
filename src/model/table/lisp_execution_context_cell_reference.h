@@ -29,10 +29,7 @@
 
 class LispExecutionContextCellReference : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook) {
-    _workbook = workbook;
-  }
-
+  LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook): _workbook(workbook) {}
   virtual ~LispExecutionContextCellReference() = default;
 
   virtual LispValuePtr value(const LispValuePtrVector &func,
