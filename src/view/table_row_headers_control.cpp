@@ -21,7 +21,6 @@
 
 //  TODO: Remove these as soon as possible!
 const int ROW_HEADER_WIDTH = 50;
-// const int COLUMN_HEADER_HEIGHT = 30;
 
 // NOTE Vertical scrolling is disabled by style
 TableRowHeadersControl::TableRowHeadersControl(
