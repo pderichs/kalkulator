@@ -35,7 +35,7 @@ const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
 TableSheet::TableSheet(const std::string &param_name)
     : column_definitions(), row_definitions(), rows(), name(param_name),
-      selections(), current_cell(0, 0), change_history() {
+      selections(), current_cell(0, 0), change_history(), _listener_map() {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     column_definitions.push_back(std::make_shared<TableColumnDefinition>());
   }
@@ -271,4 +271,12 @@ std::optional<TableCellFormat> TableSheet::get_current_cell_format() const {
   }
 
   return {};
+}
+
+void TableSheet::add_update_listener(const Location &listener,
+                                     const Location &listening_to) {
+  std::ignore = listener;
+  std::ignore = listening_to;
+
+  // TODO
 }

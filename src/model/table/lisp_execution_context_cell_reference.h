@@ -63,6 +63,9 @@ public:
       return LispValueFactory::new_string("#CIRCULARREFERR");
     }
 
+    // Inform document about cell reference
+    _workbook->add_update_listener(cell_location, Location(row, col));
+
     auto opt_cell = _workbook->get_cell(Location(col, row));
     if (!opt_cell) {
       return LispValueFactory::new_none();

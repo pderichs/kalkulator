@@ -14,13 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef TABLE_SHEET_INCLUDED
 #define TABLE_SHEET_INCLUDED
 
 #include <cstddef>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -35,6 +35,8 @@
 
 typedef std::vector<TableRowPtr> TableRows;
 
+typedef std::map<Location, LocationSet> ListenersMap;
+
 struct TableSheet {
   TableSheet(const std::string &name);
 
@@ -45,6 +47,7 @@ struct TableSheet {
   TableSelections selections;
   Location current_cell;
   TableSheetChangeHistory change_history;
+  ListenersMap _listener_map;
 
   size_t row_count() const;
   size_t col_count() const;
@@ -87,8 +90,11 @@ struct TableSheet {
   void set_current_column_width(size_t width);
   void set_current_row_height(size_t height);
 
-  void set_current_cell_format(const TableCellFormat& format);
+  void set_current_cell_format(const TableCellFormat &format);
   std::optional<TableCellFormat> get_current_cell_format() const;
+
+  void add_update_listener(const Location &listener,
+                           const Location &listening_to);
 
 private:
   void apply_state_change_item(const StateHistoryItemPtr &state);

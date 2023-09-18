@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef WORKBOOK_DOCUMENT_INCLUDED
 #define WORKBOOK_DOCUMENT_INCLUDED
@@ -36,8 +35,8 @@ public:
   ~TableWorkbookDocument() = default;
 
   // Delete copy constructor and assignment operator
-  TableWorkbookDocument(const TableWorkbookDocument& other) = delete;
-  TableWorkbookDocument& operator=(const TableWorkbookDocument& other) = delete;
+  TableWorkbookDocument(const TableWorkbookDocument &other) = delete;
+  TableWorkbookDocument &operator=(const TableWorkbookDocument &other) = delete;
 
   bool changed() const { return _changed; }
 
@@ -99,8 +98,11 @@ public:
   void undo();
   void redo();
 
-  void set_current_cell_format(const TableCellFormat& format);
+  void set_current_cell_format(const TableCellFormat &format);
   std::optional<TableCellFormat> get_current_cell_format() const;
+
+  void add_update_listener(const Location &listener,
+                           const Location &listening_to);
 
 private:
   std::string _path;

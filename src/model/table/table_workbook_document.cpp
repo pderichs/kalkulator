@@ -360,3 +360,8 @@ std::optional<TableCellFormat>
 TableWorkbookDocument::get_current_cell_format() const {
   return _current_sheet->get_current_cell_format();
 }
+
+void TableWorkbookDocument::add_update_listener(const Location &listener,
+                                                const Location &listening_to) {
+  _current_sheet->add_update_listener(listener, listening_to);
+}
