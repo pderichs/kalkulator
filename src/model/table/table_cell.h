@@ -31,7 +31,8 @@
 class TableCell {
 public:
   TableCell(int row, int col)
-      : _formula_content(), _lisp_value(), _location(col, row), _format() {}
+      : _formula_content(), _visible_content(), _lisp_value(),
+        _location(col, row), _format() {}
 
   void update_content(const std::string &content);
   std::string visible_content() const;
@@ -50,6 +51,7 @@ public:
 
 private:
   std::string _formula_content;
+  std::string _visible_content;
 
   LispValuePtr _lisp_value;
 

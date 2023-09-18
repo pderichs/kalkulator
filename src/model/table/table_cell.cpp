@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "table_cell.h"
 #include "../lisp/lisp_value.h"
@@ -28,10 +27,12 @@ void TableCell::update_content(const std::string &content) {
   } else {
     _formula_content = "";
   }
+
+  _visible_content = ValueConverter::to_string(_lisp_value, _location);
 }
 
 std::string TableCell::visible_content() const {
-  return ValueConverter::to_string(_lisp_value, _location);
+  return _visible_content;
 }
 
 std::string TableCell::get_formula_content() const {
@@ -50,6 +51,4 @@ bool TableCell::has_content() const {
   return _lisp_value && !_lisp_value->is_none();
 }
 
-void TableCell::clear() {
-  _lisp_value = {};
-}
+void TableCell::clear() { _lisp_value = {}; }
