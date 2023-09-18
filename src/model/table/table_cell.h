@@ -49,6 +49,8 @@ public:
   [[nodiscard]] TableCellFormat format() const { return *_format; }
   void set_format(const TableCellFormat &format) { _format = format; }
 
+  bool recalc();
+
 private:
   std::string _formula_content;
   std::string _visible_content;

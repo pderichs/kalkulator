@@ -27,7 +27,7 @@ void TableCell::update_content(const std::string &content) {
     _formula_content = "";
   }
 
-  _visible_content = ValueConverter::to_string(_lisp_value, _location);
+  recalc();
 }
 
 std::string TableCell::visible_content() const {
@@ -51,3 +51,12 @@ bool TableCell::has_content() const {
 }
 
 void TableCell::clear() { _lisp_value = {}; }
+
+// Returns true if content changed, false otherwise.
+bool TableCell::recalc() {
+  std::string previous_content = _visible_content;
+
+  _visible_content = ValueConverter::to_string(_lisp_value, _location);
+
+  return previous_content != _visible_content;
+}

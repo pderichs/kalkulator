@@ -98,6 +98,7 @@ struct TableSheet {
 
 private:
   void apply_state_change_item(const StateHistoryItemPtr &state) const;
+  void trigger_listeners(const Location &Location);
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

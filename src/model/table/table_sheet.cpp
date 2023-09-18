@@ -198,6 +198,8 @@ void TableSheet::update_content(const Location &cell_location,
   std::string previous_content = cell->get_formula_content();
   cell->update_content(content);
 
+  trigger_listeners(cell_location);
+
   CellState state{cell_location, previous_content, content};
   StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
   change_history.push_state(item);
@@ -273,8 +275,24 @@ std::optional<TableCellFormat> TableSheet::get_current_cell_format() const {
 
 void TableSheet::add_update_listener(const Location &listener,
                                      const Location &listening_to) {
-  std::ignore = listener;
-  std::ignore = listening_to;
+  auto it = _listener_map.find(listening_to);
+  if (it == _listener_map.end()) {
+    _listener_map[listening_to] = { listener };
+  } else {
+    it->second.insert(listener);
+  }
+}
 
-  // TODO
+void TableSheet::trigger_listeners(const Location &location) {
+  auto it = _listener_map.find(location);
+  if (it == _listener_map.end()) {
+    return;
+  }
+
+  for (const auto& listener_location: it->second) {
+    TableCellPtr cell = get_cell_by_location(listener_location);
+    if (cell->recalc()) {
+      // TODO Cell content has changed. The listeners for this cell must be triggered as well.
+    }
+  }
 }
