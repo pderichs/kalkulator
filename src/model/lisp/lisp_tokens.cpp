@@ -26,7 +26,7 @@ void LispTokens::debug_print(std::ostream &oss) const {
   std::string s;
 
   int n = 1;
-  for (auto token : *this) {
+  for (const auto& token : *this) {
     s = token_id_to_string(token.id);
     oss << n << ".) " << s << ", content: " << printable_content_of_token(token)
         << std::endl;
@@ -58,6 +58,7 @@ std::string token_id_to_string(TokenID token_id) {
 std::string printable_content_of_token(const LispToken &token) {
   std::string s;
   LispValue::DoubleType d;
+  LispValue::IntegerType i;
 
   switch (token.id) {
   case IDENTIFIER:
@@ -72,10 +73,10 @@ std::string printable_content_of_token(const LispToken &token) {
     return ss.str();
   }
   case INTEGER: {
-    d = std::any_cast<LispValue::IntegerType>(token.content);
+    i = std::any_cast<LispValue::IntegerType>(token.content);
 
     std::stringstream ss;
-    ss << d;
+    ss << i;
     return ss.str();
   }
   case OPEN_BRACKET:

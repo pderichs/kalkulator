@@ -16,23 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <cstddef>
 #include <memory>
 #include <regex>
-#include <sched.h>
 #include <sstream>
 #include <stdexcept>
 #include <tuple>
 #include <wx/aboutdlg.h>
-#include <wx/dcclient.h>
 #include <wx/event.h>
 #include <wx/filename.h>
-#include <wx/fontdlg.h>
 #include <wx/msgdlg.h>
 #include <wx/numdlg.h>
 #include <wx/rawbmp.h>
 #include <wx/stdpaths.h>
-#include <wx/timer.h>
 #include <wx/wxprec.h>
 
 #include <cstdlib>
