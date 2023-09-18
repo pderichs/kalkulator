@@ -58,7 +58,7 @@ void TableRowHeadersControl::OnDraw(wxDC &dc) {
 
 void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
                                          int width, int height,
-                                         TableSheetPtr sheet) {
+                                         const TableSheetPtr& sheet) {
   std::ignore = width;
   std::ignore = height;
   std::ignore = scrollPos;
@@ -72,7 +72,7 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
   // Rows
   c = 0;
   y = 2;
-  for (auto rowdef : sheet->row_definitions) {
+  for (const auto& rowdef : sheet->row_definitions) {
     // if (y > height) {
     //   break;
     // }
@@ -96,5 +96,5 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
 }
 
 wxSize TableRowHeadersControl::DoGetBestSize() const {
-  return wxSize(ROW_HEADER_WIDTH, 100);
+  return {ROW_HEADER_WIDTH, 100};
 }

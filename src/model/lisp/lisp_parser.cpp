@@ -23,12 +23,10 @@
 #include "lisp_tokens.h"
 #include "tools.h"
 #include <cctype>
-#include <cstdint>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 
-LispParser::LispParser(const std::string &lisp): _lisp(lisp), _pos(0) {}
+LispParser::LispParser(const std::string &lisp) : _lisp(lisp), _pos(0) {}
 
 LispTokens LispParser::parse() {
   LispTokens result;
@@ -137,7 +135,7 @@ LispToken LispParser::read_number() {
     if (std::isdigit(c)) {
       s += c;
     } else if (c == '-') {
-      if (s.size() > 0) {
+      if (!s.empty()) {
         throw LispParserError("Unexpected dash while parsing number", s);
       }
 

@@ -40,7 +40,7 @@ public:
 
 private:
   void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height,
-                   TableSheetPtr sheet);
+                   const TableSheetPtr& sheet);
 
 private:
   KalkulatorSystemColorsPtr _sys_colors;

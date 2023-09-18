@@ -23,9 +23,7 @@
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
 #include <any>
-#include <iostream>
 #include <memory>
-#include <sstream>
 
 LispValuePtr LispValueParser::next() {
   if (!has_next()) {
@@ -37,22 +35,22 @@ LispValuePtr LispValueParser::next() {
   LispToken token = current_token();
 
   if (token.is_double()) {
-    LispValue::DoubleType d =
+    auto d =
         std::any_cast<LispValue::DoubleType>(token.content);
     _pos++;
     return LispValueFactory::new_double(d);
   } else if (token.is_integer()) {
-    LispValue::IntegerType d =
+    auto d =
         std::any_cast<LispValue::IntegerType>(token.content);
     _pos++;
     return LispValueFactory::new_integer(d);
   } else if (token.is_string()) {
-    std::string s = std::any_cast<std::string>(token.content);
+    auto s = std::any_cast<std::string>(token.content);
     _pos++;
     return LispValueFactory::new_string(s);
   } else if (token.is_identifier()) {
     // Same as string but with identifier flag set to true
-    std::string s = std::any_cast<std::string>(token.content);
+    auto s = std::any_cast<std::string>(token.content);
     _pos++;
     return LispValueFactory::new_identifier(s);
   }
@@ -88,7 +86,7 @@ LispValuePtr LispValueParser::parse_list() {
 
   LispTokens param_tokens;
 
-  for (auto token : function_tokens) {
+  for (const auto& token : function_tokens) {
     if (token.is_space()) {
       continue;
     }

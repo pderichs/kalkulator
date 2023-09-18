@@ -36,10 +36,10 @@ public:
   LispLambdaExecutor(const LispFunctionDefinition &function_definition,
                      const LispValuePtrVector &params)
       : _definition(function_definition), _params(params) {}
-  virtual ~LispLambdaExecutor() = default;
+  ~LispLambdaExecutor() = default;
 
-  virtual LispValuePtr value(const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+  LispValuePtr value(const LispExecutionContext &execution_context,
+                     const std::any &context_param) {
     if (_definition.parameter_definitions.size() != _params.size()) {
       throw LispExecutionContextError(
           "Lambda Execution: Parameter count mismatch.");
@@ -60,14 +60,14 @@ public:
                                context_param);
   }
 
-  LispValuePtr
+  [[nodiscard]] LispValuePtr
   execute_actual_body(const LispValuePtrVector &def,
                       const LispExecutionContext &execution_context,
                       const std::any &context_param) const {
     return execution_context.execute(def, context_param);
   }
 
-  LispValuePtr replace_names_with_values(
+  [[nodiscard]] LispValuePtr replace_names_with_values(
       const LispValuePtrVector &list,
       std::map<std::string, LispValuePtr> named_params) const {
 
@@ -94,7 +94,7 @@ public:
     return LispValueFactory::new_list(result);
   }
 
-  std::map<std::string, LispValuePtr> match_params_names_with_values() const {
+  [[nodiscard]] std::map<std::string, LispValuePtr> match_params_names_with_values() const {
     std::map<std::string, LispValuePtr> result;
 
     size_t n = 0;

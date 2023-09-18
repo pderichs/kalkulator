@@ -25,8 +25,6 @@
 #include "lisp_value_ptr.h"
 #include "tools.h"
 
-// typedef std::map<std::string, LispValuePtr> LispFunctionParameterDefinitions;
-
 // Used for function definitions and closure definitions.
 // If used for closure definitions, name is empty.
 struct LispFunctionDefinition {

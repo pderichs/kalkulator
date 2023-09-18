@@ -17,7 +17,6 @@
  */
 
 #include "table_formula_text_control.h"
-#include "../model/event_sink.h"
 
 TableFormulaTextControl::TableFormulaTextControl(
     EventSink *event_sink, wxWindow *parent, wxWindowID id,

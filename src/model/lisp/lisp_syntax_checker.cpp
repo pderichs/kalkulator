@@ -21,7 +21,7 @@
 #include "lisp_parser_error.h"
 #include <sstream>
 
-LispSyntaxChecker::LispSyntaxChecker(const LispTokens &tokens): _tokens(tokens) {}
+LispSyntaxChecker::LispSyntaxChecker(const LispTokens &tokens) : _tokens(tokens) {}
 
 void LispSyntaxChecker::check() const {
   check_matching_brackets();

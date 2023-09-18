@@ -36,7 +36,7 @@ public:
     }
   }
 
-  bool contains(const Location &location) const {
+  [[nodiscard]] bool contains(const Location &location) const {
     if (location.x() < left()) {
       return false;
     }
@@ -56,17 +56,17 @@ public:
     return true;
   }
 
-  int left() const { return topLeft_.x(); }
+  [[nodiscard]] int left() const { return topLeft_.x(); }
 
-  int right() const { return bottomRight_.x(); }
+  [[nodiscard]] int right() const { return bottomRight_.x(); }
 
-  int top() const { return topLeft_.y(); }
+  [[nodiscard]] int top() const { return topLeft_.y(); }
 
-  int bottom() const { return bottomRight_.y(); }
+  [[nodiscard]] int bottom() const { return bottomRight_.y(); }
 
-  int width() const { return right() - left(); }
+  [[nodiscard]] int width() const { return right() - left(); }
 
-  int height() const { return bottom() - top(); }
+  [[nodiscard]] int height() const { return bottom() - top(); }
 
   void enlarge_all_directions(int amount) {
     if (amount <= 0) {

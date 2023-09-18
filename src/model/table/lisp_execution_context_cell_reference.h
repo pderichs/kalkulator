@@ -29,12 +29,12 @@
 
 class LispExecutionContextCellReference : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook): _workbook(workbook) {}
-  virtual ~LispExecutionContextCellReference() = default;
+  explicit LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook) : _workbook(workbook) {}
+  ~LispExecutionContextCellReference() override = default;
 
-  virtual LispValuePtr value(const LispValuePtrVector &func,
+  LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+                             const std::any &context_param) override {
     LispValuePtrVector params = extract_params(func);
 
     if (params.size() != 2) {
@@ -47,9 +47,9 @@ public:
     // itself.
     // The context_param contains the current cell location
     // within the spreadsheet calculation application.
-    Location cell_location = std::any_cast<Location>(context_param);
+    auto cell_location = std::any_cast<Location>(context_param);
 
-    int row, col;
+    LispValue::IntegerType row, col;
 
     params = execute_functions_and_extract_list_results(
         params, execution_context, context_param);

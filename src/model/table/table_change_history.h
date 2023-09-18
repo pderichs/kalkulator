@@ -41,11 +41,11 @@ struct StateHistoryItem {
   CellStates cell_states;
 
   // Constructor for single cell state item
-  StateHistoryItem(const CellState &state)
+  explicit StateHistoryItem(const CellState &state)
       : time_stamp(std::chrono::system_clock::now()), cell_states({state}) {}
 
   // Constructor for many cell state items
-  StateHistoryItem(const CellStates &states)
+  explicit StateHistoryItem(const CellStates &states)
       : time_stamp(std::chrono::system_clock::now()), cell_states(states) {}
 
   void reverse() {
@@ -59,11 +59,11 @@ typedef std::shared_ptr<StateHistoryItem> StateHistoryItemPtr;
 
 class StateChangeQueue {
 public:
-  StateChangeQueue(size_t max_items): _max_items(max_items), _queue() {}
+  explicit StateChangeQueue(size_t max_items): _max_items(max_items), _queue() {}
 
-  bool empty() const { return _queue.empty(); }
+  [[nodiscard]] bool empty() const { return _queue.empty(); }
 
-  size_t size() const { return _queue.size(); }
+  [[nodiscard]] size_t size() const { return _queue.size(); }
 
   void push_state(const StateHistoryItemPtr &state) {
     if (_queue.size() >= _max_items) {
@@ -87,14 +87,14 @@ private:
 
 class TableSheetChangeHistory {
 public:
-  TableSheetChangeHistory(size_t max_items = 50)
+  explicit TableSheetChangeHistory(size_t max_items = 50)
       : _undo_queue(max_items), _redo_queue(max_items) {}
 
   void push_state(const StateHistoryItemPtr &state) {
     _undo_queue.push_state(state);
   }
 
-  StateHistoryItemPtr pop_and_swap(StateChangeQueue &source,
+  static StateHistoryItemPtr pop_and_swap(StateChangeQueue &source,
                                    StateChangeQueue &dest) {
     if (source.empty()) {
       return {};

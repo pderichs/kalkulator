@@ -24,11 +24,11 @@
 
 class LispParserError : public std::runtime_error {
 public:
-  LispParserError(const std::string &msg) : std::runtime_error(msg), _item() {}
+  explicit LispParserError(const std::string &msg) : std::runtime_error(msg), _item() {}
   LispParserError(const std::string &msg, const std::string &item)
       : std::runtime_error(msg), _item(item) {}
 
-  std::string item() const { return _item; }
+  [[nodiscard]] std::string item() const { return _item; }
 
 private:
   std::string _item;

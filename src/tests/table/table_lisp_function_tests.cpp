@@ -24,7 +24,6 @@
 
 #include "../../model/table/lisp_execution_context_cell_range.h"
 #include "../../model/table/lisp_execution_context_cell_reference.h"
-#include "../../model/table/table_workbook_document.h"
 #include "table_lisp_function_tests.h"
 #include "tools.h"
 
@@ -35,9 +34,9 @@ int run_cell_range_tests1();
 class TestEventSink : public EventSink {
 public:
   TestEventSink() = default;
-  virtual ~TestEventSink() = default;
+  ~TestEventSink() override = default;
 
-  virtual void send_event(TableEvent event_id, std::any param) {
+  void send_event(TableEvent event_id, std::any param) override {
     std::ignore = event_id;
     std::ignore = param;
   }

@@ -27,11 +27,11 @@
 class LispExecutionContextDivision : public LispFunctionExecutionContext {
 public:
   LispExecutionContextDivision() = default;
-  virtual ~LispExecutionContextDivision() = default;
+  ~LispExecutionContextDivision() override = default;
 
-  virtual LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+  LispValuePtr value(const LispValuePtrVector &func,
+                     const LispExecutionContext &execution_context,
+                     const std::any &context_param) override {
     ensure_params(func);
 
     LispValuePtrVector params = extract_params(func);
@@ -43,11 +43,11 @@ public:
 
     const auto &first_param = params[0];
 
-    LispValuePtr value(
+    LispValuePtr base_value(
         expect_number(first_param, execution_context, context_param));
 
     // First parameter of subtraction is base value
-    result = value->to_double();
+    result = base_value->to_double();
 
     // Skip first param
     for (size_t n = 1; n < params.size(); n++) {

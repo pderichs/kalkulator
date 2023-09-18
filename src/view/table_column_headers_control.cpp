@@ -54,7 +54,7 @@ void TableColumnHeadersControl::OnDraw(wxDC &dc) {
 
 void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
                                             int width, int height,
-                                            TableSheetPtr sheet) {
+                                            const TableSheetPtr& sheet) {
   std::ignore = width;
   std::ignore = height;
   std::ignore = scrollPos;
@@ -71,7 +71,7 @@ void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
   // Columns
   c = 0;
   x = ROW_HEADER_WIDTH;
-  for (auto coldef : sheet->column_definitions) {
+  for (const auto& coldef : sheet->column_definitions) {
     // if (x > width) {
     //   break;
     // }
@@ -96,7 +96,7 @@ void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
 }
 
 wxSize TableColumnHeadersControl::DoGetBestSize() const {
-  return wxSize(100, COLUMN_HEADER_HEIGHT);
+  return {100, COLUMN_HEADER_HEIGHT};
 }
 
 void TableColumnHeadersControl::OnFocus(wxFocusEvent &WXUNUSED(event)) {

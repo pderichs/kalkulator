@@ -24,7 +24,7 @@
 
 class TableWorkbookFileError : public std::runtime_error {
 public:
-  TableWorkbookFileError(const std::string &msg) : std::runtime_error(msg) {}
+  explicit TableWorkbookFileError(const std::string &msg) : std::runtime_error(msg) {}
 };
 
 #endif

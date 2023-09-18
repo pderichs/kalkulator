@@ -23,9 +23,7 @@
 #include "table_workbook_file_error.h"
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
 #include <filesystem>
-#include <locale>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -147,7 +145,7 @@ static int read_sheet_size_callback(void *data, int argc, char **argv,
 
 static int read_cells_callback(void *data, int argc, char **argv,
                                char **col_names) {
-  TableWorkbookDocument *workbook = (TableWorkbookDocument *)data;
+  auto *workbook = (TableWorkbookDocument *)data;
 
   std::string curr_sheet;
   int r = 0;
@@ -259,9 +257,9 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   }
 }
 
-void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr sheet) {
+void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr& sheet) {
   size_t s = 0;
-  for (auto col_def : sheet->column_definitions) {
+  for (const auto& col_def : sheet->column_definitions) {
     if (col_def->width != DEFAULT_COLUMN_WIDTH) {
       std::stringstream sql;
       sql << "INSERT INTO sheet_sizes (sheet_id, row, col, size)"
@@ -276,7 +274,7 @@ void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr sheet) {
   }
 
   s = 0;
-  for (auto row_def : sheet->row_definitions) {
+  for (const auto& row_def : sheet->row_definitions) {
     if (row_def->height != DEFAULT_ROW_HEIGHT) {
       std::stringstream sql;
       sql << "INSERT INTO sheet_sizes (sheet_id, row, col, size)"
@@ -408,7 +406,7 @@ void TableWorkbookFile::save_sheet(int id, const TableSheetPtr &sheet,
   save_cells(id, sheet);
 }
 
-std::string TableWorkbookFile::quote(const std::string &s) const {
+std::string TableWorkbookFile::quote(const std::string &s) {
   std::stringstream ss;
   ss << "'" << s << "'";
   return ss.str();

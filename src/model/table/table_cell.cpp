@@ -17,7 +17,6 @@
  */
 
 #include "table_cell.h"
-#include "../lisp/lisp_value.h"
 
 void TableCell::update_content(const std::string &content) {
   _lisp_value = ValueConverter::to_lisp_value(content);

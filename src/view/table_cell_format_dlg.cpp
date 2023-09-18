@@ -168,8 +168,6 @@ TableCellFormatDlg::TableCellFormatDlg(
   UpdateByTableCellFormat();
 }
 
-TableCellFormatDlg::~TableCellFormatDlg() {}
-
 void TableCellFormatDlg::InitializeFontCombo() {
   m_cmbFontName->Insert(wxFontEnumerator::GetFacenames(), 0);
 }

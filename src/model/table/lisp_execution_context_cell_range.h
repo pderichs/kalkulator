@@ -27,16 +27,16 @@
 
 class LispExecutionContextCellRange : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextCellRange(TableWorkbookDocumentPtr document)
+  explicit LispExecutionContextCellRange(TableWorkbookDocumentPtr document)
       : _document(document) {}
-  virtual ~LispExecutionContextCellRange() = default;
+  ~LispExecutionContextCellRange() override = default;
 
-  virtual LispValuePtr value(const LispValuePtrVector &func,
+  LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+                             const std::any &context_param) override {
     ensure_params(func);
 
-    Location this_cell = std::any_cast<Location>(context_param);
+    auto this_cell = std::any_cast<Location>(context_param);
 
     LispValuePtrVector result;
 
@@ -52,7 +52,7 @@ public:
       throw LispExecutionContextError(ss.str());
     }
 
-    int ranges[4]; // from_row, from_col, to_row, to_col
+    LispValue::IntegerType ranges[4]; // from_row, from_col, to_row, to_col
     int n = 0;
     for (const auto &param : params) {
       LispValuePtr value(

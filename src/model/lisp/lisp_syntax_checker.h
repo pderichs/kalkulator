@@ -24,7 +24,7 @@
 
 class LispSyntaxChecker {
 public:
-  LispSyntaxChecker(const LispTokens &tokens);
+  explicit LispSyntaxChecker(const LispTokens &tokens);
   void check() const;
 
 private:

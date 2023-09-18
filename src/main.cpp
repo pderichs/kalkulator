@@ -72,13 +72,13 @@ std::map<std::string, IconPaths> IconDictionary = {
 
 class MyApp : public wxApp {
 public:
-  virtual bool OnInit();
+  bool OnInit() override;
 };
 
 class KalkulatorMainFrame : public wxFrame, public EventSink {
 public:
   KalkulatorMainFrame();
-  virtual ~KalkulatorMainFrame();
+  ~KalkulatorMainFrame() override;
 
   // Delete copy constructor and assignment operator
   KalkulatorMainFrame(const KalkulatorMainFrame &other) = delete;
@@ -110,16 +110,16 @@ private:
 
   void UpdateSheetCombo();
   void SetupUserInterface();
-  virtual void send_event(TableEvent event_id, std::any param);
+  void send_event(TableEvent event_id, std::any param) override;
 
   bool PermitLoseChanges();
 
-  bool IsDarkUI() const {
+  [[nodiscard]] static bool IsDarkUI() {
     wxSystemAppearance s = wxSystemSettings::GetAppearance();
     return s.IsDark();
   }
 
-  const char **GetIcon(const std::string &icon_id) const;
+  [[nodiscard]] const char **GetIcon(const std::string &icon_key) const;
 
   void SaveDocument(const std::string &file_path);
 
@@ -178,7 +178,7 @@ bool MyApp::OnInit() {
     }
   }
 
-  KalkulatorMainFrame *frame = new KalkulatorMainFrame();
+  auto *frame = new KalkulatorMainFrame();
   frame->SetSize(WIDTH, HEIGHT);
   frame->Show();
 
@@ -283,7 +283,7 @@ void KalkulatorMainFrame::InitializeModel() {
 void KalkulatorMainFrame::InitializeMenu() {
   wxMenuItem *item;
 
-  wxMenu *menuFile = new wxMenu();
+  auto *menuFile = new wxMenu();
   item = new wxMenuItem(menuFile, ID_New, "&New\tCtrl-N",
                         "Creates a new spreadsheet workbook");
   item->SetBitmap(*_icon_new);
@@ -307,7 +307,7 @@ void KalkulatorMainFrame::InitializeMenu() {
 
   menuFile->Append(wxID_EXIT);
 
-  wxMenu *menuTable = new wxMenu();
+  auto *menuTable = new wxMenu();
   item = new wxMenuItem(menuTable, ID_ResizeColumn, "Resize column...",
                         "Provides possibility to change current column width.");
   item->SetBitmap(*_icon_width);
@@ -327,10 +327,10 @@ void KalkulatorMainFrame::InitializeMenu() {
                         "Edit format options for current cell.");
   menuTable->Append(item);
 
-  wxMenu *menuHelp = new wxMenu();
+  auto *menuHelp = new wxMenu();
   menuHelp->Append(wxID_ABOUT);
 
-  wxMenuBar *menuBar = new wxMenuBar();
+  auto *menuBar = new wxMenuBar();
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuTable, "&Table");
   menuBar->Append(menuHelp, "&Help");
@@ -369,11 +369,11 @@ void KalkulatorMainFrame::CreateToolbar() {
 }
 
 void KalkulatorMainFrame::SetupUserInterface() {
-  wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+  auto *sizer = new wxBoxSizer(wxVERTICAL);
 
   sizer->Add(_toolbar, 0, wxEXPAND | wxALL, 5);
 
-  wxBoxSizer *formula_sizer = new wxBoxSizer(wxHORIZONTAL);
+  auto *formula_sizer = new wxBoxSizer(wxHORIZONTAL);
 
   _cmb_sheet_selection = new wxComboBox(this, ID_SHEET_SELECTION_CMB);
   UpdateSheetCombo();
@@ -548,10 +548,8 @@ void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
 
   // wxPrintf("KalkulatorMainFrame: Key pressed: %d\n", keyCode);
 
-  switch (keyCode) {
-  case WXK_F2:
+  if (keyCode == WXK_F2) {
     _text_control_formula->SetFocus();
-    break;
   }
 
   event.Skip();
@@ -619,7 +617,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
   case CELL_UPDATED:
     try {
-      Location location(std::any_cast<Location>(param));
+      auto location(std::any_cast<Location>(param));
 
       _table_control->OnCellUpdate(location);
 
@@ -633,7 +631,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
   case CURRENT_CELL_LOCATION_UPDATED:
     try {
-      Location location(std::any_cast<Location>(param));
+      auto location(std::any_cast<Location>(param));
 
       auto cell = _document->get_cell(location);
 
@@ -655,7 +653,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     break;
 
   case CELL_VIEW_SCROLL_EVENT: {
-    Location scroll_pos = std::any_cast<Location>(param);
+    auto scroll_pos = std::any_cast<Location>(param);
     _table_control->update_scroll_positions(scroll_pos);
     break;
   }

@@ -30,11 +30,11 @@
 class LispExecutionContextIf : public LispFunctionExecutionContext {
 public:
   LispExecutionContextIf() = default;
-  virtual ~LispExecutionContextIf() = default;
+  ~LispExecutionContextIf() override = default;
 
-  virtual LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+  LispValuePtr value(const LispValuePtrVector &func,
+                     const LispExecutionContext &execution_context,
+                     const std::any &context_param) override {
     LispValuePtrVector params = extract_params(func);
 
     if (params.size() < 2 || params.size() > 3) {
@@ -58,7 +58,7 @@ public:
     return result;
   }
 
-  LispValuePtr
+  [[nodiscard]] LispValuePtr
   execute_result_param(const LispValuePtrVector &func, size_t index,
                        const LispExecutionContext &execution_context,
                        const std::any &context_param) const {

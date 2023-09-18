@@ -27,11 +27,11 @@
 class LispExecutionContextAddition : public LispFunctionExecutionContext {
 public:
   LispExecutionContextAddition() = default;
-  virtual ~LispExecutionContextAddition() = default;
+  ~LispExecutionContextAddition() override = default;
 
-  virtual LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+  LispValuePtr value(const LispValuePtrVector &func,
+                     const LispExecutionContext &execution_context,
+                     const std::any &context_param) override {
     ensure_params(func);
 
     LispValuePtrVector params = extract_params(func);

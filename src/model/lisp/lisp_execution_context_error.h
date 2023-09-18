@@ -24,7 +24,7 @@
 
 class LispExecutionContextError : public std::runtime_error {
 public:
-  LispExecutionContextError(const std::string &msg) : std::runtime_error(msg) {}
+  explicit LispExecutionContextError(const std::string &msg) : std::runtime_error(msg) {}
 };
 
 #endif

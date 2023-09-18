@@ -28,11 +28,11 @@
 class LispExecutionContextCons : public LispFunctionExecutionContext {
 public:
   LispExecutionContextCons() = default;
-  virtual ~LispExecutionContextCons() = default;
+  ~LispExecutionContextCons() override = default;
 
-  virtual LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+  LispValuePtr value(const LispValuePtrVector &func,
+                     const LispExecutionContext &execution_context,
+                     const std::any &context_param) override {
     std::ignore = execution_context;
     std::ignore = context_param;
 

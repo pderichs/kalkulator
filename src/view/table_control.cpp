@@ -19,12 +19,9 @@
 #include "table_control.h"
 #include "table_column_headers_control.h"
 #include "table_row_headers_control.h"
-#include <cstddef>
 #include <iostream>
-#include <sstream>
 #include <tuple>
 #include <wx/clipbrd.h>
-#include <wx/dcclient.h>
 
 TableControl::TableControl(KalkulatorSystemColorsPtr sys_colors,
                            TableWorkbookDocumentPtr document,

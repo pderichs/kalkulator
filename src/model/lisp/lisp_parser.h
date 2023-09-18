@@ -27,7 +27,7 @@
 
 class LispParser {
 public:
-  LispParser(const std::string &lisp);
+  explicit LispParser(const std::string &lisp);
   ~LispParser() = default;
 
   LispTokens parse();
@@ -46,7 +46,7 @@ private:
   LispToken read_number();
   LispToken read_identifier();
   bool walk();
-  char current_char() const;
+  [[nodiscard]] char current_char() const;
 
 private:
   std::string _lisp;

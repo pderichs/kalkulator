@@ -56,33 +56,33 @@ public:
 
   explicit LispValue(LispValueType type) : _type(type), _content({}) {}
 
-  LispValueType type() const { return _type; }
+  [[nodiscard]] LispValueType type() const { return _type; }
 
   void set_content(const std::any &content) { _content = content; }
 
-  bool is_none() const { return _type == LVT_NONE; }
-  bool is_string() const { return _type == LVT_STRING; }
-  bool is_number() const { return is_double() || is_integer(); }
-  bool is_double() const { return _type == LVT_DOUBLE; }
-  bool is_integer() const { return _type == LVT_INTEGER; }
-  bool is_list() const { return _type == LVT_LIST; }
-  bool is_identifier() const { return _type == LVT_IDENTIFIER; }
-  bool is_boolean() const { return _type == LVT_BOOL; }
-  bool is_function_definition() const {
+  [[nodiscard]] bool is_none() const { return _type == LVT_NONE; }
+  [[nodiscard]] bool is_string() const { return _type == LVT_STRING; }
+  [[nodiscard]] bool is_number() const { return is_double() || is_integer(); }
+  [[nodiscard]] bool is_double() const { return _type == LVT_DOUBLE; }
+  [[nodiscard]] bool is_integer() const { return _type == LVT_INTEGER; }
+  [[nodiscard]] bool is_list() const { return _type == LVT_LIST; }
+  [[nodiscard]] bool is_identifier() const { return _type == LVT_IDENTIFIER; }
+  [[nodiscard]] bool is_boolean() const { return _type == LVT_BOOL; }
+  [[nodiscard]] bool is_function_definition() const {
     return _type == LVT_FUNCTION_DEFINITION;
   }
 
-  DoubleType explicit_double_value() const {
+  [[nodiscard]] DoubleType explicit_double_value() const {
     return std::any_cast<DoubleType>(_content);
   }
 
-  IntegerType explicit_integer_value() const {
+  [[nodiscard]] IntegerType explicit_integer_value() const {
     return std::any_cast<IntegerType>(_content);
   }
 
-  std::string string() const { return std::any_cast<std::string>(_content); }
+  [[nodiscard]] std::string string() const { return std::any_cast<std::string>(_content); }
 
-  DoubleType to_double() const {
+  [[nodiscard]] DoubleType to_double() const {
     if (is_integer()) {
       return static_cast<DoubleType>(explicit_integer_value());
     }
@@ -90,7 +90,7 @@ public:
     return explicit_double_value();
   }
 
-  IntegerType to_integer() const {
+  [[nodiscard]] IntegerType to_integer() const {
     if (is_double()) {
       return static_cast<IntegerType>(explicit_double_value());
     }
@@ -98,15 +98,15 @@ public:
     return explicit_integer_value();
   }
 
-  bool boolean() const {
+  [[nodiscard]] bool boolean() const {
     return std::any_cast<LispBool>(_content) == LISP_BOOL_TRUE;
   }
 
-  LispValuePtrVector list() const {
+  [[nodiscard]] LispValuePtrVector list() const {
     return std::any_cast<LispValuePtrVector>(_content);
   }
 
-  LispFunctionDefinition function_definition() const {
+  [[nodiscard]] LispFunctionDefinition function_definition() const {
     return std::any_cast<LispFunctionDefinition>(_content);
   }
 
@@ -135,7 +135,7 @@ public:
   }
 
   // A function is a list with an identifier at position 0.
-  bool is_function() const {
+  [[nodiscard]] bool is_function() const {
     if (!is_list()) {
       return false;
     }
@@ -151,7 +151,7 @@ public:
     return first->is_identifier();
   }
 
-  bool is_truthy() const {
+  [[nodiscard]] bool is_truthy() const {
     if (is_none()) {
       return false;
     }
@@ -167,7 +167,7 @@ public:
     return true;
   }
 
-  bool lists_equals(const LispValue &list) const {
+  [[nodiscard]] bool lists_equals(const LispValue &list) const {
     const auto &my_list = this->list();
     const auto &other_list = list.list();
 
@@ -188,7 +188,7 @@ public:
     return true;
   }
 
-  bool content_equals(const LispValue &other) const {
+  [[nodiscard]] bool content_equals(const LispValue &other) const {
     if (_type != other._type) {
       return false;
     }

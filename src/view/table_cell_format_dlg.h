@@ -70,7 +70,7 @@ public:
                      const wxSize &size = wxSize(716, 451),
                      long style = wxDEFAULT_DIALOG_STYLE);
 
-  ~TableCellFormatDlg();
+  ~TableCellFormatDlg() override = default;
 
   // Delete copy constructor and assignment operator
   TableCellFormatDlg(const TableCellFormatDlg &other) = delete;
@@ -78,10 +78,10 @@ public:
 
   void InitializeFontCombo();
 
-  TableCellFormat GetFormat() const;
+  [[nodiscard]] TableCellFormat GetFormat() const;
 
-  TableCellColor wxColourToTableCellColor(const wxColour &color) const;
-  wxColour tableCellColorTowxColour(const TableCellColor &color) const;
+  [[nodiscard]] TableCellColor wxColourToTableCellColor(const wxColour &color) const;
+  [[nodiscard]] wxColour tableCellColorTowxColour(const TableCellColor &color) const;
 
   void UpdateByTableCellFormat();
 

@@ -35,18 +35,18 @@ public:
         _location(col, row), _format() {}
 
   void update_content(const std::string &content);
-  std::string visible_content() const;
-  std::string get_formula_content() const;
+  [[nodiscard]] std::string visible_content() const;
+  [[nodiscard]] std::string get_formula_content() const;
   bool is_formula() const;
-  LispValuePtr lisp_value() const { return _lisp_value; }
-  bool has_content() const;
+  [[nodiscard]] LispValuePtr lisp_value() const { return _lisp_value; }
+  [[nodiscard]] bool has_content() const;
   void clear();
-  long row() const { return _location.y(); }
-  long col() const { return _location.x(); }
-  Location location() const { return _location; }
+  [[nodiscard]] long row() const { return _location.y(); }
+  [[nodiscard]] long col() const { return _location.x(); }
+  [[nodiscard]] Location location() const { return _location; }
 
-  bool has_format() const { return static_cast<bool>(_format); }
-  TableCellFormat format() const { return *_format; }
+  [[nodiscard]] bool has_format() const { return static_cast<bool>(_format); }
+  [[nodiscard]] TableCellFormat format() const { return *_format; }
   void set_format(const TableCellFormat &format) { _format = format; }
 
 private:

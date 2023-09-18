@@ -90,14 +90,14 @@ struct TableSheet {
   void set_current_column_width(size_t width);
   void set_current_row_height(size_t height);
 
-  void set_current_cell_format(const TableCellFormat &format);
+  void set_current_cell_format(const TableCellFormat &format) const;
   std::optional<TableCellFormat> get_current_cell_format() const;
 
   void add_update_listener(const Location &listener,
                            const Location &listening_to);
 
 private:
-  void apply_state_change_item(const StateHistoryItemPtr &state);
+  void apply_state_change_item(const StateHistoryItemPtr &state) const;
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

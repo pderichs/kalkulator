@@ -53,7 +53,7 @@ public:
 
 private:
   void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height,
-                 TableSheetPtr sheet);
+                 const TableSheetPtr& sheet);
   wxRect GetCellRectByLocation(const Location &cell);
   wxRect GetCurrentScrollArea() const;
 
@@ -61,7 +61,7 @@ private:
   void ScrollToCell(const Location &cell, TableCellOrientation orientation);
 
   void CopyString(const std::string &content);
-  wxColour fromTableCellColor(const TableCellColor& color);
+  static wxColour fromTableCellColor(const TableCellColor& color);
 
 private:
   KalkulatorSystemColorsPtr _sys_colors;

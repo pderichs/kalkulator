@@ -38,7 +38,7 @@ public:
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
                long style = wxTAB_TRAVERSAL);
-  virtual ~TableControl();
+  ~TableControl() override;
 
   // Delete copy constructor and assignment operator
   TableControl(const TableControl &other) = delete;
@@ -49,7 +49,7 @@ public:
   void update_scroll_positions(const Location &scroll_pos);
   void ScrollToCurrentCell();
 
-  wxFont GetCellViewFont() const { return _cells_view_control->GetFont(); }
+  [[nodiscard]] wxFont GetCellViewFont() const { return _cells_view_control->GetFont(); }
 
 protected:
   void Init();

@@ -22,8 +22,6 @@
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include "table_selections.h"
-#include <cassert>
-#include <cstddef>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -207,7 +205,7 @@ void TableSheet::update_content(const Location &cell_location,
 
 size_t TableSheet::get_max_col() const { return column_definitions.size() - 1; }
 
-void TableSheet::apply_state_change_item(const StateHistoryItemPtr &state) {
+void TableSheet::apply_state_change_item(const StateHistoryItemPtr &state) const {
   for (const auto &cell_state : state->cell_states) {
     auto cell = get_cell_by_location(cell_state.location);
     cell->update_content(cell_state.prev);
@@ -258,7 +256,7 @@ void TableSheet::set_current_row_height(size_t height) {
   set_row_height(current_cell.y(), height);
 }
 
-void TableSheet::set_current_cell_format(const TableCellFormat &format) {
+void TableSheet::set_current_cell_format(const TableCellFormat &format) const {
   TableCellPtr cell = get_current_cell();
   cell->set_format(format);
 }

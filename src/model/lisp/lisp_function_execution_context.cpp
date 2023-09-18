@@ -110,5 +110,5 @@ LispValuePtr LispFunctionExecutionContext::expect_parameter_at(
 
 LispValuePtrVector LispFunctionExecutionContext::extract_params(
     const LispValuePtrVector &func) const {
-  return LispValuePtrVector(func.begin() + 1, func.end());
+  return { func.begin() + 1, func.end() };
 }

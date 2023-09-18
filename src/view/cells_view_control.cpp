@@ -19,9 +19,7 @@
 
 #include "cells_view_control.h"
 #include "kalkulator_system_colors.h"
-#include <cstddef>
 #include <iostream>
-#include <sstream>
 #include <tuple>
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
@@ -114,7 +112,7 @@ void CellsViewControl::RefreshScrollbars() {
 
 void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
                                  int WXUNUSED(width), int WXUNUSED(height),
-                                 TableSheetPtr sheet) {
+                                 const TableSheetPtr &sheet) {
   // wxRect scrollArea = GetCurrentScrollArea();
 
   // TODO Only draw visible ones
@@ -274,7 +272,7 @@ wxRect CellsViewControl::GetCurrentScrollArea() const {
   viewStart.y *= SCROLL_UNIT;
 
   // Calculate the view rect
-  return wxRect(viewStart, clientSize);
+  return {viewStart, clientSize};
 }
 
 void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
@@ -290,27 +288,20 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   bool handled = true;
 
   switch (keyCode) {
-  case WXK_UP:
-    _document->move_cursor_up();
+  case WXK_UP:_document->move_cursor_up();
     cell_selection_moved = true;
     break;
-  case WXK_DOWN:
-    cell_selection_moved = _document->move_cursor_down();
+  case WXK_DOWN:cell_selection_moved = _document->move_cursor_down();
     break;
-  case WXK_LEFT:
-    cell_selection_moved = _document->move_cursor_left();
+  case WXK_LEFT:cell_selection_moved = _document->move_cursor_left();
     break;
-  case WXK_RIGHT:
-    cell_selection_moved = _document->move_cursor_right();
+  case WXK_RIGHT:cell_selection_moved = _document->move_cursor_right();
     break;
-  case WXK_PAGEUP:
-    cell_selection_moved = _document->move_cursor_page_up();
+  case WXK_PAGEUP:cell_selection_moved = _document->move_cursor_page_up();
     break;
-  case WXK_PAGEDOWN:
-    cell_selection_moved = _document->move_cursor_page_down();
+  case WXK_PAGEDOWN:cell_selection_moved = _document->move_cursor_page_down();
     break;
-  case WXK_DELETE:
-    _document->clear_current_cell();
+  case WXK_DELETE:_document->clear_current_cell();
     break;
   case 'Z':
     if (control) {
@@ -375,8 +366,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
       OnCut();
     }
     break;
-  default:
-    handled = false;
+  default:handled = false;
     break;
   }
 
@@ -406,24 +396,18 @@ void CellsViewControl::ScrollToCell(const Location &cell,
   int x, y;
 
   switch (orientation) {
-  case TOP:
-    x = scrollArea.GetLeft();
+  case TOP:x = scrollArea.GetLeft();
     y = rect.GetTop();
     break;
-  case LEFT:
-    x = rect.GetLeft() - defs.second->width;
+  case LEFT:x = rect.GetLeft() - defs.second->width;
     y = scrollArea.GetTop();
     break;
-  case BOTTOM:
-    x = scrollArea.GetLeft();
+  case BOTTOM:x = scrollArea.GetLeft();
     y = rect.GetBottom() - scrollArea.GetHeight() + 10;
     break;
-  case RIGHT:
-    x = rect.GetRight() - scrollArea.GetWidth() + 10;
+  case RIGHT:x = rect.GetRight() - scrollArea.GetWidth() + 10;
     y = scrollArea.GetTop();
     break;
-  default:
-    throw std::runtime_error("Unknown orientation");
   }
 
   x /= SCROLL_UNIT;
@@ -527,5 +511,5 @@ void CellsViewControl::OnCopyFormula() {
 }
 
 wxColour CellsViewControl::fromTableCellColor(const TableCellColor &color) {
-  return wxColour(color.r, color.g, color.b);
+  return {color.r, color.g, color.b};
 }

@@ -19,13 +19,8 @@
 #include "table_workbook_document.h"
 #include "table_cell.h"
 #include "table_column_definition.h"
-#include "table_row_definition.h"
 #include "table_sheet.h"
-#include <algorithm>
-#include <cassert>
 #include <memory>
-#include <tuple>
-#include <utility>
 
 TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink)
     : _path(), _changed(false), _sheets(), _event_sink(event_sink),
@@ -44,7 +39,7 @@ TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
   return {};
 }
 
-void TableWorkbookDocument::update_cell_content(TableSheetPtr sheet,
+void TableWorkbookDocument::update_cell_content(const TableSheetPtr& sheet,
                                                 Location cell_location,
                                                 const std::string &content) {
   sheet->update_content(cell_location, content);

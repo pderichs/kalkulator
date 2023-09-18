@@ -29,11 +29,11 @@
 class LispExecutionContextFloor : public LispFunctionExecutionContext {
 public:
   LispExecutionContextFloor() = default;
-  virtual ~LispExecutionContextFloor() = default;
+  ~LispExecutionContextFloor() override = default;
 
-  virtual LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+  LispValuePtr value(const LispValuePtrVector &func,
+                     const LispExecutionContext &execution_context,
+                     const std::any &context_param) override {
     LispValuePtrVector params = extract_params(func);
 
     if (params.size() != 1) {

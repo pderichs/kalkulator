@@ -39,15 +39,13 @@
 #include "lisp_execution_context_rest.h"
 #include "lisp_execution_context_subtraction.h"
 #include "lisp_execution_context_xor.h"
-#include "lisp_function_execution_context.h"
-#include "lisp_lambda_executor.h"
 #include "lisp_value.h"
 #include "lisp_value_ptr.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
 
-LispExecutionContext::LispExecutionContext(): _functions() {
+LispExecutionContext::LispExecutionContext() : _functions() {
   // Prepare functions
   _functions["+"] = std::make_shared<LispExecutionContextAddition>();
   _functions["-"] = std::make_shared<LispExecutionContextSubtraction>();
@@ -111,7 +109,7 @@ LispExecutionContext::execute(const LispValuePtrVector &func,
 }
 
 void LispExecutionContext::add_function(
-    const std::string &identifier, const LispFunctionExecutionContextPtr func) {
+    const std::string &identifier, const LispFunctionExecutionContextPtr &func) {
   if (!func) {
     throw LispExecutionContextError("Invalid function pointer");
   }

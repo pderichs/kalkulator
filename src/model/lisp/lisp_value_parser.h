@@ -26,14 +26,14 @@
 
 class LispValueParser {
 public:
-  LispValueParser(const LispTokens &tokens, size_t start = 0)
+  explicit LispValueParser(const LispTokens &tokens, size_t start = 0)
       : _pos(start), _tokens(tokens) {}
 
   LispValuePtr next();
 
 private:
-  bool has_next() const { return _pos < _tokens.size(); }
-  LispToken current_token() const { return _tokens[_pos]; }
+  [[nodiscard]] bool has_next() const { return _pos < _tokens.size(); }
+  [[nodiscard]] LispToken current_token() const { return _tokens[_pos]; }
   void skip_spaces();
   LispValuePtr parse_list();
   LispTokens collect_current_function_tokens();

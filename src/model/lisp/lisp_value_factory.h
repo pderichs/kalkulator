@@ -27,7 +27,7 @@
 
 class LispValueFactory {
 private:
-  static LispValuePtr new_value_ptr(LispValueType type, std::any content) {
+  static LispValuePtr new_value_ptr(LispValueType type, const std::any& content) {
     auto result = std::make_shared<LispValue>(type);
     result->set_content(content);
     return result;

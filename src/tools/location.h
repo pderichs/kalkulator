@@ -36,8 +36,8 @@ public:
   explicit Location(long x, long y): x_(x), y_(y) {
   }
 
-  long x() const { return x_; }
-  long y() const { return y_; }
+  [[nodiscard]] long x() const { return x_; }
+  [[nodiscard]] long y() const { return y_; }
 
   void moveLeft() { x_--; }
   void moveRight() { x_++; }
@@ -65,7 +65,7 @@ public:
     return (x_ < other.x_) || (x_ == other.x_ && y_ < other.y_);
   }
 
-  double distance_to(const Location &other) const {
+  [[nodiscard]] double distance_to(const Location &other) const {
     return std::abs(x_ - other.x()) + std::abs(y_ - other.y());
   }
 };

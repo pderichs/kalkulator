@@ -27,11 +27,11 @@
 class LispExecutionContextJoin : public LispFunctionExecutionContext {
 public:
   LispExecutionContextJoin() = default;
-  virtual ~LispExecutionContextJoin() = default;
+  ~LispExecutionContextJoin() override = default;
 
-  virtual LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+  LispValuePtr value(const LispValuePtrVector &func,
+                     const LispExecutionContext &execution_context,
+                     const std::any &context_param) override {
     LispValuePtrVector result;
 
     LispValuePtrVector params = extract_params(func);
