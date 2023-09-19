@@ -33,8 +33,8 @@ public:
   ~LispExecutionContextCellReference() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
-                             const std::any &context_param) override {
+                     const LispExecutionContext &execution_context,
+                     const std::any &context_param) override {
     LispValuePtrVector params = extract_params(func);
 
     if (params.size() != 2) {
@@ -64,7 +64,7 @@ public:
     }
 
     // Inform document about cell reference
-    _workbook->add_update_listener(cell_location, Location(row, col));
+    _workbook->add_update_listener(cell_location, Location(col, row));
 
     auto opt_cell = _workbook->get_cell(Location(col, row));
     if (!opt_cell) {
