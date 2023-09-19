@@ -26,6 +26,7 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <queue>
 
 const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
@@ -86,7 +87,7 @@ bool TableSheet::move_cursor_left() {
 }
 
 bool TableSheet::move_cursor_right() {
-  if ((size_t)current_cell.x() >= get_max_col()) {
+  if ((size_t) current_cell.x() >= get_max_col()) {
     return false;
   }
 
@@ -98,7 +99,7 @@ bool TableSheet::move_cursor_right() {
 size_t TableSheet::get_max_row() const { return row_definitions.size() - 1; }
 
 bool TableSheet::move_cursor_down() {
-  if ((size_t)current_cell.y() >= get_max_row()) {
+  if ((size_t) current_cell.y() >= get_max_row()) {
     return false;
   }
 
@@ -167,8 +168,8 @@ bool TableSheet::move_cursor_page_down() {
 }
 
 bool TableSheet::is_in_bounds(const Location &cell) const {
-  return cell.x() >= 0 && (size_t)cell.x() < num_cols() && cell.y() >= 0 &&
-         (size_t)cell.y() < num_rows();
+  return cell.x() >= 0 && (size_t) cell.x() < num_cols() && cell.y() >= 0 &&
+      (size_t) cell.y() < num_rows();
 }
 
 bool TableSheet::select_cell(const Location &cell) {
@@ -281,7 +282,7 @@ void TableSheet::add_update_listener(const Location &listener,
                                      const Location &listening_to) {
   auto it = _listener_map.find(listening_to);
   if (it == _listener_map.end()) {
-    _listener_map[listening_to] = { listener };
+    _listener_map[listening_to] = {listener};
   } else {
     it->second.insert(listener);
   }
@@ -293,16 +294,26 @@ void TableSheet::trigger_listeners(const Location &location) {
     return;
   }
 
-  for (const auto& listener_location: it->second) {
-    TableCellPtr cell = get_cell_by_location(listener_location);
+  std::queue<Location> recalc_cells;
+
+  for (const auto &listener_location : it->second) {
+    recalc_cells.push(listener_location);
+  }
+
+ while (!recalc_cells.empty()) {
+    Location cell_location = recalc_cells.front();
+    recalc_cells.pop();
+
+    TableCellPtr cell = get_cell_by_location(cell_location);
     if (cell->recalc()) {
-      // TODO Cell content has changed. The listeners for this cell must be triggered as well.
+      // Cell content has changed. The listeners for this cell must be triggered as well.
+      recalc_cells.push(cell->location());
     }
   }
 }
 
 void TableSheet::remove_from_update_listeners(const Location &location) {
-  for (auto& it : _listener_map) {
+  for (auto &it : _listener_map) {
     it.second.erase(location);
   }
 }
