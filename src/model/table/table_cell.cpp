@@ -18,7 +18,7 @@
 
 #include "table_cell.h"
 
-void TableCell::update_content(const std::string &content) {
+bool TableCell::update_content(const std::string &content) {
   _lisp_value = ValueConverter::to_lisp_value(content);
 
   if (_lisp_value->is_function()) {
@@ -27,7 +27,7 @@ void TableCell::update_content(const std::string &content) {
     _formula_content = "";
   }
 
-  recalc();
+  return recalc();
 }
 
 std::string TableCell::visible_content() const {

@@ -75,6 +75,9 @@ public:
         return LispValueFactory::new_string("#CIRCULARREFERR");
       }
 
+      // Inform document about cell reference
+      _document->add_update_listener(this_cell, cell->location());
+
       LispValuePtr value(cell->lisp_value());
       if (value && !value->is_none()) {
         result.push_back(value);

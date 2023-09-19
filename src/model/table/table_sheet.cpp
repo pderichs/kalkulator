@@ -193,16 +193,22 @@ void TableSheet::clear_current_cell() {
 
 void TableSheet::update_content(const Location &cell_location,
                                 const std::string &content) {
+  remove_from_update_listeners(cell_location);
+
   auto cell = get_cell_by_location(cell_location);
 
   std::string previous_content = cell->get_formula_content();
-  cell->update_content(content);
 
-  trigger_listeners(cell_location);
+  // Note: update listeners are applied within the call to update_content
+  if (cell->update_content(content)) {
+    // TODO remove_as_update_listener(cell->location());
 
-  CellState state{cell_location, previous_content, content};
-  StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
-  change_history.push_state(item);
+    trigger_listeners(cell_location);
+
+    CellState state{cell_location, previous_content, content};
+    StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
+    change_history.push_state(item);
+  }
 }
 
 size_t TableSheet::get_max_col() const { return column_definitions.size() - 1; }
@@ -294,5 +300,11 @@ void TableSheet::trigger_listeners(const Location &location) {
     if (cell->recalc()) {
       // TODO Cell content has changed. The listeners for this cell must be triggered as well.
     }
+  }
+}
+
+void TableSheet::remove_from_update_listeners(const Location &location) {
+  for (auto& it : _listener_map) {
+    it.second.erase(location);
   }
 }

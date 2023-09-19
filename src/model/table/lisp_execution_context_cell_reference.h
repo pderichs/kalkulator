@@ -64,6 +64,7 @@ public:
     }
 
     // Inform document about cell reference
+    std::cerr << "Cell " << cell_location << " is listening to updates from " << col << ", " << row << std::endl;
     _workbook->add_update_listener(cell_location, Location(col, row));
 
     auto opt_cell = _workbook->get_cell(Location(col, row));

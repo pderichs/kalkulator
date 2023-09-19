@@ -34,7 +34,7 @@ public:
       : _formula_content(), _visible_content(), _lisp_value(),
         _location(col, row), _format() {}
 
-  void update_content(const std::string &content);
+  bool update_content(const std::string &content);
   [[nodiscard]] std::string visible_content() const;
   [[nodiscard]] std::string get_formula_content() const;
   bool is_formula() const;

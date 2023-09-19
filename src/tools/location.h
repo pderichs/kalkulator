@@ -1,6 +1,6 @@
 /**
  * Kalkulator - a simple and small spread sheet app.
- * Copyright (C) 2023  pderichs (derichs@posteo.de)
+  Copyright (C) 2023  pderichs (derichs@posteo.de)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <cmath>
 #include <set>
 #include <vector>
+#include <ostream>
 
 // A simple coordinate class. Combines x and y.
 class Location {
@@ -67,6 +68,10 @@ public:
 
   [[nodiscard]] double distance_to(const Location &other) const {
     return std::abs(x_ - other.x()) + std::abs(y_ - other.y());
+  }
+
+  friend std::ostream& operator<<(std::ostream& os, Location const& m) {
+    return os << "(col: " << m.x() << ", row: " << m.y() << ")";
   }
 };
 
