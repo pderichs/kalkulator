@@ -201,8 +201,6 @@ void TableSheet::update_content(const Location &cell_location,
 
   // Note: update listeners are applied within the call to update_content
   if (cell->update_content(content)) {
-    // TODO remove_as_update_listener(cell->location());
-
     trigger_listeners(cell_location);
 
     CellState state{cell_location, previous_content, content};

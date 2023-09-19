@@ -61,7 +61,6 @@ public:
   };
 
   // Operator to be used for maps and sets
-  // TODO Must be tested thoroughly!
   bool operator<(const Location &other) const {
     return (x_ < other.x_) || (x_ == other.x_ && y_ < other.y_);
   }
