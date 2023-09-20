@@ -80,6 +80,8 @@ public:
   KalkulatorMainFrame();
   ~KalkulatorMainFrame() override;
 
+  void Initialize();
+
   // Delete copy constructor and assignment operator
   KalkulatorMainFrame(const KalkulatorMainFrame &other) = delete;
   KalkulatorMainFrame &operator=(const KalkulatorMainFrame &other) = delete;
@@ -179,6 +181,7 @@ bool MyApp::OnInit() {
   }
 
   auto *frame = new KalkulatorMainFrame();
+  frame->Initialize();
   frame->SetSize(WIDTH, HEIGHT);
   frame->Show();
 
@@ -198,9 +201,6 @@ KalkulatorMainFrame::KalkulatorMainFrame()
   InitializeIcons();
 
   InitializeMenu();
-
-  CreateStatusBar();
-  SetStatusText("Welcome to Kalkulator!");
 
   BindEvents();
 
@@ -251,6 +251,11 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
   }
 }
 
+void KalkulatorMainFrame::Initialize() {
+  CreateStatusBar();
+  SetStatusText("Welcome to Kalkulator!");
+}
+
 void KalkulatorMainFrame::InitializeIcons() {
   _icon_new = new wxBitmap(GetIcon("new"));
   _icon_open = new wxBitmap(GetIcon("open"));
@@ -268,8 +273,12 @@ void KalkulatorMainFrame::InitializeModel() {
 
   _execution_context.add_function(
       "cell", std::make_shared<LispExecutionContextCellReference>(_document));
+
+  auto cell_range = std::make_shared<LispExecutionContextCellRange>(_document);
   _execution_context.add_function(
-      "cell_range", std::make_shared<LispExecutionContextCellRange>(_document));
+      "cell_range", cell_range);
+  _execution_context.add_function(
+      "cell-range", cell_range);
 
   _sys_colors = std::make_shared<KalkulatorSystemColors>();
 
@@ -457,9 +466,9 @@ void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
 bool KalkulatorMainFrame::PermitLoseChanges() {
   if (_document->changed()) {
     if (wxMessageBox(
-            wxT("Current content has not been saved. Your changes will "
-                "be lost. Proceed?"),
-            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
+        wxT("Current content has not been saved. Your changes will "
+            "be lost. Proceed?"),
+        wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
       return false;
   }
 
@@ -498,7 +507,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   TableWorkbookFile file;
 
   try {
-    std::string file_path((const char *)openFileDialog.GetPath());
+    std::string file_path((const char *) openFileDialog.GetPath());
     file.open(file_path);
     _document->set_file_path("");
     file.read(_document);
@@ -539,7 +548,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  SaveDocument((const char *)saveFileDialog.GetPath());
+  SaveDocument((const char *) saveFileDialog.GetPath());
 }
 
 void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
@@ -573,8 +582,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
   std::string new_content;
 
   switch (event_id) {
-  case FORMULA_UPDATE:
-    wxPrintf("FORMULA UPDATE\n");
+  case FORMULA_UPDATE:wxPrintf("FORMULA UPDATE\n");
 
     _table_control->SetFocus();
 
@@ -613,7 +621,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     }
   }
 
-  break;
+    break;
 
   case CELL_UPDATED:
     try {
@@ -660,12 +668,10 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
   case SHEET_SELECTION_UPDATED:
   case ROW_HEIGHT_UPDATED:
-  case COLUMN_WIDTH_UPDATED:
-    _table_control->Refresh();
+  case COLUMN_WIDTH_UPDATED:_table_control->Refresh();
     break;
 
-  case HEADER_GOT_FOCUS:
-    _table_control->SetFocus();
+  case HEADER_GOT_FOCUS:_table_control->SetFocus();
     break;
   }
 }
@@ -741,7 +747,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
   int row;
   int col;
 
-  std::string input{(const char *)raw_input};
+  std::string input{(const char *) raw_input};
 
   std::regex exp{"(\\d+) (\\d+)"};
   std::smatch sm;
@@ -760,7 +766,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
   _document->select_cell(Location(col, row));
 
   _table_control->ScrollToCurrentCell(); // TODO Add option to scroll cell to
-                                         // center of view?
+  // center of view?
 }
 
 void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
