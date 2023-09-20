@@ -33,6 +33,8 @@ int run_cell_range_tests1();
 
 int run_cell_nested_reference_test1();
 
+int run_cell_range_equality_test1();
+
 class TestEventSink : public EventSink {
 public:
   TestEventSink() = default;
@@ -51,6 +53,7 @@ int run_table_lisp_function_tests() {
   RUN_TEST(run_cell_tests1);
   RUN_TEST(run_cell_range_tests1);
   RUN_TEST(run_cell_nested_reference_test1);
+  RUN_TEST(run_cell_range_equality_test1);
 
   return 0;
 }
@@ -168,6 +171,57 @@ int run_cell_nested_reference_test1() {
 
   // Cell content should now match source cell 2
   TEST_ASSERT(cell->visible_content() == "Cell 2 - hello");
+
+  return 0;
+}
+
+int run_cell_range_equality_test1() {
+  // Test setup
+  TestEventSink sink;
+  LispExecutionContext execution_context;
+  ValueConverter::set_execution_context(&execution_context);
+  TableWorkbookDocumentPtr document =
+      std::make_shared<TableWorkbookDocument>(&sink);
+  prepare_execution_context(&execution_context, document);
+
+  // Prepare cell content
+  for (int r = 0; r < 5; r++) {
+    for (int c = 0; c < 10; c++) {
+      document->select_cell(Location(c, r));
+      document->update_content_current_cell("2");
+    }
+  }
+
+  for (int r = 0; r < 2; r++) {
+    for (int c = 20; c < 22; c++) {
+      document->select_cell(Location(c, r));
+      document->update_content_current_cell("2");
+    }
+  }
+
+  // Formula
+  document->select_cell(Location(0, 50));
+  document->update_content_current_cell("=(= (cell_range 0 0 4 10) (cell_range 0 20 1 21))");
+
+  // Cell content must match source cell 1
+  const auto &opt_cell = document->get_cell(Location(0, 50));
+  TEST_ASSERT(opt_cell);
+  const auto& cell = *opt_cell;
+  TEST_ASSERT(cell->visible_content() == "TRUE");
+
+  // Change one cell
+  document->select_cell(Location(0, 0));
+  document->update_content_current_cell("3");
+  TEST_ASSERT(cell->visible_content() == "FALSE");
+
+  document->select_cell(Location(0, 0));
+  document->update_content_current_cell("2");
+  TEST_ASSERT(cell->visible_content() == "TRUE");
+
+  // Change cell in other range
+  document->select_cell(Location(20, 0));
+  document->update_content_current_cell("Hello");
+  TEST_ASSERT(cell->visible_content() == "FALSE");
 
   return 0;
 }
