@@ -232,6 +232,7 @@ void TableSheet::redo() {
   if (!state) {
     return;
   }
+
   apply_state_change_item(state);
 }
 
@@ -307,7 +308,12 @@ void TableSheet::trigger_listeners(const Location &location) {
     TableCellPtr cell = get_cell_by_location(cell_location);
     if (cell->recalc()) {
       // Cell content has changed. The listeners for this cell must be triggered as well.
-      recalc_cells.push(cell->location());
+      it = _listener_map.find(location);
+      if (it != _listener_map.end()) {
+        for (const auto& listener_location: it->second) {
+          recalc_cells.push(listener_location);
+        }
+      }
     }
   }
 }

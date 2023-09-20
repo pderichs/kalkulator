@@ -31,6 +31,8 @@ int run_cell_tests1();
 
 int run_cell_range_tests1();
 
+int run_cell_nested_reference_test1();
+
 class TestEventSink : public EventSink {
 public:
   TestEventSink() = default;
@@ -48,6 +50,7 @@ void prepare_execution_context(LispExecutionContext *execution_context,
 int run_table_lisp_function_tests() {
   RUN_TEST(run_cell_tests1);
   RUN_TEST(run_cell_range_tests1);
+  RUN_TEST(run_cell_nested_reference_test1);
 
   return 0;
 }
@@ -125,4 +128,46 @@ void prepare_execution_context(LispExecutionContext *execution_context,
       "cell", std::make_shared<LispExecutionContextCellReference>(document));
   execution_context->add_function(
       "cell_range", std::make_shared<LispExecutionContextCellRange>(document));
+}
+
+int run_cell_nested_reference_test1() {
+  // Test setup
+  TestEventSink sink;
+  LispExecutionContext execution_context;
+  ValueConverter::set_execution_context(&execution_context);
+  TableWorkbookDocumentPtr document =
+      std::make_shared<TableWorkbookDocument>(&sink);
+  prepare_execution_context(&execution_context, document);
+
+  // Prepare formulas and cell content
+  document->select_cell(Location(0, 0));
+  document->update_content_current_cell("0"); // Zeile
+
+  document->select_cell(Location(0, 1));
+  document->update_content_current_cell("5"); // Spalte
+
+  document->select_cell(Location(5, 0)); // source cell 1
+  document->update_content_current_cell("Cell 1");
+
+  document->select_cell(Location(6, 0)); // source cell 2
+  document->update_content_current_cell("Cell 2 - hello");
+
+  // Formula which contains cell reference defined by other cells.
+  document->select_cell(Location(0, 2));
+  document->update_content_current_cell("=(cell (cell 0 0) (cell 1 0))"); // Spalte
+
+  // Cell content must match source cell 1
+  const auto &opt_cell = document->get_cell(Location(0, 2));
+  TEST_ASSERT(opt_cell);
+  const auto& cell = *opt_cell;
+  TEST_ASSERT(cell->visible_content() == "Cell 1");
+
+  // Now update cell reference coordinate cell
+  document->select_cell(Location(0, 1));
+  document->update_content_current_cell("6"); // Spalte
+
+  // Cell content should now match source cell 2
+  TEST_ASSERT(cell->visible_content() == "Cell 2 - hello");
+
+  return 0;
 }
