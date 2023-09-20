@@ -23,7 +23,6 @@
 #include "../../model/lisp/lisp_function_execution_context.h"
 #include "../../model/lisp/lisp_parser.h"
 #include "../../model/lisp/lisp_parser_error.h"
-#include "../../model/lisp/lisp_value.h"
 #include "../../model/lisp/lisp_value_factory.h"
 #include "../../model/lisp/lisp_value_parser.h"
 #include "tools.h"
@@ -33,9 +32,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <tuple>
-#include <wx/wx.h>
 
-int run_lisp_tests(const std::map<std::string, LispValuePtr> tests,
+int execute_lisp_tests(const std::map<std::string, LispValuePtr>& tests,
                    const std::string &test_name);
 
 int run_lisp_tests_parsing1();
@@ -221,7 +219,7 @@ int run_lisp_tests_parsing1() {
 }
 
 int run_lisp_tests_parsing2() {
-  LispParser parser("(some-function \"Hello \\\"World\\\"\" 22 4)");
+  LispParser parser(R"((some-function "Hello \"World\"" 22 4))");
 
   try {
     LispTokens tokens = parser.parse();
@@ -230,7 +228,7 @@ int run_lisp_tests_parsing2() {
 
     TEST_ASSERT(tokens[0].id == OPEN_BRACKET);
     TEST_ASSERT(tokens[1].id == IDENTIFIER);
-    std::string s = std::any_cast<std::string>(tokens[1].content);
+    auto s = std::any_cast<std::string>(tokens[1].content);
     TEST_ASSERT(s == "some-function");
     TEST_ASSERT(tokens[2].id == SPACE);
     TEST_ASSERT(tokens[3].id == STRING);
@@ -238,8 +236,7 @@ int run_lisp_tests_parsing2() {
     TEST_ASSERT(s == "Hello \\\"World\\\"");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == INTEGER);
-    LispValue::IntegerType d =
-        std::any_cast<LispValue::IntegerType>(tokens[5].content);
+    auto d = std::any_cast<LispValue::IntegerType>(tokens[5].content);
     TEST_ASSERT(d == 22.0);
     TEST_ASSERT(tokens[6].id == SPACE);
     TEST_ASSERT(tokens[7].id == INTEGER);
@@ -267,7 +264,7 @@ int run_lisp_tests_parsing3() {
 
     TEST_ASSERT(tokens[0].id == OPEN_BRACKET);
     TEST_ASSERT(tokens[1].id == IDENTIFIER);
-    std::string s = std::any_cast<std::string>(tokens[1].content);
+    auto s = std::any_cast<std::string>(tokens[1].content);
     TEST_ASSERT(s == "hello");
     TEST_ASSERT(tokens[2].id == SPACE);
     TEST_ASSERT(tokens[3].id == STRING);
@@ -275,8 +272,7 @@ int run_lisp_tests_parsing3() {
     TEST_ASSERT(s == "8282");
     TEST_ASSERT(tokens[4].id == SPACE);
     TEST_ASSERT(tokens[5].id == DOUBLE);
-    LispValue::DoubleType d =
-        std::any_cast<LispValue::DoubleType>(tokens[5].content);
+    auto d = std::any_cast<LispValue::DoubleType>(tokens[5].content);
     TEST_ASSERT(d == -484.32);
     TEST_ASSERT(tokens[6].id == CLOSE_BRACKET);
     TEST_ASSERT(tokens.size() == 7);
@@ -300,7 +296,7 @@ int run_lisp_tests_parsing4() {
 
     TEST_ASSERT(tokens[0].id == OPEN_BRACKET);
     TEST_ASSERT(tokens[1].id == IDENTIFIER);
-    std::string s = std::any_cast<std::string>(tokens[1].content);
+    auto s = std::any_cast<std::string>(tokens[1].content);
     TEST_ASSERT(s == "funktion1");
     TEST_ASSERT(tokens[2].id == SPACE);
     TEST_ASSERT(tokens[3].id == STRING);
@@ -328,9 +324,9 @@ int run_lisp_tests_expression1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto func = parser.next();
+    auto func = value_parser.next();
     TEST_ASSERT(func);
 
     LispValue val = *func;
@@ -378,9 +374,9 @@ int run_lisp_tests_expression2() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto func = parser.next();
+    auto func = value_parser.next();
     TEST_ASSERT(func);
 
     LispValue val = *func;
@@ -418,7 +414,7 @@ int run_lisp_tests_wrong_form1() {
       "(", ")", "(343 1)", "(\"hello\" 1)", "123", "\"Hello\"",
   };
 
-  for (auto c : cases) {
+  for (const auto& c : cases) {
     bool exception = false;
 
     std::cerr << "Testing wrong form: " << c << std::endl;
@@ -427,7 +423,7 @@ int run_lisp_tests_wrong_form1() {
     try {
       LispTokens tokens = parser.parse();
 
-      LispValueParser parser(tokens);
+      LispValueParser value_parser(tokens);
       exception = false;
     } catch (LispParserError &lpe) {
       exception = true;
@@ -447,9 +443,9 @@ int run_lisp_tests_executor1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -477,9 +473,9 @@ int run_lisp_tests_executor2() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -507,9 +503,9 @@ int run_lisp_tests_custom_function1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -539,9 +535,9 @@ int run_lisp_tests_list1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -582,9 +578,9 @@ int run_lisp_tests_expression_with_identifier1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto func = parser.next();
+    auto func = value_parser.next();
     TEST_ASSERT(func);
 
     LispValue val = *func;
@@ -628,9 +624,9 @@ int run_lisp_tests_addition() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -653,9 +649,9 @@ int run_lisp_tests_subtraction() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -678,9 +674,9 @@ int run_lisp_tests_multiplication() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -703,9 +699,9 @@ int run_lisp_tests_division() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -728,9 +724,9 @@ int run_lisp_tests_addition_with_list1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -753,9 +749,9 @@ int run_lisp_tests_subtraction_with_list1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -778,9 +774,9 @@ int run_lisp_tests_multiplication_with_list1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -803,9 +799,9 @@ int run_lisp_tests_division_with_list1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -828,9 +824,9 @@ int run_lisp_tests_first1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -853,9 +849,9 @@ int run_lisp_tests_rest1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -884,9 +880,9 @@ int run_lisp_tests_join1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -921,9 +917,9 @@ int run_lisp_tests_cons1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -946,14 +942,14 @@ int run_lisp_tests_cons1() {
 }
 
 int run_lisp_tests_if1() {
-  LispParser parser("(if (= 3 3) \"OK\" \"Not ok\")");
+  LispParser parser(R"((if (= 3 3) "OK" "Not ok"))");
 
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -973,14 +969,14 @@ int run_lisp_tests_if1() {
 }
 
 int run_lisp_tests_if2() {
-  LispParser parser("(if (= 4 3) \"Not ok\" \"GOOD!\")");
+  LispParser parser(R"((if (= 4 3) "Not ok" "GOOD!"))");
 
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     LispExecutionContext executor;
@@ -1005,7 +1001,7 @@ int run_lisp_tests_eq1() {
       {"(eq 1 1)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
       {"(eq \"Hase\" 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
       {"(eq \"Hase\" \"Bär\")", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(eq \"Hase\" \"Hase\")", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {R"((eq "Hase" "Hase"))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
       {"(eq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
       {"(eq (list 54 2 66 9.326) (list 54 3 66 9.326))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
       {"(eq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
@@ -1013,7 +1009,7 @@ int run_lisp_tests_eq1() {
       {"(eq (list 6 6 6) (list 6 6 6) 5)", LispValueFactory::new_bool(LISP_BOOL_FALSE)}};
   // clang-format on
 
-  return run_lisp_tests(tests, "eq");
+  return execute_lisp_tests(tests, "eq");
 }
 
 int run_lisp_tests_xeq1() {
@@ -1022,14 +1018,14 @@ int run_lisp_tests_xeq1() {
       {"(xeq 1 1)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
       {"(xeq \"Hase\" 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
       {"(xeq \"Hase\" \"Bär\")", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(xeq \"Hase\" \"Hase\")", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {R"((xeq "Hase" "Hase"))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
       {"(xeq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
       {"(xeq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
       {"(xeq (list 6 6 6) (list 6 6 6) 6)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
       {"(xeq (list 6 6 6) (list 6 6 6) 5)", LispValueFactory::new_bool(LISP_BOOL_FALSE)}};
   // clang-format on
 
-  return run_lisp_tests(tests, "xeq");
+  return execute_lisp_tests(tests, "xeq");
 }
 
 int run_lisp_tests_not1() {
@@ -1042,7 +1038,7 @@ int run_lisp_tests_not1() {
   };
   // clang-format on
 
-  return run_lisp_tests(tests, "not");
+  return execute_lisp_tests(tests, "not");
 }
 
 int run_lisp_tests_or1() {
@@ -1057,7 +1053,7 @@ int run_lisp_tests_or1() {
   };
   // clang-format on
 
-  return run_lisp_tests(tests, "or");
+  return execute_lisp_tests(tests, "or");
 }
 
 int run_lisp_tests_and1() {
@@ -1072,7 +1068,7 @@ int run_lisp_tests_and1() {
   };
   // clang-format on
 
-  return run_lisp_tests(tests, "and");
+  return execute_lisp_tests(tests, "and");
 }
 
 int run_lisp_tests_xor1() {
@@ -1085,7 +1081,7 @@ int run_lisp_tests_xor1() {
   };
   // clang-format on
 
-  return run_lisp_tests(tests, "xor");
+  return execute_lisp_tests(tests, "xor");
 }
 
 int run_lisp_tests_avg1() {
@@ -1096,10 +1092,10 @@ int run_lisp_tests_avg1() {
   };
   // clang-format on
 
-  return run_lisp_tests(tests, "avg");
+  return execute_lisp_tests(tests, "avg");
 }
 
-int run_lisp_tests(const std::map<std::string, LispValuePtr> tests,
+int execute_lisp_tests(const std::map<std::string, LispValuePtr>& tests,
                    const std::string &test_name) {
   for (const auto &it : tests) {
     std::string test = it.first;
@@ -1112,21 +1108,21 @@ int run_lisp_tests(const std::map<std::string, LispValuePtr> tests,
     try {
       LispTokens tokens = parser.parse();
 
-      LispValueParser parser(tokens);
+      LispValueParser value_parser(tokens);
 
-      auto value = parser.next();
+      auto value = value_parser.next();
       TEST_ASSERT(value);
 
       LispExecutionContext executor;
       LispValuePtr result = executor.execute(value, {});
 
       TEST_ASSERT(*result == *expected_result);
-    } catch (LispParserError &lpe) {
+    } catch (const LispParserError &lpe) {
       std::cerr << "*** Caught lisp parser error: " << lpe.what()
                 << " (item: \"" << lpe.item() << "\")" << std::endl;
 
       TEST_ASSERT(false);
-    } catch (LispExecutionContextError &lece) {
+    } catch (const LispExecutionContextError &lece) {
       std::cerr << "*** Caught lisp parser error: " << lece.what() << std::endl;
 
       TEST_ASSERT(false);
@@ -1149,7 +1145,7 @@ int run_lisp_tests_progn() {
   };
   // clang-format on
 
-  return run_lisp_tests(tests, "progn");
+  return execute_lisp_tests(tests, "progn");
 }
 
 int run_lisp_tests_lambda_parsing() {
@@ -1194,9 +1190,9 @@ int run_lisp_lambda_parser_test1() {
   try {
     LispTokens tokens = parser.parse();
 
-    LispValueParser parser(tokens);
+    LispValueParser value_parser(tokens);
 
-    auto value = parser.next();
+    auto value = value_parser.next();
     TEST_ASSERT(value);
 
     TEST_ASSERT(value->is_list());
@@ -1246,5 +1242,5 @@ int run_lisp_lambda_execution_test1() {
   };
   // clang-format on
 
-  return run_lisp_tests(tests, "lambda");
+  return execute_lisp_tests(tests, "lambda");
 }
