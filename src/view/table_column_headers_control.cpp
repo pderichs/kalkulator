@@ -18,7 +18,7 @@
 
 #include "table_column_headers_control.h"
 
-//  TODO: Remove these as soon as possible
+// TODO: Remove these as soon as possible
 const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
 
@@ -54,7 +54,7 @@ void TableColumnHeadersControl::OnDraw(wxDC &dc) {
 
 void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
                                             int width, int height,
-                                            const TableSheetPtr& sheet) {
+                                            const TableSheetPtr &sheet) {
   std::ignore = width;
   std::ignore = height;
   std::ignore = scrollPos;
@@ -71,7 +71,7 @@ void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
   // Columns
   c = 0;
   x = ROW_HEADER_WIDTH;
-  for (const auto& coldef : sheet->column_definitions) {
+  for (const auto &coldef : sheet->column_definitions) {
     // if (x > width) {
     //   break;
     // }

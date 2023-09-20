@@ -44,7 +44,6 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- BUG: Add tests for test kal files (e.g. cell references which get their location from table cells)
 - EVAL: Is recalculation dependent on repaint events? -> if so, change it. Should only be a concern of the model.
 - REFA: eval tests refactoring (boost, CMake: enable_testing etc)
 - BUG: ScrollToCell -> Cell should be in center of view
@@ -90,6 +89,7 @@ This project makes use of other external libraries and projects. Please refer to
 
 # DONE
 
+- BUG: Add tests for test kal files (e.g. cell references which get their location from table cells)
 - REFA: License update
 - REFA: CMake
 - BUG: Format dialog does not show current format of cell
