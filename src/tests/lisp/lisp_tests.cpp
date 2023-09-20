@@ -98,12 +98,12 @@ int run_lisp_lambda_execution_test1();
 
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
-  virtual ~TestLispFunctionExecutionContext() = default;
+  ~TestLispFunctionExecutionContext() override = default;
 
   // Adds "Hello " to the front of the provided string
-  virtual LispValuePtr value(const LispValuePtrVector &func,
+  LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
-                             const std::any &context_param) {
+                             const std::any &context_param) override {
     std::ignore = execution_context;
     std::ignore = context_param;
 
