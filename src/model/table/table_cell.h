@@ -37,7 +37,7 @@ public:
   bool update_content(const std::string &content);
   [[nodiscard]] std::string visible_content() const;
   [[nodiscard]] std::string get_formula_content() const;
-  bool is_formula() const;
+  [[nodiscard]] bool is_formula() const;
   [[nodiscard]] LispValuePtr lisp_value() const { return _lisp_value; }
   [[nodiscard]] bool has_content() const;
   void clear();

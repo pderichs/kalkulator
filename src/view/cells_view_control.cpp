@@ -21,6 +21,7 @@
 #include "kalkulator_system_colors.h"
 #include <iostream>
 #include <tuple>
+#include <utility>
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
@@ -31,7 +32,8 @@ CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
                                    EventSink *event_sink, wxWindow *parent,
                                    wxWindowID id, const wxPoint &pos,
                                    const wxSize &size, long style)
-    : TableSheetView(document, event_sink, parent, id, pos, size, style), _sys_colors(sys_colors) {
+    : TableSheetView(std::move(document), event_sink, parent, id, pos, size, style),
+      _sys_colors(std::move(sys_colors)) {
 
   Bind(wxEVT_CHAR_HOOK, &CellsViewControl::OnKeyPress, this);
   Bind(wxEVT_LEFT_DOWN, &CellsViewControl::OnLeftDown, this);
@@ -92,7 +94,7 @@ void CellsViewControl::OnCut() {
   _document->clear_current_cell();
 }
 
-void CellsViewControl::DrawTable(wxDC *dc, TableSheetPtr sheet) {
+void CellsViewControl::DrawTable(wxDC *dc, const TableSheetPtr& sheet) {
   Location scrollPos = GetScrollPosition();
   int width;
   int height;

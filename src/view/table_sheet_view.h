@@ -28,13 +28,13 @@ public:
   TableSheetView(TableWorkbookDocumentPtr document, EventSink *event_sink,
                  wxWindow *parent, wxWindowID id, const wxPoint &pos,
                  const wxSize &size, long style);
-  virtual ~TableSheetView() = default;
+  ~TableSheetView() override = default;
 
   // Delete copy constructor and assignment operator
   TableSheetView(const TableSheetView &other) = delete;
   TableSheetView &operator=(const TableSheetView &other) = delete;
 
-  Location GetScrollPosition() const;
+  [[nodiscard]] Location GetScrollPosition() const;
   static void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);
 
 protected:
