@@ -94,7 +94,7 @@ void CellsViewControl::OnCut() {
   _document->clear_current_cell();
 }
 
-void CellsViewControl::DrawTable(wxDC *dc, const TableSheetPtr& sheet) {
+void CellsViewControl::DrawTable(wxDC *dc, const TableSheetPtr &sheet) {
   Location scrollPos = GetScrollPosition();
   int width;
   int height;
@@ -344,7 +344,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
 
     // Scroll(rect.GetLeft() / SCROLL_UNIT, rect.GetTop() / SCROLL_UNIT);
 
-    ScrollToCell(loc, TOP);
+    ScrollToCell(loc, CELL_WINDOW_LOCATION_TOP);
 
     // TEST END
     break;
@@ -384,7 +384,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
 }
 
 void CellsViewControl::ScrollToCell(const Location &cell,
-                                    TableCellOrientation orientation) {
+                                    CellWindowLocation cell_window_location) { // FIXME TableCellOrientation used in another context
   wxRect scrollArea = GetCurrentScrollArea();
   wxRect rect = GetCellRectByLocation(cell);
   // wxPrintf("TEST! Cell Rect: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
@@ -397,18 +397,21 @@ void CellsViewControl::ScrollToCell(const Location &cell,
 
   int x, y;
 
-  switch (orientation) {
-  case TOP:x = scrollArea.GetLeft();
+  switch (cell_window_location) {
+  case CELL_WINDOW_LOCATION_TOP:x = scrollArea.GetLeft();
     y = rect.GetTop();
     break;
-  case LEFT:x = rect.GetLeft() - defs.second->width;
+  case CELL_WINDOW_LOCATION_LEFT:x = rect.GetLeft() - defs.second->width;
     y = scrollArea.GetTop();
     break;
-  case BOTTOM:x = scrollArea.GetLeft();
+  case CELL_WINDOW_LOCATION_BOTTOM:x = scrollArea.GetLeft();
     y = rect.GetBottom() - scrollArea.GetHeight() + 10;
     break;
-  case RIGHT:x = rect.GetRight() - scrollArea.GetWidth() + 10;
+  case CELL_WINDOW_LOCATION_RIGHT:x = rect.GetRight() - scrollArea.GetWidth() + 10;
     y = scrollArea.GetTop();
+    break;
+  case CELL_WINDOW_LOCATION_CENTER:
+    // TODO
     break;
   }
 
@@ -440,22 +443,22 @@ void CellsViewControl::ScrollToCurrentCell() {
 
   if (cell_rect.GetLeft() < scrollArea.GetLeft()) {
     // Cell is left from scroll area
-    ScrollToCell(cell->location(), LEFT);
+    ScrollToCell(cell->location(), CELL_WINDOW_LOCATION_LEFT);
   }
 
   if (cell_rect.GetTop() < scrollArea.GetTop()) {
     // Cell is above scroll area
-    ScrollToCell(cell->location(), TOP);
+    ScrollToCell(cell->location(), CELL_WINDOW_LOCATION_TOP);
   }
 
   if (cell_rect.GetBottom() > scrollArea.GetBottom()) {
     // Cell is below scroll area
-    ScrollToCell(cell->location(), BOTTOM);
+    ScrollToCell(cell->location(), CELL_WINDOW_LOCATION_BOTTOM);
   }
 
   if (cell_rect.GetRight() > scrollArea.GetRight()) {
     // Cell is right from scroll area
-    ScrollToCell(cell->location(), RIGHT);
+    ScrollToCell(cell->location(), CELL_WINDOW_LOCATION_RIGHT);
   }
 }
 

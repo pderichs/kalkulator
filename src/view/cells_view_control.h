@@ -24,6 +24,14 @@
 #include "kalkulator_system_colors.h"
 #include "table_sheet_view.h"
 
+enum CellWindowLocation {
+  CELL_WINDOW_LOCATION_LEFT,
+  CELL_WINDOW_LOCATION_TOP,
+  CELL_WINDOW_LOCATION_RIGHT,
+  CELL_WINDOW_LOCATION_BOTTOM,
+  CELL_WINDOW_LOCATION_CENTER
+};
+
 class CellsViewControl : public TableSheetView {
 public:
   CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
@@ -58,7 +66,7 @@ private:
   wxRect GetCurrentScrollArea() const;
 
   Location GetTableCellByClickPosition(const wxPoint &pos) const;
-  void ScrollToCell(const Location &cell, TableCellOrientation orientation);
+  void ScrollToCell(const Location &cell, CellWindowLocation cell_window_location);
 
   void CopyString(const std::string &content);
   static wxColour fromTableCellColor(const TableCellColor& color);

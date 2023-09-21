@@ -51,12 +51,6 @@ This project makes use of other external libraries and projects. Please refer to
 - FEAT: Add > function
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Replace
-- FEAT: Add simple format: bold
-- FEAT: Add simple format: italic
-- FEAT: Add simple format: underlined
-- FEAT: Add simple format: background color
-- FEAT: Add simple format: foreground color
-- FEAT: Add simple format: font size
 - FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
   - @ x y (goto cell)
   - ...
@@ -88,6 +82,12 @@ This project makes use of other external libraries and projects. Please refer to
 
 # DONE
 
+- FEAT: Add simple format: bold
+- FEAT: Add simple format: italic
+- FEAT: Add simple format: underlined
+- FEAT: Add simple format: background color
+- FEAT: Add simple format: foreground color
+- FEAT: Add simple format: font size
 - EVAL: Is recalculation dependent on repaint events? -> if so, change it. Should only be a concern of the model.
 - BUG: Add tests for test kal files (e.g. cell references which get their location from table cells)
 - REFA: License update
