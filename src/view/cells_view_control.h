@@ -25,6 +25,7 @@
 #include "table_sheet_view.h"
 
 enum CellWindowLocation {
+  CELL_WINDOW_LOCATION_UNSPECIFIED,
   CELL_WINDOW_LOCATION_LEFT,
   CELL_WINDOW_LOCATION_TOP,
   CELL_WINDOW_LOCATION_RIGHT,
@@ -59,7 +60,7 @@ public:
   void OnCellUpdate(const Location &location);
 
   void ScrollWindow(int dx, int dy, const wxRect *rect) override;
-  void ScrollToCurrentCell();
+  void ScrollToCurrentCell(CellWindowLocation location);
 
 private:
   void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height,
@@ -73,7 +74,9 @@ private:
   void CopyString(const std::string &content);
   static wxColour fromTableCellColor(const TableCellColor& color);
 
-private:
+  CellWindowLocation GetCellLocation(const wxRect &cell_rect, const wxRect &scrollArea) const;
+
+    private:
   KalkulatorSystemColorsPtr _sys_colors;
 };
 

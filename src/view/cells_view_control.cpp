@@ -31,8 +31,9 @@ CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
                                    EventSink *event_sink, wxWindow *parent,
                                    wxWindowID id, const wxPoint &pos,
                                    const wxSize &size, long style)
-    : TableSheetView(std::move(document), event_sink, parent, id, pos, size, style),
-      _sys_colors(std::move(sys_colors)) {
+    :
+    TableSheetView(std::move(document), event_sink, parent, id, pos, size, style),
+    _sys_colors(std::move(sys_colors)) {
 
   Bind(wxEVT_CHAR_HOOK, &CellsViewControl::OnKeyPress, this);
   Bind(wxEVT_LEFT_DOWN, &CellsViewControl::OnLeftDown, this);
@@ -286,20 +287,27 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   bool handled = true;
 
   switch (keyCode) {
-  case WXK_UP:_document->move_cursor_up();
+  case WXK_UP:
+    _document->move_cursor_up();
     cell_selection_moved = true;
     break;
-  case WXK_DOWN:cell_selection_moved = _document->move_cursor_down();
+  case WXK_DOWN:
+    cell_selection_moved = _document->move_cursor_down();
     break;
-  case WXK_LEFT:cell_selection_moved = _document->move_cursor_left();
+  case WXK_LEFT:
+    cell_selection_moved = _document->move_cursor_left();
     break;
-  case WXK_RIGHT:cell_selection_moved = _document->move_cursor_right();
+  case WXK_RIGHT:
+    cell_selection_moved = _document->move_cursor_right();
     break;
-  case WXK_PAGEUP:cell_selection_moved = _document->move_cursor_page_up();
+  case WXK_PAGEUP:
+    cell_selection_moved = _document->move_cursor_page_up();
     break;
-  case WXK_PAGEDOWN:cell_selection_moved = _document->move_cursor_page_down();
+  case WXK_PAGEDOWN:
+    cell_selection_moved = _document->move_cursor_page_down();
     break;
-  case WXK_DELETE:_document->clear_current_cell();
+  case WXK_DELETE:
+    _document->clear_current_cell();
     break;
   case 'Z':
     if (control) {
@@ -364,12 +372,13 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
       OnCut();
     }
     break;
-  default:handled = false;
+  default:
+    handled = false;
     break;
   }
 
   if (cell_selection_moved) {
-    ScrollToCurrentCell();
+    ScrollToCurrentCell(CELL_WINDOW_LOCATION_RIGHT);
   }
 
   if (handled) {
@@ -394,21 +403,28 @@ void CellsViewControl::ScrollToCell(const Location &cell,
   int x, y;
 
   switch (cell_window_location) {
-  case CELL_WINDOW_LOCATION_TOP:x = scrollArea.GetLeft();
+  case CELL_WINDOW_LOCATION_TOP:
+    x = scrollArea.GetLeft();
     y = rect.GetTop();
     break;
-  case CELL_WINDOW_LOCATION_LEFT:x = rect.GetLeft() - defs.second->width;
+  case CELL_WINDOW_LOCATION_LEFT:
+    x = rect.GetLeft() - defs.second->width;
     y = scrollArea.GetTop();
     break;
-  case CELL_WINDOW_LOCATION_BOTTOM:x = scrollArea.GetLeft();
+  case CELL_WINDOW_LOCATION_BOTTOM:
+    x = scrollArea.GetLeft();
     y = rect.GetBottom() - scrollArea.GetHeight() + 10;
     break;
-  case CELL_WINDOW_LOCATION_RIGHT:x = rect.GetRight() - scrollArea.GetWidth() + 10;
+  case CELL_WINDOW_LOCATION_RIGHT:
+    x = rect.GetRight() - scrollArea.GetWidth() + 10;
     y = scrollArea.GetTop();
     break;
   case CELL_WINDOW_LOCATION_CENTER:
-    // TODO
+    x = std::max(0, rect.GetLeft() - (scrollArea.GetWidth() / 2) - 50); // ROW_HEADER_WIDTH
+    y = std::max(0, rect.GetTop() - (scrollArea.GetHeight() / 2) - 30); // COLUMN_HEADER_HEIGHT
     break;
+  default:
+    throw std::runtime_error("Unhandled cell window location");
   }
 
   x /= SCROLL_UNIT;
@@ -417,7 +433,7 @@ void CellsViewControl::ScrollToCell(const Location &cell,
   Scroll(x, y);
 }
 
-void CellsViewControl::ScrollToCurrentCell() {
+void CellsViewControl::ScrollToCurrentCell(CellWindowLocation location) {
   wxRect scrollArea = GetCurrentScrollArea();
   TableCellPtr cell = _document->get_current_cell();
   wxRect cell_rect = GetCellRectByLocation(cell->location());
@@ -437,25 +453,37 @@ void CellsViewControl::ScrollToCurrentCell() {
     return;
   }
 
+  CellWindowLocation actual_location = location;
+
+  if (actual_location == CELL_WINDOW_LOCATION_UNSPECIFIED) {
+    actual_location = GetCellLocation(cell_rect, scrollArea);
+  }
+
+  ScrollToCell(cell->location(), actual_location);
+}
+
+CellWindowLocation CellsViewControl::GetCellLocation(const wxRect &cell_rect, const wxRect &scrollArea) const {
   if (cell_rect.GetLeft() < scrollArea.GetLeft()) {
     // Cell is left from scroll area
-    ScrollToCell(cell->location(), CELL_WINDOW_LOCATION_LEFT);
+    return CELL_WINDOW_LOCATION_LEFT;
   }
 
   if (cell_rect.GetTop() < scrollArea.GetTop()) {
     // Cell is above scroll area
-    ScrollToCell(cell->location(), CELL_WINDOW_LOCATION_TOP);
+    return CELL_WINDOW_LOCATION_TOP;
   }
 
   if (cell_rect.GetBottom() > scrollArea.GetBottom()) {
     // Cell is below scroll area
-    ScrollToCell(cell->location(), CELL_WINDOW_LOCATION_BOTTOM);
+    return CELL_WINDOW_LOCATION_BOTTOM;
   }
 
   if (cell_rect.GetRight() > scrollArea.GetRight()) {
     // Cell is right from scroll area
-    ScrollToCell(cell->location(), CELL_WINDOW_LOCATION_RIGHT);
+    return CELL_WINDOW_LOCATION_RIGHT;
   }
+
+  return CELL_WINDOW_LOCATION_CENTER;
 }
 
 void CellsViewControl::OnCellUpdate(const Location &location) {

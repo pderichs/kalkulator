@@ -47,7 +47,7 @@ public:
   void OnCellUpdate(const Location &location);
   void OnSetFocus(wxFocusEvent &event);
   void update_scroll_positions(const Location &scroll_pos);
-  void ScrollToCurrentCell();
+  void ScrollToCurrentCell(CellWindowLocation location);
 
   wxFont GetCellViewFont() const { return _cells_view_control->GetFont(); }
 

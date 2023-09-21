@@ -765,8 +765,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
 
   _document->select_cell(Location(col, row));
 
-  _table_control->ScrollToCurrentCell(); // TODO Add option to scroll cell to
-  // center of view?
+  _table_control->ScrollToCurrentCell(CELL_WINDOW_LOCATION_CENTER);
 }
 
 void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {

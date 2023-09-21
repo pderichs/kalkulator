@@ -99,6 +99,6 @@ void TableControl::update_scroll_positions(const Location &scroll_pos) {
   _column_headers_control->Scroll(scroll_pos.x(), 0);
 }
 
-void TableControl::ScrollToCurrentCell() {
-  _cells_view_control->ScrollToCurrentCell();
+void TableControl::ScrollToCurrentCell(CellWindowLocation location) {
+  _cells_view_control->ScrollToCurrentCell(location);
 }
