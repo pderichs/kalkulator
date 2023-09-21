@@ -41,9 +41,9 @@ public:
                    const wxSize &size = wxDefaultSize,
                    long style = wxTAB_TRAVERSAL);
 
-  virtual ~CellsViewControl() = default;
+  ~CellsViewControl() override = default;
 
-  void OnDraw(wxDC &dc);
+  void OnDraw(wxDC &dc) override;
   void OnKeyPress(wxKeyEvent &event);
   void OnLeftDown(wxMouseEvent &event);
   void OnCopy();
@@ -56,7 +56,7 @@ public:
   void DrawTable(wxDC *dc, const TableSheetPtr& sheet);
   void OnCellUpdate(const Location &location);
 
-  virtual void ScrollWindow(int dx, int dy, const wxRect *rect);
+  void ScrollWindow(int dx, int dy, const wxRect *rect) override;
   void ScrollToCurrentCell();
 
 private:
