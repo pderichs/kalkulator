@@ -31,14 +31,14 @@ private:
   long x_, y_;
 
 public:
-  Location(): x_(0), y_(0) {
+  Location() : x_(0), y_(0) {
   }
 
-  explicit Location(long x, long y): x_(x), y_(y) {
+  explicit Location(long x, long y) : x_(x), y_(y) {
   }
 
-  [[nodiscard]] long x() const { return x_; }
-  [[nodiscard]] long y() const { return y_; }
+  long x() const { return x_; }
+  long y() const { return y_; }
 
   void moveLeft() { x_--; }
   void moveRight() { x_++; }
@@ -65,11 +65,11 @@ public:
     return (x_ < other.x_) || (x_ == other.x_ && y_ < other.y_);
   }
 
-  [[nodiscard]] double distance_to(const Location &other) const {
+  double distance_to(const Location &other) const {
     return std::abs(x_ - other.x()) + std::abs(y_ - other.y());
   }
 
-  friend std::ostream& operator<<(std::ostream& os, Location const& m) {
+  friend std::ostream &operator<<(std::ostream &os, Location const &m) {
     return os << "(col: " << m.x() << ", row: " << m.y() << ")";
   }
 };

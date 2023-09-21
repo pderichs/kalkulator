@@ -32,8 +32,8 @@ public:
   LispValuePtr next();
 
 private:
-  [[nodiscard]] bool has_next() const { return _pos < _tokens.size(); }
-  [[nodiscard]] LispToken current_token() const { return _tokens[_pos]; }
+  bool has_next() const { return _pos < _tokens.size(); }
+  LispToken current_token() const { return _tokens[_pos]; }
   void skip_spaces();
   LispValuePtr parse_list();
   LispTokens collect_current_function_tokens();

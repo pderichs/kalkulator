@@ -38,13 +38,13 @@ struct LispToken {
   TokenID id;
   std::any content;
 
-  [[nodiscard]] bool is_space() const { return id == SPACE; }
-  [[nodiscard]] bool is_identifier() const { return id == IDENTIFIER; }
-  [[nodiscard]] bool is_string() const { return id == STRING; }
-  [[nodiscard]] bool is_integer() const { return id == INTEGER; }
-  [[nodiscard]] bool is_double() const { return id == DOUBLE; }
-  [[nodiscard]] bool is_open_bracket() const { return id == OPEN_BRACKET; }
-  [[nodiscard]] bool is_closed_bracket() const { return id == CLOSE_BRACKET; }
+  bool is_space() const { return id == SPACE; }
+  bool is_identifier() const { return id == IDENTIFIER; }
+  bool is_string() const { return id == STRING; }
+  bool is_integer() const { return id == INTEGER; }
+  bool is_double() const { return id == DOUBLE; }
+  bool is_open_bracket() const { return id == OPEN_BRACKET; }
+  bool is_closed_bracket() const { return id == CLOSE_BRACKET; }
 };
 
 class LispTokens : public std::vector<LispToken> {

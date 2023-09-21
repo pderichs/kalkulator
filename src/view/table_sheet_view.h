@@ -34,7 +34,7 @@ public:
   TableSheetView(const TableSheetView &other) = delete;
   TableSheetView &operator=(const TableSheetView &other) = delete;
 
-  [[nodiscard]] Location GetScrollPosition() const;
+  Location GetScrollPosition() const;
   static void DrawTextInCenter(wxDC *dc, const wxString &s, const wxRect &rect);
 
 protected:

@@ -58,7 +58,7 @@ public:
     return result;
   }
 
-  [[nodiscard]] LispValuePtr
+  LispValuePtr
   execute_result_param(const LispValuePtrVector &func, size_t index,
                        const LispExecutionContext &execution_context,
                        const std::any &context_param) const {

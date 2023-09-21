@@ -28,7 +28,7 @@ public:
   LispParserError(const std::string &msg, const std::string &item)
       : std::runtime_error(msg), _item(item) {}
 
-  [[nodiscard]] std::string item() const { return _item; }
+  std::string item() const { return _item; }
 
 private:
   std::string _item;

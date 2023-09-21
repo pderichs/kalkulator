@@ -116,12 +116,12 @@ private:
 
   bool PermitLoseChanges();
 
-  [[nodiscard]] static bool IsDarkUI() {
+  static bool IsDarkUI() {
     wxSystemAppearance s = wxSystemSettings::GetAppearance();
     return s.IsDark();
   }
 
-  [[nodiscard]] const char **GetIcon(const std::string &icon_key) const;
+  const char **GetIcon(const std::string &icon_key) const;
 
   void SaveDocument(const std::string &file_path);
 

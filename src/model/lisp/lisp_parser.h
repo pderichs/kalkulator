@@ -46,7 +46,7 @@ private:
   LispToken read_number();
   LispToken read_identifier();
   bool walk();
-  [[nodiscard]] char current_char() const;
+  char current_char() const;
 
 private:
   std::string _lisp;

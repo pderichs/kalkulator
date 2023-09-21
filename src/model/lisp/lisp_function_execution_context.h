@@ -36,23 +36,23 @@ public:
                              const std::any &context_param) = 0;
 
 protected:
-  [[nodiscard]] LispValuePtrVector
+  LispValuePtrVector
   execute_functions(const LispValuePtrVector &params,
                     const LispExecutionContext &execution_context,
                     const std::any &context_param) const;
-  [[nodiscard]] LispValuePtrVector execute_functions_and_extract_list_results(
+  LispValuePtrVector execute_functions_and_extract_list_results(
       const LispValuePtrVector &params,
       const LispExecutionContext &execution_context,
       const std::any &context_param) const;
 
   void ensure_params(const LispValuePtrVector &func) const;
-  [[nodiscard]] LispValuePtr expect_number(const LispValuePtr &value,
+  LispValuePtr expect_number(const LispValuePtr &value,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) const;
-  [[nodiscard]] LispValuePtr expect_parameter_at(const LispValuePtrVector &func,
+  LispValuePtr expect_parameter_at(const LispValuePtrVector &func,
                                    size_t index) const;
 
-  [[nodiscard]] LispValuePtrVector extract_params(const LispValuePtrVector& func) const;
+  LispValuePtrVector extract_params(const LispValuePtrVector &func) const;
 };
 
 #endif

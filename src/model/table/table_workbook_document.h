@@ -38,7 +38,7 @@ public:
   TableWorkbookDocument(const TableWorkbookDocument &other) = delete;
   TableWorkbookDocument &operator=(const TableWorkbookDocument &other) = delete;
 
-  [[nodiscard]] bool changed() const { return _changed; }
+  bool changed() const { return _changed; }
 
   TableSheetPtr table_sheet_by_name(const std::string &name) const;
   TableSheetPtr current_sheet() const { return _current_sheet; }
@@ -51,7 +51,7 @@ public:
   void set_active_sheet(const std::string &name);
   void set_current_cell(const std::string &sheet_name,
                         const Location &current_cell);
-  void update_cell_content(const TableSheetPtr& sheet, Location cell_location,
+  void update_cell_content(const TableSheetPtr &sheet, Location cell_location,
                            const std::string &content);
   void clear_current_cell();
 

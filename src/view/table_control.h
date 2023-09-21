@@ -49,7 +49,7 @@ public:
   void update_scroll_positions(const Location &scroll_pos);
   void ScrollToCurrentCell();
 
-  [[nodiscard]] wxFont GetCellViewFont() const { return _cells_view_control->GetFont(); }
+  wxFont GetCellViewFont() const { return _cells_view_control->GetFont(); }
 
 protected:
   void Init();

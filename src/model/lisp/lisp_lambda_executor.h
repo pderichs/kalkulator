@@ -60,14 +60,14 @@ public:
                                context_param);
   }
 
-  [[nodiscard]] LispValuePtr
+  LispValuePtr
   execute_actual_body(const LispValuePtrVector &def,
                       const LispExecutionContext &execution_context,
                       const std::any &context_param) const {
     return execution_context.execute(def, context_param);
   }
 
-  [[nodiscard]] LispValuePtr replace_names_with_values(
+  LispValuePtr replace_names_with_values(
       const LispValuePtrVector &list,
       std::map<std::string, LispValuePtr> named_params) const {
 
@@ -94,7 +94,7 @@ public:
     return LispValueFactory::new_list(result);
   }
 
-  [[nodiscard]] std::map<std::string, LispValuePtr> match_params_names_with_values() const {
+  std::map<std::string, LispValuePtr> match_params_names_with_values() const {
     std::map<std::string, LispValuePtr> result;
 
     size_t n = 0;

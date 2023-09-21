@@ -78,10 +78,10 @@ public:
 
   void InitializeFontCombo();
 
-  [[nodiscard]] TableCellFormat GetFormat() const;
+  TableCellFormat GetFormat() const;
 
-  [[nodiscard]] TableCellColor wxColourToTableCellColor(const wxColour &color) const;
-  [[nodiscard]] wxColour tableCellColorTowxColour(const TableCellColor &color) const;
+  TableCellColor wxColourToTableCellColor(const wxColour &color) const;
+  wxColour tableCellColorTowxColour(const TableCellColor &color) const;
 
   void UpdateByTableCellFormat();
 

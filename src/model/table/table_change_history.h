@@ -59,11 +59,11 @@ typedef std::shared_ptr<StateHistoryItem> StateHistoryItemPtr;
 
 class StateChangeQueue {
 public:
-  explicit StateChangeQueue(size_t max_items): _max_items(max_items), _queue() {}
+  explicit StateChangeQueue(size_t max_items) : _max_items(max_items), _queue() {}
 
-  [[nodiscard]] bool empty() const { return _queue.empty(); }
+  bool empty() const { return _queue.empty(); }
 
-  [[nodiscard]] size_t size() const { return _queue.size(); }
+  size_t size() const { return _queue.size(); }
 
   void push_state(const StateHistoryItemPtr &state) {
     if (_queue.size() >= _max_items) {
@@ -95,7 +95,7 @@ public:
   }
 
   static StateHistoryItemPtr pop_and_swap(StateChangeQueue &source,
-                                   StateChangeQueue &dest) {
+                                          StateChangeQueue &dest) {
     if (source.empty()) {
       return {};
     }
