@@ -43,6 +43,8 @@ public:
 
   ~CellsViewControl() override = default;
 
+  void Initialize();
+
   void OnDraw(wxDC &dc) override;
   void OnKeyPress(wxKeyEvent &event);
   void OnLeftDown(wxMouseEvent &event);

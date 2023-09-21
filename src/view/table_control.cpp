@@ -82,6 +82,7 @@ void TableControl::CreateCellsViewControl() {
   _cells_view_control =
       new CellsViewControl(_sys_colors, _document, _event_sink, this, wxID_ANY,
                            wxDefaultPosition, wxDefaultSize, wxWANTS_CHARS);
+  _cells_view_control->Initialize();
 }
 
 void TableControl::OnCellUpdate(const Location &location) {

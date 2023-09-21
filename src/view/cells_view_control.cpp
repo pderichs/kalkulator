@@ -21,7 +21,6 @@
 #include "kalkulator_system_colors.h"
 #include <iostream>
 #include <tuple>
-#include <utility>
 #include <wx/clipbrd.h>
 #include <wx/dcclient.h>
 
@@ -39,9 +38,6 @@ CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
   Bind(wxEVT_LEFT_DOWN, &CellsViewControl::OnLeftDown, this);
 
   RefreshScrollbars();
-
-  SetBackgroundColour(_sys_colors->window_color);
-  SetForegroundColour(_sys_colors->window_text_color);
 }
 
 void CellsViewControl::OnDraw(wxDC &dc) {
@@ -517,4 +513,9 @@ void CellsViewControl::OnCopyFormula() {
 
 wxColour CellsViewControl::fromTableCellColor(const TableCellColor &color) {
   return {color.r, color.g, color.b};
+}
+
+void CellsViewControl::Initialize() {
+  SetBackgroundColour(_sys_colors->window_color);
+  SetForegroundColour(_sys_colors->window_text_color);
 }
