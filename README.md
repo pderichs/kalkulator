@@ -44,7 +44,6 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- BUG: ScrollToCell -> Cell should be in center of view
 - REFA: eval tests refactoring (boost, CMake: enable_testing etc)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
@@ -82,6 +81,7 @@ This project makes use of other external libraries and projects. Please refer to
 
 # DONE
 
+- BUG: ScrollToCell -> Cell should be in center of view
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic
 - FEAT: Add simple format: underlined
