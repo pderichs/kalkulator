@@ -23,7 +23,7 @@
 #include "../lisp/lisp_value_factory.h"
 #include "table_workbook_document.h"
 #include <sstream>
-#include <variant>
+#include <any>
 
 class LispExecutionContextCellRange : public LispFunctionExecutionContext {
 public:
