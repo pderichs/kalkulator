@@ -389,7 +389,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
 }
 
 void CellsViewControl::ScrollToCell(const Location &cell,
-                                    CellWindowLocation cell_window_location) { // FIXME TableCellOrientation used in another context
+                                    CellWindowLocation cell_window_location) {
   wxRect scrollArea = GetCurrentScrollArea();
   wxRect rect = GetCellRectByLocation(cell);
   // wxPrintf("TEST! Cell Rect: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
@@ -420,8 +420,8 @@ void CellsViewControl::ScrollToCell(const Location &cell,
     y = scrollArea.GetTop();
     break;
   case CELL_WINDOW_LOCATION_CENTER:
-    x = std::max(0, rect.GetLeft() - (scrollArea.GetWidth() / 2) - 50); // ROW_HEADER_WIDTH
-    y = std::max(0, rect.GetTop() - (scrollArea.GetHeight() / 2) - 30); // COLUMN_HEADER_HEIGHT
+    x = std::max(0, rect.GetLeft() + (rect.GetWidth() / 2) - (scrollArea.GetWidth() / 2)); // ROW_HEADER_WIDTH
+    y = std::max(0, rect.GetTop() + (rect.GetHeight() / 2) - (scrollArea.GetHeight() / 2)); // COLUMN_HEADER_HEIGHT
     break;
   default:
     throw std::runtime_error("Unhandled cell window location");
