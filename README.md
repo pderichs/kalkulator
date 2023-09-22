@@ -56,9 +56,9 @@ This project makes use of other external libraries and projects. Please refer to
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
-- FEAT: Print
-- FEAT: Find / Replace
 - FEAT: Add repl for lisp
+- FEAT: Find / Replace
+- FEAT: Print
 - FEAT: Add code editor for macros?
 - FEAT: Add macro support: OnLoad?
 - FEAT: Macros: Add OnTimer and Timer start functionality
@@ -125,7 +125,7 @@ This project makes use of other external libraries and projects. Please refer to
 - BUG: Add tests for cell function
 - BUG: Add tests for cell_range function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
-  - lambda
+  - DONE lambda
   - DONE and
   - DONE or
   - DONE xor
