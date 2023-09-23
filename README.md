@@ -45,7 +45,6 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- BUG: Something is creating a "Testing" folder on the root with every build
 - REFA: eval tests refactoring (boost, CMake: enable_testing etc)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
@@ -80,6 +79,7 @@ This project makes use of other external libraries and projects. Please refer to
 - FEAT: Add application settings (e.g. size of undo steps)
 - DOC: Add explanation of functions (especially behaviour of eq)
 - FEAT: Cell comments
+- BUG: Something (CLion?) is creating a "Testing" folder on the root with every build
 
 # DONE
 
