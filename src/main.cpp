@@ -16,6 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "model/event_sink.h"
+#include "model/lisp/lisp_execution_context.h"
+#include "model/lisp/value_converter.h"
+#include "model/table/lisp_execution_context_cell_range.h"
+#include "model/table/lisp_execution_context_cell_reference.h"
+#include "model/table/table_cell_format.h"
+#include "model/table/table_workbook_document.h"
+#include "model/table/table_workbook_file.h"
+#include "model/table/table_workbook_file_error.h"
+#include "view/icons.h"
+#include "view/kalkulator_system_colors.h"
+#include "view/table_cell_format_dlg.h"
+#include "view/table_control.h"
+#include "view/table_formula_text_control.h"
+#include <iostream>
 #include <memory>
 #include <regex>
 #include <sstream>
@@ -29,25 +44,6 @@
 #include <wx/rawbmp.h>
 #include <wx/stdpaths.h>
 #include <wx/wxprec.h>
-
-#include <cstdlib>
-#include <iostream>
-
-#include "model/event_sink.h"
-#include "model/lisp/lisp_execution_context.h"
-#include "model/lisp/value_converter.h"
-#include "model/table/lisp_execution_context_cell_range.h"
-#include "model/table/lisp_execution_context_cell_reference.h"
-#include "model/table/table_cell_format.h"
-#include "model/table/table_workbook_document.h"
-#include "model/table/table_workbook_file.h"
-#include "model/table/table_workbook_file_error.h"
-#include "tests.h"
-#include "view/icons.h"
-#include "view/kalkulator_system_colors.h"
-#include "view/table_cell_format_dlg.h"
-#include "view/table_control.h"
-#include "view/table_formula_text_control.h"
 
 #if !defined(WX_PRECOMP)
 #include <wx/wx.h>
@@ -166,20 +162,6 @@ wxIMPLEMENT_APP(MyApp);
 ///
 
 bool MyApp::OnInit() {
-  if (argc > 1) {
-    if (argv[1] == "unittests") {
-      wxPrintf("Running tests...\n");
-
-      if (run_tests() != 0) {
-        wxPrintf("TESTS FAILED!\n");
-      } else {
-        wxPrintf("TESTS OK.\n");
-      }
-
-      exit(0);
-    }
-  }
-
   auto *frame = new KalkulatorMainFrame();
   frame->Initialize();
   frame->SetSize(WIDTH, HEIGHT);
@@ -466,9 +448,10 @@ void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
 bool KalkulatorMainFrame::PermitLoseChanges() {
   if (_document->changed()) {
     if (wxMessageBox(
-        wxT("Current content has not been saved. Your changes will "
-            "be lost. Proceed?"),
-        wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
+            wxT("Current content has not been saved. Your changes will "
+                "be lost. Proceed?"),
+            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this)
+        == wxNO)
       return false;
   }
 
@@ -582,7 +565,8 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
   std::string new_content;
 
   switch (event_id) {
-  case FORMULA_UPDATE:wxPrintf("FORMULA UPDATE\n");
+  case FORMULA_UPDATE:
+    wxPrintf("FORMULA UPDATE\n");
 
     _table_control->SetFocus();
 
@@ -606,11 +590,10 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     break;
 
   case FORMULA_CANCEL: {
-    if (_text_control_formula->IsModified() &&
-        wxMessageBox(
-            wxT("Current content has not been applied. Your changes will "
-                "be lost. Proceed?"),
-            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxYES) {
+    if (_text_control_formula->IsModified() && wxMessageBox(wxT("Current content has not been applied. Your changes will "
+                                                                "be lost. Proceed?"),
+                                                            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this)
+            == wxYES) {
       _table_control->SetFocus();
 
       std::optional<Location> location =
@@ -621,7 +604,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     }
   }
 
-    break;
+  break;
 
   case CELL_UPDATED:
     try {
@@ -668,10 +651,12 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
   case SHEET_SELECTION_UPDATED:
   case ROW_HEIGHT_UPDATED:
-  case COLUMN_WIDTH_UPDATED:_table_control->Refresh();
+  case COLUMN_WIDTH_UPDATED:
+    _table_control->Refresh();
     break;
 
-  case HEADER_GOT_FOCUS:_table_control->SetFocus();
+  case HEADER_GOT_FOCUS:
+    _table_control->SetFocus();
     break;
   }
 }

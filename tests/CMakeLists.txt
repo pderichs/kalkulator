@@ -12,7 +12,7 @@ include_directories(${SQLite3_INCLUDE_DIRS})
 file(GLOB_RECURSE SOURCES ../src/*.cpp ../src/*.h src/*.cpp src/*.h)
 list(FILTER SOURCES EXCLUDE REGEX ".*src/main.cpp$")
 message("Used sources: ${SOURCES}")
-include_directories(../src ../src/tools ../src/tests)
+include_directories(../src ../src/model ../src/tools ../src/tests)
 
 # adding the Kalkulator_tests target
 add_executable(Kalkulator_tests ${SOURCES})
