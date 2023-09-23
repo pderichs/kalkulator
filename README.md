@@ -45,7 +45,6 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- REFA: eval tests refactoring (boost, CMake: enable_testing etc)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
 - FEAT: Add > function
@@ -83,6 +82,7 @@ This project makes use of other external libraries and projects. Please refer to
 
 # DONE
 
+- REFA: eval tests refactoring
 - BUG: gtest is creating a lib folder on the root with every build
 - BUG: Change name of tests executable
 - BUG: ScrollToCell -> Cell should be in center of view
