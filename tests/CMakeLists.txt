@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
-project(Google_tests)
+project(Kalkulator_tests LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
 add_subdirectory(lib/googletest)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
@@ -15,6 +16,6 @@ message("Used sources: ${SOURCES}")
 include_directories(../src ../src/model ../src/tools ../src/tests)
 
 # adding the Kalkulator_tests target
-add_executable(Kalkulator_tests ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(Kalkulator_tests gtest gtest_main ${wxWidgets_LIBRARIES} ${SQLite3_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} gtest gtest_main ${wxWidgets_LIBRARIES} ${SQLite3_LIBRARIES})
