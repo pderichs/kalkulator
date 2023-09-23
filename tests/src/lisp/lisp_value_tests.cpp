@@ -1,42 +1,30 @@
 /**
- * Kalkulator - a simple and small spread sheet app.
- * Copyright (C) 2023  pderichs (derichs@posteo.de)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+* Kalkulator - a simple and small spread sheet app.
+* Copyright (C) 2023  pderichs (derichs@posteo.de)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "gtest/gtest.h"
 
-#include <functional>
 #include <memory>
 #include <tuple>
 #include <vector>
 
-#include "../../model/lisp/lisp_value.h"
-#include "../../model/lisp/lisp_value_factory.h"
-#include "tools.h"
+#include "model/lisp/lisp_value_factory.h"
 
-int run_lisp_value_equality_tests();
-
-template <typename... Args> LispValuePtrVector make_value_list(Args... args);
-
-int run_lisp_value_tests() {
-  RUN_TEST(run_lisp_value_equality_tests);
-  return 0;
-}
-
-int run_lisp_value_equality_tests() {
-  // clang-format off
+TEST(LispValueTests, LispValueTests) {
   std::vector<std::pair<std::pair<LispValuePtr, LispValuePtr>, bool>> tests = {
       {{LispValueFactory::new_double(42), LispValueFactory::new_double(42)}, true},
       {{LispValueFactory::new_double(43), LispValueFactory::new_double(42)}, false},
@@ -57,15 +45,12 @@ int run_lisp_value_equality_tests() {
       {{LispValueFactory::new_list({LispValueFactory::new_double(10), LispValueFactory::new_string("test"), LispValueFactory::new_double(-1999)}), LispValueFactory::new_list({LispValueFactory::new_double(10), LispValueFactory::new_string("test"), LispValueFactory::new_double(-1999)})}, true},
       {{LispValueFactory::new_list({LispValueFactory::new_double(42), LispValueFactory::new_double(10), LispValueFactory::new_double(-1999)}), LispValueFactory::new_list({LispValueFactory::new_double(10), LispValueFactory::new_double(42), LispValueFactory::new_double(-1999)})}, false},
   };
-  // clang-format on
 
   for (const auto &it : tests) {
     const auto &pair = it.first;
     const auto &expected_result = it.second;
 
     bool result = *pair.first == *pair.second;
-    TEST_ASSERT(result == expected_result);
+    EXPECT_EQ(result, expected_result);
   }
-
-  return 0;
 }
