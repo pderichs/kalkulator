@@ -11,8 +11,10 @@ if (MSVC)
     add_compile_options(/W4 /WX)
 else()
     # lots of warnings and all warnings as errors
-    add_compile_options(-Wall -Wpedantic -Wextra -Weffc++ -Werror)
+    add_compile_options(-Wall -Wpedantic -Wextra -Werror)
 endif()
+
+add_subdirectory(tests)
 
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 include(${wxWidgets_USE_FILE})
@@ -29,7 +31,3 @@ add_executable(
 
 target_include_directories(${PROJECT_NAME} PUBLIC src src/tests src/tools)
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${SQLite3_LIBRARIES})
-
-# TODO
-# enable_testing()
-# add_subdirectory(src/tests)

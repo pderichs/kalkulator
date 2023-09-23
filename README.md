@@ -41,9 +41,11 @@ This project makes use of other external libraries and projects. Please refer to
 - [wxWidgets](https://www.wxwidgets.org/)
 - [SQLite](https://www.sqlite.org/index.html)
 - [Google Material Design Icons](https://github.com/google/material-design-icons)
+- [Google Test](https://github.com/google/googletest) (see tests/lib folder, based on commit: `e40661d89b051e9ef4eb8a2420b74bf78b39ef41`)
 
 ## TODO List
 
+- BUG: gtest is creating a lib folder on the root with every build
 - REFA: eval tests refactoring (boost, CMake: enable_testing etc)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
@@ -81,6 +83,7 @@ This project makes use of other external libraries and projects. Please refer to
 
 # DONE
 
+- BUG: Change name of tests executable
 - BUG: ScrollToCell -> Cell should be in center of view
 - FEAT: Add simple format: bold
 - FEAT: Add simple format: italic

@@ -19,3 +19,12 @@ Makefile
 .ninja_log
 Testing/
 build.ninja
+
+# Googletest
+tests/lib/googletest/googletest/generated/
+tests/lib/libgmock.a
+tests/lib/libgmock_main.a
+tests/lib/libgtest.a
+tests/lib/libgtest_main.a
+# TODO this folder is created during the build of gtest. Can it be moved to the tests folder?
+lib/
