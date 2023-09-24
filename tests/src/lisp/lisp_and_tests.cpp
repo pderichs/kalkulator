@@ -35,9 +35,9 @@ TEST(LispAndTests, AndTest1) {
       {"(and (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
   };
 
-  // FIXME Generate separate test cases: see googletest documentation
   return execute_lisp_tests(tests, "and");
 }
+
 TEST(LispAndTests, AndDoesNotExecuteOtherConditionIfFirstIsFalseAlready) {
   LispParser parser("(and (= 4 4 6) (lambda (x y) (+ x y)))");
 
@@ -61,5 +61,5 @@ TEST(LispAndTests, AndDoesNotExecuteOtherConditionIfFirstIsFalseAlready) {
   LispValuePtr result = executor.execute(value, {});
 
   EXPECT_TRUE(result->is_boolean());
-  EXPECT_TRUE(result->boolean());
+  EXPECT_FALSE(result->boolean());
 }

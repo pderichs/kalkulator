@@ -35,7 +35,6 @@ TEST(LispOrTests, OrTest1) {
       {"(or (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
   };
 
-  // FIXME Generate separate test cases: see googletest documentation
   return execute_lisp_tests(tests, "or");
 }
 
