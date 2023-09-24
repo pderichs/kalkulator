@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LISP_EXECUTION_CONTEXT_CELL_REFERENCE_INCLUDED
 #define LISP_EXECUTION_CONTEXT_CELL_REFERENCE_INCLUDED
 
@@ -65,7 +64,7 @@ public:
     }
 
     // Inform document about cell reference
-    std::cerr << "Cell " << cell_location << " is listening to updates from " << col << ", " << row << std::endl;
+    //std::cerr << "Cell " << cell_location << " is listening to updates from " << col << ", " << row << std::endl;
     _workbook->add_update_listener(cell_location, Location(col, row));
 
     auto opt_cell = _workbook->get_cell(Location(col, row));

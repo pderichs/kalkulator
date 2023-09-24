@@ -28,7 +28,7 @@ void execute_lisp_tests(const std::map<std::string, LispValuePtr> &tests,
     std::string test = it.first;
     const auto &expected_result = it.second;
 
-    std::cerr << test_name << ": test for " << test << std::endl;
+    std::cout << test_name << ": test for " << test << std::endl;
 
     LispParser parser(test);
 

@@ -193,7 +193,7 @@ TEST(LispParserTests, WrongFormTests1) {
   };
 
   for (const auto &c : cases) {
-    std::cerr << "Testing wrong form: " << c << std::endl;
+    std::cout << "Testing wrong form: " << c << std::endl;
     LispParser parser(c);
 
     LispTokens tokens;
