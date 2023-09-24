@@ -21,6 +21,7 @@
 #include "lisp_execution_context_and.h"
 #include "lisp_execution_context_average.h"
 #include "lisp_execution_context_cons.h"
+#include "lisp_execution_context_cos.h"
 #include "lisp_execution_context_division.h"
 #include "lisp_execution_context_eq.h"
 #include "lisp_execution_context_error.h"
@@ -75,6 +76,7 @@ LispExecutionContext::LispExecutionContext() : _functions() {
   _functions[">"] = std::make_shared<LispExecutionContextGreaterThan>();
   _functions["<"] = std::make_shared<LispExecutionContextLowerThan>();
   _functions["tan"] = std::make_shared<LispExecutionContextTan>();
+  _functions["cos"] = std::make_shared<LispExecutionContextCos>();
 }
 
 LispValuePtr
