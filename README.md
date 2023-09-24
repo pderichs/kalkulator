@@ -48,14 +48,12 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Lisp sin
 - FEAT: Store true and false lisp bool values (don't create them everytime)
 - FEAT: Store error strings instead of creating them every time (PARAMCOUNTERR, PARAMERR)
 - FEAT: Lisp abs
 - FEAT: Lisp root (sqrt etc)
 - FEAT: Lisp ceil
 - FEAT: Lisp log(arithm)
-- FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
 - FEAT: Lisp is-none
 - FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon())
@@ -86,6 +84,7 @@ conditions on their websites:
 
 # DONE
 
+- FEAT: Lisp sin
 - FEAT: Lisp cos
 - FEAT: Lisp tan
 - FEAT: Add < function
