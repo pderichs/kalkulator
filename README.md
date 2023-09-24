@@ -45,26 +45,9 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- FEAT: Mulitiple cell selection
-- FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed references, like $ function)
-- FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add < function
 - FEAT: Add > function
-- FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
-- FEAT: Replace
-- FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
-  - @ x y (goto cell)
-  - ...
-- FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
-- MAYB: Support cell type currency
-- MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
-- FEAT: Add repl for lisp
-- FEAT: Find / Replace
-- FEAT: Print
-- FEAT: Add code editor for macros?
-- FEAT: Add macro support: OnLoad?
-- FEAT: Macros: Add OnTimer and Timer start functionality
-- FEAT: Direct editing? (without the need of pressing F2)
+- FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Lisp abs
 - FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon())
 - FEAT: Lisp tan
@@ -76,10 +59,26 @@ This project makes use of other external libraries and projects. Please refer to
 - FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
 - FEAT: isnone
+- FEAT: Mulitiple cell selection
+- FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
+- FEAT: Replace
+- FEAT: Print
+- FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
+  - @ x y (goto cell)
+  - ...
+- FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
+- MAYB: Support cell type currency
+- MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
+- FEAT: Add repl for lisp
+- FEAT: Add code editor for macros?
+- FEAT: Add macro support: OnLoad?
+- FEAT: Macros: Add OnTimer and Timer start functionality
+- FEAT: Direct editing? (without the need of pressing F2)
 - MAYB: Cache function results (see field _func_result on LispValue)
 - FEAT: Add application settings (e.g. size of undo steps)
 - DOC: Add explanation of functions (especially behaviour of eq)
 - FEAT: Cell comments
+- FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed references, like $ function)
 - BUG: Something (CLion?) is creating a "Testing" folder on the root with every build
 
 # DONE

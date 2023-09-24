@@ -36,10 +36,6 @@ public:
                      const std::any &context_param) override {
     ensure_params(func);
 
-    auto this_cell = std::any_cast<Location>(context_param);
-
-    LispValuePtrVector result;
-
     LispValuePtrVector params =
         extract_and_execute_params(func, execution_context, context_param);
 
@@ -49,6 +45,10 @@ public:
          << params.size();
       throw LispExecutionContextError(ss.str());
     }
+
+    auto this_cell = std::any_cast<Location>(context_param);
+
+    LispValuePtrVector result;
 
     LispValue::IntegerType ranges[4]; // from_row, from_col, to_row, to_col
     int n = 0;
