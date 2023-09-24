@@ -45,9 +45,8 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- BUG: More tests for or
-- BUG: More tests for xor
 - BUG: More tests for and
+- BUG: More tests for xor
 - BUG: googletest has the possibility to generate test cases on the fly - replace our current map-based solution with that (see e.g. execute_lisp_tests)
 - BUG: Cell does not check for numbers (expect_number)
 - FEAT: Mulitiple cell selection
@@ -89,6 +88,7 @@ This project makes use of other external libraries and projects. Please refer to
 
 # DONE
 
+- BUG: More tests for or
 - BUG: More tests for if
 - REFA: Design: Function contexts are always calling extract_params_from_list, then execute_functions_and_extract_list_results
 - REFA: eval tests refactoring
