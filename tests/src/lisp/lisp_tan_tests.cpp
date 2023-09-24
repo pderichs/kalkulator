@@ -17,7 +17,12 @@
  */
 
 #include "lisp_test_tools.h"
+#include "model/lisp/lisp_execution_context_error.h"
+#include "model/lisp/lisp_function_execution_context.h"
+#include "model/lisp/lisp_parser.h"
+#include "model/lisp/lisp_value.h"
 #include "model/lisp/lisp_value_factory.h"
+#include "model/lisp/lisp_value_parser.h"
 #include "gtest/gtest.h"
 
 TEST(LispTanTests, TanTest1) {
@@ -29,4 +34,55 @@ TEST(LispTanTests, TanTest1) {
   };
 
   return execute_lisp_tests(tests, "tan");
+}
+
+TEST(LispTanTests, TanDoesNotAcceptWrongParameterCountMore) {
+  LispParser parser("(tan 1 \"Hello\")");
+
+  LispTokens tokens;
+  EXPECT_NO_THROW(tokens = parser.parse());
+
+  LispValueParser value_parser(tokens);
+
+  auto value = value_parser.next();
+  EXPECT_TRUE(value);
+
+  LispExecutionContext executor;
+  LispValuePtr result = executor.execute(value, {});
+
+  EXPECT_EQ(*result, "#PARAMCOUNTERR");
+}
+
+TEST(LispTanTests, TanDoesNotAcceptWrongParameterCountLess) {
+  LispParser parser("(tan)");
+
+  LispTokens tokens;
+  EXPECT_NO_THROW(tokens = parser.parse());
+
+  LispValueParser value_parser(tokens);
+
+  auto value = value_parser.next();
+  EXPECT_TRUE(value);
+
+  LispExecutionContext executor;
+  LispValuePtr result = executor.execute(value, {});
+
+  EXPECT_EQ(*result, "#PARAMCOUNTERR");
+}
+
+TEST(LispTanTests, TanDoesNotAcceptWrongParameterFormat) {
+  LispParser parser("(tan \"Hello\")");
+
+  LispTokens tokens;
+  EXPECT_NO_THROW(tokens = parser.parse());
+
+  LispValueParser value_parser(tokens);
+
+  auto value = value_parser.next();
+  EXPECT_TRUE(value);
+
+  LispExecutionContext executor;
+  LispValuePtr result = executor.execute(value, {});
+
+  EXPECT_EQ(*result, "#PARAMERR");
 }
