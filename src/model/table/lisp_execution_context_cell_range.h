@@ -22,8 +22,8 @@
 #include "../lisp/lisp_function_execution_context.h"
 #include "../lisp/lisp_value_factory.h"
 #include "table_workbook_document.h"
-#include <sstream>
 #include <any>
+#include <sstream>
 
 class LispExecutionContextCellRange : public LispFunctionExecutionContext {
 public:
@@ -32,18 +32,16 @@ public:
   ~LispExecutionContextCellRange() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
-                             const LispExecutionContext &execution_context,
-                             const std::any &context_param) override {
+                     const LispExecutionContext &execution_context,
+                     const std::any &context_param) override {
     ensure_params(func);
 
     auto this_cell = std::any_cast<Location>(context_param);
 
     LispValuePtrVector result;
 
-    LispValuePtrVector params = extract_params(func);
-
-    params = execute_functions_and_extract_list_results(
-        params, execution_context, context_param);
+    LispValuePtrVector params =
+        extract_and_execute_params(func, execution_context, context_param);
 
     if (params.size() != 4) {
       std::stringstream ss;

@@ -45,7 +45,8 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- REFA: Design: Function contexts are always calling extract_params, then execute_functions_and_extract_list_results
+- BUG: More tests for if
+- REFA: Design: Function contexts are always calling extract_params_from_list, then execute_functions_and_extract_list_results
 - FEAT: Mulitiple cell selection
 - FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed references, like $ function)
 - FEAT: defun (with newly added lambda support, this should be doable now)

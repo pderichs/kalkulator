@@ -33,7 +33,7 @@ public:
                      const std::any &context_param) override {
     ensure_params(func);
 
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params = extract_params_from_list(func);
 
     if (_extract_lists) {
       params = execute_functions_and_extract_list_results(

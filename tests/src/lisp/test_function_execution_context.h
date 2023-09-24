@@ -36,7 +36,7 @@ public:
 
     ensure_params(func);
 
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params = extract_params_from_list(func);
 
     if (params.size() != 1) {
       throw LispExecutionContextError("Unexpected parameter count");

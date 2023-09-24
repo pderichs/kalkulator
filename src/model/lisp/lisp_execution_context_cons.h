@@ -36,7 +36,7 @@ public:
     std::ignore = execution_context;
     std::ignore = context_param;
 
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params = extract_params_from_list(func);
 
     if (params.size() != 2) {
       throw LispExecutionContextError("cons expects two parameters");

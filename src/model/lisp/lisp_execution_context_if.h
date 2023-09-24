@@ -35,7 +35,7 @@ public:
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param) override {
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params = extract_params_from_list(func);
 
     if (params.size() < 2 || params.size() > 3) {
       throw LispExecutionContextError("Unexpected parameter count for if");
@@ -64,7 +64,7 @@ public:
                        const std::any &context_param) const {
     LispValuePtr result;
 
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params = extract_params_from_list(func);
 
     const auto &result_param = expect_parameter_at(params, index);
 

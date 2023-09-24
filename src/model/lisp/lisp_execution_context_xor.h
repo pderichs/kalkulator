@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_EXECUTION_CONTEXT_XOR_INCLUDED
 #define LISP_EXECUTION_CONTEXT_XOR_INCLUDED
@@ -34,14 +33,12 @@ public:
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param) override {
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params =
+        extract_and_execute_params(func, execution_context, context_param);
 
     if (params.size() != 2) {
       throw LispExecutionContextError("Xor: Expected 2 parameters");
     }
-
-    params = execute_functions_and_extract_list_results(
-        params, execution_context, context_param);
 
     const auto &param1 = params[0];
     const auto &param2 = params[1];

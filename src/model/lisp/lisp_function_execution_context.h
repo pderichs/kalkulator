@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_FUNCTION_EXECUTION_CONTEXT_INCLUDED
 #define LISP_FUNCTION_EXECUTION_CONTEXT_INCLUDED
@@ -52,7 +51,13 @@ protected:
   LispValuePtr expect_parameter_at(const LispValuePtrVector &func,
                                    size_t index) const;
 
-  LispValuePtrVector extract_params(const LispValuePtrVector &func) const;
+  LispValuePtrVector
+  extract_params_from_list(const LispValuePtrVector &func) const;
+
+  LispValuePtrVector
+  extract_and_execute_params(const LispValuePtrVector &func,
+                             const LispExecutionContext &execution_context,
+                             const std::any &context_param) const;
 };
 
 #endif

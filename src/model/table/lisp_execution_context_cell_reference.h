@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 #ifndef LISP_EXECUTION_CONTEXT_CELL_REFERENCE_INCLUDED
 #define LISP_EXECUTION_CONTEXT_CELL_REFERENCE_INCLUDED
@@ -29,13 +29,15 @@
 
 class LispExecutionContextCellReference : public LispFunctionExecutionContext {
 public:
-  explicit LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook) : _workbook(workbook) {}
+  explicit LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook)
+      : _workbook(workbook) {}
   ~LispExecutionContextCellReference() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param) override {
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params =
+        extract_and_execute_params(func, execution_context, context_param);
 
     if (params.size() != 2) {
       throw LispExecutionContextError(
@@ -51,9 +53,6 @@ public:
 
     LispValue::IntegerType row, col;
 
-    params = execute_functions_and_extract_list_results(
-        params, execution_context, context_param);
-
     row = params[0]->to_integer();
     col = params[1]->to_integer();
 
@@ -64,7 +63,8 @@ public:
     }
 
     // Inform document about cell reference
-    //std::cerr << "Cell " << cell_location << " is listening to updates from " << col << ", " << row << std::endl;
+    // std::cerr << "Cell " << cell_location << " is listening to updates from "
+    // << col << ", " << row << std::endl;
     _workbook->add_update_listener(cell_location, Location(col, row));
 
     auto opt_cell = _workbook->get_cell(Location(col, row));

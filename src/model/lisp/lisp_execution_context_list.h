@@ -36,7 +36,7 @@ public:
     std::ignore = execution_context;
     std::ignore = context_param;
 
-    return LispValueFactory::new_list(extract_params(func)); // ;)
+    return LispValueFactory::new_list(extract_params_from_list(func)); // ;)
   }
 };
 

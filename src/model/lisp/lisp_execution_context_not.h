@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_EXECUTION_CONTEXT_NOT_INCLUDED
 #define LISP_EXECUTION_CONTEXT_NOT_INCLUDED
@@ -35,10 +34,8 @@ public:
                      const std::any &context_param) override {
     ensure_params(func);
 
-    LispValuePtrVector params = extract_params(func);
-
-    params = execute_functions_and_extract_list_results(
-        params, execution_context, context_param);
+    LispValuePtrVector params =
+        extract_and_execute_params(func, execution_context, context_param);
 
     for (const auto &param : params) {
       if (param->is_truthy()) {

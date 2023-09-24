@@ -108,7 +108,16 @@ LispValuePtr LispFunctionExecutionContext::expect_parameter_at(
   }
 }
 
-LispValuePtrVector LispFunctionExecutionContext::extract_params(
+LispValuePtrVector LispFunctionExecutionContext::extract_params_from_list(
     const LispValuePtrVector &func) const {
   return { func.begin() + 1, func.end() };
+}
+
+LispValuePtrVector LispFunctionExecutionContext::extract_and_execute_params(const LispValuePtrVector& func, const LispExecutionContext& execution_context, const std::any& context_param) const {
+  LispValuePtrVector result;
+
+  result = extract_params_from_list(func);
+  result = execute_functions_and_extract_list_results(result, execution_context, context_param);
+
+  return result;
 }

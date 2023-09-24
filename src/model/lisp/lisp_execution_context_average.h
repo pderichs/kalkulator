@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_EXECUTION_CONTEXT_AVG_INCLUDED
 #define LISP_EXECUTION_CONTEXT_AVG_INCLUDED
@@ -33,12 +32,10 @@ public:
                      const std::any &context_param) override {
     ensure_params(func);
 
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params =
+        extract_and_execute_params(func, execution_context, context_param);
 
     LispValue::DoubleType result = 0.0;
-
-    params = execute_functions_and_extract_list_results(
-        params, execution_context, context_param);
 
     size_t param_count = params.size();
 

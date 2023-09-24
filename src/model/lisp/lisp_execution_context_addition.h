@@ -34,12 +34,10 @@ public:
                      const std::any &context_param) override {
     ensure_params(func);
 
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params =
+        extract_and_execute_params(func, execution_context, context_param);
 
     LispValue::DoubleType result = 0.0;
-
-    params = execute_functions_and_extract_list_results(
-        params, execution_context, context_param);
 
     for (const auto &param : params) {
       LispValuePtr value(

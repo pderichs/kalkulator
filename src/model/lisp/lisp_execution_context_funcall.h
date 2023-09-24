@@ -38,7 +38,7 @@ public:
                      const std::any &context_param) override {
     ensure_params(func);
 
-    LispValuePtrVector params = extract_params(func);
+    LispValuePtrVector params = extract_params_from_list(func);
 
     LispValuePtr lambda = params[0];
     if (!lambda->is_function()) {
