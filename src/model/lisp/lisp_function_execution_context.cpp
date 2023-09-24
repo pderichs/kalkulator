@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "lisp_function_execution_context.h"
 #include "lisp_execution_context.h"
@@ -54,6 +53,19 @@ LispValuePtr LispFunctionExecutionContext::expect_number(
   return result;
 }
 
+LispValuePtr LispFunctionExecutionContext::execute_if_required(
+    const LispValuePtr &param, const LispExecutionContext &execution_context,
+    const std::any &context_param) const {
+  if (param->is_function()) {
+    LispValuePtr function_result(
+        execution_context.execute(param, context_param));
+
+    return function_result;
+  }
+
+  return param;
+}
+
 LispValuePtrVector LispFunctionExecutionContext::execute_functions(
     const LispValuePtrVector &params,
     const LispExecutionContext &execution_context,
@@ -61,14 +73,7 @@ LispValuePtrVector LispFunctionExecutionContext::execute_functions(
   LispValuePtrVector result;
 
   for (const auto &param : params) {
-    if (param->is_function()) {
-      LispValuePtr function_result(
-          execution_context.execute(param, context_param));
-
-      result.push_back(function_result);
-    } else {
-      result.push_back(param);
-    }
+    result.push_back(execute_if_required(param, execution_context, context_param));
   }
 
   return result;
@@ -110,14 +115,18 @@ LispValuePtr LispFunctionExecutionContext::expect_parameter_at(
 
 LispValuePtrVector LispFunctionExecutionContext::extract_params_from_list(
     const LispValuePtrVector &func) const {
-  return { func.begin() + 1, func.end() };
+  return {func.begin() + 1, func.end()};
 }
 
-LispValuePtrVector LispFunctionExecutionContext::extract_and_execute_params(const LispValuePtrVector& func, const LispExecutionContext& execution_context, const std::any& context_param) const {
+LispValuePtrVector LispFunctionExecutionContext::extract_and_execute_params(
+    const LispValuePtrVector &func,
+    const LispExecutionContext &execution_context,
+    const std::any &context_param) const {
   LispValuePtrVector result;
 
   result = extract_params_from_list(func);
-  result = execute_functions_and_extract_list_results(result, execution_context, context_param);
+  result = execute_functions_and_extract_list_results(result, execution_context,
+                                                      context_param);
 
   return result;
 }

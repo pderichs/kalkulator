@@ -32,11 +32,13 @@ public:
                      const LispExecutionContext &execution_context,
                      const std::any &context_param) override {
     ensure_params(func);
-    LispValuePtrVector params =
-        extract_and_execute_params(func, execution_context, context_param);
+    LispValuePtrVector params = extract_params_from_list(func);
 
     for (const auto &param : params) {
-      if (param->is_truthy()) {
+      LispValuePtr actual_value =
+          execute_if_required(param, execution_context, context_param);
+
+      if (actual_value->is_truthy()) {
         return LispValueFactory::new_bool(LISP_BOOL_TRUE);
       }
     }

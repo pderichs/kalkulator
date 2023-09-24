@@ -58,6 +58,11 @@ protected:
   extract_and_execute_params(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) const;
+
+  LispValuePtr
+  execute_if_required(const LispValuePtr &param,
+                      const LispExecutionContext &execution_context,
+                      const std::any &context_param) const;
 };
 
 #endif

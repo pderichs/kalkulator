@@ -20,6 +20,10 @@
 #include "model/lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
 #include "gtest/gtest.h"
+#include "mock_function_context.h"
+#include "model/lisp/lisp_parser.h"
+#include "model/lisp/lisp_value_parser.h"
+#include "gmock/gmock.h"
 
 TEST(LispOrTests, OrTest1) {
   std::map<std::string, LispValuePtr> tests = {
@@ -31,5 +35,32 @@ TEST(LispOrTests, OrTest1) {
       {"(or (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
   };
 
+  // FIXME Generate separate test cases: see googletest documentation
   return execute_lisp_tests(tests, "or");
+}
+
+TEST(LispOrTests, OrDoesNotExecuteOtherConditionIfFulfilledByFirst) {
+  LispParser parser("(or (= 4 4 4) (lambda (x y) (+ x y)))");
+
+  LispTokens tokens;
+  EXPECT_NO_THROW(tokens = parser.parse());
+
+  LispValueParser value_parser(tokens);
+
+  auto value = value_parser.next();
+  EXPECT_TRUE(value);
+  EXPECT_TRUE(value->is_function());
+
+  std::shared_ptr<MockFunctionContext> fct =
+      std::make_shared<MockFunctionContext>();
+  LispExecutionContext executor;
+  executor.add_function("lambda", fct, true);
+
+  // We want to make sure the lambda is not executed
+  EXPECT_CALL(*fct, value).Times(0);
+
+  LispValuePtr result = executor.execute(value, {});
+
+  EXPECT_TRUE(result->is_boolean());
+  EXPECT_EQ(result->boolean(), LISP_BOOL_TRUE);
 }
