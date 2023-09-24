@@ -29,5 +29,6 @@ TEST(LispXorTests, XorTest1) {
       {"(xor (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
   };
 
+  // FIXME Generate separate test cases: see googletest documentation
   return execute_lisp_tests(tests, "xor");
 }

@@ -62,5 +62,5 @@ TEST(LispOrTests, OrDoesNotExecuteOtherConditionIfFulfilledByFirst) {
   LispValuePtr result = executor.execute(value, {});
 
   EXPECT_TRUE(result->is_boolean());
-  EXPECT_EQ(result->boolean(), LISP_BOOL_TRUE);
+  EXPECT_TRUE(result->boolean());
 }
