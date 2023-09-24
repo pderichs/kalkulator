@@ -19,30 +19,17 @@
 #ifndef MOCK_FUNCTION_CONTEXT_H
 #define MOCK_FUNCTION_CONTEXT_H
 
-#include "lisp_execution_context_error.h"
-#include "lisp_function_execution_context.h"
-#include "lisp_value.h"
-#include "lisp_value_factory.h"
+#include "model/lisp/lisp_execution_context_error.h"
+#include "model/lisp/lisp_function_execution_context.h"
+#include "model/lisp/lisp_value.h"
+#include "model/lisp/lisp_value_factory.h"
 #include "gmock/gmock.h"
 
 class MockFunctionContext : public LispFunctionExecutionContext {
 public:
-  MockFunctionContext(LispValuePtr mock_result)
-      : _mock_result(std::move(mock_result)) {}
-  ~MockFunctionContext() override = default;
-
-  LispValuePtr value(const LispValuePtrVector &func,
-                     const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
-    std::ignore = func;
-    std::ignore = execution_context;
-    std::ignore = context_param;
-
-    return _mock_result;
-  }
-
-private:
-  LispValuePtr _mock_result;
+  MOCK_METHOD3(value, LispValuePtr(const LispValuePtrVector &func,
+                                   const LispExecutionContext &execution_context,
+                                   const std::any &context_param));
 };
 
 #endif // MOCK_FUNCTION_CONTEXT_H

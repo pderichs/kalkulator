@@ -13,9 +13,9 @@ include_directories(${SQLite3_INCLUDE_DIRS})
 file(GLOB_RECURSE SOURCES ../src/*.cpp ../src/*.h src/*.cpp src/*.h)
 list(FILTER SOURCES EXCLUDE REGEX ".*src/main.cpp$")
 message("Used sources: ${SOURCES}")
-include_directories(../src ../src/model ../src/tools ../src/tests)
+include_directories(../src ../src/model ../src/tools ../src/tests src)
 
 # adding the Kalkulator_tests target
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} gtest gtest_main ${wxWidgets_LIBRARIES} ${SQLite3_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock gmock_main ${wxWidgets_LIBRARIES} ${SQLite3_LIBRARIES})
