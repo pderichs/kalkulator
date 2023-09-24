@@ -16,18 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef LISP_EXECUTION_CONTEXT_COS_H
-#define LISP_EXECUTION_CONTEXT_COS_H
+#ifndef LISP_EXECUTION_CONTEXT_SIN_H
+#define LISP_EXECUTION_CONTEXT_SIN_H
 
 #include "lisp_execution_context_error.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
 
-class LispExecutionContextCos : public LispFunctionExecutionContext {
+class LispExecutionContextSin : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextCos() = default;
-  ~LispExecutionContextCos() override = default;
+  LispExecutionContextSin() = default;
+  ~LispExecutionContextSin() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
@@ -43,9 +43,9 @@ public:
       return LispValueFactory::new_string("#PARAMERR");
     }
 
-    LispValue::DoubleType result = std::cos(params[0]->to_double());
+    LispValue::DoubleType result = std::sin(params[0]->to_double());
     return LispValueFactory::new_double(result);
   }
 };
 
-#endif // LISP_EXECUTION_CONTEXT_COS_H
+#endif // LISP_EXECUTION_CONTEXT_SIN_H
