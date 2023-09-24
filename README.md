@@ -45,8 +45,6 @@ This project makes use of other external libraries and projects. Please refer to
 
 ## TODO List
 
-- BUG: googletest has the possibility to generate test cases on the fly - replace our current map-based solution with that (see e.g. execute_lisp_tests)
-- BUG: Cell does not check for numbers (expect_number)
 - FEAT: Mulitiple cell selection
 - FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed references, like $ function)
 - FEAT: defun (with newly added lambda support, this should be doable now)
@@ -86,6 +84,7 @@ This project makes use of other external libraries and projects. Please refer to
 
 # DONE
 
+- BUG: Cell does not check for numbers (expect_number)
 - BUG: More tests for and
 - BUG: More tests for or
 - BUG: More tests for if

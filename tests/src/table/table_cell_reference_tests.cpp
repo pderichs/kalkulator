@@ -86,3 +86,43 @@ TEST(TableCellTests, NestedReferenceTest1) {
   // Cell content should now match source cell 2
   EXPECT_EQ(cell->visible_content(), "Cell 2 - hello");
 }
+
+TEST(TableCellTests, CallToCellWithStringParameterAsRow) {
+  // Test setup
+  TestEventSink sink;
+  LispExecutionContext execution_context;
+  ValueConverter::set_execution_context(&execution_context);
+  TableWorkbookDocumentPtr document =
+      std::make_shared<TableWorkbookDocument>(&sink);
+  prepare_execution_context(&execution_context, document);
+
+  // Prepare formulas and cell content
+  document->select_cell(Location(0, 0));
+  document->update_content_current_cell("=(cell hello 1)");
+
+  // Cell content must match source cell 1
+  const auto &opt_cell = document->get_cell(Location(0, 0));
+  EXPECT_TRUE(opt_cell);
+  const auto &cell = *opt_cell;
+  EXPECT_EQ(cell->visible_content(), "#PARAMERR");
+}
+
+TEST(TableCellTests, CallToCellWithStringParameterAsColumn) {
+  // Test setup
+  TestEventSink sink;
+  LispExecutionContext execution_context;
+  ValueConverter::set_execution_context(&execution_context);
+  TableWorkbookDocumentPtr document =
+      std::make_shared<TableWorkbookDocument>(&sink);
+  prepare_execution_context(&execution_context, document);
+
+  // Prepare formulas and cell content
+  document->select_cell(Location(0, 0));
+  document->update_content_current_cell("=(cell 2 hello)");
+
+  // Cell content must match source cell 1
+  const auto &opt_cell = document->get_cell(Location(0, 0));
+  EXPECT_TRUE(opt_cell);
+  const auto &cell = *opt_cell;
+  EXPECT_EQ(cell->visible_content(), "#PARAMERR");
+}

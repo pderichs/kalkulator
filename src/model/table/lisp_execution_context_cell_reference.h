@@ -44,6 +44,10 @@ public:
           "cell function needs 2 parameters (row and colum)");
     }
 
+    if (!params[0]->is_number() || !params[1]->is_number()) {
+      return LispValueFactory::new_string("#PARAMERR");
+    }
+
     // To prevent a circular reference we need to check whether
     // the function parameters would make the cell reference
     // itself.
