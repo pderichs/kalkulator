@@ -5,7 +5,8 @@ This is a simple and small spreadsheet application which uses a Lisp-like langua
 > [!WARNING]
 > This is by no means bug free and / or production ready - **USE AT YOUR OWN RISK**.
 
-I have implemented a similar application in C before ("simplecalc"), but for usability reasons I wanted to create a GUI application now.
+I have implemented a similar application in C before ("simplecalc"), but for usability reasons I wanted to create a GUI
+application now.
 
 ## Build
 
@@ -36,17 +37,17 @@ If you want to create a build with debug symbols run the following commands:
 
 This project is licensed under the [GNU GENERAL PUBLIC LICENSE v3](https://www.gnu.org/licenses/gpl-3.0.txt).
 
-This project makes use of other external libraries and projects. Please refer to their respective LICENSES, terms and conditions on their websites:
+This project makes use of other external libraries and projects. Please refer to their respective LICENSES, terms and
+conditions on their websites:
 
 - [wxWidgets](https://www.wxwidgets.org/)
 - [SQLite](https://www.sqlite.org/index.html)
 - [Google Material Design Icons](https://github.com/google/material-design-icons)
-- [Google Test](https://github.com/google/googletest) (see tests/lib folder, based on commit: `e40661d89b051e9ef4eb8a2420b74bf78b39ef41`)
+- [Google Test](https://github.com/google/googletest) (see tests/lib folder, based on
+  commit: `e40661d89b051e9ef4eb8a2420b74bf78b39ef41`)
 
 ## TODO List
 
-- FEAT: Add < function
-- FEAT: Add > function
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Lisp abs
 - FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon())
@@ -58,14 +59,14 @@ This project makes use of other external libraries and projects. Please refer to
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
-- FEAT: isnone
-- FEAT: Mulitiple cell selection
+- FEAT: Lisp is-none
+- FEAT: Multiple cell selection
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Replace
 - FEAT: Print
 - FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
-  - @ x y (goto cell)
-  - ...
+    - @ x y (goto cell)
+    - ...
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
@@ -78,16 +79,20 @@ This project makes use of other external libraries and projects. Please refer to
 - FEAT: Add application settings (e.g. size of undo steps)
 - DOC: Add explanation of functions (especially behaviour of eq)
 - FEAT: Cell comments
-- FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed references, like $ function)
-- BUG: Something (CLion?) is creating a "Testing" folder on the root with every build
+- FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed
+  references, like $ function)
+- BUG: Something (CLion?) is creating a "Testing" folder on the root folder with every build
 
 # DONE
 
+- FEAT: Add < function
+- FEAT: Add > function
 - BUG: Cell does not check for numbers (expect_number)
 - BUG: More tests for and
 - BUG: More tests for or
 - BUG: More tests for if
-- REFA: Design: Function contexts are always calling extract_params_from_list, then execute_functions_and_extract_list_results
+- REFA: Design: Function contexts are always calling extract_params_from_list, then
+  execute_functions_and_extract_list_results
 - REFA: eval tests refactoring
 - BUG: gtest is creating a lib folder on the root with every build
 - BUG: Change name of tests executable
@@ -108,7 +113,8 @@ This project makes use of other external libraries and projects. Please refer to
 - BUG: Lambda implementation somewhat feels like a hack
 - BUG: "Invalid file structure" error on save
 - FEAT: Lisp progn
-- BUG: When header controls get focus, they handle key presses by themselves - switch focus back to cells as soon as header gets focused
+- BUG: When header controls get focus, they handle key presses by themselves - switch focus back to cells as soon as
+  header gets focused
 - FEAT: Go to cell function
 - FEAT: Pressing Escape in editor control should move focus back to cells view
 - BUG: Store row and column sizes
@@ -135,19 +141,20 @@ This project makes use of other external libraries and projects. Please refer to
 - BUG: Add tests for cell function
 - BUG: Add tests for cell_range function
 - FEAT: Complete minimal lisp interpreter: https://de.wikipedia.org/wiki/Lisp#Minimaler_Funktionsumfang_f%C3%BCr_Lisp
-  - DONE lambda
-  - DONE and
-  - DONE or
-  - DONE xor
-  - DONE not
-  - DONE first
-  - DONE rest
-  - DONE quote (DONE with "list")
-  - DONE join
-  - DONE cons
-  - DONE eq (see prepared lisp_eq on LispValue)
-  - DONE if/cond
-- REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This can be cleaned up.
+    - DONE lambda
+    - DONE and
+    - DONE or
+    - DONE xor
+    - DONE not
+    - DONE first
+    - DONE rest
+    - DONE quote (DONE with "list")
+    - DONE join
+    - DONE cons
+    - DONE eq (see prepared lisp_eq on LispValue)
+    - DONE if/cond
+- REFA: function execution contexts use the same pattern everytime when checking for function or numerical value. This
+  can be cleaned up.
 - BUG: Fix scroll bar behaviour (scrolling is not useable atm)
   Refactoring of table control might be needed
 - FEAT: Implement DELETE operation on cells
@@ -159,7 +166,8 @@ This project makes use of other external libraries and projects. Please refer to
 - REFA: Clean up main.cpp
 - FEAT: Add bool type for LispValue (could be useful for if)
 - BUG: Fix circular reference formula bug: Referencing the same cell in a formula with "cell" causes the app to crash
-- BUG: Support dark UI of Desktop Environment (see: https://stackoverflow.com/questions/58920057/wxwidgets-dark-mode-on-macos)
+- BUG: Support dark UI of Desktop Environment (
+  see: https://stackoverflow.com/questions/58920057/wxwidgets-dark-mode-on-macos)
 - BUG: Make sure cell_range ranges behave correctly  (with reversed directions)
 - FEAT: Add avg function
 - FEAT: Save (sqlite)
@@ -167,7 +175,8 @@ This project makes use of other external libraries and projects. Please refer to
 - BUG: Clearing cell content is crashing the app
 - FEAT_ Add cell_range function which returns lists of values of cells
 - FEAT: Support lists for mathematical operations: This helps later with cell_ranges
-- REFA: There are functionalities in LispFunctionExecutionContext derived classes which principally just say "I want a number or a function which returns a number" - introduce function which streamlines this process
+- REFA: There are functionalities in LispFunctionExecutionContext derived classes which principally just say "I want a
+  number or a function which returns a number" - introduce function which streamlines this process
 - BUG: Add tests for function contexts
 - BUG: LispValue does not support IDENTIFIERS - could be useful for variables
 - Change numbers in UI to be zero based (helps with reference of cells)
