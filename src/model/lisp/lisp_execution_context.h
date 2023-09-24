@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #ifndef LISP_EXECUTOR_INCLUDED
 #define LISP_EXECUTOR_INCLUDED
@@ -40,7 +39,8 @@ public:
   LispValuePtr execute(const LispValuePtrVector &func,
                        const std::any &context_param) const;
   void add_function(const std::string &identifier,
-                    const LispFunctionExecutionContextPtr &func);
+                    const LispFunctionExecutionContextPtr &func,
+                    bool override = false);
 
 private:
   LispValuePtr eval_function(const LispValuePtr &func,

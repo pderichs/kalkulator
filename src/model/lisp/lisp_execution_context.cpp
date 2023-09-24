@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "lisp_execution_context.h"
 #include "lisp_execution_context_addition.h"
@@ -109,13 +108,14 @@ LispExecutionContext::execute(const LispValuePtrVector &func,
 }
 
 void LispExecutionContext::add_function(
-    const std::string &identifier, const LispFunctionExecutionContextPtr &func) {
+    const std::string &identifier, const LispFunctionExecutionContextPtr &func,
+    bool override) {
   if (!func) {
     throw LispExecutionContextError("Invalid function pointer");
   }
 
   const auto &execution_context_it = _functions.find(identifier);
-  if (execution_context_it != _functions.end()) {
+  if (!override && execution_context_it != _functions.end()) {
     throw LispExecutionContextError("Identifier is already assigned");
   }
 
