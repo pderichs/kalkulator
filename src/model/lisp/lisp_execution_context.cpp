@@ -32,6 +32,7 @@
 #include "lisp_execution_context_join.h"
 #include "lisp_execution_context_lambda.h"
 #include "lisp_execution_context_list.h"
+#include "lisp_execution_context_lower_than.h"
 #include "lisp_execution_context_multiplication.h"
 #include "lisp_execution_context_not.h"
 #include "lisp_execution_context_or.h"
@@ -71,6 +72,7 @@ LispExecutionContext::LispExecutionContext() : _functions() {
   _functions["lambda"] = std::make_shared<LispExecutionContextLambda>();
   _functions["funcall"] = std::make_shared<LispExecutionContextFuncall>();
   _functions[">"] = std::make_shared<LispExecutionContextGreaterThan>();
+  _functions["<"] = std::make_shared<LispExecutionContextLowerThan>();
 }
 
 LispValuePtr

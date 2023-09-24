@@ -28,6 +28,7 @@ TEST(LispGreaterThanTests, GreaterThanTests1) {
      {"(> 0 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
      {"(> (+ 1 2) (+ 2 3))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
      {"(> (+ 2 3) (+ 1 0))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+     {"(> 1 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
  };
 
  return execute_lisp_tests(tests, ">");
