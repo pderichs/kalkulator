@@ -86,4 +86,9 @@ int generate_random_int_in_range(int min, int max) {
   std::uniform_int_distribution<int> dist(min, max);
   return dist(gen);
 }
+
+bool double_nearly_eq(double a, double b, double epsilon) {
+  return std::fabs(a - b) <= epsilon;
+}
+
 }; // namespace pdtools

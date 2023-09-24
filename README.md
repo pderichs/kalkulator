@@ -48,18 +48,20 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: defun (with newly added lambda support, this should be doable now)
-- FEAT: Lisp abs
-- FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon())
-- FEAT: Lisp tan
+- FEAT: Store true and false lisp bool values (don't create them everytime)
+- FEAT: Store error strings instead of creating them every time (PARAMCOUNTERR, PARAMERR)
 - FEAT: Lisp cos
 - FEAT: Lisp sin
+- FEAT: Lisp abs
 - FEAT: Lisp root (sqrt etc)
 - FEAT: Lisp ceil
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp map (after lambda)
 - FEAT: Lisp Support for variables (setq)
 - FEAT: Lisp is-none
+- FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon())
+- FEAT: defun (with newly added lambda support, this should be doable now)
+- FEAT: Add possibility to add or remove sheets
 - FEAT: Multiple cell selection
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Replace
@@ -85,6 +87,7 @@ conditions on their websites:
 
 # DONE
 
+- FEAT: Lisp tan
 - FEAT: Add < function
 - FEAT: Add > function
 - BUG: Cell does not check for numbers (expect_number)

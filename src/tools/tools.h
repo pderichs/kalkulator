@@ -77,6 +77,8 @@ std::optional<T> convert_string_to_number(const std::string &str) {
   return value;
 }
 
+bool double_nearly_eq(double a, double b, double epsilon);
+
 }; // namespace pdtools
 
 // Thanks to

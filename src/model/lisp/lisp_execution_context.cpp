@@ -39,6 +39,7 @@
 #include "lisp_execution_context_progn.h"
 #include "lisp_execution_context_rest.h"
 #include "lisp_execution_context_subtraction.h"
+#include "lisp_execution_context_tan.h"
 #include "lisp_execution_context_xor.h"
 #include "lisp_value.h"
 #include "lisp_value_ptr.h"
@@ -73,6 +74,7 @@ LispExecutionContext::LispExecutionContext() : _functions() {
   _functions["funcall"] = std::make_shared<LispExecutionContextFuncall>();
   _functions[">"] = std::make_shared<LispExecutionContextGreaterThan>();
   _functions["<"] = std::make_shared<LispExecutionContextLowerThan>();
+  _functions["tan"] = std::make_shared<LispExecutionContextTan>();
 }
 
 LispValuePtr
