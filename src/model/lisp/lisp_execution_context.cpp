@@ -45,6 +45,7 @@
 #include "lisp_execution_context_xor.h"
 #include "lisp_value.h"
 #include "lisp_value_ptr.h"
+#include "lisp_execution_context_abs.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -79,6 +80,7 @@ LispExecutionContext::LispExecutionContext() : _functions() {
   _functions["tan"] = std::make_shared<LispExecutionContextTan>();
   _functions["cos"] = std::make_shared<LispExecutionContextCos>();
   _functions["sin"] = std::make_shared<LispExecutionContextSin>();
+  _functions["abs"] = std::make_shared<LispExecutionContextAbs>();
 }
 
 LispValuePtr
