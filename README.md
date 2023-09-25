@@ -48,9 +48,8 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Lisp log(arithm)
-- FEAT: Lisp Support for variables (setq)
 - FEAT: Lisp is-none
+- FEAT: Lisp Support for variables (setq)
 - FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon()) (could be a variable in a default scope)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add possibility to add or remove sheets
@@ -79,6 +78,7 @@ conditions on their websites:
 
 # DONE
 
+- FEAT: Lisp log(arithm)
 - FEAT: Lisp pow
 - FEAT: Lisp sqrt
 - FEAT: Lisp ceil
