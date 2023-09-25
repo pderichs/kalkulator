@@ -48,8 +48,6 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Store true and false lisp bool values (don't create them everytime)
-- FEAT: Store error strings instead of creating them every time (PARAMCOUNTERR, PARAMERR)
 - FEAT: Lisp abs
 - FEAT: Lisp root (sqrt etc)
 - FEAT: Lisp ceil
@@ -84,6 +82,8 @@ conditions on their websites:
 
 # DONE
 
+- FEAT: Store true and false lisp bool values (don't create them everytime)
+- FEAT: Store error strings instead of creating them every time (PARAMCOUNTERR, PARAMERR)
 - FEAT: Lisp sin
 - FEAT: Lisp cos
 - FEAT: Lisp tan

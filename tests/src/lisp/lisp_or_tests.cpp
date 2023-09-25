@@ -20,7 +20,6 @@
 #include "mock_function_context.h"
 #include "model/lisp/lisp_execution_context.h"
 #include "model/lisp/lisp_parser.h"
-#include "model/lisp/lisp_value_factory.h"
 #include "model/lisp/lisp_value_parser.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
