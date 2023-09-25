@@ -48,7 +48,6 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Lisp sqrt
 - FEAT: Lisp pow
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp Support for variables (setq)
@@ -81,6 +80,7 @@ conditions on their websites:
 
 # DONE
 
+- FEAT: Lisp sqrt
 - FEAT: Lisp ceil
 - FEAT: Lisp abs
 - FEAT: Store true and false lisp bool values (don't create them everytime)
