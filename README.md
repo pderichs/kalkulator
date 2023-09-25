@@ -48,8 +48,8 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Lisp root (sqrt etc)
 - FEAT: Lisp ceil
+- FEAT: Lisp root (sqrt etc)
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp Support for variables (setq)
 - FEAT: Lisp is-none

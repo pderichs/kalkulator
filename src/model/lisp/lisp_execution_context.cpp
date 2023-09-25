@@ -46,6 +46,7 @@
 #include "lisp_value.h"
 #include "lisp_value_ptr.h"
 #include "lisp_execution_context_abs.h"
+#include "lisp_execution_context_ceil.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -81,6 +82,7 @@ LispExecutionContext::LispExecutionContext() : _functions() {
   _functions["cos"] = std::make_shared<LispExecutionContextCos>();
   _functions["sin"] = std::make_shared<LispExecutionContextSin>();
   _functions["abs"] = std::make_shared<LispExecutionContextAbs>();
+  _functions["ceil"] = std::make_shared<LispExecutionContextCeil>();
 }
 
 LispValuePtr
