@@ -49,6 +49,7 @@
 #include "lisp_execution_context_ceil.h"
 #include "lisp_execution_context_sqrt.h"
 #include "lisp_execution_context_pow.h"
+#include "lisp_execution_context_log.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -87,6 +88,7 @@ LispExecutionContext::LispExecutionContext() : _functions() {
   _functions["ceil"] = std::make_shared<LispExecutionContextCeil>();
   _functions["sqrt"] = std::make_shared<LispExecutionContextSqrt>();
   _functions["pow"] = std::make_shared<LispExecutionContextPow>();
+  _functions["log"] = std::make_shared<LispExecutionContextLog>();
 }
 
 LispValuePtr
