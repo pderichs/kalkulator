@@ -54,8 +54,8 @@ conditions on their websites:
 - FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon()) (could be a variable in a default scope)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add possibility to add or remove sheets
-- FEAT: Multiple cell selection
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
+- FEAT: Multiple cell selection
 - FEAT: Replace
 - FEAT: Print
 - FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
