@@ -24,15 +24,16 @@
 #include "model/lisp/lisp_value_parser.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispAndTests, AndTest1) {
   std::map<std::string, LispValuePtr> tests = {
-      {"(and (= 1 0))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(and (= 1 0) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(and (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(and (= 1 1) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(and (= 1 0) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(and (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
+      {"(and (= 1 0))", LispCommonValues::false_value()},
+      {"(and (= 1 0) (= 0 1))", LispCommonValues::false_value()},
+      {"(and (= 1 1))", LispCommonValues::true_value()},
+      {"(and (= 1 1) (= 0 1))", LispCommonValues::false_value()},
+      {"(and (= 1 0) (= 1 1))", LispCommonValues::false_value()},
+      {"(and (= 1 1) (= 1 1))", LispCommonValues::true_value()},
   };
 
   return execute_lisp_tests(tests, "and");

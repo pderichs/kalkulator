@@ -21,6 +21,7 @@
 
 #include "lisp_execution_context.h"
 #include "lisp_value.h"
+#include "lisp_common_values.h"
 
 class LispExecutionContextAnd : public LispFunctionExecutionContext {
 public:
@@ -38,11 +39,11 @@ public:
       LispValuePtr actual_value =
           execute_if_required(param, execution_context, context_param);
       if (!actual_value->is_truthy()) {
-        return LispValueFactory::new_bool(LISP_BOOL_FALSE);
+        return LispCommonValues::false_value();
       }
     }
 
-    return LispValueFactory::new_bool(LISP_BOOL_TRUE);
+    return LispCommonValues::true_value();
   }
 };
 

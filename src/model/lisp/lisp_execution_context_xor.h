@@ -52,10 +52,10 @@ public:
     bool p2 = param2->boolean();
 
     if (p1 != p2) {
-      return LispValueFactory::new_bool(LISP_BOOL_TRUE);
+      return LispCommonValues::true_value();
     }
 
-    return LispValueFactory::new_bool(LISP_BOOL_FALSE);
+    return LispCommonValues::false_value();
   }
 };
 

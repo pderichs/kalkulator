@@ -23,6 +23,7 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
+#include "lisp_common_values.h"
 
 class LispExecutionContextCos : public LispFunctionExecutionContext {
 public:
@@ -36,11 +37,11 @@ public:
         extract_and_execute_params(func, execution_context, context_param);
 
     if (params.size() != 1) {
-      return LispValueFactory::new_string("#PARAMCOUNTERR");
+      return LispCommonValues::error_parameter_count();
     }
 
     if (!params[0]->is_number()) {
-      return LispValueFactory::new_string("#PARAMERR");
+      return LispCommonValues::error_parameter();
     }
 
     LispValue::DoubleType result = std::cos(params[0]->to_double());

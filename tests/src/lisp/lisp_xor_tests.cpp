@@ -20,13 +20,14 @@
 #include "model/lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
 #include "gtest/gtest.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispXorTests, XorTest1) {
   std::map<std::string, LispValuePtr> tests = {
-      {"(xor (= 1 0) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(xor (= 1 1) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(xor (= 1 0) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(xor (= 1 1) (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(xor (= 1 0) (= 0 1))", LispCommonValues::false_value()},
+      {"(xor (= 1 1) (= 0 1))", LispCommonValues::true_value()},
+      {"(xor (= 1 0) (= 1 1))", LispCommonValues::true_value()},
+      {"(xor (= 1 1) (= 1 1))", LispCommonValues::false_value()},
   };
 
   return execute_lisp_tests(tests, "xor");

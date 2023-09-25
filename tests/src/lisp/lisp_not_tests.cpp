@@ -20,13 +20,14 @@
 #include "model/lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
 #include "gtest/gtest.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispNotTests, NotTest1) {
   std::map<std::string, LispValuePtr> tests = {
-      {"(not (= 1 0))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(not (= 1 0) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(not (= 1 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(not (= 1 1) (= 0 1))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+      {"(not (= 1 0))", LispCommonValues::true_value()},
+      {"(not (= 1 0) (= 0 1))", LispCommonValues::true_value()},
+      {"(not (= 1 1))", LispCommonValues::false_value()},
+      {"(not (= 1 1) (= 0 1))", LispCommonValues::false_value()},
   };
 
   return execute_lisp_tests(tests, "not");

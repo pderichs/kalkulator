@@ -21,14 +21,15 @@
 #include "model/lisp/lisp_parser.h"
 #include "model/lisp/lisp_value_parser.h"
 #include "gtest/gtest.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispGreaterThanTests, GreaterThanTests1) {
  std::map<std::string, LispValuePtr> tests = {
-     {"(> 1 0)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-     {"(> 0 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-     {"(> (+ 1 2) (+ 2 3))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-     {"(> (+ 2 3) (+ 1 0))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-     {"(> 1 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
+     {"(> 1 0)", LispCommonValues::true_value()},
+     {"(> 0 1)", LispCommonValues::false_value()},
+     {"(> (+ 1 2) (+ 2 3))", LispCommonValues::false_value()},
+     {"(> (+ 2 3) (+ 1 0))", LispCommonValues::true_value()},
+     {"(> 1 1)", LispCommonValues::false_value()},
  };
 
  return execute_lisp_tests(tests, ">");

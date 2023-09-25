@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "model/lisp/lisp_value_factory.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispValueTests, LispValueEqualityTests) {
   // clang-format off
@@ -33,10 +34,10 @@ TEST(LispValueTests, LispValueEqualityTests) {
       {{LispValueFactory::new_string("hello"), LispValueFactory::new_double(42)}, false},
       {{LispValueFactory::new_string("hello"), LispValueFactory::new_string("hello")}, true},
       {{LispValueFactory::new_string("hello"), LispValueFactory::new_string("hallo")}, false},
-      {{LispValueFactory::new_bool(LISP_BOOL_TRUE), LispValueFactory::new_bool(LISP_BOOL_TRUE)}, true},
-      {{LispValueFactory::new_bool(LISP_BOOL_FALSE), LispValueFactory::new_bool(LISP_BOOL_TRUE)}, false},
-      {{LispValueFactory::new_bool(LISP_BOOL_TRUE), LispValueFactory::new_bool(LISP_BOOL_FALSE)}, false},
-      {{LispValueFactory::new_bool(LISP_BOOL_FALSE), LispValueFactory::new_bool(LISP_BOOL_FALSE)}, true},
+      {{LispCommonValues::true_value(), LispCommonValues::true_value()}, true},
+      {{LispCommonValues::false_value(), LispCommonValues::true_value()}, false},
+      {{LispCommonValues::true_value(), LispCommonValues::false_value()}, false},
+      {{LispCommonValues::false_value(), LispCommonValues::false_value()}, true},
 
       {{LispValueFactory::new_list({LispValueFactory::new_double(10), LispValueFactory::new_double(42), LispValueFactory::new_double(-1999)}), LispValueFactory::new_list({LispValueFactory::new_double(10), LispValueFactory::new_double(42), LispValueFactory::new_double(-1999)})}, true},
       {{LispValueFactory::new_list({LispValueFactory::new_double(11), LispValueFactory::new_double(42), LispValueFactory::new_double(-1999)}), LispValueFactory::new_list({LispValueFactory::new_double(10), LispValueFactory::new_double(42), LispValueFactory::new_double(-1999)})}, false},

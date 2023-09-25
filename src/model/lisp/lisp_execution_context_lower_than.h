@@ -36,18 +36,18 @@ public:
         extract_and_execute_params(func, execution_context, context_param);
 
     if (params.size() != 2) {
-      return LispValueFactory::new_string("#PARAMCOUNTERR");
+      return LispCommonValues::error_parameter_count();
     }
 
     if (!params[0]->is_number() || !params[1]->is_number()) {
-      return LispValueFactory::new_string("#PARAMERR");
+      return LispCommonValues::error_parameter();
     }
 
     if (params[0]->to_double() < params[1]->to_double()) {
-      return LispValueFactory::new_bool(LISP_BOOL_TRUE);
+      return LispCommonValues::true_value();
     }
 
-    return LispValueFactory::new_bool(LISP_BOOL_FALSE);
+    return LispCommonValues::false_value();
   }
 };
 

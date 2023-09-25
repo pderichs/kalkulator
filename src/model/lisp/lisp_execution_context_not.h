@@ -39,11 +39,11 @@ public:
 
     for (const auto &param : params) {
       if (param->is_truthy()) {
-        return LispValueFactory::new_bool(LISP_BOOL_FALSE);
+        return LispCommonValues::false_value();
       }
     }
 
-    return LispValueFactory::new_bool(LISP_BOOL_TRUE);
+    return LispCommonValues::true_value();
   }
 };
 

@@ -46,13 +46,13 @@ public:
     LispValuePtr last;
     for (const auto &param : params) {
       if (last && !last->content_equals(*param)) {
-        return LispValueFactory::new_bool(LISP_BOOL_FALSE);
+        return LispCommonValues::false_value();
       }
 
       last = param;
     }
 
-    return LispValueFactory::new_bool(LISP_BOOL_TRUE);
+    return LispCommonValues::true_value();
   }
 
 private:

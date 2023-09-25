@@ -39,11 +39,11 @@ public:
           execute_if_required(param, execution_context, context_param);
 
       if (actual_value->is_truthy()) {
-        return LispValueFactory::new_bool(LISP_BOOL_TRUE);
+        return LispCommonValues::true_value();
       }
     }
 
-    return LispValueFactory::new_bool(LISP_BOOL_FALSE);
+    return LispCommonValues::false_value();
   }
 };
 

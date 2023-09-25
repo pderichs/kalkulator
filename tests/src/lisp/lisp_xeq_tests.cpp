@@ -20,17 +20,18 @@
 #include "model/lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
 #include "gtest/gtest.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispXeqTests, XeqTest1) {
   std::map<std::string, LispValuePtr> tests = {
-      {"(xeq 1 1)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(xeq \"Hase\" 1)", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(xeq \"Hase\" \"Bär\")", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {R"((xeq "Hase" "Hase"))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(xeq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispValueFactory::new_bool(LISP_BOOL_FALSE)},
-      {"(xeq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(xeq (list 6 6 6) (list 6 6 6) 6)", LispValueFactory::new_bool(LISP_BOOL_TRUE)},
-      {"(xeq (list 6 6 6) (list 6 6 6) 5)", LispValueFactory::new_bool(LISP_BOOL_FALSE)}};
+      {"(xeq 1 1)", LispCommonValues::true_value()},
+      {"(xeq \"Hase\" 1)", LispCommonValues::false_value()},
+      {"(xeq \"Hase\" \"Bär\")", LispCommonValues::false_value()},
+      {R"((xeq "Hase" "Hase"))", LispCommonValues::true_value()},
+      {"(xeq (list 54 2 66 9.326) (list 54 2 66 9.326))", LispCommonValues::false_value()},
+      {"(xeq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispCommonValues::true_value()},
+      {"(xeq (list 6 6 6) (list 6 6 6) 6)", LispCommonValues::true_value()},
+      {"(xeq (list 6 6 6) (list 6 6 6) 5)", LispCommonValues::false_value()}};
 
   return execute_lisp_tests(tests, "xeq");
 }

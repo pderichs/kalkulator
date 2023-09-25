@@ -23,6 +23,7 @@
 #include "../lisp/lisp_execution_context_error.h"
 #include "../lisp/lisp_function_execution_context.h"
 #include "../lisp/lisp_value_factory.h"
+#include "../lisp/lisp_common_values.h"
 #include "table_workbook_document.h"
 #include <any>
 #include <sstream>
@@ -40,12 +41,11 @@ public:
         extract_and_execute_params(func, execution_context, context_param);
 
     if (params.size() != 2) {
-      throw LispExecutionContextError(
-          "cell function needs 2 parameters (row and colum)");
+      return LispCommonValues::error_parameter_count();
     }
 
     if (!params[0]->is_number() || !params[1]->is_number()) {
-      return LispValueFactory::new_string("#PARAMERR");
+      return LispCommonValues::error_parameter();
     }
 
     // To prevent a circular reference we need to check whether
@@ -63,7 +63,7 @@ public:
     if (row == cell_location.y() && col == cell_location.x()) {
       // This would be a circular reference - cancel operation
       // throw LispExecutionContextError("Detected circular reference.");
-      return LispValueFactory::new_string("#CIRCULARREFERR");
+      return LispCommonValues::error_circular_ref();
     }
 
     // Inform document about cell reference

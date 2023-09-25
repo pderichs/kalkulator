@@ -21,6 +21,7 @@
 
 #include "../lisp/lisp_function_execution_context.h"
 #include "../lisp/lisp_value_factory.h"
+#include "../lisp/lisp_common_values.h"
 #include "table_workbook_document.h"
 #include <any>
 #include <sstream>
@@ -70,7 +71,7 @@ public:
       }
 
       if (cell->row() == this_cell.y() && cell->col() == this_cell.x()) {
-        return LispValueFactory::new_string("#CIRCULARREFERR");
+        return LispCommonValues::error_circular_ref();
       }
 
       // Inform document about cell reference
