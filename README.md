@@ -48,12 +48,12 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Lisp ceil
-- FEAT: Lisp root (sqrt etc)
+- FEAT: Lisp sqrt
+- FEAT: Lisp pow
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp Support for variables (setq)
 - FEAT: Lisp is-none
-- FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon())
+- FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon()) (could be a variable in a default scope)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add possibility to add or remove sheets
 - FEAT: Multiple cell selection
@@ -81,6 +81,7 @@ conditions on their websites:
 
 # DONE
 
+- FEAT: Lisp ceil
 - FEAT: Lisp abs
 - FEAT: Store true and false lisp bool values (don't create them everytime)
 - FEAT: Store error strings instead of creating them every time (PARAMCOUNTERR, PARAMERR)
