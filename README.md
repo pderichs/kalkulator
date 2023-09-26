@@ -6,7 +6,8 @@ This is a simple and small spreadsheet application which uses a Lisp-like langua
 > This is by no means bug free and / or production ready - **USE AT YOUR OWN RISK**.
 
 I have implemented a similar application in C before ("simplecalc"), but for usability reasons I wanted to create a GUI
-application now.
+application now. There are of course much more advanced and more sophisticated spread sheet applications out there -
+this has just been implemented for learning purpose and fun :)
 
 ## Build
 
