@@ -76,7 +76,7 @@ conditions on their websites:
   references, like $ function)
 - BUG: Something (CLion?) is creating a "Testing" folder on the root folder with every build
 
-# DONE
+## DONE
 
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp pow
