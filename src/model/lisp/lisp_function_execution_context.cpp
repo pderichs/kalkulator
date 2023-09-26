@@ -125,6 +125,7 @@ LispValuePtrVector LispFunctionExecutionContext::extract_and_execute_params(
   LispValuePtrVector result;
 
   result = extract_params_from_list(func);
+  result = execution_context.extract_scope_variables(result);
   result = execute_functions_and_extract_list_results(result, execution_context,
                                                       context_param);
 

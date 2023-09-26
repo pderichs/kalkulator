@@ -22,43 +22,19 @@
 #include "model/lisp/lisp_value_parser.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "lisp_test_tools.h"
 
 TEST(LispIfTests, IfTest1) {
-  LispParser parser(R"((if (= 3 3) "OK" "Not ok"))");
+  std::map<std::string, LispValuePtr> tests = {
+      {R"((if (= 3 3) "OK" "Not ok"))", LispValueFactory::new_string("OK")},
+      {"(if true 1 0)", LispValueFactory::new_integer(1)},
+      {"(if false 0 42)", LispValueFactory::new_integer(0)},
+      {"(if nil 42 999)", LispValueFactory::new_integer(42)},
+      {R"((if (= 4 3) "Not ok" "GOOD!"))",
+       LispValueFactory::new_string("GOOD!")},
+  };
 
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_TRUE(result->is_string());
-
-  EXPECT_EQ(*result, "OK");
-}
-
-TEST(LispIfTests, IfTest2) {
-  LispParser parser(R"((if (= 4 3) "Not ok" "GOOD!"))");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_TRUE(result->is_string());
-
-  EXPECT_EQ(*result, "GOOD!");
+  return execute_lisp_tests(tests, "if");
 }
 
 TEST(LispIfTests, IfTestWithLambda1) {

@@ -44,6 +44,8 @@ public:
                     const LispFunctionExecutionContextPtr &func,
                     bool override = false);
 
+  LispValuePtrVector extract_scope_variables(const LispValuePtrVector& params) const;
+
 private:
   LispScopeMap _scope;
   LispFunctionMap _functions;

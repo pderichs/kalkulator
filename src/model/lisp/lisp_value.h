@@ -157,7 +157,7 @@ public:
     }
 
     if (is_boolean()) {
-      return boolean() == LISP_BOOL_TRUE;
+      return boolean();
     }
 
     if (is_number()) {

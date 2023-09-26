@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LISP_EXECUTION_CONTEXT_IF_INCLUDED
 #define LISP_EXECUTION_CONTEXT_IF_INCLUDED
 
@@ -41,7 +40,7 @@ public:
       throw LispExecutionContextError("Unexpected parameter count for if");
     }
 
-    LispValuePtr condition = expect_parameter_at(params, 0);
+    LispValuePtr condition = params[0];
 
     if (condition->is_function()) {
       condition = execution_context.execute(condition, context_param);
@@ -49,29 +48,16 @@ public:
 
     LispValuePtr result;
 
-    if (condition->is_truthy()) {
-      result = execute_result_param(func, 1, execution_context, context_param);
-    } else {
-      result = execute_result_param(func, 2, execution_context, context_param);
+    if (!condition->is_boolean()) {
+      std::cerr << "CONDITION IS NOT BOOL" << std::endl;
+      return LispCommonValues::error_parameter();
     }
 
-    return result;
-  }
-
-  LispValuePtr
-  execute_result_param(const LispValuePtrVector &func, size_t index,
-                       const LispExecutionContext &execution_context,
-                       const std::any &context_param) const {
-    LispValuePtr result;
-
-    LispValuePtrVector params = extract_params_from_list(func);
-
-    const auto &result_param = expect_parameter_at(params, index);
-
-    if (result_param->is_function()) {
-      result = execution_context.execute(result_param, context_param);
+    if (condition->boolean()) {
+      result = execution_context.execute(params[1], context_param);
     } else {
-      result = result_param;
+      // TODO Handle not existing second parameter
+      result = execution_context.execute(params[2], context_param);
     }
 
     return result;

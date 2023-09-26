@@ -140,3 +140,23 @@ void LispExecutionContext::add_function(
 
   _functions[identifier] = func;
 }
+
+LispValuePtrVector LispExecutionContext::extract_scope_variables(const LispValuePtrVector &params) const {
+  LispValuePtrVector result;
+
+  for (const auto &param : params) {
+    if (param->is_identifier()) {
+      std::string id = param->string();
+
+      auto it = _scope.find(id);
+      if (it != _scope.end()) {
+        result.push_back(it->second);
+        continue;
+      }
+    }
+
+    result.push_back(param);
+  }
+
+  return result;
+}
