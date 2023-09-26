@@ -17,21 +17,16 @@ Install dependencies in Debian:
   apt install libwxgtk3.2-dev libsqlite3-dev
 ```
 
-Run
+### Clean
 
 ``` sh
-  cmake .
-  make -j 7
+  cmake --build . --target clean -j 5
 ```
 
-### Debug Build
+### Build
 
-If you want to create a build with debug symbols run the following commands:
-
-``` sh
-  make clean
-  cmake . -DCMAKE_BUILD_TYPE=Debug
-  make -j 7
+```sh
+  cmake --build . --target all -j 5
 ```
 
 ## License
