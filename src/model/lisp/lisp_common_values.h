@@ -28,7 +28,7 @@ public:
   static LispValuePtr error_circular_ref();
   static LispValuePtr true_value();
   static LispValuePtr false_value();
-  static LispValuePtr nil_value();
+  static LispValuePtr none_value();
 
 private:
   static LispValuePtr _error_parameter_count;
@@ -36,7 +36,7 @@ private:
   static LispValuePtr _error_circular_ref;
   static LispValuePtr _true_value;
   static LispValuePtr _false_value;
-  static LispValuePtr _nil_value;
+  static LispValuePtr _none_value;
 };
 
 #endif // LISP_ERROR_VALUES_H

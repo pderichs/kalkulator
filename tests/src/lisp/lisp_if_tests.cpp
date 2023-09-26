@@ -29,8 +29,8 @@ TEST(LispIfTests, IfTest1) {
       {R"((if (= 3 3) "OK" "Not ok"))", LispValueFactory::new_string("OK")},
       {"(if true 1 0)", LispValueFactory::new_integer(1)},
       {"(if false 0 42)", LispValueFactory::new_integer(42)},
-      {R"((if (= 4 3) "Not ok" "GOOD!"))",
-       LispValueFactory::new_string("GOOD!")},
+      {R"((if (= 4 3) "Not ok" "GOOD!"))", LispValueFactory::new_string("GOOD!")},
+      {R"((if (= 4 3) "Not ok"))", LispValueFactory::new_none()},
   };
 
   return execute_lisp_tests(tests, "if");

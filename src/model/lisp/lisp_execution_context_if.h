@@ -56,8 +56,11 @@ public:
     if (condition->boolean()) {
       result = execution_context.execute(params[1], context_param);
     } else {
-      // TODO Handle not existing second parameter
-      result = execution_context.execute(params[2], context_param);
+      if (params.size() == 3) {
+        result = execution_context.execute(params[2], context_param);
+      } else {
+        result = LispCommonValues::none_value();
+      }
     }
 
     return result;

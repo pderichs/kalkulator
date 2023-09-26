@@ -57,7 +57,7 @@
 
 LispExecutionContext::LispExecutionContext() : _scope(), _functions() {
   // Prepare default scope
-  _scope["nil"] = LispCommonValues::nil_value();
+  _scope["nil"] = LispCommonValues::none_value();
   _scope["true"] = LispCommonValues::true_value();
   _scope["false"] = LispCommonValues::false_value();
 
