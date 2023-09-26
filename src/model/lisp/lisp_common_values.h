@@ -25,7 +25,6 @@ class LispCommonValues {
 public:
   static LispValuePtr error_parameter_count();
   static LispValuePtr error_parameter();
-  static LispValuePtr error_generic();
   static LispValuePtr error_circular_ref();
   static LispValuePtr true_value();
   static LispValuePtr false_value();
@@ -34,7 +33,6 @@ public:
 private:
   static LispValuePtr _error_parameter_count;
   static LispValuePtr _error_parameter;
-  static LispValuePtr _error_generic;
   static LispValuePtr _error_circular_ref;
   static LispValuePtr _true_value;
   static LispValuePtr _false_value;
