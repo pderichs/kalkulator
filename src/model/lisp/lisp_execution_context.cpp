@@ -17,9 +17,11 @@
  */
 
 #include "lisp_execution_context.h"
+#include "lisp_execution_context_abs.h"
 #include "lisp_execution_context_addition.h"
 #include "lisp_execution_context_and.h"
 #include "lisp_execution_context_average.h"
+#include "lisp_execution_context_ceil.h"
 #include "lisp_execution_context_cons.h"
 #include "lisp_execution_context_cos.h"
 #include "lisp_execution_context_division.h"
@@ -30,27 +32,25 @@
 #include "lisp_execution_context_funcall.h"
 #include "lisp_execution_context_greater_than.h"
 #include "lisp_execution_context_if.h"
+#include "lisp_execution_context_isnone.h"
 #include "lisp_execution_context_join.h"
 #include "lisp_execution_context_lambda.h"
 #include "lisp_execution_context_list.h"
+#include "lisp_execution_context_log.h"
 #include "lisp_execution_context_lower_than.h"
 #include "lisp_execution_context_multiplication.h"
 #include "lisp_execution_context_not.h"
 #include "lisp_execution_context_or.h"
+#include "lisp_execution_context_pow.h"
 #include "lisp_execution_context_progn.h"
 #include "lisp_execution_context_rest.h"
 #include "lisp_execution_context_sin.h"
+#include "lisp_execution_context_sqrt.h"
 #include "lisp_execution_context_subtraction.h"
 #include "lisp_execution_context_tan.h"
 #include "lisp_execution_context_xor.h"
 #include "lisp_value.h"
 #include "lisp_value_ptr.h"
-#include "lisp_execution_context_abs.h"
-#include "lisp_execution_context_ceil.h"
-#include "lisp_execution_context_sqrt.h"
-#include "lisp_execution_context_pow.h"
-#include "lisp_execution_context_log.h"
-#include "lisp_execution_context_isnone.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -141,7 +141,8 @@ void LispExecutionContext::add_function(
   _functions[identifier] = func;
 }
 
-LispValuePtrVector LispExecutionContext::extract_scope_variables(const LispValuePtrVector &params) const {
+LispValuePtrVector LispExecutionContext::extract_scope_variables(
+    const LispValuePtrVector &params) const {
   LispValuePtrVector result;
 
   for (const auto &param : params) {

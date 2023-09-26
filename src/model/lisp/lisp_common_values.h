@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 #ifndef LISP_ERROR_VALUES_H
 #define LISP_ERROR_VALUES_H
@@ -39,4 +39,4 @@ private:
   static LispValuePtr _nil_value;
 };
 
-#endif //LISP_ERROR_VALUES_H
+#endif // LISP_ERROR_VALUES_H

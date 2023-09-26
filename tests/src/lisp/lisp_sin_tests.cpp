@@ -19,10 +19,10 @@
 #include "lisp_test_tools.h"
 #include "model/lisp/lisp_execution_context_error.h"
 #include "model/lisp/lisp_function_execution_context.h"
-#include "model/lisp/lisp_value.h"
 #include "model/lisp/lisp_parser.h"
-#include "model/lisp/lisp_value_parser.h"
+#include "model/lisp/lisp_value.h"
 #include "model/lisp/lisp_value_factory.h"
+#include "model/lisp/lisp_value_parser.h"
 #include "gtest/gtest.h"
 
 TEST(LispSinTests, SinTest1) {

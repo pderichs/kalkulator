@@ -14,8 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
+ */
 
 #include "value_converter.h"
 #include "lisp_execution_context.h"
@@ -94,7 +93,7 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
     throw std::runtime_error("to_string: Execution context is NULL");
   }
 
-  if (!value) {
+  if (!value || value->is_none()) {
     return "";
   }
 
@@ -110,8 +109,6 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
     std::stringstream ss;
     ss << value->to_integer();
     return ss.str();
-  } else if (value->is_none()) {
-    return "";
   } else if (value->is_function()) {
     // Execute function
     try {
@@ -128,12 +125,12 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
     } else {
       return "FALSE";
     }
-  } else {
-    std::stringstream ss;
-    ss << "Unable to convert lisp value of type "
-       << static_cast<int>(value->type());
-    throw ValueConversionError(ss.str());
   }
+
+  std::stringstream ss;
+  ss << "to_string: Unable to convert lisp value of type "
+     << static_cast<int>(value->type());
+  throw ValueConversionError(ss.str());
 }
 
 void ValueConverter::set_execution_context(LispExecutionContext *context) {
