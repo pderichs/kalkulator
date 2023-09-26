@@ -122,8 +122,10 @@ LispExecutionContext::execute(const LispValuePtrVector &func,
     throw LispExecutionContextError(ss.str());
   }
 
+  LispValuePtrVector func_extracted_scope = extract_scope_variables(func);
+
   const auto &function_context = execution_context_it->second;
-  return function_context->value(func, *this, context_param);
+  return function_context->value(func_extracted_scope, *this, context_param);
 }
 
 void LispExecutionContext::add_function(

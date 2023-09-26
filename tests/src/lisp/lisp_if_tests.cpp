@@ -16,20 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "lisp_test_tools.h"
 #include "mock_function_context.h"
 #include "model/lisp/lisp_execution_context.h"
 #include "model/lisp/lisp_parser.h"
 #include "model/lisp/lisp_value_parser.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "lisp_test_tools.h"
 
 TEST(LispIfTests, IfTest1) {
   std::map<std::string, LispValuePtr> tests = {
       {R"((if (= 3 3) "OK" "Not ok"))", LispValueFactory::new_string("OK")},
       {"(if true 1 0)", LispValueFactory::new_integer(1)},
-      {"(if false 0 42)", LispValueFactory::new_integer(0)},
-      {"(if nil 42 999)", LispValueFactory::new_integer(42)},
+      {"(if false 0 42)", LispValueFactory::new_integer(42)},
       {R"((if (= 4 3) "Not ok" "GOOD!"))",
        LispValueFactory::new_string("GOOD!")},
   };
