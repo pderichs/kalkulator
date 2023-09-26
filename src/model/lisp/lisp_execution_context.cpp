@@ -50,11 +50,17 @@
 #include "lisp_execution_context_sqrt.h"
 #include "lisp_execution_context_pow.h"
 #include "lisp_execution_context_log.h"
+#include "lisp_execution_context_isnone.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
 
-LispExecutionContext::LispExecutionContext() : _functions() {
+LispExecutionContext::LispExecutionContext() : _scope(), _functions() {
+  // Prepare default scope
+  _scope["nil"] = LispCommonValues::nil_value();
+  _scope["true"] = LispCommonValues::true_value();
+  _scope["false"] = LispCommonValues::false_value();
+
   // Prepare functions
   _functions["+"] = std::make_shared<LispExecutionContextAddition>();
   _functions["-"] = std::make_shared<LispExecutionContextSubtraction>();
@@ -89,6 +95,7 @@ LispExecutionContext::LispExecutionContext() : _functions() {
   _functions["sqrt"] = std::make_shared<LispExecutionContextSqrt>();
   _functions["pow"] = std::make_shared<LispExecutionContextPow>();
   _functions["log"] = std::make_shared<LispExecutionContextLog>();
+  _functions["is-none"] = std::make_shared<LispExecutionContextIsNone>();
 }
 
 LispValuePtr
@@ -98,16 +105,8 @@ LispExecutionContext::execute(const LispValuePtr &value,
     return value;
   }
 
-  LispValuePtr execution_result = eval_function(value, context_param);
+  LispValuePtr execution_result = execute(value->list(), context_param);
   return execution_result;
-}
-
-LispValuePtr
-LispExecutionContext::eval_function(const LispValuePtr &func,
-                                    const std::any &context_param) const {
-  const auto &func_list = func->list();
-
-  return execute(func_list, context_param);
 }
 
 LispValuePtr

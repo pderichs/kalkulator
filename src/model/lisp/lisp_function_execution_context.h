@@ -30,6 +30,7 @@ class LispFunctionExecutionContext {
 public:
   LispFunctionExecutionContext() = default;
   virtual ~LispFunctionExecutionContext() = default;
+
   virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
                              const std::any &context_param) = 0;

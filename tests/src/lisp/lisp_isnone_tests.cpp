@@ -16,29 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LISP_ERROR_VALUES_H
-#define LISP_ERROR_VALUES_H
+#include "model/lisp/lisp_execution_context_error.h"
+#include "gtest/gtest.h"
+#include "lisp/lisp_value_factory.h"
+#include "lisp/lisp_common_values.h"
+#include "lisp_test_tools.h"
 
-#include "model/lisp/lisp_value.h"
+TEST(LispIsNoneTests, IsNoneTest1) {
+  std::map<std::string, LispValuePtr> tests = {
+      {"(is-none 0)", LispCommonValues::false_value()},
+      {"(is-none 1)", LispCommonValues::false_value()},
+      {"(is-none 0 1)", LispCommonValues::false_value()},
+      {"(is-none some-identifier)", LispCommonValues::false_value()},
+      {"(is-none \"Hello\")", LispCommonValues::false_value()},
+      {"(is-none nil)", LispCommonValues::true_value()},
+  };
 
-class LispCommonValues {
-public:
-  static LispValuePtr error_parameter_count();
-  static LispValuePtr error_parameter();
-  static LispValuePtr error_generic();
-  static LispValuePtr error_circular_ref();
-  static LispValuePtr true_value();
-  static LispValuePtr false_value();
-  static LispValuePtr nil_value();
+  return execute_lisp_tests(tests, "is-none");
+}
 
-private:
-  static LispValuePtr _error_parameter_count;
-  static LispValuePtr _error_parameter;
-  static LispValuePtr _error_generic;
-  static LispValuePtr _error_circular_ref;
-  static LispValuePtr _true_value;
-  static LispValuePtr _false_value;
-  static LispValuePtr _nil_value;
-};
-
-#endif //LISP_ERROR_VALUES_H

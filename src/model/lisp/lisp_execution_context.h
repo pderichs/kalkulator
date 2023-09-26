@@ -31,6 +31,8 @@ typedef std::shared_ptr<LispFunctionExecutionContext>
 
 typedef std::map<std::string, LispFunctionExecutionContextPtr> LispFunctionMap;
 
+typedef std::map<std::string, LispValuePtr> LispScopeMap;
+
 class LispExecutionContext {
 public:
   LispExecutionContext();
@@ -43,10 +45,7 @@ public:
                     bool override = false);
 
 private:
-  LispValuePtr eval_function(const LispValuePtr &func,
-                             const std::any &context_param = {}) const;
-
-private:
+  LispScopeMap _scope;
   LispFunctionMap _functions;
 };
 

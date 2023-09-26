@@ -31,6 +31,8 @@ LispValuePtr LispCommonValues::_true_value =
     LispValueFactory::new_bool(LISP_BOOL_TRUE);
 LispValuePtr LispCommonValues::_false_value =
     LispValueFactory::new_bool(LISP_BOOL_FALSE);
+LispValuePtr LispCommonValues::_nil_value =
+    LispValueFactory::new_none();
 
 LispValuePtr LispCommonValues::error_parameter_count() {
   return _error_parameter_count;
@@ -50,4 +52,7 @@ LispValuePtr LispCommonValues::true_value() {
 }
 LispValuePtr LispCommonValues::false_value() {
   return _false_value;
+}
+LispValuePtr LispCommonValues::nil_value() {
+  return _nil_value;
 }
