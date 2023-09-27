@@ -179,15 +179,10 @@ KalkulatorMainFrame::KalkulatorMainFrame()
       _icon_new(nullptr), _icon_open(nullptr), _icon_save(nullptr),
       _icon_height(nullptr), _icon_width(nullptr) {
   InitializeModel();
-
   InitializeIcons();
-
   InitializeMenu();
-
   BindEvents();
-
   CreateToolbar();
-
   SetupUserInterface();
 }
 
@@ -257,10 +252,8 @@ void KalkulatorMainFrame::InitializeModel() {
       "cell", std::make_shared<LispExecutionContextCellReference>(_document));
 
   auto cell_range = std::make_shared<LispExecutionContextCellRange>(_document);
-  _execution_context.add_function(
-      "cell_range", cell_range);
-  _execution_context.add_function(
-      "cell-range", cell_range);
+  _execution_context.add_function("cell_range", cell_range);
+  _execution_context.add_function("cell-range", cell_range);
 
   _sys_colors = std::make_shared<KalkulatorSystemColors>();
 
@@ -450,8 +443,7 @@ bool KalkulatorMainFrame::PermitLoseChanges() {
     if (wxMessageBox(
             wxT("Current content has not been saved. Your changes will "
                 "be lost. Proceed?"),
-            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this)
-        == wxNO)
+            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
       return false;
   }
 
@@ -490,7 +482,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   TableWorkbookFile file;
 
   try {
-    std::string file_path((const char *) openFileDialog.GetPath());
+    std::string file_path((const char *)openFileDialog.GetPath());
     file.open(file_path);
     _document->set_file_path("");
     file.read(_document);
@@ -531,7 +523,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  SaveDocument((const char *) saveFileDialog.GetPath());
+  SaveDocument((const char *)saveFileDialog.GetPath());
 }
 
 void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
@@ -590,10 +582,11 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     break;
 
   case FORMULA_CANCEL: {
-    if (_text_control_formula->IsModified() && wxMessageBox(wxT("Current content has not been applied. Your changes will "
-                                                                "be lost. Proceed?"),
-                                                            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this)
-            == wxYES) {
+    if (_text_control_formula->IsModified() &&
+        wxMessageBox(
+            wxT("Current content has not been applied. Your changes will "
+                "be lost. Proceed?"),
+            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxYES) {
       _table_control->SetFocus();
 
       std::optional<Location> location =
@@ -732,7 +725,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
   int row;
   int col;
 
-  std::string input{(const char *) raw_input};
+  std::string input{(const char *)raw_input};
 
   std::regex exp{"(\\d+) (\\d+)"};
   std::smatch sm;
