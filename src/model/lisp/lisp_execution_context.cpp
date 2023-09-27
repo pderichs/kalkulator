@@ -61,6 +61,8 @@ LispExecutionContext::LispExecutionContext() : _scope(), _functions() {
   _scope["nil"] = LispCommonValues::none_value();
   _scope["true"] = LispCommonValues::true_value();
   _scope["false"] = LispCommonValues::false_value();
+  _scope["EPSILON"] =
+      LispValueFactory::new_double(std::numeric_limits<LispValue::DoubleType>::epsilon());
 
   // Prepare functions
   _functions["+"] = std::make_shared<LispExecutionContextAddition>();
