@@ -44,12 +44,11 @@ conditions on their websites:
 
 ## TODO List
 
-- REFA: Redesign/streamline function execution process
-- FEAT: Lisp is-none
 - FEAT: Lisp Support for variables (setq)
 - FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon()) (could be a variable in a default scope)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add possibility to add or remove sheets
+- FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Multiple cell selection
 - FEAT: Replace
@@ -57,7 +56,6 @@ conditions on their websites:
 - FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
     - @ x y (goto cell)
     - ...
-- FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
 - FEAT: Add repl for lisp
@@ -75,6 +73,7 @@ conditions on their websites:
 
 ## DONE
 
+- FEAT: Lisp is-none
 - FEAT: Lisp log(arithm)
 - FEAT: Lisp pow
 - FEAT: Lisp sqrt

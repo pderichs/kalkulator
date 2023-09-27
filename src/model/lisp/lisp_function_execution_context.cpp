@@ -73,7 +73,9 @@ LispValuePtrVector LispFunctionExecutionContext::execute_functions(
   LispValuePtrVector result;
 
   for (const auto &param : params) {
-    result.push_back(execute_if_required(param, execution_context, context_param));
+    result.push_back(execute_if_required(param,
+                                         execution_context,
+                                         context_param));
   }
 
   return result;

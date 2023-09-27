@@ -23,6 +23,7 @@
 
 #include "lisp_value.h"
 #include "lisp_value_ptr.h"
+#include "lisp_common_values.h"
 
 class LispFunctionExecutionContext;
 
@@ -44,7 +45,10 @@ public:
                     const LispFunctionExecutionContextPtr &func,
                     bool override = false);
 
-  LispValuePtrVector extract_scope_variables(const LispValuePtrVector& params) const;
+  void add_variable(const std::string &name,
+                    LispValuePtr value = LispCommonValues::none_value());
+
+  LispValuePtrVector extract_scope_variables(const LispValuePtrVector &params) const;
 
 private:
   LispScopeMap _scope;

@@ -51,6 +51,7 @@
 #include "lisp_execution_context_xor.h"
 #include "lisp_value.h"
 #include "lisp_value_ptr.h"
+#include "lisp_execution_context_set_var.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -96,6 +97,8 @@ LispExecutionContext::LispExecutionContext() : _scope(), _functions() {
   _functions["pow"] = std::make_shared<LispExecutionContextPow>();
   _functions["log"] = std::make_shared<LispExecutionContextLog>();
   _functions["is-none"] = std::make_shared<LispExecutionContextIsNone>();
+  // SetVar needs writable access to execution context to update the scope.
+  _functions["set-var"] = std::make_shared<LispExecutionContextSetVar>(this);
 }
 
 LispValuePtr
@@ -162,4 +165,9 @@ LispValuePtrVector LispExecutionContext::extract_scope_variables(
   }
 
   return result;
+}
+
+void LispExecutionContext::add_variable(const std::string &name,
+                                        LispValuePtr value) {
+  _scope[name] = value;
 }

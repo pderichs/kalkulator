@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef LISP_EXECUTION_CONTEXT_FLOOR_INCLUDED
-#define LISP_EXECUTION_CONTEXT_FLOOR_INCLUDED
+#ifndef LISP_EXECUTION_CONTEXT_SET_VAR_H
+#define LISP_EXECUTION_CONTEXT_SET_VAR_H
 
 #include "lisp_execution_context_error.h"
 #include "lisp_function_execution_context.h"
@@ -25,10 +25,17 @@
 #include "lisp_value_factory.h"
 #include <cmath>
 
-class LispExecutionContextFloor : public LispFunctionExecutionContext {
+class LispExecutionContextSetVar : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextFloor() = default;
-  ~LispExecutionContextFloor() override = default;
+  LispExecutionContextSetVar(LispExecutionContext *modifiable_execution_context)
+      : _modifiable_execution_context(nullptr) {
+    _modifiable_execution_context = modifiable_execution_context;
+  }
+  ~LispExecutionContextSetVar() override = default;
+
+  // Delete copy constructor and assignment operator
+  LispExecutionContextSetVar(const LispExecutionContextSetVar &other) = delete;
+  LispExecutionContextSetVar &operator=(const LispExecutionContextSetVar &other) = delete;
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
@@ -36,16 +43,22 @@ public:
     LispValuePtrVector params =
         extract_and_execute_params(func, execution_context, context_param);
 
-    if (params.size() != 1) {
+    if (params.size() != 2) {
       return LispCommonValues::error_parameter_count();
     }
 
-    if (!params[0]->is_number()) {
+    if (!params[0]->is_identifier()) {
       return LispCommonValues::error_parameter();
     }
 
-    return LispValueFactory::new_double(std::floor(params[0]->to_double()));
+    _modifiable_execution_context->add_variable(params[0]->string(), params[1]);
+
+    // Return the assigned value
+    return params[1];
   }
+
+private:
+  LispExecutionContext *_modifiable_execution_context;
 };
 
-#endif
+#endif //LISP_EXECUTION_CONTEXT_SET_VAR_H
