@@ -18,8 +18,6 @@
 
 #include "lisp_test_tools.h"
 #include "mock_function_context.h"
-#include "model/lisp/lisp_parser.h"
-#include "model/lisp/lisp_value_parser.h"
 #include "gtest/gtest.h"
 
 TEST(LispSetVarTests, SetVarTest1) {
@@ -29,76 +27,13 @@ TEST(LispSetVarTests, SetVarTest1) {
       {"(set-var test1 -15.377)", LispValueFactory::new_double(-15.377)},
       {"(set-var test1 18.847)", LispValueFactory::new_double(18.847)},
       {"(set-var test1 \"Hello\")", LispValueFactory::new_string("Hello")},
+      {"(set-var test1 \"Hello\")", LispValueFactory::new_string("Hello")},
+      {"(set-var 1 \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(set-var)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(set-var hello)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(set-var hello 1 2)", LispValueFactory::new_error("#PARAMCOUNTERR")},
   };
 
   return execute_lisp_tests(tests, "set-var");
-}
-
-TEST(LispSetVarTests, SetVarDoesNotAcceptWrongParameterFormat) {
-  LispParser parser("(set-var 1 \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
-}
-
-TEST(LispSetVarTests, SetVarDoesNotAcceptWrongParameterCountLess) {
-  LispParser parser("(set-var)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispSetVarTests, SetVarDoesNotAcceptWrongParameterCountOne) {
-  LispParser parser("(set-var hello)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispSetVarTests, SetVarDoesNotAcceptWrongParameterCountMore) {
-  LispParser parser("(set-var hello 1 2)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
 }
 

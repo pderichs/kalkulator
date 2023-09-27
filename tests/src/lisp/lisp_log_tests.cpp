@@ -16,11 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "model/lisp/lisp_execution_context.h"
 #include "model/lisp/lisp_execution_context_error.h"
-#include "model/lisp/lisp_function_execution_context.h"
-#include "model/lisp/lisp_parser.h"
-#include "model/lisp/lisp_value_parser.h"
 #include "gtest/gtest.h"
 #include "lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
@@ -31,58 +27,11 @@ TEST(LispLogTests, LogTest1) {
       {"(log 5)", LispValueFactory::new_double(std::log(5))},
       {"(log 15.377)", LispValueFactory::new_double(std::log(15.377))},
       {"(log 18.847)", LispValueFactory::new_double(std::log(18.847))},
+      {"(log 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(log)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(log \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
   };
 
   return execute_lisp_tests(tests, "log");
 }
 
-TEST(LispLogTests, LogDoesNotAcceptWrongParameterCountMore) {
-  LispParser parser("(log 1 \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispLogTests, LogDoesNotAcceptWrongParameterCountLess) {
-  LispParser parser("(log)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispLogTests, LogDoesNotAcceptWrongParameterFormat) {
-  LispParser parser("(log \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
-}

@@ -30,75 +30,12 @@ TEST(LispGreaterThanTests, GreaterThanTests1) {
      {"(> (+ 1 2) (+ 2 3))", LispCommonValues::false_value()},
      {"(> (+ 2 3) (+ 1 0))", LispCommonValues::true_value()},
      {"(> 1 1)", LispCommonValues::false_value()},
+     {"(> 19 -32 6)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+     {"(> 19)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+     {"(> \"Hello\" 1)", LispValueFactory::new_error("#PARAMERR")},
+     {"(> 1 \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
  };
 
  return execute_lisp_tests(tests, ">");
 }
 
-TEST(LispGreaterThanTests, GreaterThanFailsWithWrongParameterCountMoreParams) {
- LispParser parser("(> 19 -32 6)");
-
- LispTokens tokens;
- EXPECT_NO_THROW(tokens = parser.parse());
-
- LispValueParser value_parser(tokens);
-
- auto value = value_parser.next();
- EXPECT_TRUE(value);
-
- LispExecutionContext executor;
- LispValuePtr result = executor.execute(value, {});
-
- EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispGreaterThanTests, GreaterThanFailsWithWrongParameterCountLessParams) {
-  LispParser parser("(> 19)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispGreaterThanTests, GreaterThanFailsWithWrongParameterTypesFirst) {
-  LispParser parser("(> \"Hello\" 1)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
-}
-
-TEST(LispGreaterThanTests, GreaterThanFailsWithWrongParameterTypesSecond) {
-  LispParser parser("(> 1 \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
-}

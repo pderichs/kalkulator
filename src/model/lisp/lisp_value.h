@@ -38,6 +38,7 @@ enum LispValueType {
   LVT_BOOL = 5,
   LVT_INTEGER = 6,
   LVT_FUNCTION_DEFINITION = 7, // non native lisp function
+  LVT_ERROR = 8,
 };
 
 enum LispBool {
@@ -71,6 +72,7 @@ public:
   bool is_function_definition() const {
     return _type == LVT_FUNCTION_DEFINITION;
   }
+  bool is_error() const { return _type == LVT_ERROR; }
 
   DoubleType explicit_double_value() const {
     return std::any_cast<DoubleType>(_content);
@@ -194,13 +196,20 @@ public:
     }
 
     switch (_type) {
-    case LVT_NONE:return this->is_none() && other.is_none();
-    case LVT_BOOL:return boolean() == other.boolean();
+    case LVT_NONE:
+      return this->is_none() && other.is_none();
+    case LVT_BOOL:
+      return boolean() == other.boolean();
     case LVT_IDENTIFIER:
-    case LVT_STRING:return string() == other.string();
-    case LVT_LIST:return lists_equals(other);
-    case LVT_DOUBLE:return to_double() == other.to_double();
-    case LVT_INTEGER:return to_integer() == other.to_integer();
+    case LVT_STRING:
+    case LVT_ERROR:
+      return string() == other.string();
+    case LVT_LIST:
+      return lists_equals(other);
+    case LVT_DOUBLE:
+      return to_double() == other.to_double();
+    case LVT_INTEGER:
+      return to_integer() == other.to_integer();
     default:
       throw std::runtime_error(
           "Equality check is not implemented for this type");

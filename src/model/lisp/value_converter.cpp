@@ -125,6 +125,8 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
     } else {
       return "FALSE";
     }
+  } else if (value->is_error()) {
+    return value->string();
   }
 
   std::stringstream ss;

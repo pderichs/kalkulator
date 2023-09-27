@@ -16,11 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "model/lisp/lisp_execution_context.h"
 #include "model/lisp/lisp_execution_context_error.h"
-#include "model/lisp/lisp_function_execution_context.h"
-#include "model/lisp/lisp_parser.h"
-#include "model/lisp/lisp_value_parser.h"
 #include "gtest/gtest.h"
 #include "lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
@@ -32,75 +28,11 @@ TEST(LispPowTests, PowTest1) {
       {"(pow 5 1)", LispValueFactory::new_double(std::pow(5, 1))},
       {"(pow -15.377 3)", LispValueFactory::new_double(std::pow(-15.377, 3))},
       {"(pow 18.847 15)", LispValueFactory::new_double(std::pow(18.847, 15))},
+      {"(pow \"Hello\" 1)", LispValueFactory::new_error("#PARAMERR")},
+      {"(pow 1 \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(pow)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(pow 10)", LispValueFactory::new_error("#PARAMCOUNTERR")},
   };
 
   return execute_lisp_tests(tests, "pow");
-}
-
-TEST(LispPowTests, PowDoesNotAcceptWrongParameterFormatFirst) {
-  LispParser parser("(pow \"Hello\" 1)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
-}
-
-TEST(LispPowTests, PowDoesNotAcceptWrongParameterFormatSecond) {
-  LispParser parser("(pow 1 \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
-}
-
-TEST(LispPowTests, PowDoesNotAcceptWrongParameterCountLess) {
-  LispParser parser("(pow)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispPowTests, PowDoesNotAcceptWrongParameterCountLessJustOne) {
-  LispParser parser("(pow 10)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
 }

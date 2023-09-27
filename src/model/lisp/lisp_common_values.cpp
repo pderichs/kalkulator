@@ -20,11 +20,11 @@
 #include "lisp_value_factory.h"
 
 LispValuePtr LispCommonValues::_error_parameter_count =
-    LispValueFactory::new_string("#PARAMCOUNTERR");
+    LispValueFactory::new_error("#PARAMCOUNTERR");
 LispValuePtr LispCommonValues::_error_parameter =
-    LispValueFactory::new_string("#PARAMERR");
+    LispValueFactory::new_error("#PARAMERR");
 LispValuePtr LispCommonValues::_error_circular_ref =
-    LispValueFactory::new_string("#CIRCULARREF");
+    LispValueFactory::new_error("#CIRCULARREF");
 LispValuePtr LispCommonValues::_true_value =
     LispValueFactory::new_bool(LISP_BOOL_TRUE);
 LispValuePtr LispCommonValues::_false_value =

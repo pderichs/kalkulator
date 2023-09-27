@@ -18,11 +18,8 @@
 
 #include "lisp_test_tools.h"
 #include "model/lisp/lisp_execution_context_error.h"
-#include "model/lisp/lisp_function_execution_context.h"
-#include "model/lisp/lisp_parser.h"
 #include "model/lisp/lisp_value.h"
 #include "model/lisp/lisp_value_factory.h"
-#include "model/lisp/lisp_value_parser.h"
 #include "gtest/gtest.h"
 
 TEST(LispCosTests, CosTest1) {
@@ -31,58 +28,10 @@ TEST(LispCosTests, CosTest1) {
       {"(cos 45)", LispValueFactory::new_double(std::cos(45))},
       {"(cos 15)", LispValueFactory::new_double(std::cos(15))},
       {"(cos 18)", LispValueFactory::new_double(std::cos(18))},
+      {"(cos 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(cos)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(cos \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
   };
 
   return execute_lisp_tests(tests, "cos");
-}
-
-TEST(LispCosTests, CosDoesNotAcceptWrongParameterCountMore) {
-  LispParser parser("(cos 1 \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispCosTests, CosDoesNotAcceptWrongParameterCountLess) {
-  LispParser parser("(cos)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispCosTests, CosDoesNotAcceptWrongParameterFormat) {
-  LispParser parser("(cos \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
 }

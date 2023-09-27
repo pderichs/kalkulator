@@ -28,59 +28,10 @@ TEST(LispFloorTests, FloorTest1) {
       {"(floor -5)", LispValueFactory::new_double(std::floor(-5))},
       {"(floor -15.377)", LispValueFactory::new_double(std::floor(-15.377))},
       {"(floor 18.847)", LispValueFactory::new_double(std::floor(18.847))},
+      {"(floor 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(floor)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(floor \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
   };
 
   return execute_lisp_tests(tests, "floor");
 }
-
-TEST(LispFloorTests, FloorDoesNotAcceptWrongParameterCountMore) {
-  LispParser parser("(floor 1 \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispFloorTests, FloorDoesNotAcceptWrongParameterCountLess) {
-  LispParser parser("(floor)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispFloorTests, FloorDoesNotAcceptWrongParameterFormat) {
-  LispParser parser("(floor \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
-}
-

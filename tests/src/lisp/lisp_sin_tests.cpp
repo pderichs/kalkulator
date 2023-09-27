@@ -31,58 +31,10 @@ TEST(LispSinTests, SinTest1) {
       {"(sin 45)", LispValueFactory::new_double(std::sin(45))},
       {"(sin 15)", LispValueFactory::new_double(std::sin(15))},
       {"(sin 18)", LispValueFactory::new_double(std::sin(18))},
+      {"(sin 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(sin)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(sin \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
   };
 
   return execute_lisp_tests(tests, "sin");
-}
-
-TEST(LispSinTests, SinDoesNotAcceptWrongParameterCountMore) {
-  LispParser parser("(sin 1 \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispSinTests, SinDoesNotAcceptWrongParameterCountLess) {
-  LispParser parser("(sin)");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMCOUNTERR");
-}
-
-TEST(LispSinTests, SinDoesNotAcceptWrongParameterFormat) {
-  LispParser parser("(sin \"Hello\")");
-
-  LispTokens tokens;
-  EXPECT_NO_THROW(tokens = parser.parse());
-
-  LispValueParser value_parser(tokens);
-
-  auto value = value_parser.next();
-  EXPECT_TRUE(value);
-
-  LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
-
-  EXPECT_EQ(*result, "#PARAMERR");
 }
