@@ -28,9 +28,9 @@ TEST(LispFloorTests, FloorTest1) {
       {"(floor -5)", LispValueFactory::new_double(std::floor(-5))},
       {"(floor -15.377)", LispValueFactory::new_double(std::floor(-15.377))},
       {"(floor 18.847)", LispValueFactory::new_double(std::floor(18.847))},
-      {"(floor 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(floor)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(floor \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(floor 1 \"Hello\")", LispCommonValues::error_parameter_count()},
+      {"(floor)", LispCommonValues::error_parameter_count()},
+      {"(floor \"Hello\")", LispCommonValues::error_parameter()},
   };
 
   return execute_lisp_tests(tests, "floor");

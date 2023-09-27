@@ -28,9 +28,9 @@ TEST(LispCeilTests, CeilTest1) {
       {"(ceil -5)", LispValueFactory::new_double(std::ceil(-5))},
       {"(ceil -15.377)", LispValueFactory::new_double(std::ceil(-15.377))},
       {"(ceil 18.847)", LispValueFactory::new_double(std::ceil(18.847))},
-      {"(ceil 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(ceil)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(ceil \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(ceil 1 \"Hello\")", LispCommonValues::error_parameter_count()},
+      {"(ceil)", LispCommonValues::error_parameter_count()},
+      {"(ceil \"Hello\")", LispCommonValues::error_parameter()},
   };
 
   return execute_lisp_tests(tests, "ceil");

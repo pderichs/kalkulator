@@ -31,9 +31,9 @@ TEST(LispSinTests, SinTest1) {
       {"(sin 45)", LispValueFactory::new_double(std::sin(45))},
       {"(sin 15)", LispValueFactory::new_double(std::sin(15))},
       {"(sin 18)", LispValueFactory::new_double(std::sin(18))},
-      {"(sin 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(sin)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(sin \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(sin 1 \"Hello\")", LispCommonValues::error_parameter_count()},
+      {"(sin)", LispCommonValues::error_parameter_count()},
+      {"(sin \"Hello\")", LispCommonValues::error_parameter()},
   };
 
   return execute_lisp_tests(tests, "sin");

@@ -21,6 +21,7 @@
 #include "model/lisp/lisp_value.h"
 #include "model/lisp/lisp_value_factory.h"
 #include "gtest/gtest.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispCosTests, CosTest1) {
   std::map<std::string, LispValuePtr> tests = {
@@ -28,9 +29,9 @@ TEST(LispCosTests, CosTest1) {
       {"(cos 45)", LispValueFactory::new_double(std::cos(45))},
       {"(cos 15)", LispValueFactory::new_double(std::cos(15))},
       {"(cos 18)", LispValueFactory::new_double(std::cos(18))},
-      {"(cos 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(cos)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(cos \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(cos 1 \"Hello\")", LispCommonValues::error_parameter_count()},
+      {"(cos)", LispCommonValues::error_parameter_count()},
+      {"(cos \"Hello\")", LispCommonValues::error_parameter()},
   };
 
   return execute_lisp_tests(tests, "cos");

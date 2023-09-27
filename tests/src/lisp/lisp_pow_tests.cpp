@@ -20,6 +20,7 @@
 #include "gtest/gtest.h"
 #include "lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispPowTests, PowTest1) {
   std::map<std::string, LispValuePtr> tests = {
@@ -28,10 +29,10 @@ TEST(LispPowTests, PowTest1) {
       {"(pow 5 1)", LispValueFactory::new_double(std::pow(5, 1))},
       {"(pow -15.377 3)", LispValueFactory::new_double(std::pow(-15.377, 3))},
       {"(pow 18.847 15)", LispValueFactory::new_double(std::pow(18.847, 15))},
-      {"(pow \"Hello\" 1)", LispValueFactory::new_error("#PARAMERR")},
-      {"(pow 1 \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
-      {"(pow)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(pow 10)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(pow \"Hello\" 1)", LispCommonValues::error_parameter()},
+      {"(pow 1 \"Hello\")", LispCommonValues::error_parameter()},
+      {"(pow)", LispCommonValues::error_parameter_count()},
+      {"(pow 10)", LispCommonValues::error_parameter_count()},
   };
 
   return execute_lisp_tests(tests, "pow");

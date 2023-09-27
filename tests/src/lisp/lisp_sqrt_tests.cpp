@@ -20,6 +20,7 @@
 #include "gtest/gtest.h"
 #include "lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispSqrtTests, SqrtTest1) {
   std::map<std::string, LispValuePtr> tests = {
@@ -27,9 +28,9 @@ TEST(LispSqrtTests, SqrtTest1) {
       {"(sqrt 5)", LispValueFactory::new_double(std::sqrt(5))},
       {"(sqrt 15.377)", LispValueFactory::new_double(std::sqrt(15.377))},
       {"(sqrt 18.847)", LispValueFactory::new_double(std::sqrt(18.847))},
-      {"(sqrt 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(sqrt)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(sqrt \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(sqrt 1 \"Hello\")", LispCommonValues::error_parameter_count()},
+      {"(sqrt)", LispCommonValues::error_parameter_count()},
+      {"(sqrt \"Hello\")", LispCommonValues::error_parameter()},
   };
 
   return execute_lisp_tests(tests, "sqrt");

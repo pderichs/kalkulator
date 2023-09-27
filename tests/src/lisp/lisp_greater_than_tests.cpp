@@ -30,10 +30,10 @@ TEST(LispGreaterThanTests, GreaterThanTests1) {
      {"(> (+ 1 2) (+ 2 3))", LispCommonValues::false_value()},
      {"(> (+ 2 3) (+ 1 0))", LispCommonValues::true_value()},
      {"(> 1 1)", LispCommonValues::false_value()},
-     {"(> 19 -32 6)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-     {"(> 19)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-     {"(> \"Hello\" 1)", LispValueFactory::new_error("#PARAMERR")},
-     {"(> 1 \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+     {"(> 19 -32 6)", LispCommonValues::error_parameter_count()},
+     {"(> 19)", LispCommonValues::error_parameter_count()},
+     {"(> \"Hello\" 1)", LispCommonValues::error_parameter()},
+     {"(> 1 \"Hello\")", LispCommonValues::error_parameter()},
  };
 
  return execute_lisp_tests(tests, ">");

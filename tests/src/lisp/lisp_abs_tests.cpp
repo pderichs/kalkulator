@@ -20,6 +20,7 @@
 #include "gtest/gtest.h"
 #include "lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispAbsTests, AbsTest1) {
   std::map<std::string, LispValuePtr> tests = {
@@ -27,9 +28,9 @@ TEST(LispAbsTests, AbsTest1) {
       {"(abs -5)", LispValueFactory::new_double(std::abs(-5))},
       {"(abs -15.377)", LispValueFactory::new_double(std::abs(-15.377))},
       {"(abs 18.847)", LispValueFactory::new_double(std::abs(18.847))},
-      {"(abs 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(abs)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(abs \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(abs 1 \"Hello\")", LispCommonValues::error_parameter_count()},
+      {"(abs)", LispCommonValues::error_parameter_count()},
+      {"(abs \"Hello\")", LispCommonValues::error_parameter()},
   };
 
   return execute_lisp_tests(tests, "abs");

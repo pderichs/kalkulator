@@ -20,6 +20,7 @@
 #include "gtest/gtest.h"
 #include "lisp/lisp_value_factory.h"
 #include "lisp_test_tools.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispLogTests, LogTest1) {
   std::map<std::string, LispValuePtr> tests = {
@@ -27,9 +28,9 @@ TEST(LispLogTests, LogTest1) {
       {"(log 5)", LispValueFactory::new_double(std::log(5))},
       {"(log 15.377)", LispValueFactory::new_double(std::log(15.377))},
       {"(log 18.847)", LispValueFactory::new_double(std::log(18.847))},
-      {"(log 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(log)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(log \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(log 1 \"Hello\")", LispCommonValues::error_parameter_count()},
+      {"(log)", LispCommonValues::error_parameter_count()},
+      {"(log \"Hello\")", LispCommonValues::error_parameter()},
   };
 
   return execute_lisp_tests(tests, "log");

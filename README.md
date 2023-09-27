@@ -50,7 +50,6 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon()) (could be a variable in a default scope)
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Add possibility to add or remove sheets
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
@@ -78,6 +77,7 @@ conditions on their websites:
 
 ## DONE
 
+- FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon()) (could be a variable in a default scope)
 - FEAT: Lisp Support for variables (set-var)
 - FEAT: Lisp is-none
 - FEAT: Lisp log(arithm)

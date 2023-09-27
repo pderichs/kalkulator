@@ -28,10 +28,10 @@ TEST(LispSetVarTests, SetVarTest1) {
       {"(set-var test1 18.847)", LispValueFactory::new_double(18.847)},
       {"(set-var test1 \"Hello\")", LispValueFactory::new_string("Hello")},
       {"(set-var test1 \"Hello\")", LispValueFactory::new_string("Hello")},
-      {"(set-var 1 \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
-      {"(set-var)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(set-var hello)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(set-var hello 1 2)", LispValueFactory::new_error("#PARAMCOUNTERR")},
+      {"(set-var 1 \"Hello\")", LispCommonValues::error_parameter()},
+      {"(set-var)", LispCommonValues::error_parameter_count()},
+      {"(set-var hello)", LispCommonValues::error_parameter_count()},
+      {"(set-var hello 1 2)", LispCommonValues::error_parameter_count()},
   };
 
   return execute_lisp_tests(tests, "set-var");

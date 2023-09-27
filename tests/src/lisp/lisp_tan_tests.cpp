@@ -21,6 +21,7 @@
 #include "model/lisp/lisp_value.h"
 #include "model/lisp/lisp_value_factory.h"
 #include "gtest/gtest.h"
+#include "lisp/lisp_common_values.h"
 
 TEST(LispTanTests, TanTest1) {
   std::map<std::string, LispValuePtr> tests = {
@@ -28,9 +29,9 @@ TEST(LispTanTests, TanTest1) {
       {"(tan 45)", LispValueFactory::new_double(std::tan(45))},
       {"(tan 15)", LispValueFactory::new_double(std::tan(15))},
       {"(tan 18)", LispValueFactory::new_double(std::tan(18))},
-      {"(tan 1 \"Hello\")", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(tan)", LispValueFactory::new_error("#PARAMCOUNTERR")},
-      {"(tan \"Hello\")", LispValueFactory::new_error("#PARAMERR")},
+      {"(tan 1 \"Hello\")", LispCommonValues::error_parameter_count()},
+      {"(tan)", LispCommonValues::error_parameter_count()},
+      {"(tan \"Hello\")", LispCommonValues::error_parameter()},
   };
 
   return execute_lisp_tests(tests, "tan");
