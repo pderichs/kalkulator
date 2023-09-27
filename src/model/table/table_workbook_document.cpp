@@ -21,6 +21,7 @@
 #include "table_column_definition.h"
 #include "table_sheet.h"
 #include <memory>
+#include <algorithm>
 
 TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink)
     : _path(), _changed(false), _sheets(), _event_sink(event_sink),
@@ -359,4 +360,21 @@ TableWorkbookDocument::get_current_cell_format() const {
 void TableWorkbookDocument::add_update_listener(const Location &listener,
                                                 const Location &listening_to) {
   _current_sheet->add_update_listener(listener, listening_to);
+}
+
+void TableWorkbookDocument::remove_current_sheet() {
+  if (_sheets.size() == 1) {
+    // Do not remove last sheet (for now - TODO)
+    return;
+  }
+
+  auto it = std::find(_sheets.begin(), _sheets.end(), _current_sheet);
+  if (it == _sheets.end()) {
+    // Should never happen
+    return;
+  }
+
+  _sheets.erase(it);
+  _current_sheet = _sheets[0];
+  _changed = true;
 }

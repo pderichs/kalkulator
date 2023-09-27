@@ -98,6 +98,8 @@ private:
   void OnResizeRow(wxCommandEvent &event);
   void OnGotoCell(wxCommandEvent &event);
   void OnFormatCell(wxCommandEvent &event);
+  void OnAddSheet(wxCommandEvent &WXUNUSED(event));
+  void OnRemoveSheet(wxCommandEvent &WXUNUSED(event));
 
   void BindEvents();
   void CreateToolbar();
@@ -150,6 +152,8 @@ enum {
   ID_ResizeRow,
   ID_GotoCell,
   ID_FormatCell,
+  ID_AddSheet,
+  ID_RemoveSheet
 };
 
 enum { ID_SHEET_SELECTION_CMB = wxID_HIGHEST + 1 };
@@ -291,6 +295,14 @@ void KalkulatorMainFrame::InitializeMenu() {
 
   menuFile->Append(wxID_EXIT);
 
+  auto *menuSheets = new wxMenu();
+  item = new wxMenuItem(menuSheets, ID_AddSheet, "Add Sheet...",
+                        "Adds a new sheet to the workbook");
+  menuSheets->Append(item);
+  item = new wxMenuItem(menuSheets, ID_RemoveSheet, "Remove Sheet",
+                        "Removes the current sheet from the workbook");
+  menuSheets->Append(item);
+
   auto *menuTable = new wxMenu();
   item = new wxMenuItem(menuTable, ID_ResizeColumn, "Resize column...",
                         "Provides possibility to change current column width.");
@@ -316,6 +328,7 @@ void KalkulatorMainFrame::InitializeMenu() {
 
   auto *menuBar = new wxMenuBar();
   menuBar->Append(menuFile, "&File");
+  menuBar->Append(menuSheets, "&Sheets");
   menuBar->Append(menuTable, "&Table");
   menuBar->Append(menuHelp, "&Help");
   SetMenuBar(menuBar);
@@ -388,6 +401,8 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnResizeRow, this, ID_ResizeRow);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnGotoCell, this, ID_GotoCell);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnFormatCell, this, ID_FormatCell);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnAddSheet, this, ID_AddSheet);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRemoveSheet, this, ID_RemoveSheet);
 
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
@@ -761,4 +776,20 @@ void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
 
     Refresh();
   }
+}
+
+void KalkulatorMainFrame::OnAddSheet(wxCommandEvent &WXUNUSED(event)) {
+  wxString raw_input =
+      wxGetTextFromUser(wxT("Sheet Name:"), wxT("Add sheet"), "");
+
+  if (raw_input.IsEmpty()) {
+    return;
+  }
+
+  _document->add_sheet(static_cast<const char*>(raw_input));
+  UpdateSheetCombo();
+}
+
+void KalkulatorMainFrame::OnRemoveSheet(wxCommandEvent &WXUNUSED(event)) {
+  _document->remove_current_sheet();
 }
