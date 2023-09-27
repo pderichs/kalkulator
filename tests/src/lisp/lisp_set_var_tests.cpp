@@ -85,3 +85,20 @@ TEST(LispSetVarTests, SetVarDoesNotAcceptWrongParameterCountOne) {
   EXPECT_EQ(*result, "#PARAMCOUNTERR");
 }
 
+TEST(LispSetVarTests, SetVarDoesNotAcceptWrongParameterCountMore) {
+  LispParser parser("(set-var hello 1 2)");
+
+  LispTokens tokens;
+  EXPECT_NO_THROW(tokens = parser.parse());
+
+  LispValueParser value_parser(tokens);
+
+  auto value = value_parser.next();
+  EXPECT_TRUE(value);
+
+  LispExecutionContext executor;
+  LispValuePtr result = executor.execute(value, {});
+
+  EXPECT_EQ(*result, "#PARAMCOUNTERR");
+}
+
