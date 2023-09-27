@@ -175,3 +175,12 @@ void LispExecutionContext::add_variable(const std::string &name,
                                         LispValuePtr value) {
   _scope[name] = value;
 }
+
+LispValuePtr LispExecutionContext::scope_variable(const std::string& name) const {
+  auto it = _scope.find(name);
+  if (it == _scope.end()) {
+    return LispCommonValues::none_value();
+  }
+
+  return it->second;
+}

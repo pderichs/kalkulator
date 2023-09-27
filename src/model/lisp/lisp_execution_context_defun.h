@@ -37,8 +37,7 @@ public:
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param) override {
-    LispValuePtrVector params =
-        extract_and_execute_params(func, execution_context, context_param);
+    LispValuePtrVector params = extract_params_from_list(func);
 
     /*
      * (defun hello-world (name) "Simple function" (message-box "Hello, " name))

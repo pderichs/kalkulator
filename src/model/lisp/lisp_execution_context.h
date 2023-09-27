@@ -50,6 +50,8 @@ public:
 
   LispValuePtrVector extract_scope_variables(const LispValuePtrVector &params) const;
 
+  LispValuePtr scope_variable(const std::string& name) const;
+
 private:
   LispScopeMap _scope;
   LispFunctionMap _functions;
