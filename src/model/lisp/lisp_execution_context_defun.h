@@ -16,24 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef LISP_EXECUTION_CONTEXT_SET_VAR_H
-#define LISP_EXECUTION_CONTEXT_SET_VAR_H
+#ifndef LISP_EXECUTION_CONTEXT_DEFUN_H
+#define LISP_EXECUTION_CONTEXT_DEFUN_H
 
 #include "lisp_execution_context_error.h"
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
-#include <cmath>
 
-class LispExecutionContextSetVar : public LispFunctionExecutionContext {
+class LispExecutionContextDefun : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextSetVar(LispExecutionContext *modifiable_execution_context)
+  LispExecutionContextDefun(LispExecutionContext *modifiable_execution_context)
       : _modifiable_execution_context(modifiable_execution_context) {}
-  ~LispExecutionContextSetVar() override = default;
+  ~LispExecutionContextDefun() override = default;
 
   // Delete copy constructor and assignment operator
-  LispExecutionContextSetVar(const LispExecutionContextSetVar &other) = delete;
-  LispExecutionContextSetVar &operator=(const LispExecutionContextSetVar &other) = delete;
+  LispExecutionContextDefun(const LispExecutionContextDefun &other) = delete;
+  LispExecutionContextDefun &operator=(const LispExecutionContextDefun &other) = delete;
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
@@ -41,7 +40,10 @@ public:
     LispValuePtrVector params =
         extract_and_execute_params(func, execution_context, context_param);
 
-    if (params.size() != 2) {
+    /*
+     * (defun hello-world (name) "Simple function" (message-box "Hello, " name))
+     */
+    if (params.size() != 4) {
       return LispCommonValues::error_parameter_count();
     }
 
@@ -49,14 +51,39 @@ public:
       return LispCommonValues::error_parameter();
     }
 
-    _modifiable_execution_context->add_variable(params[0]->string(), params[1]);
+    if (!params[1]->is_list()) {
+      return LispCommonValues::error_parameter();
+    }
 
-    // Return the assigned value
-    return params[1];
+    if (!params[2]->is_string()) {
+      return LispCommonValues::error_parameter();
+    }
+
+    if (!params[3]->is_list()) {
+      return LispCommonValues::error_parameter();
+    }
+
+    LispFunctionDefinition def;
+    def.name = params[0]->string();
+    def.comment = params[2]->string();
+    def.body = params[3]->list();
+
+    for (const auto &param : params[1]->list()) {
+      if (!param->is_identifier()) {
+        return LispCommonValues::error_parameter();
+      }
+
+      def.parameter_definitions.push_back(param->string());
+    }
+
+    auto function_def = LispValueFactory::new_function_definition(def);
+    _modifiable_execution_context->add_variable(def.name, function_def);
+
+    return function_def;
   }
 
 private:
   LispExecutionContext *_modifiable_execution_context;
 };
 
-#endif //LISP_EXECUTION_CONTEXT_SET_VAR_H
+#endif //LISP_EXECUTION_CONTEXT_DEFUN_H

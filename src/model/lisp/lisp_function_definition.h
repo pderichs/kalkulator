@@ -29,10 +29,12 @@
 // If used for closure definitions, name is empty.
 struct LispFunctionDefinition {
   std::string name;
+  std::string comment;
   StringVector parameter_definitions;
   LispValuePtrVector body;
 
-  LispFunctionDefinition() : name(), parameter_definitions(), body() {}
+  LispFunctionDefinition()
+      : name(), comment(), parameter_definitions(), body() {}
 };
 
 #endif
