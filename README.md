@@ -29,6 +29,12 @@ Install dependencies in Debian:
   cmake --build . --target all -j 5
 ```
 
+### Run Tests
+
+```sh 
+  bin/kalkulator_tests
+```
+
 ## License
 
 This project is licensed under the [GNU GENERAL PUBLIC LICENSE v3](https://www.gnu.org/licenses/gpl-3.0.txt).

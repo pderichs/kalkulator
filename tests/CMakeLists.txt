@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(Kalkulator_tests LANGUAGES CXX)
+project(kalkulator_tests LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 add_subdirectory(lib/googletest)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${gmock_SOURCE_DIR}/include ${gmock_SOURCE_DIR})
