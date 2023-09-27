@@ -125,3 +125,21 @@ TEST(LispDefunTests, DefunTestFailsIfFunctionBodyHasWrongFormat) {
   EXPECT_TRUE(result->is_error());
   EXPECT_EQ(result->string(), "#PARAMERR");
 }
+
+TEST(LispDefunTests, DefunTestFailsIfParameterCountIsWrong) {
+  LispParser parser("(defun)");
+
+  LispTokens tokens;
+  EXPECT_NO_THROW(tokens = parser.parse());
+
+  LispValueParser value_parser(tokens);
+
+  auto value = value_parser.next();
+  EXPECT_TRUE(value);
+
+  LispExecutionContext executor;
+  LispValuePtr result = executor.execute(value, {});
+
+  EXPECT_TRUE(result->is_error());
+  EXPECT_EQ(result->string(), "#PARAMCOUNTERR");
+}
