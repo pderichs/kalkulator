@@ -23,7 +23,6 @@
 #include "lisp_function_execution_context.h"
 #include "lisp_value.h"
 #include "lisp_value_factory.h"
-#include <cmath>
 
 class LispExecutionContextSetVar : public LispFunctionExecutionContext {
 public:
