@@ -37,6 +37,9 @@ public:
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param) override {
+    std::ignore = execution_context;
+    std::ignore = context_param;
+
     LispValuePtrVector params = extract_params_from_list(func);
 
     /*
