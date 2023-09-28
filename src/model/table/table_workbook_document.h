@@ -71,7 +71,8 @@ public:
   bool select_sheet_by_name(const std::string &sheet_name);
   TableSheetPtr find_sheet_by_name(const std::string &sheet_name) const;
 
-  std::optional<TableCellPtr> get_cell(const Location &location) const;
+  std::optional<TableCellPtr> get_cell(const Location &location,
+                                       const std::string &sheet_name = "") const;
   TableCellPtr get_current_cell() const;
   TableCellPtrVector get_range(const Location &from, const Location &to) const;
 

@@ -127,3 +127,29 @@ TEST(TableCellTests, CallToCellWithStringParameterAsColumn) {
   const auto &cell = *opt_cell;
   EXPECT_EQ(cell->visible_content(), "#PARAMERR");
 }
+
+TEST(TableCellTests, CellReferenceToOtherSheet) {
+  // Test setup
+  TestEventSink sink;
+  LispExecutionContext execution_context;
+  ValueConverter::set_execution_context(&execution_context);
+  TableWorkbookDocumentPtr document =
+      std::make_shared<TableWorkbookDocument>(&sink);
+  prepare_execution_context(&execution_context, document);
+
+  // Prepare second sheet
+  document->add_sheet("Testsheet");
+  document->select_sheet_by_name("Testsheet");
+  document->select_cell(Location(0, 1));
+  document->update_content_current_cell("42");
+
+  // Prepare formulas and cell content
+  document->select_cell(Location(0, 0));
+  document->update_content_current_cell("=(cell \"Testsheet\" 1 0)");
+
+  // Cell content must match source cell
+  const auto &opt_cell = document->get_cell(Location(0, 0));
+  EXPECT_TRUE(opt_cell);
+  const auto &cell = *opt_cell;
+  EXPECT_EQ(cell->visible_content(), "42");
+}

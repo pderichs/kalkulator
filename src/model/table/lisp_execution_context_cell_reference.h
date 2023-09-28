@@ -40,11 +40,25 @@ public:
     LispValuePtrVector params =
         extract_and_execute_params(func, execution_context, context_param);
 
-    if (params.size() != 2) {
+    if (params.size() < 2 || params.size() > 3) {
       return LispCommonValues::error_parameter_count();
     }
 
-    if (!params[0]->is_number() || !params[1]->is_number()) {
+    std::string sheet;
+    size_t row_index, col_index;
+
+    if (params[0]->is_string()) {
+      // We have a sheet reference
+      row_index = 1;
+      col_index = 2;
+
+      sheet = params[0]->string();
+    } else {
+      row_index = 0;
+      col_index = 1;
+    }
+
+    if (!params[row_index]->is_number() || !params[col_index]->is_number()) {
       return LispCommonValues::error_parameter();
     }
 
@@ -55,7 +69,8 @@ public:
     // within the spreadsheet calculation application.
     auto source_cell_location = std::any_cast<Location>(context_param);
 
-    auto referenced_cell_location = read_cell_location(params, 0, 1);
+    auto referenced_cell_location =
+        read_cell_location(params, row_index, col_index);
 
     if (source_cell_location == referenced_cell_location) {
       // This would be a circular reference - cancel operation
@@ -69,7 +84,7 @@ public:
     _workbook->add_update_listener(source_cell_location,
                                    referenced_cell_location);
 
-    auto opt_cell = _workbook->get_cell(referenced_cell_location);
+    auto opt_cell = _workbook->get_cell(referenced_cell_location, sheet);
     if (!opt_cell) {
       return LispValueFactory::new_none();
     }

@@ -40,7 +40,7 @@ TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
   return {};
 }
 
-void TableWorkbookDocument::update_cell_content(const TableSheetPtr& sheet,
+void TableWorkbookDocument::update_cell_content(const TableSheetPtr &sheet,
                                                 Location cell_location,
                                                 const std::string &content) {
   sheet->update_content(cell_location, content);
@@ -99,8 +99,16 @@ bool TableWorkbookDocument::move_cursor_right() {
 }
 
 std::optional<TableCellPtr>
-TableWorkbookDocument::get_cell(const Location &location) const {
-  TableSheetPtr sheet = _current_sheet;
+TableWorkbookDocument::get_cell(const Location &location,
+                                const std::string &sheet_name) const {
+  TableSheetPtr sheet;
+
+  if (sheet_name.empty()) {
+    sheet = _current_sheet;
+  } else {
+    sheet = table_sheet_by_name(sheet_name);
+  }
+
   return sheet->get_cell_by_location(location);
 }
 
