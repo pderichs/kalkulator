@@ -31,7 +31,7 @@ to apply your changes to the cell or `Esc` to abort.
 3. Move the cursor to cell row 1, col 0.
 4. Press F2 and enter `2`.
 5. Move the cursor to cell row 1, col 0.
-6. Press F2 and enter `The Answer to Life, the Unierse and Everything:`.
+6. Press F2 and enter `The Answer to Life, the Universe and Everything:`.
 7. In the menu bar select `Table -> Resize Column...`.
 8. Extend the column size to e.g. `300` to give more space for the text in cell 1, 0.
 9. Move the cursor to cell row 1, col 1.
