@@ -9,6 +9,32 @@ I have implemented a similar application in C before ("simplecalc"), but for usa
 application now. There are of course much more advanced and more sophisticated spread sheet applications out there -
 this has just been implemented for learning purpose and fun :)
 
+## How does it work?
+
+Start the application
+
+```sh 
+  bin/kalkulator
+```
+
+You can move the cell selection with your cursor keys or by using the mouse. Alternatively you can press `Ctrl+G` and
+enter the coordinates in the form `row column` to navigate to the cell with coordinates `row` and `col` (e.g. to
+navigate to cell with coordinates row 10 and column 20 you use `10 20`).
+
+Press `F2` to edit cell contents (this moves the cursor to the formula text field above the cells view). Press `Enter`
+to apply your changes to the cell or `Esc` to abort.
+
+### Sample
+
+1. Move the cursor to cell row 0, col 0.
+2. Press F2 and enter `40`.
+3. Move the cursor to cell row 1, col 0.
+4. Press F2 and enter `2`.
+5. Move the cursor to cell row 1, col 0.
+6. Press F2 and enter `The Answer to Life, the Unierse and Everything:`.
+7. Move the cursor to cell row 1, col 1.
+8. Press F2 and enter `=(+ (cell 0 0) (cell 1 0))`.
+
 ## Build
 
 Install dependencies in Debian:
