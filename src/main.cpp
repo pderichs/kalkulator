@@ -801,8 +801,8 @@ void KalkulatorMainFrame::OnRemoveSheet(wxCommandEvent &WXUNUSED(event)) {
 
 void KalkulatorMainFrame::OnSearch(wxCommandEvent &WXUNUSED(event)) {
   wxString raw_input =
-      wxGetTextFromUser(wxT("Sheet Name:"),
-                        wxT("Add sheet"),
+      wxGetTextFromUser(wxT("Search term:"),
+                        wxT("Search"),
                         _last_search_term);
 
   _last_search_term = raw_input;
