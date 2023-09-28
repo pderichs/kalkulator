@@ -1,0 +1,20 @@
+name: kalkulator_ci_gtest
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get install libwxgtk3.2-dev libsqlite3-dev
+      - name: Clean
+        run: cmake --build . --target clean
+      - name: Build
+        run: cmake --build . --target all
+      - name: Run Tests
+        run: /home/runner/work/kalkulator/bin/kalkulator_tests

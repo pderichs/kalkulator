@@ -50,7 +50,7 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
+- FEAT: Add github action for tests
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Multiple cell selection
 - FEAT: Replace
@@ -75,6 +75,7 @@ conditions on their websites:
 
 ## DONE
 
+- FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - FEAT: Add possibility to add or remove sheets
 - FEAT: defun (with newly added lambda support, this should be doable now)
 - FEAT: Lisp EPSILON (provide access to std::numeric_limits<double>::epsilon()) (could be a variable in a default scope)
