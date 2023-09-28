@@ -12,11 +12,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: sudo apt-get install build-essential libwxgtk3.0-gtk3-dev libsqlite3-dev
-      - name: Prerequisites
-        run: cmake ${{github.workspace}}
-      - name: Clean
-        run: cmake --build ${{github.workspace}} --target clean
       - name: Build
-        run: cmake --build ${{github.workspace}} --target all
+        run: cmake --build --target all
       - name: Run Tests
         run: /home/runner/work/kalkulator/bin/kalkulator_tests
