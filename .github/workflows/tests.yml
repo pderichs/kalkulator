@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install build-essential libwxgtk3.0-gtk3-dev libsqlite3-dev
       - name: Prerequisites
-        run: cmake ..
+        run: cmake ${{github.workspace}}
       - name: Clean
         run: cmake --build ${{github.workspace}} --target clean
       - name: Build
