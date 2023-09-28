@@ -32,8 +32,10 @@ to apply your changes to the cell or `Esc` to abort.
 4. Press F2 and enter `2`.
 5. Move the cursor to cell row 1, col 0.
 6. Press F2 and enter `The Answer to Life, the Unierse and Everything:`.
-7. Move the cursor to cell row 1, col 1.
-8. Press F2 and enter `=(+ (cell 0 0) (cell 1 0))`.
+7. In the menu bar select `Table -> Resize Column...`.
+8. Extend the column size to e.g. `300` to give more space for the text in cell 1, 0.
+9. Move the cursor to cell row 1, col 1.
+10. Press F2 and enter `=(+ (cell 0 0) (cell 1 0))`.
 
 ## Build
 
