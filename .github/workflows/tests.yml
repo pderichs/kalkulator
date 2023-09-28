@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
-        run: sudo apt-get install build-essential libwxgtk3-dev libsqlite3-dev
+        run: sudo apt-get install build-essential libwxgtk2.8-dev libsqlite3-dev
       - name: Clean
         run: cmake --build . --target clean
       - name: Build
