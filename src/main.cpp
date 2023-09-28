@@ -30,6 +30,7 @@
 #include "view/table_cell_format_dlg.h"
 #include "view/table_control.h"
 #include "view/table_formula_text_control.h"
+#include "view/table_search_dlg.h"
 #include <iostream>
 #include <memory>
 #include <regex>
@@ -146,6 +147,7 @@ private:
   wxBitmap *_icon_width;
 
   wxString _last_search_term;
+  TableSearchResultsDlg *_search_results_dlg;
 };
 
 enum {
@@ -189,7 +191,8 @@ KalkulatorMainFrame::KalkulatorMainFrame()
       _execution_context(), _sys_colors(), _toolbar(nullptr),
       _btn_formula_selection(nullptr), _cmb_sheet_selection(nullptr),
       _icon_new(nullptr), _icon_open(nullptr), _icon_save(nullptr),
-      _icon_height(nullptr), _icon_width(nullptr), _last_search_term() {
+      _icon_height(nullptr), _icon_width(nullptr), _last_search_term(),
+      _search_results_dlg(nullptr) {
   InitializeModel();
   InitializeIcons();
   InitializeMenu();
@@ -237,6 +240,11 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
   if (_text_control_formula) {
     delete _text_control_formula;
     _text_control_formula = nullptr;
+  }
+
+  if (_search_results_dlg) {
+    delete _search_results_dlg;
+    _search_results_dlg = nullptr;
   }
 }
 
@@ -680,7 +688,13 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     break;
   }
 
-  case SHEET_SELECTION_UPDATED:
+  case SHEET_SELECTION_UPDATED: {
+    auto sheet = _document->current_sheet();
+    _cmb_sheet_selection->SetValue(sheet->name);
+    _table_control->Refresh();
+    break;
+  }
+
   case ROW_HEIGHT_UPDATED:
   case COLUMN_WIDTH_UPDATED:
     _table_control->Refresh();
@@ -689,6 +703,14 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
   case HEADER_GOT_FOCUS:
     _table_control->SetFocus();
     break;
+
+  case NAVIGATE_SEARCH_RESULT_ITEM: {
+    auto search_result = std::any_cast<TableSearchResultItem>(param);
+    _document->select_sheet(search_result.sheet);
+    _document->select_cell(search_result.location);
+    _table_control->ScrollToCurrentCell(CELL_WINDOW_LOCATION_CENTER);
+    break;
+  }
   }
 }
 
@@ -827,13 +849,18 @@ void KalkulatorMainFrame::OnSearch(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  LocationSet locations =
-      _document->search_current_sheet(static_cast<const char *>(raw_input));
+  TableSearchResult search_result =
+      _document->search_sheets(static_cast<const char *>(raw_input));
 
-  if (locations.empty()) {
+  if (search_result.empty()) {
     wxMessageBox("No occurrences found.", "Search");
     return;
   }
 
-  // TODO Modeless Dialog which enables navigating through search results
+  if (!_search_results_dlg) {
+    _search_results_dlg = new TableSearchResultsDlg(this, this, wxID_ANY);
+  }
+
+  _search_results_dlg->Initialize(search_result);
+  _search_results_dlg->Show();
 }

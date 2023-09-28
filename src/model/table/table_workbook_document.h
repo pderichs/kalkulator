@@ -22,6 +22,7 @@
 #include "../event_sink.h"
 #include "table_cell.h"
 #include "table_cell_format.h"
+#include "table_search_result.h"
 #include "table_sheet.h"
 #include <memory>
 #include <string>
@@ -63,13 +64,14 @@ public:
   bool move_cursor_page_up();
   bool move_cursor_page_down();
 
-  LocationSet search_current_sheet(const std::string& search_term) const;
+  TableSearchResult search_sheets(const std::string& search_term) const;
   std::optional<Location> current_sheet_selected_cell() const;
 
   Location get_cell_by_pos(const Location &position) const;
   void select_cell(const Location &cell);
 
   bool select_sheet_by_name(const std::string &sheet_name);
+  bool select_sheet(const TableSheetPtr &sheet);
   TableSheetPtr find_sheet_by_name(const std::string &sheet_name) const;
 
   std::optional<TableCellPtr> get_cell(const Location &location,

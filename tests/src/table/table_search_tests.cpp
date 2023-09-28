@@ -29,20 +29,23 @@ TEST(TableSearchTests, TableSearchTest1) {
       std::make_shared<TableWorkbookDocument>(&sink);
   prepare_execution_context(&execution_context, document);
 
-  // Prepare second sheet
   document->add_sheet("Testsheet");
   document->select_sheet_by_name("Testsheet");
   document->select_cell(Location(0, 1));
-  document->update_content_current_cell("42"); // Should *NOT* be in search results later
+  document->update_content_current_cell("42");
 
-  // Prepare formulas and cell content
   document->select_sheet_by_name("Sheet 1");
   document->select_cell(Location(0, 2));
   document->update_content_current_cell("42");
 
-  // Cell content must match source cell
-  auto result = document->search_current_sheet("42");
+  auto result = document->search_sheets("42");
 
-  EXPECT_EQ(result.size(), 1);
-  EXPECT_EQ(*result.begin(), Location(0, 2));
+  EXPECT_EQ(result.size(), 2);
+  TableSearchResultItem item = result[0];
+  EXPECT_EQ(item.sheet->name, "Sheet 1");
+  EXPECT_EQ(item.location, Location(0, 2));
+
+  item = result[1];
+  EXPECT_EQ(item.sheet->name, "Testsheet");
+  EXPECT_EQ(item.location, Location(0, 1));
 }

@@ -24,9 +24,9 @@
 #include "table_selections.h"
 #include <iostream>
 #include <memory>
+#include <queue>
 #include <sstream>
 #include <stdexcept>
-#include <queue>
 
 const size_t INITIAL_ROW_COUNT = 100;
 const size_t INITIAL_COL_COUNT = 100;
@@ -87,7 +87,7 @@ bool TableSheet::move_cursor_left() {
 }
 
 bool TableSheet::move_cursor_right() {
-  if ((size_t) current_cell.x() >= get_max_col()) {
+  if ((size_t)current_cell.x() >= get_max_col()) {
     return false;
   }
 
@@ -99,7 +99,7 @@ bool TableSheet::move_cursor_right() {
 size_t TableSheet::get_max_row() const { return row_definitions.size() - 1; }
 
 bool TableSheet::move_cursor_down() {
-  if ((size_t) current_cell.y() >= get_max_row()) {
+  if ((size_t)current_cell.y() >= get_max_row()) {
     return false;
   }
 
@@ -168,8 +168,8 @@ bool TableSheet::move_cursor_page_down() {
 }
 
 bool TableSheet::is_in_bounds(const Location &cell) const {
-  return cell.x() >= 0 && (size_t) cell.x() < num_cols() && cell.y() >= 0 &&
-      (size_t) cell.y() < num_rows();
+  return cell.x() >= 0 && (size_t)cell.x() < num_cols() && cell.y() >= 0 &&
+         (size_t)cell.y() < num_rows();
 }
 
 bool TableSheet::select_cell(const Location &cell) {
@@ -212,7 +212,8 @@ void TableSheet::update_content(const Location &cell_location,
 
 size_t TableSheet::get_max_col() const { return column_definitions.size() - 1; }
 
-void TableSheet::apply_state_change_item(const StateHistoryItemPtr &state) const {
+void TableSheet::apply_state_change_item(
+    const StateHistoryItemPtr &state) const {
   for (const auto &cell_state : state->cell_states) {
     auto cell = get_cell_by_location(cell_state.location);
     cell->update_content(cell_state.prev);
@@ -301,16 +302,17 @@ void TableSheet::trigger_listeners(const Location &location) {
     recalc_cells.push(listener_location);
   }
 
- while (!recalc_cells.empty()) {
+  while (!recalc_cells.empty()) {
     Location cell_location = recalc_cells.front();
     recalc_cells.pop();
 
     TableCellPtr cell = get_cell_by_location(cell_location);
     if (cell->recalc()) {
-      // Cell content has changed. The listeners for this cell must be triggered as well.
+      // Cell content has changed. The listeners for this cell must be triggered
+      // as well.
       it = _listener_map.find(location);
       if (it != _listener_map.end()) {
-        for (const auto& listener_location: it->second) {
+        for (const auto &listener_location : it->second) {
           recalc_cells.push(listener_location);
         }
       }
@@ -329,7 +331,7 @@ LocationSet TableSheet::search(const std::string &search_term) const {
 
   for (size_t row = 0; row < num_rows(); row++) {
     for (size_t col = 0; col < num_cols(); col++) {
-      const auto& cell = get_cell(row, col);
+      const auto &cell = get_cell(row, col);
       if (cell->has_content()) {
         std::string content = cell->visible_content();
         if (content.find(search_term) != content.npos) {

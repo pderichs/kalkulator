@@ -78,7 +78,6 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Add github action for tests
 - FEAT: Multiple cell selection
 - FEAT: Replace
@@ -103,6 +102,7 @@ conditions on their websites:
 
 ## DONE
 
+- FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - FEAT: Add possibility to add or remove sheets
 - FEAT: defun (with newly added lambda support, this should be doable now)

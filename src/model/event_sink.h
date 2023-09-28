@@ -31,6 +31,7 @@ enum TableEvent {
   ROW_HEIGHT_UPDATED,
   FORMULA_CANCEL,
   HEADER_GOT_FOCUS,
+  NAVIGATE_SEARCH_RESULT_ITEM,
 };
 
 class EventSink {

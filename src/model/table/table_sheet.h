@@ -19,12 +19,6 @@
 #ifndef TABLE_SHEET_INCLUDED
 #define TABLE_SHEET_INCLUDED
 
-#include <cstddef>
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
-
 #include "location.h"
 #include "table_cell.h"
 #include "table_cell_format.h"
@@ -32,6 +26,11 @@
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include "table_selections.h"
+#include <cstddef>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
 typedef std::vector<TableRowPtr> TableRows;
 
@@ -96,7 +95,7 @@ struct TableSheet {
   void add_update_listener(const Location &listener,
                            const Location &listening_to);
 
-  LocationSet search(const std::string& search_term) const;
+  LocationSet search(const std::string &search_term) const;
 
 private:
   void apply_state_change_item(const StateHistoryItemPtr &state) const;

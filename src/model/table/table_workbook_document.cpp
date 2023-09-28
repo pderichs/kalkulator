@@ -20,8 +20,8 @@
 #include "table_cell.h"
 #include "table_column_definition.h"
 #include "table_sheet.h"
-#include <memory>
 #include <algorithm>
+#include <memory>
 
 TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink)
     : _path(), _changed(false), _sheets(), _event_sink(event_sink),
@@ -312,16 +312,20 @@ TableWorkbookDocument::find_sheet_by_name(const std::string &sheet_name) const {
   return {};
 }
 
-bool TableWorkbookDocument::select_sheet_by_name(
-    const std::string &sheet_name) {
-  const auto &sheet = find_sheet_by_name(sheet_name);
+bool TableWorkbookDocument::select_sheet(const TableSheetPtr &sheet) {
   if (sheet) {
     _current_sheet = sheet;
-    _event_sink->send_event(SHEET_SELECTION_UPDATED, sheet_name);
+    _event_sink->send_event(SHEET_SELECTION_UPDATED, sheet->name);
     return true;
   }
 
   return false;
+}
+
+bool TableWorkbookDocument::select_sheet_by_name(
+    const std::string &sheet_name) {
+  const auto &sheet = find_sheet_by_name(sheet_name);
+  return select_sheet(sheet);
 }
 
 size_t TableWorkbookDocument::get_current_column_width() const {
@@ -387,6 +391,19 @@ void TableWorkbookDocument::remove_current_sheet() {
   _changed = true;
 }
 
-LocationSet TableWorkbookDocument::search_current_sheet(const std::string &search_term) const {
-  return _current_sheet->search(search_term);
+TableSearchResult
+TableWorkbookDocument::search_sheets(const std::string &search_term) const {
+  TableSearchResult result;
+
+  for (const auto &sheet : _sheets) {
+    LocationSet locations = sheet->search(search_term);
+    for (const auto &location : locations) {
+      TableSearchResultItem found_item;
+      found_item.sheet = sheet;
+      found_item.location = location;
+      result.push_back(found_item);
+    }
+  }
+
+  return result;
 }
