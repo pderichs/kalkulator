@@ -158,7 +158,10 @@ enum {
   ID_GotoCell,
   ID_FormatCell,
   ID_AddSheet,
-  ID_RemoveSheet
+  ID_RemoveSheet,
+  ID_Copy,
+  ID_Paste,
+  ID_Search,
 };
 
 enum { ID_SHEET_SELECTION_CMB = wxID_HIGHEST + 1 };
@@ -300,6 +303,19 @@ void KalkulatorMainFrame::InitializeMenu() {
 
   menuFile->Append(wxID_EXIT);
 
+  auto *menuEdit = new wxMenu();
+  item = new wxMenuItem(menuEdit, ID_Copy, "&Copy\tCtrl+C",
+                        "Copies the current cell content");
+  menuEdit->Append(item);
+  item =
+      new wxMenuItem(menuEdit, ID_Paste, "&Paste\tCtrl+V",
+                     "Pastes the content of the clipboard to the current cell");
+  menuEdit->Append(item);
+  menuEdit->AppendSeparator();
+  item = new wxMenuItem(menuEdit, ID_Search, "&Search\tCtrl+F",
+                        "Search for a string");
+  menuEdit->Append(item);
+
   auto *menuSheets = new wxMenu();
   item = new wxMenuItem(menuSheets, ID_AddSheet, "Add Sheet...",
                         "Adds a new sheet to the workbook");
@@ -333,6 +349,7 @@ void KalkulatorMainFrame::InitializeMenu() {
 
   auto *menuBar = new wxMenuBar();
   menuBar->Append(menuFile, "&File");
+  menuBar->Append(menuEdit, "&Edit");
   menuBar->Append(menuSheets, "&Sheets");
   menuBar->Append(menuTable, "&Table");
   menuBar->Append(menuHelp, "&Help");
@@ -408,6 +425,7 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnFormatCell, this, ID_FormatCell);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnAddSheet, this, ID_AddSheet);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRemoveSheet, this, ID_RemoveSheet);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSearch, this, ID_Search);
 
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
@@ -461,9 +479,9 @@ void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
 bool KalkulatorMainFrame::PermitLoseChanges() {
   if (_document->changed()) {
     if (wxMessageBox(
-        wxT("Current content has not been saved. Your changes will "
-            "be lost. Proceed?"),
-        wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
+            wxT("Current content has not been saved. Your changes will "
+                "be lost. Proceed?"),
+            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
       return false;
   }
 
@@ -502,7 +520,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   TableWorkbookFile file;
 
   try {
-    std::string file_path((const char *) openFileDialog.GetPath());
+    std::string file_path((const char *)openFileDialog.GetPath());
     file.open(file_path);
     _document->set_file_path("");
     file.read(_document);
@@ -543,7 +561,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  SaveDocument((const char *) saveFileDialog.GetPath());
+  SaveDocument((const char *)saveFileDialog.GetPath());
 }
 
 void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
@@ -617,7 +635,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     }
   }
 
-    break;
+  break;
 
   case CELL_UPDATED:
     try {
@@ -745,7 +763,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
   int row;
   int col;
 
-  std::string input{(const char *) raw_input};
+  std::string input{(const char *)raw_input};
 
   std::regex exp{"(\\d+) (\\d+)"};
   std::smatch sm;
@@ -801,9 +819,7 @@ void KalkulatorMainFrame::OnRemoveSheet(wxCommandEvent &WXUNUSED(event)) {
 
 void KalkulatorMainFrame::OnSearch(wxCommandEvent &WXUNUSED(event)) {
   wxString raw_input =
-      wxGetTextFromUser(wxT("Search term:"),
-                        wxT("Search"),
-                        _last_search_term);
+      wxGetTextFromUser(wxT("Search term:"), wxT("Search"), _last_search_term);
 
   _last_search_term = raw_input;
 
