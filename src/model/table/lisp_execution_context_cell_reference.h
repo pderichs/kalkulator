@@ -53,25 +53,23 @@ public:
     // itself.
     // The context_param contains the current cell location
     // within the spreadsheet calculation application.
-    auto cell_location = std::any_cast<Location>(context_param);
+    auto source_cell_location = std::any_cast<Location>(context_param);
 
-    LispValue::IntegerType row, col;
+    auto referenced_cell_location = read_cell_location(params, 0, 1);
 
-    row = params[0]->to_integer();
-    col = params[1]->to_integer();
-
-    if (row == cell_location.y() && col == cell_location.x()) {
+    if (source_cell_location == referenced_cell_location) {
       // This would be a circular reference - cancel operation
       // throw LispExecutionContextError("Detected circular reference.");
       return LispCommonValues::error_circular_ref();
     }
 
     // Inform document about cell reference
-    // std::cerr << "Cell " << cell_location << " is listening to updates from "
+    // std::cerr << "Cell " << source_cell_location << " is listening to updates from "
     // << col << ", " << row << std::endl;
-    _workbook->add_update_listener(cell_location, Location(col, row));
+    _workbook->add_update_listener(source_cell_location,
+                                   referenced_cell_location);
 
-    auto opt_cell = _workbook->get_cell(Location(col, row));
+    auto opt_cell = _workbook->get_cell(referenced_cell_location);
     if (!opt_cell) {
       return LispValueFactory::new_none();
     }
@@ -83,6 +81,18 @@ public:
     }
 
     return cell->lisp_value();
+  }
+
+private:
+  Location read_cell_location(const LispValuePtrVector &params,
+                              size_t row_index,
+                              int col_index) const {
+    LispValue::IntegerType row, col;
+
+    row = params[row_index]->to_integer();
+    col = params[col_index]->to_integer();
+
+    return Location(col, row);
   }
 
 private:
