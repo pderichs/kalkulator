@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "cells_view_control.h"
 #include "kalkulator_system_colors.h"
 #include <iostream>
@@ -378,7 +377,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   }
 
   if (cell_selection_moved) {
-    ScrollToCurrentCell(CELL_WINDOW_LOCATION_RIGHT);
+    ScrollToCurrentCell(CELL_WINDOW_LOCATION_UNSPECIFIED);
   }
 
   if (handled) {
@@ -420,8 +419,8 @@ void CellsViewControl::ScrollToCell(const Location &cell,
     y = scrollArea.GetTop();
     break;
   case CELL_WINDOW_LOCATION_CENTER:
-    x = std::max(0, rect.GetLeft() + (rect.GetWidth() / 2) - (scrollArea.GetWidth() / 2)); // ROW_HEADER_WIDTH
-    y = std::max(0, rect.GetTop() + (rect.GetHeight() / 2) - (scrollArea.GetHeight() / 2)); // COLUMN_HEADER_HEIGHT
+    x = std::max(0, rect.GetLeft() + (rect.GetWidth() / 2) - (scrollArea.GetWidth() / 2));
+    y = std::max(0, rect.GetTop() + (rect.GetHeight() / 2) - (scrollArea.GetHeight() / 2));
     break;
   default:
     throw std::runtime_error("Unhandled cell window location");
