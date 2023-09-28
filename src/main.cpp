@@ -59,8 +59,10 @@ typedef std::pair<const char **, const char **> IconPaths;
 // clang-format off
 // Map between icon_key and dark mode and bright mode icon paths.
 std::map<std::string, IconPaths> IconDictionary = {
-    {"new", {outline_insert_drive_file_white_18dp_xpm, outline_insert_drive_file_black_18dp_xpm}},
-    {"open", {outline_folder_open_white_18dp_xpm, outline_folder_open_black_18dp_xpm}},
+    {"new", {outline_insert_drive_file_white_18dp_xpm,
+             outline_insert_drive_file_black_18dp_xpm}},
+    {"open",
+     {outline_folder_open_white_18dp_xpm, outline_folder_open_black_18dp_xpm}},
     {"save", {outline_save_white_18dp_xpm, outline_save_black_18dp_xpm}},
     {"height", {outline_height_white_18dp_xpm, outline_height_black_18dp_xpm}}
 };
@@ -100,6 +102,7 @@ private:
   void OnFormatCell(wxCommandEvent &event);
   void OnAddSheet(wxCommandEvent &WXUNUSED(event));
   void OnRemoveSheet(wxCommandEvent &WXUNUSED(event));
+  void OnSearch(wxCommandEvent &WXUNUSED(event));
 
   void BindEvents();
   void CreateToolbar();
@@ -141,6 +144,8 @@ private:
   wxBitmap *_icon_save;
   wxBitmap *_icon_height;
   wxBitmap *_icon_width;
+
+  wxString _last_search_term;
 };
 
 enum {
@@ -181,7 +186,7 @@ KalkulatorMainFrame::KalkulatorMainFrame()
       _execution_context(), _sys_colors(), _toolbar(nullptr),
       _btn_formula_selection(nullptr), _cmb_sheet_selection(nullptr),
       _icon_new(nullptr), _icon_open(nullptr), _icon_save(nullptr),
-      _icon_height(nullptr), _icon_width(nullptr) {
+      _icon_height(nullptr), _icon_width(nullptr), _last_search_term() {
   InitializeModel();
   InitializeIcons();
   InitializeMenu();
@@ -456,9 +461,9 @@ void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
 bool KalkulatorMainFrame::PermitLoseChanges() {
   if (_document->changed()) {
     if (wxMessageBox(
-            wxT("Current content has not been saved. Your changes will "
-                "be lost. Proceed?"),
-            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
+        wxT("Current content has not been saved. Your changes will "
+            "be lost. Proceed?"),
+        wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
       return false;
   }
 
@@ -497,7 +502,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   TableWorkbookFile file;
 
   try {
-    std::string file_path((const char *)openFileDialog.GetPath());
+    std::string file_path((const char *) openFileDialog.GetPath());
     file.open(file_path);
     _document->set_file_path("");
     file.read(_document);
@@ -538,7 +543,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  SaveDocument((const char *)saveFileDialog.GetPath());
+  SaveDocument((const char *) saveFileDialog.GetPath());
 }
 
 void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
@@ -612,7 +617,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     }
   }
 
-  break;
+    break;
 
   case CELL_UPDATED:
     try {
@@ -740,7 +745,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
   int row;
   int col;
 
-  std::string input{(const char *)raw_input};
+  std::string input{(const char *) raw_input};
 
   std::regex exp{"(\\d+) (\\d+)"};
   std::smatch sm;
@@ -786,10 +791,33 @@ void KalkulatorMainFrame::OnAddSheet(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  _document->add_sheet(static_cast<const char*>(raw_input));
+  _document->add_sheet(static_cast<const char *>(raw_input));
   UpdateSheetCombo();
 }
 
 void KalkulatorMainFrame::OnRemoveSheet(wxCommandEvent &WXUNUSED(event)) {
   _document->remove_current_sheet();
+}
+
+void KalkulatorMainFrame::OnSearch(wxCommandEvent &WXUNUSED(event)) {
+  wxString raw_input =
+      wxGetTextFromUser(wxT("Sheet Name:"),
+                        wxT("Add sheet"),
+                        _last_search_term);
+
+  _last_search_term = raw_input;
+
+  if (raw_input.IsEmpty()) {
+    return;
+  }
+
+  LocationSet locations =
+      _document->search_current_sheet(static_cast<const char *>(raw_input));
+
+  if (locations.empty()) {
+    wxMessageBox("No occurrences found.", "Search");
+    return;
+  }
+
+  // TODO Modeless Dialog which enables navigating through search results
 }

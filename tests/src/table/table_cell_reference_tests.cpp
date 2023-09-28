@@ -144,6 +144,7 @@ TEST(TableCellTests, CellReferenceToOtherSheet) {
   document->update_content_current_cell("42");
 
   // Prepare formulas and cell content
+  document->select_sheet_by_name("Sheet 1");
   document->select_cell(Location(0, 0));
   document->update_content_current_cell("=(cell \"Testsheet\" 1 0)");
 

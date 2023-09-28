@@ -50,8 +50,8 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Add github action for tests
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
+- FEAT: Add github action for tests
 - FEAT: Multiple cell selection
 - FEAT: Replace
 - FEAT: Print

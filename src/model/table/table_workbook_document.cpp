@@ -386,3 +386,7 @@ void TableWorkbookDocument::remove_current_sheet() {
   _current_sheet = _sheets[0];
   _changed = true;
 }
+
+LocationSet TableWorkbookDocument::search_current_sheet(const std::string &search_term) const {
+  return _current_sheet->search(search_term);
+}

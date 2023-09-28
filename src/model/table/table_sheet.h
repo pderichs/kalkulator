@@ -96,6 +96,8 @@ struct TableSheet {
   void add_update_listener(const Location &listener,
                            const Location &listening_to);
 
+  LocationSet search(const std::string& search_term) const;
+
 private:
   void apply_state_change_item(const StateHistoryItemPtr &state) const;
   void trigger_listeners(const Location &Location);

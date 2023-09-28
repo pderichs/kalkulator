@@ -323,3 +323,21 @@ void TableSheet::remove_from_update_listeners(const Location &location) {
     it.second.erase(location);
   }
 }
+
+LocationSet TableSheet::search(const std::string &search_term) const {
+  LocationSet result;
+
+  for (size_t row = 0; row < num_rows(); row++) {
+    for (size_t col = 0; col < num_cols(); col++) {
+      const auto& cell = get_cell(row, col);
+      if (cell->has_content()) {
+        std::string content = cell->visible_content();
+        if (content.find(search_term) != content.npos) {
+          result.insert(cell->location());
+        }
+      }
+    }
+  }
+
+  return result;
+}
