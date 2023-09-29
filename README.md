@@ -19,7 +19,7 @@ Start the application
 
 You can move the cell selection with your cursor keys or by using the mouse. Alternatively you can press `Ctrl+G` and
 enter the coordinates in the form `row column` to navigate to the cell with coordinates `row` and `col` (e.g. to
-navigate to cell with coordinates row 10 and column 20 you use `10 20`).
+navigate to cell with coordinates row 10 and column 20 just enter `10 20`).
 
 Press `F2` to edit cell contents (this moves the cursor to the formula text field above the cells view). Press `Enter`
 to apply your changes to the cell or `Esc` to abort.
