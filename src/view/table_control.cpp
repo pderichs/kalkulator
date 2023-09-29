@@ -19,7 +19,6 @@
 #include "table_control.h"
 #include "table_column_headers_control.h"
 #include "table_row_headers_control.h"
-#include <iostream>
 #include <tuple>
 #include <wx/clipbrd.h>
 
@@ -73,9 +72,12 @@ void TableControl::CreateHeaderControls() {
   _row_headers_control = new TableRowHeadersControl(
       _sys_colors, _document, _event_sink, this, wxID_ANY, wxDefaultPosition,
       wxDefaultSize, wxWANTS_CHARS);
+  _row_headers_control->Initialize();
+
   _column_headers_control = new TableColumnHeadersControl(
       _sys_colors, _document, _event_sink, this, wxID_ANY, wxDefaultPosition,
       wxDefaultSize, wxWANTS_CHARS);
+  _column_headers_control->Initialize();
 }
 
 void TableControl::CreateCellsViewControl() {
@@ -101,4 +103,9 @@ void TableControl::update_scroll_positions(const Location &scroll_pos) {
 
 void TableControl::ScrollToCurrentCell(CellWindowLocation location) {
   _cells_view_control->ScrollToCurrentCell(location);
+}
+
+void TableControl::SetCurrentCell(const Location& location) {
+  _row_headers_control->SetCurrentRow(location.y());
+  _column_headers_control->SetCurrentCol(location.x());
 }

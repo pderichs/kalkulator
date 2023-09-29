@@ -102,6 +102,7 @@ conditions on their websites:
 
 ## DONE
 
+- FEAT: Mark current row/cell in header controls
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
 - FEAT: Add possibility to add or remove sheets

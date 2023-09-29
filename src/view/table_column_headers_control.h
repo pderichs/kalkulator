@@ -34,9 +34,12 @@ public:
                             long style = wxTAB_TRAVERSAL);
   virtual ~TableColumnHeadersControl() = default;
 
+  void Initialize();
+
   void OnDraw(wxDC &dc);
   virtual wxSize DoGetBestSize() const;
   void OnFocus(wxFocusEvent& WXUNUSED(event));
+  void SetCurrentCol(size_t col);
 
 private:
   void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height,
@@ -44,6 +47,7 @@ private:
 
 private:
   KalkulatorSystemColorsPtr _sys_colors;
+  size_t _current_column;
 };
 
 #endif

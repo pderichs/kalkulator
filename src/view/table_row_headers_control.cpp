@@ -29,13 +29,16 @@ TableRowHeadersControl::TableRowHeadersControl(
     const wxSize &size, long style)
     : TableSheetView(document, event_sink, parent, id, pos, size,
                      style | ~wxVSCROLL),
-      _sys_colors(sys_colors) {
+      _sys_colors(sys_colors), _current_row(0) {
   int height = document->get_current_sheet_height();
   SetScrollRate(0, 10);
   SetVirtualSize(ROW_HEADER_WIDTH, height);
-  EnableScrolling(false, false);
 
   Bind(wxEVT_SET_FOCUS, &TableRowHeadersControl::OnFocus, this);
+}
+
+void TableRowHeadersControl::Initialize() {
+  EnableScrolling(false, false);
 }
 
 void TableRowHeadersControl::OnFocus(wxFocusEvent &WXUNUSED(event)) {
@@ -63,14 +66,13 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
   std::ignore = height;
   std::ignore = scrollPos;
 
-  int y, c;
+  int y;
+  size_t c = 0;
 
   // Set pen and brushes for headers of columns and rows
   dc->SetPen(*_sys_colors->caption_grid_pen);
-  dc->SetBrush(*_sys_colors->caption_background_brush);
 
   // Rows
-  c = 0;
   y = 2;
   for (const auto& rowdef : sheet->row_definitions) {
     // if (y > height) {
@@ -85,6 +87,12 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
       name = ss.str();
     }
 
+    if (c == _current_row) {
+      dc->SetBrush(wxColour(*_sys_colors->current_cell_pen->GetColour()));
+    } else {
+      dc->SetBrush(*_sys_colors->caption_background_brush);
+    }
+
     wxRect rect(0, y, ROW_HEADER_WIDTH, rowdef->height);
     dc->DrawRectangle(rect);
     DrawTextInCenter(dc, name, rect);
@@ -97,4 +105,8 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
 
 wxSize TableRowHeadersControl::DoGetBestSize() const {
   return {ROW_HEADER_WIDTH, 100};
+}
+
+void TableRowHeadersControl::SetCurrentRow(size_t row) {
+  _current_row = row;
 }

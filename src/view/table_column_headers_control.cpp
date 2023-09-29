@@ -29,13 +29,16 @@ TableColumnHeadersControl::TableColumnHeadersControl(
     const wxSize &size, long style)
     : TableSheetView(document, event_sink, parent, id, pos, size,
                      style | ~wxHSCROLL),
-      _sys_colors(sys_colors) {
+      _sys_colors(sys_colors), _current_column(0) {
   int width = _document->get_current_sheet_width() + ROW_HEADER_WIDTH;
   SetScrollRate(10, 0);
   SetVirtualSize(width, COLUMN_HEADER_HEIGHT);
-  EnableScrolling(false, false);
 
   Bind(wxEVT_SET_FOCUS, &TableColumnHeadersControl::OnFocus, this);
+}
+
+void TableColumnHeadersControl::Initialize() {
+  EnableScrolling(false, false);
 }
 
 void TableColumnHeadersControl::OnDraw(wxDC &dc) {
@@ -59,17 +62,16 @@ void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
   std::ignore = height;
   std::ignore = scrollPos;
 
-  int x, c;
+  int x;
+  size_t c = 0;
 
   // Set pen and brushes for headers of columns and rows
   dc->SetPen(*_sys_colors->caption_grid_pen);
-  dc->SetBrush(*_sys_colors->caption_background_brush);
 
   // TODO for now we are drawing all available columns and rows
   // this can possibly be optimized
 
   // Columns
-  c = 0;
   x = ROW_HEADER_WIDTH;
   for (const auto &coldef : sheet->column_definitions) {
     // if (x > width) {
@@ -83,6 +85,12 @@ void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
       std::stringstream ss;
       ss << c;
       name = ss.str();
+    }
+
+    if (c == _current_column) {
+      dc->SetBrush(wxColour(*_sys_colors->current_cell_pen->GetColour()));
+    } else {
+      dc->SetBrush(*_sys_colors->caption_background_brush);
     }
 
     wxRect rect(x, 2, coldef->width, COLUMN_HEADER_HEIGHT);
@@ -101,4 +109,8 @@ wxSize TableColumnHeadersControl::DoGetBestSize() const {
 
 void TableColumnHeadersControl::OnFocus(wxFocusEvent &WXUNUSED(event)) {
   _event_sink->send_event(HEADER_GOT_FOCUS, {});
+}
+
+void TableColumnHeadersControl::SetCurrentCol(size_t col) {
+  _current_column = col;
 }

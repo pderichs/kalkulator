@@ -487,9 +487,9 @@ void KalkulatorMainFrame::OnClose(wxCloseEvent &event) {
 bool KalkulatorMainFrame::PermitLoseChanges() {
   if (_document->changed()) {
     if (wxMessageBox(
-            wxT("Current content has not been saved. Your changes will "
-                "be lost. Proceed?"),
-            wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
+        wxT("Current content has not been saved. Your changes will "
+            "be lost. Proceed?"),
+        wxT("Please confirm"), wxICON_QUESTION | wxYES_NO, this) == wxNO)
       return false;
   }
 
@@ -528,7 +528,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   TableWorkbookFile file;
 
   try {
-    std::string file_path((const char *)openFileDialog.GetPath());
+    std::string file_path((const char *) openFileDialog.GetPath());
     file.open(file_path);
     _document->set_file_path("");
     file.read(_document);
@@ -569,7 +569,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  SaveDocument((const char *)saveFileDialog.GetPath());
+  SaveDocument((const char *) saveFileDialog.GetPath());
 }
 
 void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
@@ -643,7 +643,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     }
   }
 
-  break;
+    break;
 
   case CELL_UPDATED:
     try {
@@ -672,6 +672,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
         std::string formula = unwrapped_cell->get_formula_content();
         _text_control_formula->SetValue(formula);
 
+        _table_control->SetCurrentCell(unwrapped_cell->location());
         _table_control->Refresh();
       }
 
@@ -785,7 +786,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
   int row;
   int col;
 
-  std::string input{(const char *)raw_input};
+  std::string input{(const char *) raw_input};
 
   std::regex exp{"(\\d+) (\\d+)"};
   std::smatch sm;
