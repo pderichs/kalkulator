@@ -169,7 +169,7 @@ bool TableSheet::move_cursor_page_down() {
 
 bool TableSheet::is_in_bounds(const Location &cell) const {
   return cell.x() >= 0 && (size_t)cell.x() < num_cols() && cell.y() >= 0 &&
-         (size_t)cell.y() < num_rows();
+      (size_t)cell.y() < num_rows();
 }
 
 bool TableSheet::select_cell(const Location &cell) {
@@ -310,7 +310,7 @@ void TableSheet::trigger_listeners(const Location &location) {
     if (cell->recalc()) {
       // Cell content has changed. The listeners for this cell must be triggered
       // as well.
-      it = _listener_map.find(location);
+      it = _listener_map.find(cell_location);
       if (it != _listener_map.end()) {
         for (const auto &listener_location : it->second) {
           recalc_cells.push(listener_location);
