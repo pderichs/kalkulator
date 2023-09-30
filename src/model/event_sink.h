@@ -32,6 +32,7 @@ enum TableEvent {
   FORMULA_CANCEL,
   HEADER_GOT_FOCUS,
   NAVIGATE_SEARCH_RESULT_ITEM,
+  MESSAGE_BOX,
 };
 
 class EventSink {

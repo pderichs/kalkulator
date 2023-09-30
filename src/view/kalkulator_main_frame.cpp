@@ -17,10 +17,9 @@
  */
 
 #include "kalkulator_main_frame.h"
-#include "model/lisp/value_converter.h"
 #include "model/table/lisp_execution_context_cell_range.h"
 #include "model/table/lisp_execution_context_cell_reference.h"
-#include "model/table/table_cell_format.h"
+#include "model/table/lisp_execution_context_message_box.h"
 #include "model/table/table_workbook_file.h"
 #include "model/table/table_workbook_file_error.h"
 #include "view/icons.h"
@@ -146,6 +145,9 @@ void KalkulatorMainFrame::InitializeModel() {
   auto cell_range = std::make_shared<LispExecutionContextCellRange>(_document);
   _execution_context.add_function("cell_range", cell_range);
   _execution_context.add_function("cell-range", cell_range);
+  _execution_context.add_function("message-box",
+                                  std::make_shared<
+                                      LispExecutionContextMessageBox>(this));
 
   _sys_colors = std::make_shared<KalkulatorSystemColors>();
 
@@ -581,6 +583,13 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     _table_control->ScrollToCurrentCell(CELL_WINDOW_LOCATION_CENTER);
     break;
   }
+
+  case MESSAGE_BOX: {
+    std::string msg = std::any_cast<std::string>(param);
+    wxMessageBox(msg);
+    break;
+  }
+
   }
 }
 

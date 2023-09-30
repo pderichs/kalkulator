@@ -82,23 +82,20 @@ conditions on their websites:
 - FEAT: Multiple cell selection
 - FEAT: Replace
 - FEAT: Print
-- FEAT: General command function like in Emacs (M-x) or Sublime (C+Shift+P):
-    - @ x y (goto cell)
-    - ...
-- MAYB: Support cell type currency
-- MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
 - FEAT: Add macro support: OnLoad?
 - FEAT: Macros: Add OnTimer and Timer start functionality
 - FEAT: Direct editing? (without the need of pressing F2)
-- MAYB: Cache function results (see field _func_result on LispValue)
 - FEAT: Add application settings (e.g. size of undo steps)
 - DOC: Add explanation of functions (especially behaviour of eq)
 - FEAT: Cell comments
 - FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed
   references, like $ function)
 - BUG: Something (CLion?) is creating a "Testing" folder on the root folder with every build
+- MAYB: Support cell type currency
+- MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
+- MAYB: Cache function results (see field _func_result on LispValue)
 
 ## DONE
 
