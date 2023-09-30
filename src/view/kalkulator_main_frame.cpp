@@ -339,7 +339,7 @@ void KalkulatorMainFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
   aboutInfo.AddDeveloper("pderichs");
   aboutInfo.AddDeveloper("");
   aboutInfo.AddDeveloper(
-      "Kalulator uses some awesome external libraries and projects:");
+      "Kalkulator uses some awesome external libraries and projects:");
   aboutInfo.AddDeveloper("wxWidgets https://www.wxwidgets.org/");
   aboutInfo.AddDeveloper("SQLite https://www.sqlite.org/index.html");
   aboutInfo.AddDeveloper("Google Material Design Icons "
