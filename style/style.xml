@@ -64,6 +64,7 @@
     <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
     <option name="INDENT_CASE_FROM_SWITCH" value="false" />
     <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="false" />
+    <option name="SPACE_AFTER_TYPE_CAST" value="false" />
     <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
     <option name="FOR_STATEMENT_WRAP" value="1" />
     <option name="ASSIGNMENT_WRAP" value="1" />
