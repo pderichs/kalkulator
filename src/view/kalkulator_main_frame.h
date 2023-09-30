@@ -52,7 +52,6 @@ private:
   void OnSave(wxCommandEvent &event);
   void OnSaveAs(wxCommandEvent &event);
   void OnRightDown(wxMouseEvent &event);
-  void OnKeyPress(wxKeyEvent &event);
   void OnSheetSelectionCombo(wxCommandEvent &event);
   void OnResizeColumn(wxCommandEvent &event);
   void OnResizeRow(wxCommandEvent &event);

@@ -31,7 +31,13 @@ CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
                                    wxWindowID id, const wxPoint &pos,
                                    const wxSize &size, long style)
     :
-    TableSheetView(std::move(document), event_sink, parent, id, pos, size, style),
+    TableSheetView(std::move(document),
+                   event_sink,
+                   parent,
+                   id,
+                   pos,
+                   size,
+                   style),
     _sys_colors(std::move(sys_colors)) {
 
   Bind(wxEVT_CHAR_HOOK, &CellsViewControl::OnKeyPress, this);
@@ -321,6 +327,11 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
     }
     break;
 
+  case WXK_F2: {
+    _event_sink->send_event(EDIT_CELL, {});
+    break;
+  }
+
   case WXK_F3: {
     int x, y;
     GetViewStart(&x, &y);
@@ -335,6 +346,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
 
     break;
   }
+
   case WXK_F4: {
     // TEST START
     Location loc(50, 40);
@@ -383,7 +395,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   if (handled) {
     Refresh();
   } else {
-    event.Skip(); // Allow further event handling
+    event.Skip();
   }
 }
 
@@ -415,12 +427,19 @@ void CellsViewControl::ScrollToCell(const Location &cell,
     y = rect.GetBottom() - scrollArea.GetHeight() + 10;
     break;
   case CELL_WINDOW_LOCATION_RIGHT:
-    x = rect.GetRight() - scrollArea.GetWidth() + 10;
+    x = rect.GetRight() - scrollArea.GetWidth()
+        + 10;
     y = scrollArea.GetTop();
     break;
   case CELL_WINDOW_LOCATION_CENTER:
-    x = std::max(0, rect.GetLeft() + (rect.GetWidth() / 2) - (scrollArea.GetWidth() / 2));
-    y = std::max(0, rect.GetTop() + (rect.GetHeight() / 2) - (scrollArea.GetHeight() / 2));
+    x = std::max(0,
+                 rect.GetLeft()
+                     + (rect.GetWidth() / 2)
+                     - (scrollArea.GetWidth()
+                         / 2));
+    y = std::max(0,
+                 rect.GetTop() + (rect.GetHeight() / 2)
+                     - (scrollArea.GetHeight() / 2));
     break;
   default:
     throw std::runtime_error("Unhandled cell window location");
@@ -461,7 +480,8 @@ void CellsViewControl::ScrollToCurrentCell(CellWindowLocation location) {
   ScrollToCell(cell->location(), actual_location);
 }
 
-CellWindowLocation CellsViewControl::GetCellLocation(const wxRect &cell_rect, const wxRect &scrollArea) const {
+CellWindowLocation CellsViewControl::GetCellLocation(const wxRect &cell_rect,
+                                                     const wxRect &scrollArea) const {
   if (cell_rect.GetLeft() < scrollArea.GetLeft()) {
     // Cell is left from scroll area
     return CELL_WINDOW_LOCATION_LEFT;

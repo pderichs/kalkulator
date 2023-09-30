@@ -311,7 +311,6 @@ void KalkulatorMainFrame::BindEvents() {
 
   Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
-  Bind(wxEVT_CHAR_HOOK, &KalkulatorMainFrame::OnKeyPress, this);
 
   Bind(wxEVT_COMBOBOX, &KalkulatorMainFrame::OnSheetSelectionCombo, this,
        ID_SHEET_SELECTION_CMB);
@@ -446,19 +445,6 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
   SaveDocument((const char *) saveFileDialog.GetPath());
 }
 
-void KalkulatorMainFrame::OnKeyPress(wxKeyEvent &event) {
-  // Handle the keypress event here
-  int keyCode = event.GetKeyCode();
-
-  // wxPrintf("KalkulatorMainFrame: Key pressed: %d\n", keyCode);
-
-  if (keyCode == WXK_F2) {
-    _text_control_formula->SetFocus();
-  }
-
-  event.Skip();
-}
-
 void KalkulatorMainFrame::UpdateFormulaBySelectedCell(
     const Location &location) {
   auto cell = _document->get_current_cell();
@@ -590,6 +576,10 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     break;
   }
 
+  case EDIT_CELL: {
+    _text_control_formula->SetFocus();
+    break;
+  }
   }
 }
 
