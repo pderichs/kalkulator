@@ -259,7 +259,7 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
 
 void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr& sheet) {
   size_t s = 0;
-  for (const auto& col_def : sheet->column_definitions) {
+  for (const auto& col_def : sheet->column_definitions()) {
     if (col_def->width != DEFAULT_COLUMN_WIDTH) {
       std::stringstream sql;
       sql << "INSERT INTO sheet_sizes (sheet_id, row, col, size)"
@@ -274,7 +274,7 @@ void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr& sheet) {
   }
 
   s = 0;
-  for (const auto& row_def : sheet->row_definitions) {
+  for (const auto& row_def : sheet->row_definitions()) {
     if (row_def->height != DEFAULT_ROW_HEIGHT) {
       std::stringstream sql;
       sql << "INSERT INTO sheet_sizes (sheet_id, row, col, size)"
@@ -390,8 +390,8 @@ void TableWorkbookFile::save_sheet(int id, const TableSheetPtr &sheet,
   sql << "INSERT INTO sheets (id, name, current_cell_row, current_cell_col, "
          "active) ";
   sql << "VALUES (";
-  sql << id << "," << quote(sheet->name) << ",";
-  sql << sheet->current_cell.y() << "," << sheet->current_cell.x() << ",";
+  sql << id << "," << quote(sheet->name()) << ",";
+  sql << sheet->current_cell().y() << "," << sheet->current_cell().x() << ",";
 
   if (active) {
     sql << "TRUE";

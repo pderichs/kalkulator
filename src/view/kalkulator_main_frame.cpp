@@ -550,7 +550,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
   case SHEET_SELECTION_UPDATED: {
     auto sheet = _document->current_sheet();
-    _cmb_sheet_selection->SetValue(sheet->name);
+    _cmb_sheet_selection->SetValue(sheet->name());
     _table_control->Refresh();
     break;
   }
@@ -597,7 +597,7 @@ void KalkulatorMainFrame::UpdateSheetCombo() {
   int n = 0;
   int current = -1;
   for (const auto &sheet : _document->sheets()) {
-    _cmb_sheet_selection->Append(sheet->name);
+    _cmb_sheet_selection->Append(sheet->name());
 
     if (sheet == _document->current_sheet()) {
       current = n;

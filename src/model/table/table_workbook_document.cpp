@@ -32,7 +32,7 @@ TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink)
 TableSheetPtr
 TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
   for (auto sheet : _sheets) {
-    if (sheet->name == name) {
+    if (sheet->name() == name) {
       return sheet;
     }
   }
@@ -55,13 +55,14 @@ void TableWorkbookDocument::update_content_current_cell(
     const std::string &content) {
   TableSheetPtr sheet = _current_sheet;
 
-  update_cell_content(sheet, sheet->current_cell, content);
+  update_cell_content(sheet, sheet->current_cell(), content);
 }
 
 bool TableWorkbookDocument::move_cursor_up() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_up()) {
-    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
+                            sheet->current_cell());
     return true;
   }
 
@@ -71,7 +72,8 @@ bool TableWorkbookDocument::move_cursor_up() {
 bool TableWorkbookDocument::move_cursor_down() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_down()) {
-    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
+                            sheet->current_cell());
     return true;
   }
 
@@ -81,7 +83,8 @@ bool TableWorkbookDocument::move_cursor_down() {
 bool TableWorkbookDocument::move_cursor_left() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_left()) {
-    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
+                            sheet->current_cell());
     return true;
   }
 
@@ -91,7 +94,8 @@ bool TableWorkbookDocument::move_cursor_left() {
 bool TableWorkbookDocument::move_cursor_right() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_right()) {
-    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
+                            sheet->current_cell());
     return true;
   }
 
@@ -120,7 +124,8 @@ TableCellPtr TableWorkbookDocument::get_current_cell() const {
 bool TableWorkbookDocument::move_cursor_page_up() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_page_up()) {
-    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
+                            sheet->current_cell());
     return true;
   }
 
@@ -130,7 +135,8 @@ bool TableWorkbookDocument::move_cursor_page_up() {
 bool TableWorkbookDocument::move_cursor_page_down() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_page_down()) {
-    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED, sheet->current_cell);
+    _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
+                            sheet->current_cell());
     return true;
   }
 
@@ -148,7 +154,7 @@ TableWorkbookDocument::get_cell_by_pos(const Location &position) const {
   int n;
 
   n = 0;
-  for (const auto &rowdef : _current_sheet->row_definitions) {
+  for (const auto &rowdef : _current_sheet->row_definitions()) {
     height += rowdef->height;
 
     if (height > position.y()) {
@@ -160,7 +166,7 @@ TableWorkbookDocument::get_cell_by_pos(const Location &position) const {
   }
 
   n = 0;
-  for (const auto &coldef : _current_sheet->column_definitions) {
+  for (const auto &coldef : _current_sheet->column_definitions()) {
     width += coldef->width;
 
     if (width > position.x()) {
@@ -178,14 +184,14 @@ void TableWorkbookDocument::select_cell(const Location &cell) {
   if (_current_sheet->select_cell(cell)) {
     _changed = true;
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
-                            _current_sheet->current_cell);
+                            _current_sheet->current_cell());
   }
 }
 
 int TableWorkbookDocument::get_current_sheet_width() const {
   int width = 0;
 
-  for (const auto &coldef : _current_sheet->column_definitions) {
+  for (const auto &coldef : _current_sheet->column_definitions()) {
     width += coldef->width;
   }
 
@@ -195,7 +201,7 @@ int TableWorkbookDocument::get_current_sheet_width() const {
 int TableWorkbookDocument::get_current_sheet_height() const {
   int height = 0;
 
-  for (const auto &rowdef : _current_sheet->row_definitions) {
+  for (const auto &rowdef : _current_sheet->row_definitions()) {
     height += rowdef->height;
   }
 
@@ -293,7 +299,7 @@ void TableWorkbookDocument::clear_current_cell() {
 
   _changed = true;
 
-  std::any param = _current_sheet->current_cell;
+  std::any param = _current_sheet->current_cell();
   _event_sink->send_event(CELL_UPDATED, param);
 }
 
@@ -304,7 +310,7 @@ void TableWorkbookDocument::redo() { _current_sheet->redo(); }
 TableSheetPtr
 TableWorkbookDocument::find_sheet_by_name(const std::string &sheet_name) const {
   for (const auto &sheet : _sheets) {
-    if (sheet->name == sheet_name) {
+    if (sheet->name() == sheet_name) {
       return sheet;
     }
   }
@@ -315,7 +321,7 @@ TableWorkbookDocument::find_sheet_by_name(const std::string &sheet_name) const {
 bool TableWorkbookDocument::select_sheet(const TableSheetPtr &sheet) {
   if (sheet) {
     _current_sheet = sheet;
-    _event_sink->send_event(SHEET_SELECTION_UPDATED, sheet->name);
+    _event_sink->send_event(SHEET_SELECTION_UPDATED, sheet->name());
     return true;
   }
 
@@ -351,7 +357,7 @@ void TableWorkbookDocument::set_current_row_height(size_t height) {
 std::optional<Location>
 TableWorkbookDocument::current_sheet_selected_cell() const {
   if (_current_sheet) {
-    return _current_sheet->current_cell;
+    return _current_sheet->current_cell();
   }
 
   return {};

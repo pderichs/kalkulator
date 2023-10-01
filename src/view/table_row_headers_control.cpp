@@ -74,7 +74,7 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
 
   // Rows
   y = 2;
-  for (const auto& rowdef : sheet->row_definitions) {
+  for (const auto& rowdef : sheet->row_definitions()) {
     // if (y > height) {
     //   break;
     // }

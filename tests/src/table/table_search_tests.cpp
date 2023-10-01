@@ -42,10 +42,10 @@ TEST(TableSearchTests, TableSearchTest1) {
 
   EXPECT_EQ(result.size(), 2);
   TableSearchResultItem item = result[0];
-  EXPECT_EQ(item.sheet->name, "Sheet 1");
+  EXPECT_EQ(item.sheet->name(), "Sheet 1");
   EXPECT_EQ(item.location, Location(0, 2));
 
   item = result[1];
-  EXPECT_EQ(item.sheet->name, "Testsheet");
+  EXPECT_EQ(item.sheet->name(), "Testsheet");
   EXPECT_EQ(item.location, Location(0, 1));
 }

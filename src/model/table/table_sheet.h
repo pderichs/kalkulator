@@ -36,17 +36,9 @@ typedef std::vector<TableRowPtr> TableRows;
 
 typedef std::map<Location, LocationSet> ListenersMap;
 
-struct TableSheet {
+class TableSheet {
+public:
   TableSheet(const std::string &name);
-
-  TableColumnDefinitions column_definitions;
-  TableRowDefinitions row_definitions;
-  TableRows rows;
-  std::string name;
-  TableSelections selections;
-  Location current_cell;
-  TableSheetChangeHistory change_history;
-  ListenersMap _listener_map;
 
   size_t row_count() const;
   size_t col_count() const;
@@ -97,10 +89,25 @@ struct TableSheet {
 
   LocationSet search(const std::string &search_term) const;
 
+  Location current_cell() const { return _current_cell; }
+  std::string name() const { return _name; }
+  TableRowDefinitions row_definitions() const { return _row_definitions; }
+  TableColumnDefinitions column_definitions() const { return _column_definitions; }
+
 private:
   void apply_state_change_item(const StateHistoryItemPtr &state) const;
   void trigger_listeners(const Location &Location);
   void remove_from_update_listeners(const Location &location);
+
+private:
+  TableColumnDefinitions _column_definitions;
+  TableRowDefinitions _row_definitions;
+  TableRows _rows;
+  std::string _name;
+  TableSelections _selections;
+  Location _current_cell;
+  TableSheetChangeHistory _change_history;
+  ListenersMap _listener_map;
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

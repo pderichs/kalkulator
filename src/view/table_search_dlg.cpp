@@ -49,7 +49,7 @@ void TableSearchResultsDlg::Initialize(const TableSearchResult &results) {
 
   _lst_results->DeleteAllItems();
   for (const auto &result : _results) {
-    long index = _lst_results->InsertItem(0, result.sheet->name);
+    long index = _lst_results->InsertItem(0, result.sheet->name());
     _lst_results->SetItem(index, 1, pdtools::locationToString(result.location));
 
     auto cell = result.sheet->get_cell_by_location(result.location);

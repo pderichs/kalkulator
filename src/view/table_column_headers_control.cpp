@@ -73,7 +73,7 @@ void TableColumnHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
 
   // Columns
   x = ROW_HEADER_WIDTH;
-  for (const auto &coldef : sheet->column_definitions) {
+  for (const auto &coldef : sheet->column_definitions()) {
     // if (x > width) {
     //   break;
     // }

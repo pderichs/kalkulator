@@ -121,7 +121,7 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
 
   // TODO Only draw visible ones
 
-  wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell);
+  wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell());
 
   for (size_t r = 0; r < sheet->row_count(); r++) {
     for (size_t c = 0; c < sheet->col_count(); c++) {
@@ -234,7 +234,7 @@ wxRect CellsViewControl::GetCellRectByLocation(const Location &cell) {
   TableSheetPtr sheet = _document->current_sheet();
 
   n = 0;
-  for (const auto &coldef : sheet->column_definitions) {
+  for (const auto &coldef : sheet->column_definitions()) {
     if (n == cell.x()) {
       cell_coldef = coldef;
       break;
@@ -246,7 +246,7 @@ wxRect CellsViewControl::GetCellRectByLocation(const Location &cell) {
   }
 
   n = 0;
-  for (const auto &rowdef : sheet->row_definitions) {
+  for (const auto &rowdef : sheet->row_definitions()) {
     if (n == cell.y()) {
       cell_rowdef = rowdef;
       break;
