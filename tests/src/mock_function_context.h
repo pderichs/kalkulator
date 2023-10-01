@@ -27,9 +27,9 @@
 
 class MockFunctionContext : public LispFunctionExecutionContext {
 public:
-  MOCK_METHOD3(value, LispValuePtr(const LispValuePtrVector &func,
-                                   const LispExecutionContext &execution_context,
-                                   const std::any &context_param));
+  MOCK_METHOD(LispValuePtr, value, (const LispValuePtrVector &func,
+      const LispExecutionContext &execution_context,
+      const std::any &context_param), (override));
 };
 
 #endif // MOCK_FUNCTION_CONTEXT_H
