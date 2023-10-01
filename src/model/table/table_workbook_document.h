@@ -69,6 +69,7 @@ public:
 
   Location get_cell_by_pos(const Location &position) const;
   void select_cell(const Location &cell);
+  void select_cell(size_t row, size_t col);
 
   bool select_sheet_by_name(const std::string &sheet_name);
   bool select_sheet(const TableSheetPtr &sheet);

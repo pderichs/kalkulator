@@ -407,3 +407,7 @@ TableWorkbookDocument::search_sheets(const std::string &search_term) const {
 
   return result;
 }
+
+void TableWorkbookDocument::select_cell(size_t row, size_t col) {
+  select_cell(Location(col, row));
+}
