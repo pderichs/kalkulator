@@ -31,7 +31,7 @@
 class LispExecutionContextCellReference : public LispFunctionExecutionContext {
 public:
   explicit LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook)
-      : _workbook(workbook) {}
+      : _document(workbook) {}
   ~LispExecutionContextCellReference() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
@@ -81,10 +81,10 @@ public:
     // Inform document about cell reference
     // std::cerr << "Cell " << source_cell_location << " is listening to updates from "
     // << col << ", " << row << std::endl;
-    _workbook->add_update_listener(source_cell_location,
+    _document->add_update_listener(source_cell_location,
                                    referenced_cell_location);
 
-    auto opt_cell = _workbook->get_cell(referenced_cell_location, sheet);
+    auto opt_cell = _document->get_cell(referenced_cell_location, sheet);
     if (!opt_cell) {
       return LispValueFactory::new_none();
     }
@@ -111,7 +111,7 @@ private:
   }
 
 private:
-  TableWorkbookDocumentPtr _workbook;
+  TableWorkbookDocumentPtr _document;
 };
 
 #endif

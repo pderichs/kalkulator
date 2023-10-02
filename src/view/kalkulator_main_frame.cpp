@@ -401,7 +401,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
   TableWorkbookFile file;
 
   try {
-    std::string file_path((const char *) openFileDialog.GetPath());
+    std::string file_path((const char *)openFileDialog.GetPath());
     file.open(file_path);
     _document->set_file_path("");
     file.read(_document);
@@ -442,7 +442,7 @@ void KalkulatorMainFrame::OnSaveAs(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  SaveDocument((const char *) saveFileDialog.GetPath());
+  SaveDocument((const char *)saveFileDialog.GetPath());
 }
 
 void KalkulatorMainFrame::UpdateFormulaBySelectedCell(
@@ -463,7 +463,8 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
   std::string new_content;
 
   switch (event_id) {
-  case FORMULA_UPDATE:wxPrintf("FORMULA UPDATE\n");
+  case FORMULA_UPDATE:
+    wxPrintf("FORMULA UPDATE\n");
 
     _table_control->SetFocus();
 
@@ -556,10 +557,12 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
   }
 
   case ROW_HEIGHT_UPDATED:
-  case COLUMN_WIDTH_UPDATED:_table_control->Refresh();
+  case COLUMN_WIDTH_UPDATED:
+    _table_control->Refresh();
     break;
 
-  case HEADER_GOT_FOCUS:_table_control->SetFocus();
+  case HEADER_GOT_FOCUS:
+    _table_control->SetFocus();
     break;
 
   case NAVIGATE_SEARCH_RESULT_ITEM: {
@@ -654,7 +657,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
   int row;
   int col;
 
-  std::string input{(const char *) raw_input};
+  std::string input{(const char *)raw_input};
 
   std::regex exp{"(\\d+) (\\d+)"};
   std::smatch sm;
