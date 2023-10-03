@@ -30,7 +30,7 @@ public:
   TableWorkbookFile();
   ~TableWorkbookFile();
 
-  // Delete copy constructor and assignemnt operator
+  // Delete copy constructor and assignment operator
   TableWorkbookFile(const TableWorkbookFile &other) = delete;
   TableWorkbookFile &operator=(const TableWorkbookFile &other) = delete;
 
@@ -50,8 +50,6 @@ private:
   void save_sheet_sizes(int id, const TableSheetPtr& sheet);
   static std::string quote(const std::string &s) ;
   void execute_sql(const std::string &sql);
-
-  std::string lisp_value_type_to_string(LispValueType t) const;
 
   void read_tables();
   bool has_table(const std::string &name);

@@ -20,6 +20,7 @@
 #define WORKBOOK_DOCUMENT_INCLUDED
 
 #include "../event_sink.h"
+#include "table_cell_location.h"
 #include "table_cell.h"
 #include "table_cell_format.h"
 #include "table_search_result.h"
@@ -29,6 +30,7 @@
 #include <vector>
 
 typedef std::vector<TableCellPtr> TableCellPtrVector;
+typedef std::map<TableCellLocation, TableCellLocationSet> TableCellListenerMap;
 
 class TableWorkbookDocument {
 public:
@@ -64,7 +66,7 @@ public:
   bool move_cursor_page_up();
   bool move_cursor_page_down();
 
-  TableSearchResult search_sheets(const std::string& search_term) const;
+  TableSearchResult search_sheets(const std::string &search_term) const;
   std::optional<Location> current_sheet_selected_cell() const;
 
   Location get_cell_by_pos(const Location &position) const;
@@ -107,8 +109,13 @@ public:
   void set_current_cell_format(const TableCellFormat &format);
   std::optional<TableCellFormat> get_current_cell_format() const;
 
-  void add_update_listener(const Location &listener,
-                           const Location &listening_to);
+  void add_update_listener(const TableCellLocation &listener,
+                           const TableCellLocation &listening_to);
+
+  TableCellPtr get_cell_by_location(const TableCellLocation& location) const;
+
+private:
+  void trigger_listeners(const TableCellLocation &location);
 
 private:
   std::string _path;
@@ -116,6 +123,7 @@ private:
   TableSheets _sheets;
   EventSink *_event_sink;
   TableSheetPtr _current_sheet;
+  TableCellListenerMap _listeners;
 };
 
 typedef std::shared_ptr<TableWorkbookDocument> TableWorkbookDocumentPtr;

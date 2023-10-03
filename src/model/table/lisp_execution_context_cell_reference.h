@@ -22,6 +22,7 @@
 #include "../lisp/lisp_execution_context.h"
 #include "../lisp/lisp_execution_context_error.h"
 #include "../lisp/lisp_function_execution_context.h"
+#include "../lisp/value_converter.h"
 #include "../lisp/lisp_value_factory.h"
 #include "../lisp/lisp_common_values.h"
 #include "table_workbook_document.h"
@@ -56,6 +57,8 @@ public:
     } else {
       row_index = 0;
       col_index = 1;
+
+      sheet = _document->current_sheet()->name();
     }
 
     if (!params[row_index]->is_number() || !params[col_index]->is_number()) {
@@ -67,10 +70,11 @@ public:
     // itself.
     // The context_param contains the current cell location
     // within the spreadsheet calculation application.
-    auto source_cell_location = std::any_cast<Location>(context_param);
+    auto source_cell_location = std::any_cast<TableCellLocation>(context_param);
 
     auto referenced_cell_location =
-        read_cell_location(params, row_index, col_index);
+        TableCellLocation(sheet,
+                          read_cell_location(params, row_index, col_index));
 
     if (source_cell_location == referenced_cell_location) {
       // This would be a circular reference - cancel operation
@@ -84,15 +88,10 @@ public:
     _document->add_update_listener(source_cell_location,
                                    referenced_cell_location);
 
-    auto opt_cell = _document->get_cell(referenced_cell_location, sheet);
-    if (!opt_cell) {
-      return LispValueFactory::new_none();
-    }
-
-    auto cell = *opt_cell;
+    auto cell = _document->get_cell_by_location(referenced_cell_location);
 
     if (!cell || !cell->has_content()) {
-      return LispValueFactory::new_none();
+      return LispCommonValues::none_value();
     }
 
     return cell->lisp_value();

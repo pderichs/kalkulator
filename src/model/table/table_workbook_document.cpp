@@ -18,14 +18,15 @@
 
 #include "table_workbook_document.h"
 #include "table_cell.h"
-#include "table_column_definition.h"
 #include "table_sheet.h"
+#include "model/lisp/value_converter.h"
 #include <algorithm>
 #include <memory>
+#include <queue>
 
 TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink)
     : _path(), _changed(false), _sheets(), _event_sink(event_sink),
-      _current_sheet() {
+      _current_sheet(), _listeners() {
   initialize();
 }
 
@@ -43,12 +44,16 @@ TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
 void TableWorkbookDocument::update_cell_content(const TableSheetPtr &sheet,
                                                 Location cell_location,
                                                 const std::string &content) {
-  sheet->update_content(cell_location, content);
+  if (sheet->update_content(cell_location, content)) {
+    auto location = TableCellLocation(sheet->name(), cell_location);
 
-  _changed = true;
+    trigger_listeners(location);
 
-  std::any param = cell_location;
-  _event_sink->send_event(CELL_UPDATED, param);
+    _changed = true;
+
+    std::any param = cell_location;
+    _event_sink->send_event(CELL_UPDATED, param);
+  }
 }
 
 void TableWorkbookDocument::update_content_current_cell(
@@ -375,9 +380,14 @@ TableWorkbookDocument::get_current_cell_format() const {
   return _current_sheet->get_current_cell_format();
 }
 
-void TableWorkbookDocument::add_update_listener(const Location &listener,
-                                                const Location &listening_to) {
-  _current_sheet->add_update_listener(listener, listening_to);
+void TableWorkbookDocument::add_update_listener(const TableCellLocation &listener,
+                                                const TableCellLocation &listening_to) {
+  auto it = _listeners.find(listening_to);
+  if (it == _listeners.end()) {
+    _listeners[listening_to] = {listener};
+  } else {
+    it->second.insert(listener);
+  }
 }
 
 void TableWorkbookDocument::remove_current_sheet() {
@@ -416,4 +426,45 @@ TableWorkbookDocument::search_sheets(const std::string &search_term) const {
 
 void TableWorkbookDocument::select_cell(size_t row, size_t col) {
   select_cell(Location(col, row));
+}
+
+void TableWorkbookDocument::trigger_listeners(const TableCellLocation &location) {
+  auto it = _listeners.find(location);
+  if (it == _listeners.end()) {
+    return;
+  }
+
+  std::queue<TableCellLocation> recalc_cells;
+
+  for (const auto &listener_location : it->second) {
+    recalc_cells.push(listener_location);
+  }
+
+  while (!recalc_cells.empty()) {
+    TableCellLocation cell_location = recalc_cells.front();
+    recalc_cells.pop();
+
+    TableCellPtr cell = get_cell_by_location(cell_location);
+    if (cell->recalc(cell_location.sheet())) {
+      // Cell content has changed. The listeners for this cell must be triggered
+      // as well.
+      it = _listeners.find(cell_location);
+      if (it != _listeners.end()) {
+        for (const auto &listener_location : it->second) {
+          recalc_cells.push(listener_location);
+        }
+      }
+    }
+  }
+}
+
+TableCellPtr TableWorkbookDocument::get_cell_by_location(const TableCellLocation &location) const {
+  TableCellPtr result;
+
+  auto sheet = table_sheet_by_name(location.sheet());
+  if (!sheet) {
+    return {};
+  }
+
+  return sheet->get_cell_by_location(location.location());
 }

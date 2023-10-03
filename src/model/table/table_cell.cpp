@@ -17,8 +17,10 @@
  */
 
 #include "table_cell.h"
+#include "table_cell_location.h"
 
-bool TableCell::update_content(const std::string &content) {
+bool TableCell::update_content(const std::string &content,
+                               const std::string &sheet_name) {
   _lisp_value = ValueConverter::to_lisp_value(content);
 
   if (_lisp_value->is_function()) {
@@ -27,7 +29,7 @@ bool TableCell::update_content(const std::string &content) {
     _formula_content = "";
   }
 
-  return recalc();
+  return recalc(sheet_name);
 }
 
 std::string TableCell::visible_content() const {
@@ -53,10 +55,12 @@ bool TableCell::has_content() const {
 void TableCell::clear() { _lisp_value = {}; }
 
 // Returns true if content changed, false otherwise.
-bool TableCell::recalc() {
+bool TableCell::recalc(const std::string &sheet_name) {
   std::string previous_content = _visible_content;
 
-  _visible_content = ValueConverter::to_string(_lisp_value, _location);
+  _visible_content = ValueConverter::to_string(_lisp_value,
+                                               TableCellLocation(sheet_name,
+                                                                 _location));
 
   return previous_content != _visible_content;
 }

@@ -67,7 +67,7 @@ public:
   size_t get_max_row() const;
   size_t get_max_col() const;
 
-  void update_content(const Location &cell_location,
+  bool update_content(const Location &cell_location,
                       const std::string &content);
 
   void undo();
@@ -84,9 +84,6 @@ public:
   void set_current_cell_format(const TableCellFormat &format) const;
   std::optional<TableCellFormat> get_current_cell_format() const;
 
-  void add_update_listener(const Location &listener,
-                           const Location &listening_to);
-
   LocationSet search(const std::string &search_term) const;
 
   Location current_cell() const { return _current_cell; }
@@ -96,7 +93,6 @@ public:
 
 private:
   void apply_state_change_item(const StateHistoryItemPtr &state) const;
-  void trigger_listeners(const Location &Location);
   void remove_from_update_listeners(const Location &location);
 
 private:

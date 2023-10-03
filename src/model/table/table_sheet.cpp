@@ -192,7 +192,7 @@ void TableSheet::clear_current_cell() {
   _change_history.push_state(item);
 }
 
-void TableSheet::update_content(const Location &cell_location,
+bool TableSheet::update_content(const Location &cell_location,
                                 const std::string &content) {
   remove_from_update_listeners(cell_location);
 
@@ -201,22 +201,26 @@ void TableSheet::update_content(const Location &cell_location,
   std::string previous_content = cell->get_formula_content();
 
   // Note: update listeners are applied within the call to update_content
-  if (cell->update_content(content)) {
-    trigger_listeners(cell_location);
-
+  if (cell->update_content(content, _name)) {
     CellState state{cell_location, previous_content, content};
     StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
     _change_history.push_state(item);
+
+    return true;
   }
+
+  return false;
 }
 
-size_t TableSheet::get_max_col() const { return _column_definitions.size() - 1; }
+size_t TableSheet::get_max_col() const {
+  return _column_definitions.size() - 1;
+}
 
 void TableSheet::apply_state_change_item(
     const StateHistoryItemPtr &state) const {
   for (const auto &cell_state : state->cell_states) {
     auto cell = get_cell_by_location(cell_state.location);
-    cell->update_content(cell_state.prev);
+    cell->update_content(cell_state.prev, _name);
   }
 }
 
@@ -278,46 +282,6 @@ std::optional<TableCellFormat> TableSheet::get_current_cell_format() const {
   }
 
   return {};
-}
-
-void TableSheet::add_update_listener(const Location &listener,
-                                     const Location &listening_to) {
-  auto it = _listener_map.find(listening_to);
-  if (it == _listener_map.end()) {
-    _listener_map[listening_to] = {listener};
-  } else {
-    it->second.insert(listener);
-  }
-}
-
-void TableSheet::trigger_listeners(const Location &location) {
-  auto it = _listener_map.find(location);
-  if (it == _listener_map.end()) {
-    return;
-  }
-
-  std::queue<Location> recalc_cells;
-
-  for (const auto &listener_location : it->second) {
-    recalc_cells.push(listener_location);
-  }
-
-  while (!recalc_cells.empty()) {
-    Location cell_location = recalc_cells.front();
-    recalc_cells.pop();
-
-    TableCellPtr cell = get_cell_by_location(cell_location);
-    if (cell->recalc()) {
-      // Cell content has changed. The listeners for this cell must be triggered
-      // as well.
-      it = _listener_map.find(cell_location);
-      if (it != _listener_map.end()) {
-        for (const auto &listener_location : it->second) {
-          recalc_cells.push(listener_location);
-        }
-      }
-    }
-  }
 }
 
 void TableSheet::remove_from_update_listeners(const Location &location) {

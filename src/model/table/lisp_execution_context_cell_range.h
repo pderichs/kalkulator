@@ -22,6 +22,7 @@
 #include "../lisp/lisp_function_execution_context.h"
 #include "../lisp/lisp_value_factory.h"
 #include "../lisp/lisp_common_values.h"
+#include "../lisp/value_converter.h"
 #include "table_workbook_document.h"
 #include <any>
 #include <sstream>
@@ -47,7 +48,8 @@ public:
       throw LispExecutionContextError(ss.str());
     }
 
-    auto this_cell = std::any_cast<Location>(context_param);
+    auto this_cell = std::any_cast<TableCellLocation>(context_param);
+    auto sheet = this_cell.sheet();
 
     LispValuePtrVector result;
 
@@ -70,12 +72,15 @@ public:
         continue;
       }
 
-      if (cell->row() == this_cell.y() && cell->col() == this_cell.x()) {
+      if (cell->row() == this_cell.location().y()
+          && cell->col() == this_cell.location().x()) {
         return LispCommonValues::error_circular_ref();
       }
 
       // Inform document about cell reference
-      _document->add_update_listener(this_cell, cell->location());
+      _document->add_update_listener(this_cell,
+                                     TableCellLocation(sheet,
+                                                       cell->location()));
 
       LispValuePtr value(cell->lisp_value());
       if (value && !value->is_none()) {
