@@ -39,7 +39,7 @@ public:
   ~LispLambdaExecutor() = default;
 
   LispValuePtr value(const LispExecutionContext &execution_context,
-                     const std::any &context_param) {
+                     const std::any &context_param, UpdateIdType update_id) {
     if (_definition.parameter_definitions.size() != _params.size()) {
       throw LispExecutionContextError(
           "Lambda Execution: Parameter count mismatch.");
@@ -56,15 +56,9 @@ public:
 
     LispValuePtr expanded_body = replace_names_with_values(def, named_params);
 
-    return execute_actual_body(expanded_body->list(), execution_context,
-                               context_param);
-  }
-
-  LispValuePtr
-  execute_actual_body(const LispValuePtrVector &def,
-                      const LispExecutionContext &execution_context,
-                      const std::any &context_param) const {
-    return execution_context.execute(def, context_param);
+    return execution_context.execute(expanded_body->list(),
+                                     context_param,
+                                     update_id);
   }
 
   LispValuePtr replace_names_with_values(

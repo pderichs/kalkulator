@@ -107,18 +107,21 @@ LispExecutionContext::LispExecutionContext() : _scope(), _functions() {
 
 LispValuePtr
 LispExecutionContext::execute(const LispValuePtr &value,
-                              const std::any &context_param = {}) const {
+                              const std::any &context_param,
+                              UpdateIdType update_id) const {
   if (!value->is_function()) {
     return value;
   }
 
-  LispValuePtr execution_result = execute(value->list(), context_param);
+  LispValuePtr
+      execution_result = execute(value->list(), context_param, update_id);
   return execution_result;
 }
 
 LispValuePtr
 LispExecutionContext::execute(const LispValuePtrVector &func,
-                              const std::any &context_param) const {
+                              const std::any &context_param,
+                              UpdateIdType update_id) const {
   std::string identifier = func.at(0)->string();
   const auto &execution_context_it = _functions.find(identifier);
   if (execution_context_it == _functions.end()) {
@@ -132,7 +135,10 @@ LispExecutionContext::execute(const LispValuePtrVector &func,
   LispValuePtrVector func_extracted_scope = extract_scope_variables(func);
 
   const auto &function_context = execution_context_it->second;
-  return function_context->value(func_extracted_scope, *this, context_param);
+  return function_context->value(func_extracted_scope,
+                                 *this,
+                                 context_param,
+                                 update_id);
 }
 
 void LispExecutionContext::add_function(
@@ -176,7 +182,7 @@ void LispExecutionContext::add_variable(const std::string &name,
   _scope[name] = value;
 }
 
-LispValuePtr LispExecutionContext::scope_variable(const std::string& name) const {
+LispValuePtr LispExecutionContext::scope_variable(const std::string &name) const {
   auto it = _scope.find(name);
   if (it == _scope.end()) {
     return LispCommonValues::none_value();

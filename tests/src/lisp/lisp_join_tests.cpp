@@ -34,7 +34,7 @@ TEST(LispJoinTests, JoinTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_list());
 

@@ -33,24 +33,25 @@ public:
 
   virtual LispValuePtr value(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
-                             const std::any &context_param) = 0;
+                             const std::any &context_param,
+                             UpdateIdType update_id) = 0;
 
 protected:
   LispValuePtrVector
   execute_functions(const LispValuePtrVector &params,
                     const LispExecutionContext &execution_context,
-                    const std::any &context_param) const;
+                    const std::any &context_param,
+                    UpdateIdType update_id) const;
   LispValuePtrVector execute_functions_and_extract_list_results(
       const LispValuePtrVector &params,
       const LispExecutionContext &execution_context,
-      const std::any &context_param) const;
+      const std::any &context_param, UpdateIdType update_id) const;
 
   void ensure_params(const LispValuePtrVector &func) const;
   LispValuePtr expect_number(const LispValuePtr &value,
                              const LispExecutionContext &execution_context,
-                             const std::any &context_param) const;
-  LispValuePtr expect_parameter_at(const LispValuePtrVector &func,
-                                   size_t index) const;
+                             const std::any &context_param,
+                             UpdateIdType update_id) const;
 
   LispValuePtrVector
   extract_params_from_list(const LispValuePtrVector &func) const;
@@ -58,12 +59,14 @@ protected:
   LispValuePtrVector
   extract_and_execute_params(const LispValuePtrVector &func,
                              const LispExecutionContext &execution_context,
-                             const std::any &context_param) const;
+                             const std::any &context_param,
+                             UpdateIdType update_id) const;
 
   LispValuePtr
   execute_if_required(const LispValuePtr &param,
                       const LispExecutionContext &execution_context,
-                      const std::any &context_param) const;
+                      const std::any &context_param,
+                      UpdateIdType update_id) const;
 };
 
 #endif

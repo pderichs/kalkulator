@@ -14,26 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
+#ifndef UPDATE_ID_H
+#define UPDATE_ID_H
 
-#ifndef VALUE_CONVERTER_INCLUDED
-#define VALUE_CONVERTER_INCLUDED
+#include <cstddef>
 
-#include "lisp_execution_context.h"
-#include "update_id.h"
+typedef size_t UpdateIdType;
 
-class ValueConverter {
-public:
-  static void set_execution_context(LispExecutionContext *context);
+UpdateIdType generate_update_id();
 
-  static LispValuePtr to_lisp_value(const std::string &s);
-  static std::string to_string(const LispValuePtr &value,
-                               const std::any &context_param,
-                               UpdateIdType update_id);
-
-private:
-  static LispExecutionContext *execution_context;
-};
-
-#endif
+#endif //UPDATE_ID_H

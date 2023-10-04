@@ -32,9 +32,13 @@ public:
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     LispValuePtrVector params =
-        extract_and_execute_params(func, execution_context, context_param);
+        extract_and_execute_params(func,
+                                   execution_context,
+                                   context_param,
+                                   update_id);
 
     if (params.size() != 2) {
       throw LispExecutionContextError("Xor: Expected 2 parameters");

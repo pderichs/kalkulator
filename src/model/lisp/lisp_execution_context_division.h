@@ -30,18 +30,22 @@ public:
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     ensure_params(func);
 
     LispValuePtrVector params =
-        extract_and_execute_params(func, execution_context, context_param);
+        extract_and_execute_params(func,
+                                   execution_context,
+                                   context_param,
+                                   update_id);
 
     LispValue::DoubleType result;
 
     const auto &first_param = params[0];
 
     LispValuePtr base_value(
-        expect_number(first_param, execution_context, context_param));
+        expect_number(first_param, execution_context, context_param, update_id));
 
     // First parameter of subtraction is base value
     result = base_value->to_double();
@@ -50,7 +54,7 @@ public:
     for (size_t n = 1; n < params.size(); n++) {
       const auto &param = params[n];
       LispValuePtr value(
-          expect_number(param, execution_context, context_param));
+          expect_number(param, execution_context, context_param, update_id));
 
       if (value->to_double() == 0.0) {
         throw LispExecutionContextError("Division by zero");

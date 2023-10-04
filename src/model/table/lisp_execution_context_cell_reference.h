@@ -37,9 +37,13 @@ public:
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     LispValuePtrVector params =
-        extract_and_execute_params(func, execution_context, context_param);
+        extract_and_execute_params(func,
+                                   execution_context,
+                                   context_param,
+                                   update_id);
 
     if (params.size() < 2 || params.size() > 3) {
       return LispCommonValues::error_parameter_count();
@@ -78,7 +82,6 @@ public:
 
     if (source_cell_location == referenced_cell_location) {
       // This would be a circular reference - cancel operation
-      // throw LispExecutionContextError("Detected circular reference.");
       return LispCommonValues::error_circular_ref();
     }
 

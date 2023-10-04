@@ -23,7 +23,7 @@
 #include "gtest/gtest.h"
 
 void execute_lisp_tests(const std::map<std::string, LispValuePtr> &tests,
-                       const std::string &test_name) {
+                        const std::string &test_name) {
   for (const auto &it : tests) {
     std::string test = it.first;
     const auto &expected_result = it.second;
@@ -41,7 +41,7 @@ void execute_lisp_tests(const std::map<std::string, LispValuePtr> &tests,
     EXPECT_TRUE(value);
 
     LispExecutionContext executor;
-    LispValuePtr result = executor.execute(value, {});
+    LispValuePtr result = executor.execute(value, {}, 0);
 
     EXPECT_EQ(*result, *expected_result);
   }

@@ -34,7 +34,7 @@ const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
 TableSheet::TableSheet(const std::string &param_name)
     : _column_definitions(), _row_definitions(), _rows(), _name(param_name),
-      _selections(), _current_cell(0, 0), _change_history(), _listener_map() {
+      _selections(), _current_cell(0, 0), _change_history() {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     _column_definitions.push_back(std::make_shared<TableColumnDefinition>());
   }
@@ -193,15 +193,14 @@ void TableSheet::clear_current_cell() {
 }
 
 bool TableSheet::update_content(const Location &cell_location,
-                                const std::string &content) {
-  remove_from_update_listeners(cell_location);
-
+                                const std::string &content,
+                                UpdateIdType update_id) {
   auto cell = get_cell_by_location(cell_location);
 
   std::string previous_content = cell->get_formula_content();
 
   // Note: update listeners are applied within the call to update_content
-  if (cell->update_content(content, _name)) {
+  if (cell->update_content(content, _name, update_id)) {
     CellState state{cell_location, previous_content, content};
     StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
     _change_history.push_state(item);
@@ -220,7 +219,7 @@ void TableSheet::apply_state_change_item(
     const StateHistoryItemPtr &state) const {
   for (const auto &cell_state : state->cell_states) {
     auto cell = get_cell_by_location(cell_state.location);
-    cell->update_content(cell_state.prev, _name);
+    cell->update_content(cell_state.prev, _name, 0);
   }
 }
 
@@ -282,12 +281,6 @@ std::optional<TableCellFormat> TableSheet::get_current_cell_format() const {
   }
 
   return {};
-}
-
-void TableSheet::remove_from_update_listeners(const Location &location) {
-  for (auto &it : _listener_map) {
-    it.second.erase(location);
-  }
 }
 
 LocationSet TableSheet::search(const std::string &search_term) const {

@@ -30,11 +30,15 @@ public:
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     ensure_params(func);
 
     LispValuePtrVector params =
-        extract_and_execute_params(func, execution_context, context_param);
+        extract_and_execute_params(func,
+                                   execution_context,
+                                   context_param,
+                                   update_id);
 
     params.erase(params.begin());
 

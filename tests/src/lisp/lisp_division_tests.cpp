@@ -35,7 +35,7 @@ TEST(LispDivisionTests, DivisionTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, 100);
 }
@@ -52,7 +52,7 @@ TEST(LispDivisionTests, DivisionWithListTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, 10);
 }

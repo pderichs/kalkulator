@@ -26,6 +26,7 @@
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include "table_selections.h"
+#include "model/lisp/update_id.h"
 #include <cstddef>
 #include <map>
 #include <memory>
@@ -33,8 +34,6 @@
 #include <vector>
 
 typedef std::vector<TableRowPtr> TableRows;
-
-typedef std::map<Location, LocationSet> ListenersMap;
 
 class TableSheet {
 public:
@@ -68,7 +67,7 @@ public:
   size_t get_max_col() const;
 
   bool update_content(const Location &cell_location,
-                      const std::string &content);
+                      const std::string &content, UpdateIdType update_id);
 
   void undo();
   void redo();
@@ -103,7 +102,6 @@ private:
   TableSelections _selections;
   Location _current_cell;
   TableSheetChangeHistory _change_history;
-  ListenersMap _listener_map;
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

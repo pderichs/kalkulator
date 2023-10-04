@@ -24,6 +24,7 @@
 #include "lisp_value.h"
 #include "lisp_value_ptr.h"
 #include "lisp_common_values.h"
+#include "update_id.h"
 
 class LispFunctionExecutionContext;
 
@@ -38,9 +39,11 @@ class LispExecutionContext {
 public:
   LispExecutionContext();
   LispValuePtr execute(const LispValuePtr &value,
-                       const std::any &context_param) const;
+                       const std::any &context_param,
+                       UpdateIdType update_id) const;
   LispValuePtr execute(const LispValuePtrVector &func,
-                       const std::any &context_param) const;
+                       const std::any &context_param,
+                       UpdateIdType update_id) const;
   void add_function(const std::string &identifier,
                     const LispFunctionExecutionContextPtr &func,
                     bool override = false);
@@ -50,7 +53,7 @@ public:
 
   LispValuePtrVector extract_scope_variables(const LispValuePtrVector &params) const;
 
-  LispValuePtr scope_variable(const std::string& name) const;
+  LispValuePtr scope_variable(const std::string &name) const;
 
 private:
   LispScopeMap _scope;

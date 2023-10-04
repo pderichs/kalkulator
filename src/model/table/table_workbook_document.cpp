@@ -20,6 +20,7 @@
 #include "table_cell.h"
 #include "table_sheet.h"
 #include "model/lisp/value_converter.h"
+#include "model/lisp/update_id.h"
 #include <algorithm>
 #include <memory>
 #include <queue>
@@ -41,13 +42,21 @@ TableWorkbookDocument::table_sheet_by_name(const std::string &name) const {
   return {};
 }
 
+void TableWorkbookDocument::remove_from_update_listeners(const TableCellLocation &location) {
+  for (auto &it : _listeners) {
+    it.second.erase(location);
+  }
+}
+
 void TableWorkbookDocument::update_cell_content(const TableSheetPtr &sheet,
                                                 Location cell_location,
-                                                const std::string &content) {
-  if (sheet->update_content(cell_location, content)) {
-    auto location = TableCellLocation(sheet->name(), cell_location);
+                                                const std::string &content,
+                                                unsigned long update_id) {
+  auto location = TableCellLocation(sheet->name(), cell_location);
+  remove_from_update_listeners(location);
 
-    trigger_listeners(location);
+  if (sheet->update_content(cell_location, content, update_id)) {
+    trigger_listeners(location, update_id);
 
     _changed = true;
 
@@ -58,9 +67,11 @@ void TableWorkbookDocument::update_cell_content(const TableSheetPtr &sheet,
 
 void TableWorkbookDocument::update_content_current_cell(
     const std::string &content) {
+  UpdateIdType update_id = generate_update_id();
+
   TableSheetPtr sheet = _current_sheet;
 
-  update_cell_content(sheet, sheet->current_cell(), content);
+  update_cell_content(sheet, sheet->current_cell(), content, update_id);
 }
 
 bool TableWorkbookDocument::move_cursor_up() {
@@ -428,7 +439,8 @@ void TableWorkbookDocument::select_cell(size_t row, size_t col) {
   select_cell(Location(col, row));
 }
 
-void TableWorkbookDocument::trigger_listeners(const TableCellLocation &location) {
+void TableWorkbookDocument::trigger_listeners(const TableCellLocation &location,
+                                              UpdateIdType update_id) {
   auto it = _listeners.find(location);
   if (it == _listeners.end()) {
     return;
@@ -445,7 +457,7 @@ void TableWorkbookDocument::trigger_listeners(const TableCellLocation &location)
     recalc_cells.pop();
 
     TableCellPtr cell = get_cell_by_location(cell_location);
-    if (cell->recalc(cell_location.sheet())) {
+    if (cell->recalc(cell_location.sheet(), update_id)) {
       // Cell content has changed. The listeners for this cell must be triggered
       // as well.
       it = _listeners.find(cell_location);

@@ -27,6 +27,7 @@
 
 #include "location.h"
 #include "table_cell_format.h"
+#include "model/lisp/update_id.h"
 
 class TableCell {
 public:
@@ -34,7 +35,9 @@ public:
       : _formula_content(), _visible_content(), _lisp_value(),
         _location(col, row), _format() {}
 
-  bool update_content(const std::string &content, const std::string& sheet_name);
+  bool update_content(const std::string &content,
+                      const std::string &sheet_name,
+                      UpdateIdType update_id);
   std::string visible_content() const;
   std::string get_formula_content() const;
   bool is_formula() const;
@@ -49,7 +52,7 @@ public:
   TableCellFormat format() const { return *_format; }
   void set_format(const TableCellFormat &format) { _format = format; }
 
-  bool recalc(const std::string& sheet_name);
+  bool recalc(const std::string& sheet_name, UpdateIdType update_id);
 
 private:
   std::string _formula_content;

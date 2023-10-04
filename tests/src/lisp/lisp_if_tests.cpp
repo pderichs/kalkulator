@@ -49,7 +49,7 @@ TEST(LispIfTests, IfTestWithLambda1) {
   EXPECT_TRUE(value->is_function());
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_function_definition());
   EXPECT_EQ(result->function_definition().name, "");
@@ -75,7 +75,7 @@ TEST(LispIfTests, IfTestWithLambdaFalseCaseIsNotExecutedWhenConditionIsTrue) {
   // We want to make sure the lambda is not executed
   EXPECT_CALL(*fct, value).Times(0);
 
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_integer());
   EXPECT_EQ(result->explicit_integer_value(), 666);
@@ -101,7 +101,7 @@ TEST(LispIfTests, IfTestWithLambdaTrueCaseIsNotExecutedWhenConditionIsFalse) {
   // We want to make sure the lambda is not executed
   EXPECT_CALL(*fct, value).Times(0);
 
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_integer());
   EXPECT_EQ(result->explicit_integer_value(), 666);

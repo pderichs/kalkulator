@@ -25,22 +25,24 @@
 
 class LispExecutionContextEq : public LispFunctionExecutionContext {
 public:
-  explicit LispExecutionContextEq(bool extract_lists) : _extract_lists(extract_lists) {}
+  explicit LispExecutionContextEq(bool extract_lists) : _extract_lists(
+      extract_lists) {}
   ~LispExecutionContextEq() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     ensure_params(func);
 
     LispValuePtrVector params = extract_params_from_list(func);
 
     if (_extract_lists) {
       params = execute_functions_and_extract_list_results(
-          params, execution_context, context_param);
+          params, execution_context, context_param, update_id);
     } else {
       params =
-          execute_functions(params, execution_context, context_param);
+          execute_functions(params, execution_context, context_param, update_id);
     }
 
     LispValuePtr last;

@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LISP_EXECUTION_CONTEXT_LIST_INCLUDED
 #define LISP_EXECUTION_CONTEXT_LIST_INCLUDED
 
@@ -32,9 +31,11 @@ public:
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     std::ignore = execution_context;
     std::ignore = context_param;
+    std::ignore = update_id;
 
     return LispValueFactory::new_list(extract_params_from_list(func)); // ;)
   }

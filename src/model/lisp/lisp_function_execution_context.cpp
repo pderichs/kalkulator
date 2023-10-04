@@ -33,11 +33,11 @@ void LispFunctionExecutionContext::ensure_params(
 
 LispValuePtr LispFunctionExecutionContext::expect_number(
     const LispValuePtr &value, const LispExecutionContext &execution_context,
-    const std::any &context_param) const {
+    const std::any &context_param, UpdateIdType update_id) const {
   LispValuePtr result;
 
   if (value->is_function()) {
-    result = execution_context.execute(value, context_param);
+    result = execution_context.execute(value, context_param, update_id);
   } else if (value->is_number()) {
     result = value;
   } else if (value->is_none()) {
@@ -55,10 +55,10 @@ LispValuePtr LispFunctionExecutionContext::expect_number(
 
 LispValuePtr LispFunctionExecutionContext::execute_if_required(
     const LispValuePtr &param, const LispExecutionContext &execution_context,
-    const std::any &context_param) const {
+    const std::any &context_param, UpdateIdType update_id) const {
   if (param->is_function()) {
     LispValuePtr function_result(
-        execution_context.execute(param, context_param));
+        execution_context.execute(param, context_param, update_id));
 
     return function_result;
   }
@@ -69,13 +69,13 @@ LispValuePtr LispFunctionExecutionContext::execute_if_required(
 LispValuePtrVector LispFunctionExecutionContext::execute_functions(
     const LispValuePtrVector &params,
     const LispExecutionContext &execution_context,
-    const std::any &context_param) const {
+    const std::any &context_param, UpdateIdType update_id) const {
   LispValuePtrVector result;
 
   for (const auto &param : params) {
     result.push_back(execute_if_required(param,
                                          execution_context,
-                                         context_param));
+                                         context_param, update_id));
   }
 
   return result;
@@ -85,10 +85,11 @@ LispValuePtrVector
 LispFunctionExecutionContext::execute_functions_and_extract_list_results(
     const LispValuePtrVector &params,
     const LispExecutionContext &execution_context,
-    const std::any &context_param) const {
+    const std::any &context_param, UpdateIdType update_id) const {
   LispValuePtrVector result;
 
-  auto exparams = execute_functions(params, execution_context, context_param);
+  auto exparams =
+      execute_functions(params, execution_context, context_param, update_id);
 
   for (const auto &param : exparams) {
     if (param->is_list()) {
@@ -103,18 +104,6 @@ LispFunctionExecutionContext::execute_functions_and_extract_list_results(
   return result;
 }
 
-LispValuePtr LispFunctionExecutionContext::expect_parameter_at(
-    const LispValuePtrVector &params, size_t index) const {
-  try {
-    const auto &param = params.at(index);
-    return param;
-  } catch (std::out_of_range const &exc) {
-    std::stringstream ss;
-    ss << "Expected parameter at position " << index;
-    throw LispExecutionContextError(ss.str());
-  }
-}
-
 LispValuePtrVector LispFunctionExecutionContext::extract_params_from_list(
     const LispValuePtrVector &func) const {
   return {func.begin() + 1, func.end()};
@@ -123,12 +112,12 @@ LispValuePtrVector LispFunctionExecutionContext::extract_params_from_list(
 LispValuePtrVector LispFunctionExecutionContext::extract_and_execute_params(
     const LispValuePtrVector &func,
     const LispExecutionContext &execution_context,
-    const std::any &context_param) const {
+    const std::any &context_param, UpdateIdType update_id) const {
   LispValuePtrVector result;
 
   result = extract_params_from_list(func);
   result = execute_functions_and_extract_list_results(result, execution_context,
-                                                      context_param);
+                                                      context_param, update_id);
 
   return result;
 }

@@ -35,7 +35,7 @@ TEST(LispMultiplicationTests, MultiplicationTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, -3648);
 }
@@ -52,7 +52,7 @@ TEST(LispMultiplicationTests, MultiplicationWithListTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, 4800000);
 }

@@ -30,9 +30,11 @@ public:
   // Adds "Hello " to the front of the provided string
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     std::ignore = execution_context;
     std::ignore = context_param;
+    std::ignore = update_id;
 
     ensure_params(func);
 

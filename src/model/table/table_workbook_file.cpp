@@ -169,7 +169,7 @@ static int read_cells_callback(void *data, int argc, char **argv,
     } else if (col == "content") {
       const auto &cell = sheet->get_cell(r, c);
       if (cell) {
-        workbook->update_cell_content(sheet, Location(c, r), content);
+        workbook->update_cell_content(sheet, Location(c, r), content, 0);
       }
     }
   }

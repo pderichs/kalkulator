@@ -35,7 +35,7 @@ TEST(LispAdditionTests, AdditionTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, -7);
 }
@@ -51,7 +51,7 @@ TEST(LispAdditionTests, AdditionWithListTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, 2036);
 }

@@ -29,7 +29,7 @@ class MockFunctionContext : public LispFunctionExecutionContext {
 public:
   MOCK_METHOD(LispValuePtr, value, (const LispValuePtrVector &func,
       const LispExecutionContext &execution_context,
-      const std::any &context_param), (override));
+      const std::any &context_param, UpdateIdType update_id), (override));
 };
 
 #endif // MOCK_FUNCTION_CONTEXT_H

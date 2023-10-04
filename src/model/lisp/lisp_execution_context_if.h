@@ -33,7 +33,8 @@ public:
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     LispValuePtrVector params = extract_params_from_list(func);
 
     if (params.size() < 2 || params.size() > 3) {
@@ -43,7 +44,8 @@ public:
     LispValuePtr condition = params[0];
 
     if (condition->is_function()) {
-      condition = execution_context.execute(condition, context_param);
+      condition =
+          execution_context.execute(condition, context_param, update_id);
     }
 
     LispValuePtr result;
@@ -54,10 +56,10 @@ public:
     }
 
     if (condition->boolean()) {
-      result = execution_context.execute(params[1], context_param);
+      result = execution_context.execute(params[1], context_param, update_id);
     } else {
       if (params.size() == 3) {
-        result = execution_context.execute(params[2], context_param);
+        result = execution_context.execute(params[2], context_param, update_id);
       } else {
         result = LispCommonValues::none_value();
       }

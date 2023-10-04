@@ -58,7 +58,7 @@ TEST(LispOrTests, OrDoesNotExecuteOtherConditionIfFulfilledByFirst) {
   // We want to make sure the lambda is not executed
   EXPECT_CALL(*fct, value).Times(0);
 
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_boolean());
   EXPECT_TRUE(result->boolean());

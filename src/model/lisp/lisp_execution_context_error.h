@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LISP_EXECUTOR_ERROR_INCLUDED
 #define LISP_EXECUTOR_ERROR_INCLUDED
 
@@ -24,7 +23,8 @@
 
 class LispExecutionContextError : public std::runtime_error {
 public:
-  explicit LispExecutionContextError(const std::string &msg) : std::runtime_error(msg) {}
+  explicit LispExecutionContextError(const std::string &msg)
+      : std::runtime_error(msg) {}
 };
 
 #endif

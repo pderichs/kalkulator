@@ -37,7 +37,7 @@ TEST(LispDefunTests, DefunTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   auto function_definition_val = executor.scope_variable("test-function1");
   EXPECT_TRUE(function_definition_val->is_function_definition());
@@ -66,7 +66,7 @@ TEST(LispDefunTests, DefunTestFailsIfFunctionNameHasWrongFormat) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_error());
   EXPECT_EQ(result->string(), "#PARAMERR");
@@ -84,7 +84,7 @@ TEST(LispDefunTests, DefunTestFailsIfFunctionParamsHaveWrongFormat) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_error());
   EXPECT_EQ(result->string(), "#PARAMERR");
@@ -102,7 +102,7 @@ TEST(LispDefunTests, DefunTestFailsIfFunctionCommentHasWrongFormat) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_error());
   EXPECT_EQ(result->string(), "#PARAMERR");
@@ -120,7 +120,7 @@ TEST(LispDefunTests, DefunTestFailsIfFunctionBodyHasWrongFormat) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_error());
   EXPECT_EQ(result->string(), "#PARAMERR");
@@ -138,7 +138,7 @@ TEST(LispDefunTests, DefunTestFailsIfParameterCountIsWrong) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_TRUE(result->is_error());
   EXPECT_EQ(result->string(), "#PARAMCOUNTERR");

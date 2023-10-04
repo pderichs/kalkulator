@@ -35,7 +35,8 @@ public:
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     ensure_params(func);
 
     LispValuePtrVector params = extract_params_from_list(func);
@@ -47,7 +48,7 @@ public:
     }
 
     LispValuePtr func_def_value =
-        execution_context.execute(lambda->list(), context_param);
+        execution_context.execute(lambda->list(), context_param, update_id);
     if (!func_def_value->is_function_definition()) {
       throw LispExecutionContextError(
           "Funcall: Lambda did not return a closure.");
@@ -64,7 +65,7 @@ public:
     lambda_params.erase(lambda_params.begin());
 
     LispLambdaExecutor executor(definition, lambda_params);
-    return executor.value(execution_context, context_param);
+    return executor.value(execution_context, context_param, update_id);
   }
 };
 

@@ -31,17 +31,21 @@ public:
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
-                     const std::any &context_param) override {
+                     const std::any &context_param,
+                     UpdateIdType update_id) override {
     ensure_params(func);
 
     LispValuePtrVector params =
-        extract_and_execute_params(func, execution_context, context_param);
+        extract_and_execute_params(func,
+                                   execution_context,
+                                   context_param,
+                                   update_id);
 
     LispValue::DoubleType result = 1.0;
 
     for (const auto &param : params) {
       LispValuePtr value(
-          expect_number(param, execution_context, context_param));
+          expect_number(param, execution_context, context_param, update_id));
       result *= value->to_double();
     }
 

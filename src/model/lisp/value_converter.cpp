@@ -88,7 +88,8 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
 
 // TODO Maybe add cell specific formats
 std::string ValueConverter::to_string(const LispValuePtr &value,
-                                      const std::any &context_param) {
+                                      const std::any &context_param,
+                                      UpdateIdType update_id) {
   if (!execution_context) {
     throw std::runtime_error("to_string: Execution context is NULL");
   }
@@ -102,7 +103,7 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
   } else if (value->is_double()) {
     std::stringstream ss;
     ss << std::setprecision(
-              std::numeric_limits<LispValue::DoubleType>::max_digits10 - 1)
+        std::numeric_limits<LispValue::DoubleType>::max_digits10 - 1)
        << value->to_double();
     return ss.str();
   } else if (value->is_integer()) {
@@ -112,8 +113,8 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
   } else if (value->is_function()) {
     // Execute function
     try {
-      LispValuePtr result = execution_context->execute(value, context_param);
-      return ValueConverter::to_string(result, context_param);
+      LispValuePtr result = execution_context->execute(value, context_param, update_id);
+      return ValueConverter::to_string(result, context_param, update_id);
     } catch (const std::runtime_error &) {
       return "#ERR";
     }

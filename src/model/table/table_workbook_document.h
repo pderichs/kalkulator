@@ -55,8 +55,10 @@ public:
   void set_active_sheet(const std::string &name);
   void set_current_cell(const std::string &sheet_name,
                         const Location &current_cell);
-  void update_cell_content(const TableSheetPtr &sheet, Location cell_location,
-                           const std::string &content);
+  void update_cell_content(const TableSheetPtr &sheet,
+                           Location cell_location,
+                           const std::string &content,
+                           unsigned long update_id);
   void clear_current_cell();
 
   bool move_cursor_up();
@@ -112,10 +114,12 @@ public:
   void add_update_listener(const TableCellLocation &listener,
                            const TableCellLocation &listening_to);
 
-  TableCellPtr get_cell_by_location(const TableCellLocation& location) const;
+  TableCellPtr get_cell_by_location(const TableCellLocation &location) const;
 
 private:
-  void trigger_listeners(const TableCellLocation &location);
+  void trigger_listeners(const TableCellLocation &location,
+                         UpdateIdType update_id);
+  void remove_from_update_listeners(const TableCellLocation &location);
 
 private:
   std::string _path;

@@ -37,7 +37,7 @@ TEST(LispExecutionTests, ExecutorTest1) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, -416.32);
 }
@@ -54,7 +54,7 @@ TEST(LispExecutionTests, ExecutorTest2) {
   EXPECT_TRUE(value);
 
   LispExecutionContext executor;
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, 32.0);
 }
@@ -73,7 +73,7 @@ TEST(LispExecutionTests, CustomFunctionTest1) {
   LispExecutionContext executor;
   executor.add_function("say_hello_test",
                         std::make_shared<TestLispFunctionExecutionContext>());
-  LispValuePtr result = executor.execute(value, {});
+  LispValuePtr result = executor.execute(value, {}, 0);
 
   EXPECT_EQ(*result, "Hello Franzi!");
 }
