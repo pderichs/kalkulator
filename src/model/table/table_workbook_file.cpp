@@ -145,7 +145,10 @@ static int read_sheet_size_callback(void *data, int argc, char **argv,
 
 static int read_cells_callback(void *data, int argc, char **argv,
                                char **col_names) {
-  auto *workbook = (TableWorkbookDocument *)data;
+  auto param =
+      static_cast<std::tuple<TableWorkbookDocument *, UpdateIdType> *>(data);
+  auto *workbook = std::get<0>(*param);
+  auto update_id = std::get<1>(*param);
 
   std::string curr_sheet;
   int r = 0;
@@ -169,7 +172,10 @@ static int read_cells_callback(void *data, int argc, char **argv,
     } else if (col == "content") {
       const auto &cell = sheet->get_cell(r, c);
       if (cell) {
-        workbook->update_cell_content(sheet, Location(c, r), content, 0);
+        workbook->update_cell_content(sheet,
+                                      Location(c, r),
+                                      content,
+                                      update_id);
       }
     }
   }
@@ -243,11 +249,13 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   }
 
   // Read cells
+  auto cells_param = std::make_tuple(workbook, generate_update_id());
+
   err_msg = nullptr;
   rc = sqlite3_exec(_db,
                     "SELECT sheets.name, cells.row, cells.col, cells.content "
                     "FROM cells INNER JOIN sheets ON cells.sheet_id=sheets.id;",
-                    read_cells_callback, (void *)workbook.get(), &err_msg);
+                    read_cells_callback, (void *)&cells_param, &err_msg);
 
   if (rc != SQLITE_OK) {
     std::stringstream ss;
@@ -257,9 +265,9 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
   }
 }
 
-void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr& sheet) {
+void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr &sheet) {
   size_t s = 0;
-  for (const auto& col_def : sheet->column_definitions()) {
+  for (const auto &col_def : sheet->column_definitions()) {
     if (col_def->width != DEFAULT_COLUMN_WIDTH) {
       std::stringstream sql;
       sql << "INSERT INTO sheet_sizes (sheet_id, row, col, size)"
@@ -274,7 +282,7 @@ void TableWorkbookFile::save_sheet_sizes(int id, const TableSheetPtr& sheet) {
   }
 
   s = 0;
-  for (const auto& row_def : sheet->row_definitions()) {
+  for (const auto &row_def : sheet->row_definitions()) {
     if (row_def->height != DEFAULT_ROW_HEIGHT) {
       std::stringstream sql;
       sql << "INSERT INTO sheet_sizes (sheet_id, row, col, size)"

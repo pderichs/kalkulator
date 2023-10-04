@@ -32,8 +32,8 @@
 class TableCell {
 public:
   TableCell(int row, int col)
-      : _formula_content(), _visible_content(), _lisp_value(),
-        _location(col, row), _format() {}
+      : _formula_content(), _visible_content(), _lisp_value(), _cached_result(),
+        _last_update(0), _location(col, row), _format() {}
 
   bool update_content(const std::string &content,
                       const std::string &sheet_name,
@@ -42,6 +42,8 @@ public:
   std::string get_formula_content() const;
   bool is_formula() const;
   LispValuePtr lisp_value() const { return _lisp_value; }
+  LispValuePtr result() const;
+
   bool has_content() const;
   void clear();
   long row() const { return _location.y(); }
@@ -52,13 +54,16 @@ public:
   TableCellFormat format() const { return *_format; }
   void set_format(const TableCellFormat &format) { _format = format; }
 
-  bool recalc(const std::string& sheet_name, UpdateIdType update_id);
+  bool recalc(const std::string &sheet_name, UpdateIdType update_id);
 
 private:
   std::string _formula_content;
   std::string _visible_content;
 
   LispValuePtr _lisp_value;
+
+  LispValuePtr _cached_result;
+  UpdateIdType _last_update;
 
   // Cell knows about its position
   const Location _location;

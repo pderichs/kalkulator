@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <random>
 #include "view/kalkulator_main_frame.h"
 
 #if !defined(WX_PRECOMP)
@@ -32,6 +33,8 @@ public:
 wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit() {
+  srand(static_cast<unsigned>(time(nullptr)));
+
   auto *frame = new KalkulatorMainFrame();
   frame->Initialize();
   frame->SetSize(WIDTH, HEIGHT);

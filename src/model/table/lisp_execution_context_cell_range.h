@@ -86,7 +86,7 @@ public:
                                      TableCellLocation(sheet,
                                                        cell->location()));
 
-      LispValuePtr value(cell->lisp_value());
+      LispValuePtr value(cell->result());
       if (value && !value->is_none()) {
         result.push_back(value);
       }

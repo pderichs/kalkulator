@@ -17,8 +17,8 @@
  */
 
 #include "update_id.h"
-#include <ctime>
+#include <random>
 
 UpdateIdType generate_update_id() {
-  return static_cast<size_t>(time(NULL));
+  return static_cast<UpdateIdType>(rand() % 1000);
 }

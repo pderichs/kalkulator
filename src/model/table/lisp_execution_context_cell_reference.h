@@ -97,7 +97,7 @@ public:
       return LispCommonValues::none_value();
     }
 
-    return cell->lisp_value();
+    return cell->result();
   }
 
 private:

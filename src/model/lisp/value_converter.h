@@ -32,6 +32,10 @@ public:
                                const std::any &context_param,
                                UpdateIdType update_id);
 
+  static LispValuePtr execute_function(const LispValuePtr &function,
+                                       const std::any &context_param,
+                                       UpdateIdType update_id);
+
 private:
   static LispExecutionContext *execution_context;
 };

@@ -27,7 +27,7 @@ bool TableCell::update_content(const std::string &content,
   if (_lisp_value->is_function()) {
     _formula_content = content;
   } else {
-    _formula_content = "";
+    _formula_content.clear();
   }
 
   return recalc(sheet_name, update_id);
@@ -53,16 +53,41 @@ bool TableCell::has_content() const {
   return _lisp_value && !_lisp_value->is_none();
 }
 
-void TableCell::clear() { _lisp_value = {}; }
+void TableCell::clear() {
+  _lisp_value = {};
+  _cached_result = {};
+  _last_update = 0;
+}
 
 // Returns true if content changed, false otherwise.
 bool TableCell::recalc(const std::string &sheet_name, UpdateIdType update_id) {
+  if (_last_update == update_id) {
+    return false;
+  }
+
   std::string previous_content = _visible_content;
 
-  _visible_content = ValueConverter::to_string(_lisp_value,
-                                               TableCellLocation(sheet_name,
-                                                                 _location),
+  auto location = TableCellLocation(sheet_name,
+                                    _location);
+
+  if (is_formula()) {
+    _cached_result =
+        ValueConverter::execute_function(_lisp_value, location, update_id);
+  }
+
+  _visible_content = ValueConverter::to_string(result(),
+                                               location,
                                                update_id);
 
+  _last_update = update_id;
+
   return previous_content != _visible_content;
+}
+
+LispValuePtr TableCell::result() const {
+  if (is_formula() && _cached_result) {
+    return _cached_result;
+  }
+
+  return _lisp_value;
 }

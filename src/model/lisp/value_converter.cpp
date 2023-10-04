@@ -113,10 +113,10 @@ std::string ValueConverter::to_string(const LispValuePtr &value,
   } else if (value->is_function()) {
     // Execute function
     try {
-      LispValuePtr result = execution_context->execute(value, context_param, update_id);
+      LispValuePtr result = execute_function(value, context_param, update_id);
       return ValueConverter::to_string(result, context_param, update_id);
     } catch (const std::runtime_error &) {
-      return "#ERR";
+      return "#EXECUTIONERR";
     }
   } else if (value->is_list()) {
     return "#LIST";
@@ -143,3 +143,10 @@ void ValueConverter::set_execution_context(LispExecutionContext *context) {
 
   ValueConverter::execution_context = context;
 }
+
+LispValuePtr ValueConverter::execute_function(const LispValuePtr &function,
+                                              const std::any &context_param,
+                                              UpdateIdType update_id) {
+  return execution_context->execute(function, context_param, update_id);
+}
+
