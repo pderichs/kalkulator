@@ -38,6 +38,8 @@ typedef std::map<std::string, LispValuePtr> LispScopeMap;
 class LispExecutionContext {
 public:
   LispExecutionContext();
+  ~LispExecutionContext() = default;
+
   LispValuePtr execute(const LispValuePtr &value,
                        const std::any &context_param,
                        UpdateIdType update_id) const;

@@ -53,19 +53,6 @@ LispValuePtr LispFunctionExecutionContext::expect_number(
   return result;
 }
 
-LispValuePtr LispFunctionExecutionContext::execute_if_required(
-    const LispValuePtr &param, const LispExecutionContext &execution_context,
-    const std::any &context_param, UpdateIdType update_id) const {
-  if (param->is_function()) {
-    LispValuePtr function_result(
-        execution_context.execute(param, context_param, update_id));
-
-    return function_result;
-  }
-
-  return param;
-}
-
 LispValuePtrVector LispFunctionExecutionContext::execute_functions(
     const LispValuePtrVector &params,
     const LispExecutionContext &execution_context,
@@ -73,9 +60,9 @@ LispValuePtrVector LispFunctionExecutionContext::execute_functions(
   LispValuePtrVector result;
 
   for (const auto &param : params) {
-    result.push_back(execute_if_required(param,
-                                         execution_context,
-                                         context_param, update_id));
+    result.push_back(execution_context.execute(param,
+                                               context_param,
+                                               update_id));
   }
 
   return result;

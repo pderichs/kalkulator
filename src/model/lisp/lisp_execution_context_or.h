@@ -37,10 +37,7 @@ public:
 
     for (const auto &param : params) {
       LispValuePtr actual_value =
-          execute_if_required(param,
-                              execution_context,
-                              context_param,
-                              update_id);
+          execution_context.execute(param, context_param, update_id);
 
       if (actual_value->is_truthy()) {
         return LispCommonValues::true_value();

@@ -61,12 +61,6 @@ protected:
                              const LispExecutionContext &execution_context,
                              const std::any &context_param,
                              UpdateIdType update_id) const;
-
-  LispValuePtr
-  execute_if_required(const LispValuePtr &param,
-                      const LispExecutionContext &execution_context,
-                      const std::any &context_param,
-                      UpdateIdType update_id) const;
 };
 
 #endif
