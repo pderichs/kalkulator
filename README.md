@@ -65,7 +65,7 @@ Install dependencies in Debian:
 
 ## License
 
-This project is licensed under the [GNU GENERAL PUBLIC LICENSE v3](https://www.gnu.org/licenses/gpl-3.0.txt).
+This project is licensed under the terms of the [GNU GENERAL PUBLIC LICENSE v3](https://www.gnu.org/licenses/gpl-3.0.txt).
 
 This project makes use of other external libraries and projects. Please refer to their respective LICENSES, terms and
 conditions on their websites:

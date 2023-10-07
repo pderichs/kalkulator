@@ -23,7 +23,6 @@
 #include "model/lisp/lisp_value_parser.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "lisp/lisp_common_values.h"
 
 TEST(LispOrTests, OrTest1) {
   std::map<std::string, LispValuePtr> tests = {

@@ -16,9 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "model/lisp/lisp_execution_context_error.h"
 #include "gtest/gtest.h"
-#include "lisp/lisp_value_factory.h"
 #include "lisp/lisp_common_values.h"
 #include "lisp_test_tools.h"
 

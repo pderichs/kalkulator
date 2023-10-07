@@ -21,7 +21,6 @@
 #include "lisp/lisp_common_values.h"
 
 TEST(LispEqTests, EqTest1) {
-  // clang-format off
   std::map<std::string, LispValuePtr> tests = {
       {"(eq 1 1)", LispCommonValues::true_value()},
       {"(eq \"Hase\" 1)", LispCommonValues::false_value()},
@@ -32,7 +31,6 @@ TEST(LispEqTests, EqTest1) {
       {"(eq (+ 54 2 66 9.3265) (+ 54 2 66 9.3265))", LispCommonValues::true_value()},
       {"(eq (list 6 6 6) (list 6 6 6) 6)", LispCommonValues::false_value()},
       {"(eq (list 6 6 6) (list 6 6 6) 5)", LispCommonValues::false_value()}};
-  // clang-format on
 
   return execute_lisp_tests(tests, "eq");
 }

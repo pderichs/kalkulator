@@ -18,10 +18,7 @@
 
 #include "lisp_test_tools.h"
 #include "mock_function_context.h"
-#include "model/lisp/lisp_parser.h"
-#include "model/lisp/lisp_value_parser.h"
 #include "gtest/gtest.h"
-#include "lisp/lisp_common_values.h"
 
 TEST(LispGreaterThanTests, GreaterThanTests1) {
  std::map<std::string, LispValuePtr> tests = {

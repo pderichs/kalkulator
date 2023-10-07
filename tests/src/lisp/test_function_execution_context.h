@@ -25,8 +25,6 @@
 
 class TestLispFunctionExecutionContext : public LispFunctionExecutionContext {
 public:
-  ~TestLispFunctionExecutionContext() override = default;
-
   // Adds "Hello " to the front of the provided string
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
@@ -56,4 +54,4 @@ public:
   }
 };
 
-#endif//LISP_TEST_FUNCTION_EXECUTION_CONTEXT_H
+#endif // LISP_TEST_FUNCTION_EXECUTION_CONTEXT_H

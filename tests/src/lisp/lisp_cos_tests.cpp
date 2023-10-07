@@ -17,7 +17,6 @@
  */
 
 #include "lisp_test_tools.h"
-#include "model/lisp/lisp_execution_context_error.h"
 #include "model/lisp/lisp_value.h"
 #include "model/lisp/lisp_value_factory.h"
 #include "gtest/gtest.h"

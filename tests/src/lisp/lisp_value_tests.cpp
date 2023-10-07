@@ -17,11 +17,9 @@
  */
 
 #include "gtest/gtest.h"
-
 #include <memory>
 #include <tuple>
 #include <vector>
-
 #include "model/lisp/lisp_value_factory.h"
 #include "lisp/lisp_common_values.h"
 

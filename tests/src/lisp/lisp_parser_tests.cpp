@@ -17,8 +17,6 @@
 */
 
 #include "gtest/gtest.h"
-
-#include "model/lisp/lisp_execution_context.h"
 #include "model/lisp/lisp_execution_context_error.h"
 #include "model/lisp/lisp_parser.h"
 #include "model/lisp/lisp_value_parser.h"
