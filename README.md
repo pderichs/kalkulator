@@ -18,10 +18,10 @@ Start the application
 ```
 
 You can move the cell selection with your cursor keys or by using the mouse. Alternatively you can press `Ctrl+G` and
-enter the coordinates in the form `row column` to navigate to the cell with coordinates `row` and `col` (e.g. to
-navigate to cell with coordinates row 10 and column 20 just enter `10 20`).
+enter the coordinates in the form `row column` to navigate to the cell with the coordinates `row` and `col` (e.g. to
+navigate to the cell with the coordinates row 10 and column 20 just enter `10 20`).
 
-Press `F2` to edit cell contents (this moves the cursor to the formula text field above the cells view). Press `Enter`
+Press `F2` to edit the cell contents (this moves the cursor to the formula text field above the cells view). Press `Enter`
 to apply your changes to the cell or `Esc` to abort.
 
 ### Sample
@@ -205,7 +205,7 @@ conditions on their websites:
 - FEAT: Save (sqlite)
 - FEAT: Open (sqlite)
 - BUG: Clearing cell content is crashing the app
-- FEAT_ Add cell_range function which returns lists of values of cells
+- FEAT: Add cell_range function which returns lists of values of cells
 - FEAT: Support lists for mathematical operations: This helps later with cell_ranges
 - REFA: There are functionalities in LispFunctionExecutionContext derived classes which principally just say "I want a
   number or a function which returns a number" - introduce function which streamlines this process
