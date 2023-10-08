@@ -18,7 +18,6 @@
 
 #include "table_column_headers_control.h"
 
-// TODO: Remove these as soon as possible
 const int ROW_HEADER_WIDTH = 50;
 const int COLUMN_HEADER_HEIGHT = 30;
 

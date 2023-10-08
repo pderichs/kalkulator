@@ -105,7 +105,7 @@ void TableControl::ScrollToCurrentCell(CellWindowLocation location) {
   _cells_view_control->ScrollToCurrentCell(location);
 }
 
-void TableControl::SetCurrentCell(const Location& location) {
+void TableControl::SetCurrentCell(const Location &location) {
   _row_headers_control->SetCurrentRow(location.y());
   _column_headers_control->SetCurrentCol(location.x());
 }

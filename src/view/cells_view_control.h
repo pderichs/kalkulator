@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef CELLS_VIEW_CONTROL_INCLUDED
 #define CELLS_VIEW_CONTROL_INCLUDED
 
@@ -55,7 +54,7 @@ public:
 
   void RefreshScrollbars();
 
-  void DrawTable(wxDC *dc, const TableSheetPtr& sheet);
+  void DrawTable(wxDC *dc, const TableSheetPtr &sheet);
   void OnCellUpdate(const Location &location);
 
   void ScrollWindow(int dx, int dy, const wxRect *rect) override;
@@ -63,19 +62,21 @@ public:
 
 private:
   void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height,
-                 const TableSheetPtr& sheet);
+                 const TableSheetPtr &sheet);
   wxRect GetCellRectByLocation(const Location &cell);
   wxRect GetCurrentScrollArea() const;
 
   Location GetTableCellByClickPosition(const wxPoint &pos) const;
-  void ScrollToCell(const Location &cell, CellWindowLocation cell_window_location);
+  void ScrollToCell(const Location &cell,
+                    CellWindowLocation cell_window_location);
 
   void CopyString(const std::string &content);
-  static wxColour fromTableCellColor(const TableCellColor& color);
+  static wxColour fromTableCellColor(const TableCellColor &color);
 
-  CellWindowLocation GetCellLocation(const wxRect &cell_rect, const wxRect &scrollArea) const;
+  CellWindowLocation GetCellLocation(const wxRect &cell_rect,
+                                     const wxRect &scrollArea) const;
 
-    private:
+private:
   KalkulatorSystemColorsPtr _sys_colors;
 };
 

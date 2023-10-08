@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef TABLE_COLUMN_HEADERS_CONTROL_INCLUDED
 #define TABLE_COLUMN_HEADERS_CONTROL_INCLUDED
 

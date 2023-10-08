@@ -51,4 +51,4 @@ private:
   EventSink *_event_sink;
 };
 
-#endif // TABLE_SEARCH_RESULTS_DIALOG_H
+#endif

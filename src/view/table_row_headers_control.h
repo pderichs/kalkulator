@@ -38,12 +38,12 @@ public:
 
   void OnDraw(wxDC &dc);
   virtual wxSize DoGetBestSize() const;
-  void OnFocus(wxFocusEvent& WXUNUSED(event));
+  void OnFocus(wxFocusEvent & WXUNUSED(event));
   void SetCurrentRow(size_t row);
 
 private:
   void DrawHeaders(wxDC *dc, const Location &scrollPos, int width, int height,
-                   const TableSheetPtr& sheet);
+                   const TableSheetPtr &sheet);
 
 private:
   KalkulatorSystemColorsPtr _sys_colors;
