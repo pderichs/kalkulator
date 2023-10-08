@@ -21,13 +21,39 @@
 
 #include "model/lisp/lisp_value.h"
 
+/**
+ * Provides some often used default LispValue instances
+ */
 class LispCommonValues {
 public:
+  /**
+   * @return Error string returned for a wrong parameter count
+   */
   static LispValuePtr error_parameter_count();
+
+  /**
+   * @return Error string for a wrong parameter format or unexpected parameter
+   */
   static LispValuePtr error_parameter();
+
+  /**
+   * @return String indicating a circular reference error
+   */
   static LispValuePtr error_circular_ref();
+
+  /**
+   * @return LispValue which represents a true value
+   */
   static LispValuePtr true_value();
+
+  /**
+   * @return LispValue which represents a false value
+   */
   static LispValuePtr false_value();
+
+  /**
+   * @return LispValue which represents a none value
+   */
   static LispValuePtr none_value();
 
 private:
@@ -39,4 +65,4 @@ private:
   static LispValuePtr _none_value;
 };
 
-#endif // LISP_ERROR_VALUES_H
+#endif
