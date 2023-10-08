@@ -54,4 +54,4 @@ public:
   }
 };
 
-#endif //LISP_EXECUTION_CONTEXT_ISNONE_H
+#endif

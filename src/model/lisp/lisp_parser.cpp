@@ -190,8 +190,10 @@ LispToken LispParser::read_identifier() {
     if (std::isspace(c) || c == ')') {
       _pos--;
       break;
-    } else { // TODO check std::isprint?
+    } else if(std::isprint(c)) {
       s += c;
+    } else {
+      throw LispParserError("Not supported: Unprintable char detected.");
     }
   } while (walk());
 

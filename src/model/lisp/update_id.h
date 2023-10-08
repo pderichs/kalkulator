@@ -25,4 +25,4 @@ typedef size_t UpdateIdType;
 
 UpdateIdType generate_update_id();
 
-#endif //UPDATE_ID_H
+#endif

@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "lisp_value_parser.h"
 #include "lisp_parser_error.h"
 #include "lisp_tokens.h"
@@ -86,7 +85,7 @@ LispValuePtr LispValueParser::parse_list() {
 
   LispTokens param_tokens;
 
-  for (const auto& token : function_tokens) {
+  for (const auto &token : function_tokens) {
     if (token.is_space()) {
       continue;
     }

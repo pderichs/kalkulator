@@ -26,7 +26,7 @@ void LispTokens::debug_print(std::ostream &oss) const {
   std::string s;
 
   int n = 1;
-  for (const auto& token : *this) {
+  for (const auto &token : *this) {
     s = token_id_to_string(token.id);
     oss << n << ".) " << s << ", content: " << printable_content_of_token(token)
         << std::endl;

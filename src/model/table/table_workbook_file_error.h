@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef TABLE_WORKBOOK_FILE_ERROR_INCLUDED
 #define TABLE_WORKBOOK_FILE_ERROR_INCLUDED
 

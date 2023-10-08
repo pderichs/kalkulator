@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LISP_VALUE_PTR_INCLUDED
 #define LISP_VALUE_PTR_INCLUDED
 

@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LISP_VALUE_FACTORY_INCLUDED
 #define LISP_VALUE_FACTORY_INCLUDED
 
@@ -27,7 +26,8 @@
 
 class LispValueFactory {
 private:
-  static LispValuePtr new_value_ptr(LispValueType type, const std::any& content) {
+  static LispValuePtr new_value_ptr(LispValueType type,
+                                    const std::any &content) {
     auto result = std::make_shared<LispValue>(type);
     result->set_content(content);
     return result;
@@ -54,7 +54,7 @@ public:
     return new_value_ptr(LVT_BOOL, value);
   }
 
-  static LispValuePtr new_error(const std::string& value) {
+  static LispValuePtr new_error(const std::string &value) {
     return new_value_ptr(LVT_ERROR, value);
   }
 

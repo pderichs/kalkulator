@@ -53,4 +53,4 @@ private:
 
 typedef std::set<TableCellLocation> TableCellLocationSet;
 
-#endif //TABLE_CELL_LOCATION_H
+#endif

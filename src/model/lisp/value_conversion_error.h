@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef VALUE_CONVERSION_ERROR_INCLUDED
 #define VALUE_CONVERSION_ERROR_INCLUDED
 

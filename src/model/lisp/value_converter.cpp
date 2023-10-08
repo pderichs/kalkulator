@@ -86,7 +86,6 @@ LispValuePtr ValueConverter::to_lisp_value(const std::string &s) {
   return LispValueFactory::new_string(s);
 }
 
-// TODO Maybe add cell specific formats
 std::string ValueConverter::to_string(const LispValuePtr &value,
                                       const std::any &context_param,
                                       UpdateIdType update_id) {

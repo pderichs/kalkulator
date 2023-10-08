@@ -16,12 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "lisp_syntax_checker.h"
 #include "lisp_parser_error.h"
 #include <sstream>
 
-LispSyntaxChecker::LispSyntaxChecker(const LispTokens &tokens) : _tokens(tokens) {}
+LispSyntaxChecker::LispSyntaxChecker(const LispTokens &tokens)
+    : _tokens(tokens) {}
 
 void LispSyntaxChecker::check() const {
   check_matching_brackets();

@@ -31,4 +31,4 @@ struct TableSearchResultItem {
 
 typedef std::vector<TableSearchResultItem> TableSearchResult;
 
-#endif // TABLE_SEARCH_RESULT_H
+#endif

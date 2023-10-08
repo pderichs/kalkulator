@@ -53,4 +53,4 @@ public:
   }
 };
 
-#endif //LISP_EXECUTION_CONTEXT_LOG_H
+#endif

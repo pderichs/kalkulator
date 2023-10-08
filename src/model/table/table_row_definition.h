@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef TABLE_ROW_DEFINITION_INCLUDED
 #define TABLE_ROW_DEFINITION_INCLUDED
 

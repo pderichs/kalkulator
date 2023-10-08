@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef TABLE_CELL_COLOR_INCLUDED
 #define TABLE_CELL_COLOR_INCLUDED
 

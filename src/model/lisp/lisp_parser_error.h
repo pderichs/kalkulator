@@ -24,7 +24,8 @@
 
 class LispParserError : public std::runtime_error {
 public:
-  explicit LispParserError(const std::string &msg) : std::runtime_error(msg), _item() {}
+  explicit LispParserError(const std::string &msg)
+      : std::runtime_error(msg), _item() {}
   LispParserError(const std::string &msg, const std::string &item)
       : std::runtime_error(msg), _item(item) {}
 
