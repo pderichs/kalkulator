@@ -47,13 +47,7 @@ CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
 }
 
 void CellsViewControl::OnDraw(wxDC &dc) {
-  TableSheetPtr sheet = _document->current_sheet();
-  if (!sheet) {
-    // TODO Clear?
-    return;
-  }
-
-  DrawTable(&dc, sheet);
+  DrawTable(&dc, _document->current_sheet());
 }
 
 void CellsViewControl::ScrollWindow(int dx, int dy, const wxRect *rect) {
@@ -116,11 +110,21 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
                                  int WXUNUSED(width), int WXUNUSED(height),
                                  const TableSheetPtr &sheet) {
   wxRect scrollArea = GetCurrentScrollArea();
-
   wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell());
 
   for (size_t r = 0; r < sheet->row_count(); r++) {
+
+    if (_document->get_row_top_position(r)
+        > static_cast<size_t>(scrollArea.GetBottom())) {
+      break;
+    }
+
     for (size_t c = 0; c < sheet->col_count(); c++) {
+      if (_document->get_col_left_position(c)
+          > static_cast<size_t>(scrollArea.GetRight())) {
+        break;
+      }
+
       wxColour oldForegroundColor;
       bool foreground_color_reset_required = false;
 
@@ -130,9 +134,9 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
       auto cell = sheet->get_cell(r, c);
       if (cell) {
         wxRect cellRect = GetCellRectByLocation(Location(c, r));
-         if (!scrollArea.Contains(cellRect)) {
-           break;
-         }
+        if (!scrollArea.Contains(cellRect)) {
+          continue;
+        }
 
         if (cellRect == current_cell_rect) {
           dc->SetPen(*_sys_colors->current_cell_pen);

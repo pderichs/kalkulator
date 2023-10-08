@@ -366,6 +366,24 @@ public:
    */
   TableCellPtr get_cell_by_location(const TableCellLocation &location) const;
 
+  /**
+   * Returns the top pixel position of the requested row within the
+   * current sheet.
+   *
+   * @param row Row to get the top pixel position for
+   * @return Top pixel position for row
+   */
+  size_t get_row_top_position(size_t row);
+
+  /**
+   * Returns the left pixel position of the requested column within the
+   * current sheet.
+   *
+   * @param col Column to get the left pixel position for
+   * @return Left pixel position for column
+   */
+  size_t get_col_left_position(size_t col);
+
 private:
   /**
    * Trigger all cell listeners which are registered for receiving updates on

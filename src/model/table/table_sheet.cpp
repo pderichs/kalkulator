@@ -33,7 +33,8 @@ const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
 TableSheet::TableSheet(const std::string &param_name)
     : _column_definitions(), _row_definitions(), _rows(), _name(param_name),
-      _current_cell(0, 0), _change_history() {
+      _current_cell(0, 0), _change_history(), _row_top_positions(),
+      _col_left_positions() {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     _column_definitions.push_back(std::make_shared<TableColumnDefinition>());
   }
@@ -237,11 +238,17 @@ size_t TableSheet::get_current_row_height() const {
 }
 
 void TableSheet::set_column_width(size_t idx, size_t width) {
+  // Clear offsets cache
+  _col_left_positions.clear();
+
   TableColumnDefinitionPtr col_def = _column_definitions[idx];
   col_def->width = width;
 }
 
 void TableSheet::set_row_height(size_t idx, size_t height) {
+  // Clear offsets cache
+  _row_top_positions.clear();
+
   TableRowDefinitionPtr row_def = _row_definitions[idx];
   row_def->height = height;
 }
@@ -285,4 +292,48 @@ LocationSet TableSheet::search(const std::string &search_term) const {
   }
 
   return result;
+}
+
+size_t TableSheet::get_row_top_position(size_t row) {
+  auto it = _row_top_positions.find(row);
+  if (it != _row_top_positions.end()) {
+    return it->second;
+  }
+
+  size_t r = 0;
+  size_t top = 0;
+  for (const auto &rowdef : _row_definitions) {
+    if (r == row) {
+      break;
+    }
+
+    top += rowdef->height;
+    r++;
+  }
+
+  _row_top_positions[row] = top;
+
+  return top;
+}
+
+size_t TableSheet::get_col_left_position(size_t col) {
+  auto it = _col_left_positions.find(col);
+  if (it != _col_left_positions.end()) {
+    return it->second;
+  }
+
+  size_t c = 0;
+  size_t left = 0;
+  for (const auto &coldef : _column_definitions) {
+    if (c == col) {
+      break;
+    }
+
+    left += coldef->width;
+    c++;
+  }
+
+  _col_left_positions[col] = left;
+
+  return left;
 }

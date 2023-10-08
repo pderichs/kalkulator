@@ -89,6 +89,22 @@ public:
   TableRowDefinitions row_definitions() const { return _row_definitions; }
   TableColumnDefinitions column_definitions() const { return _column_definitions; }
 
+  /**
+   * Returns the top pixel position of the requested row.
+   *
+   * @param row Row to get the top pixel position for
+   * @return Top pixel position for row
+   */
+  size_t get_row_top_position(size_t row);
+
+  /**
+   * Returns the left pixel position of the requested column.
+   *
+   * @param col Column to get the left pixel position for
+   * @return Left pixel position for column
+   */
+  size_t get_col_left_position(size_t col);
+
 private:
   TableColumnDefinitions _column_definitions;
   TableRowDefinitions _row_definitions;
@@ -96,6 +112,8 @@ private:
   std::string _name;
   Location _current_cell;
   TableSheetChangeHistory _change_history;
+  std::map<size_t, size_t> _row_top_positions;
+  std::map<size_t, size_t> _col_left_positions;
 };
 
 typedef std::shared_ptr<TableSheet> TableSheetPtr;

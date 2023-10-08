@@ -485,3 +485,11 @@ void TableWorkbookDocument::trigger_listeners(const TableCellLocation &location,
 TableCellPtr TableWorkbookDocument::get_cell_by_location(const TableCellLocation &location) const {
   return get_cell(location.location(), location.sheet());
 }
+
+size_t TableWorkbookDocument::get_row_top_position(size_t row) {
+  return _current_sheet->get_row_top_position(row);
+}
+
+size_t TableWorkbookDocument::get_col_left_position(size_t col) {
+  return _current_sheet->get_col_left_position(col);
+}
