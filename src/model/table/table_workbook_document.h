@@ -121,6 +121,9 @@ private:
                          UpdateIdType update_id);
   void remove_from_update_listeners(const TableCellLocation &location);
 
+  void apply_state_change_item(const StateHistoryItemPtr &state_history_item,
+                               UpdateIdType update_id);
+
 private:
   std::string _path;
   bool _changed;

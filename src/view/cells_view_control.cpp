@@ -150,7 +150,6 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
           if (format.background_color) {
             wxColour color = fromTableCellColor(*(format.background_color));
 
-            // TODO Store brush for later usage (maybe map of color -> brush)
             wxBrush oldBrush = dc->GetBrush();
             wxBrush brush(color);
             dc->SetBrush(brush);
@@ -316,13 +315,11 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
     break;
   case 'Z':
     if (control) {
-      wxPrintf("UNDO!!!\n");
       _document->undo();
     }
     break;
   case 'Y':
     if (control) {
-      wxPrintf("REDO!!!\n");
       _document->redo();
     }
     break;

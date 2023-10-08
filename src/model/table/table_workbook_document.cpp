@@ -319,9 +319,27 @@ void TableWorkbookDocument::clear_current_cell() {
   _event_sink->send_event(CELL_UPDATED, param);
 }
 
-void TableWorkbookDocument::undo() { _current_sheet->undo(); }
+void TableWorkbookDocument::apply_state_change_item(const StateHistoryItemPtr &state_history_item,
+                                                    UpdateIdType update_id) {
+  for (auto cell_state : state_history_item->cell_states) {
+    update_cell_content(_current_sheet,
+                        cell_state.location,
+                        cell_state.prev,
+                        update_id);
+  }
+}
 
-void TableWorkbookDocument::redo() { _current_sheet->redo(); }
+void TableWorkbookDocument::undo() {
+  auto state_change = _current_sheet->undo();
+  UpdateIdType update_id = generate_update_id();
+  apply_state_change_item(state_change, update_id);
+}
+
+void TableWorkbookDocument::redo() {
+  auto state_change = _current_sheet->redo();
+  UpdateIdType update_id = generate_update_id();
+  apply_state_change_item(state_change, update_id);
+}
 
 TableSheetPtr
 TableWorkbookDocument::find_sheet_by_name(const std::string &sheet_name) const {

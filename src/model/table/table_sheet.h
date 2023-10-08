@@ -69,8 +69,8 @@ public:
   bool update_content(const Location &cell_location,
                       const std::string &content, UpdateIdType update_id);
 
-  void undo();
-  void redo();
+  StateHistoryItemPtr undo();
+  StateHistoryItemPtr redo();
 
   size_t get_current_column_width() const;
   size_t get_current_row_height() const;
@@ -89,10 +89,6 @@ public:
   std::string name() const { return _name; }
   TableRowDefinitions row_definitions() const { return _row_definitions; }
   TableColumnDefinitions column_definitions() const { return _column_definitions; }
-
-private:
-  void apply_state_change_item(const StateHistoryItemPtr &state) const;
-  void remove_from_update_listeners(const Location &location);
 
 private:
   TableColumnDefinitions _column_definitions;

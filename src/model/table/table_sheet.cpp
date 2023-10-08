@@ -156,6 +156,10 @@ bool TableSheet::move_cursor_page_up() {
 }
 
 bool TableSheet::move_cursor_page_down() {
+  if (static_cast<size_t>(_current_cell.y()) == get_max_row()) {
+    return false;
+  }
+
   size_t amount = ROW_PAGE_MOVE_AMOUNT;
   if (_current_cell.y() + amount > get_max_row()) {
     // Move to last row
@@ -215,29 +219,12 @@ size_t TableSheet::get_max_col() const {
   return _column_definitions.size() - 1;
 }
 
-void TableSheet::apply_state_change_item(
-    const StateHistoryItemPtr &state) const {
-  for (const auto &cell_state : state->cell_states) {
-    auto cell = get_cell_by_location(cell_state.location);
-    cell->update_content(cell_state.prev, _name, 0);
-  }
+StateHistoryItemPtr TableSheet::undo() {
+  return _change_history.undo();
 }
 
-void TableSheet::undo() {
-  StateHistoryItemPtr state = _change_history.undo();
-  if (!state) {
-    return;
-  }
-  apply_state_change_item(state);
-}
-
-void TableSheet::redo() {
-  StateHistoryItemPtr state = _change_history.redo();
-  if (!state) {
-    return;
-  }
-
-  apply_state_change_item(state);
+StateHistoryItemPtr TableSheet::redo() {
+  return _change_history.redo();
 }
 
 size_t TableSheet::get_current_column_width() const {
