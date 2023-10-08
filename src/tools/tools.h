@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef TOOLS_H_INCLUDED
 #define TOOLS_H_INCLUDED
 
