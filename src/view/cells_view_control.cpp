@@ -58,7 +58,6 @@ void CellsViewControl::OnDraw(wxDC &dc) {
 
 void CellsViewControl::ScrollWindow(int dx, int dy, const wxRect *rect) {
   wxScrolledWindow::ScrollWindow(dx, dy, rect);
-  // wxPrintf("SCROLL EVENT: %d/%d\n", dx, dy);
   _event_sink->send_event(CELL_VIEW_SCROLL_EVENT, GetScrollPosition());
 }
 
@@ -86,6 +85,7 @@ void CellsViewControl::OnPaste() {
       std::string content(data.GetText());
       _document->update_content_current_cell(content);
     }
+
     wxTheClipboard->Close();
   }
 }
@@ -102,8 +102,6 @@ void CellsViewControl::DrawTable(wxDC *dc, const TableSheetPtr &sheet) {
   int height;
   GetSize(&width, &height);
 
-  // TODO With the above information we could calculate the viewport
-  // contents and only draw these to avoid flickering?
   DrawCells(dc, scrollPos, width, height, sheet);
 }
 
@@ -117,9 +115,7 @@ void CellsViewControl::RefreshScrollbars() {
 void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
                                  int WXUNUSED(width), int WXUNUSED(height),
                                  const TableSheetPtr &sheet) {
-  // wxRect scrollArea = GetCurrentScrollArea();
-
-  // TODO Only draw visible ones
+  wxRect scrollArea = GetCurrentScrollArea();
 
   wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell());
 
@@ -134,9 +130,9 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
       auto cell = sheet->get_cell(r, c);
       if (cell) {
         wxRect cellRect = GetCellRectByLocation(Location(c, r));
-        // if (!scrollArea.Contains(cellRect)) {
-        //   break;
-        // }
+         if (!scrollArea.Contains(cellRect)) {
+           break;
+         }
 
         if (cellRect == current_cell_rect) {
           dc->SetPen(*_sys_colors->current_cell_pen);
@@ -207,17 +203,6 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
       }
     }
   }
-
-  // Draw cursor(s)
-  // TODO support multiple cursors?
-  // for (auto &l : sheet->cursors) {
-  //   TableRowDefinitionPtr rowdef;
-  //   TableColumnDefinitionPtr coldef;
-
-  //   std::tie(rowdef, coldef) = sheet->get_definitions_for_location(l);
-
-  //   // TODO draw cursor
-  // }
 }
 
 wxRect CellsViewControl::GetCellRectByLocation(const Location &cell) {
@@ -286,8 +271,6 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
   bool control = event.RawControlDown();
   bool shift = event.ShiftDown();
 
-  // wxPrintf("Key pressed: %d\n", keyCode);
-
   bool handled = true;
 
   switch (keyCode) {
@@ -349,16 +332,9 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
     Location loc(50, 40);
     _document->select_cell(loc);
 
-    // wxRect rect = GetCellRectByLocation(loc);
-    // wxPrintf("TEST! Cell Rect: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
-    //          rect.GetLeft(), rect.GetTop(), rect.GetWidth(),
-    //          rect.GetHeight(), rect.GetRight(), rect.GetBottom());
-
-    // Scroll(rect.GetLeft() / SCROLL_UNIT, rect.GetTop() / SCROLL_UNIT);
-
     ScrollToCell(loc, CELL_WINDOW_LOCATION_TOP);
-
     // TEST END
+
     break;
   }
   case 'C':
@@ -400,10 +376,6 @@ void CellsViewControl::ScrollToCell(const Location &cell,
                                     CellWindowLocation cell_window_location) {
   wxRect scrollArea = GetCurrentScrollArea();
   wxRect rect = GetCellRectByLocation(cell);
-  // wxPrintf("TEST! Cell Rect: %d, %d, %d, %d, (right: %d, bottom: %d)\n",
-  // rect.GetLeft(),
-  //          rect.GetTop(), rect.GetWidth(), rect.GetHeight(),
-  //          rect.GetRight(), rect.GetBottom());
 
   std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr> defs =
       _document->get_definitions_for_location(cell);
@@ -452,17 +424,6 @@ void CellsViewControl::ScrollToCurrentCell(CellWindowLocation location) {
   wxRect scrollArea = GetCurrentScrollArea();
   TableCellPtr cell = _document->get_current_cell();
   wxRect cell_rect = GetCellRectByLocation(cell->location());
-
-  // int scrollX, scrollY;
-  // GetScrollPixelsPerUnit(&scrollX, &scrollY);
-
-  // wxPrintf("Scroll Area: %d, %d, %d, %d, %d, %d\n", scrollArea.GetLeft(),
-  //          scrollArea.GetTop(), scrollArea.GetWidth(),
-  //          scrollArea.GetHeight(), scrollArea.GetRight(),
-  //          scrollArea.GetBottom());
-  // wxPrintf("  -> Cell Rect: %d, %d, %d, %d, %d, %d\n", cell_rect.GetLeft(),
-  //          cell_rect.GetTop(), cell_rect.GetWidth(), cell_rect.GetHeight(),
-  //          cell_rect.GetRight(), cell_rect.GetBottom());
 
   if (scrollArea.Contains(cell_rect)) {
     return;
@@ -530,12 +491,7 @@ void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
   clickPosition.y += scrollPosY;
 
   // Calculate the clicked coordinates accounting for the scroll position
-  wxPrintf("Logical / calculated Click Position: %d, %d\n", clickPosition.x,
-           clickPosition.y);
-
   Location cell = GetTableCellByClickPosition(clickPosition);
-
-  // wxPrintf("Selected cell: %ld, %ld\n", cell.x(), cell.y());
 
   _document->select_cell(cell);
 
