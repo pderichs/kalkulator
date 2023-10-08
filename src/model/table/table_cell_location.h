@@ -23,6 +23,13 @@
 #include <set>
 #include "location.h"
 
+/**
+ * Provides the data to identify a cell within the workbook document.
+ * It contains information about the sheet and the cell location within
+ * the sheet.
+ *
+ * It can also be used as a key for a map.
+ */
 class TableCellLocation {
 public:
   explicit TableCellLocation(const std::string &sheet_name,

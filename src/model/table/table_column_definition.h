@@ -25,6 +25,9 @@
 
 #define DEFAULT_COLUMN_WIDTH 100
 
+/**
+ * Represents the caption and width of a column within a table sheet.
+ */
 struct TableColumnDefinition {
   std::string caption;
   size_t width;

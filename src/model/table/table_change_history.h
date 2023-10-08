@@ -26,6 +26,9 @@
 #include <iostream>
 #include <memory>
 
+/**
+ * Identifies the state of a cell.
+ */
 struct CellState {
   Location location;
   std::string prev;
@@ -36,6 +39,9 @@ struct CellState {
 
 typedef std::vector<CellState> CellStates;
 
+/**
+ * Combines the state of a sheet at a specific moment in time.
+ */
 struct StateHistoryItem {
   std::chrono::system_clock::time_point time_stamp;
   CellStates cell_states;
@@ -57,14 +63,34 @@ struct StateHistoryItem {
 
 typedef std::shared_ptr<StateHistoryItem> StateHistoryItemPtr;
 
+/**
+ * Represents the main undo/redo queue mechanism in a table sheet.
+ */
 class StateChangeQueue {
 public:
-  explicit StateChangeQueue(size_t max_items) : _max_items(max_items), _queue() {}
+  /**
+   * Creates a new StateChangeQueue
+   * @param max_items The maximum undo/redo step amount
+   */
+  explicit StateChangeQueue(size_t max_items)
+      : _max_items(max_items), _queue() {}
 
+  /**
+   * @return true if queue is empty, false otherwise
+   */
   bool empty() const { return _queue.empty(); }
 
+  /**
+   * @return The current amount of items in the queue
+   */
   size_t size() const { return _queue.size(); }
 
+  /**
+   * Adds a new state to the queue. Deletes a state from the back if max amount
+   * is reached.
+   *
+   * @param state New item to be pushed into the queue
+   */
   void push_state(const StateHistoryItemPtr &state) {
     if (_queue.size() >= _max_items) {
       // Delete oldest state
@@ -74,7 +100,16 @@ public:
     _queue.push_front(state);
   }
 
+  /**
+   * Pops a new state from the top of the queue
+   *
+   * @return The state on the front.
+   */
   StateHistoryItemPtr pop_state() {
+    if (empty()) {
+      return {};
+    }
+
     auto result = _queue.front();
     _queue.pop_front();
     return result;
@@ -85,15 +120,21 @@ private:
   std::deque<StateHistoryItemPtr> _queue;
 };
 
+/**
+ * Combines two state change queues. One for undo operations, one for redo
+ * operations and manages the item handling.
+ */
 class TableSheetChangeHistory {
 public:
   explicit TableSheetChangeHistory(size_t max_items = 50)
       : _undo_queue(max_items), _redo_queue(max_items) {}
 
-  void push_state(const StateHistoryItemPtr &state) {
-    _undo_queue.push_state(state);
-  }
+  void push_state(const StateHistoryItemPtr &state) { _undo_queue.push_state(state); }
 
+  StateHistoryItemPtr undo() { return pop_and_swap(_undo_queue, _redo_queue); }
+  StateHistoryItemPtr redo() { return pop_and_swap(_redo_queue, _undo_queue); }
+
+private:
   static StateHistoryItemPtr pop_and_swap(StateChangeQueue &source,
                                           StateChangeQueue &dest) {
     if (source.empty()) {
@@ -109,15 +150,6 @@ public:
 
     return item;
   }
-
-  StateHistoryItemPtr undo() {
-    std::cerr << "Undo queue count: " << _undo_queue.size() << std::endl;
-    std::cerr << "Redo queue count: " << _redo_queue.size() << std::endl;
-
-    return pop_and_swap(_undo_queue, _redo_queue);
-  }
-
-  StateHistoryItemPtr redo() { return pop_and_swap(_redo_queue, _undo_queue); }
 
 private:
   StateChangeQueue _undo_queue;

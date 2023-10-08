@@ -25,6 +25,9 @@
 #include "tools.h"
 #include <string>
 
+/**
+ * Provides functionality to store and read table workbook files.
+ */
 class TableWorkbookFile {
 public:
   TableWorkbookFile();
@@ -34,24 +37,90 @@ public:
   TableWorkbookFile(const TableWorkbookFile &other) = delete;
   TableWorkbookFile &operator=(const TableWorkbookFile &other) = delete;
 
+  /**
+   * Opens a workbook file.
+   * @param filename Path of the file to be opened
+   */
   void open(const std::string &filename);
+
+  /**
+   * Closes the workbook file.
+   */
   void close();
 
+  /**
+   * Read workbook data from the current opened file.
+   * @param workbook Destination of the data read from file
+   */
   void read(TableWorkbookDocumentPtr &workbook);
+
+  /**
+   * Writes the workbook data to the current opened file.
+   * @param workbook Workbook to be stored within the file.
+   */
   void write(const TableWorkbookDocumentPtr &workbook);
 
+  /**
+   * @return the current file path
+   */
   std::string file_path() const { return _file_path; }
 
 private:
+  /**
+   * Creates the SQLite tables to store workbook information within
+   * the file.
+   */
   void create_tables();
+
+  /**
+   * Saves a specific sheet to the file
+   *
+   * @param id Sheet id
+   * @param sheet Sheet instance to be stored
+   * @param document Workbook document instance used to identify active sheet
+   */
   void save_sheet(int id, const TableSheetPtr &sheet,
                   const TableWorkbookDocumentPtr &document);
+
+  /**
+   * Stores the cells of a sheet to the file.
+   *
+   * @param id Sheet id
+   * @param sheet Cells of this sheet will be stored
+   */
   void save_cells(int id, const TableSheetPtr &sheet);
+
+  /**
+   * Stores the row and column sizes of the given sheet to the file.
+   *
+   * @param id Sheet id
+   * @param sheet Sheet which contains the row and column sizes to be stored
+   */
   void save_sheet_sizes(int id, const TableSheetPtr& sheet);
+
+  /**
+   * Helper function to quote contents of a string
+   * @param s String to be quoted
+   * @return Quoted string
+   */
   static std::string quote(const std::string &s) ;
+
+  /**
+   * Executes a SQL statement
+   * @param sql Statement to be executed
+   */
   void execute_sql(const std::string &sql);
 
+  /**
+   * Reads the tables data from the file.
+   */
   void read_tables();
+
+  /**
+   * Checks whether the given table name is present within the file
+   * @param name Name of table to query
+   * @return true if table exists, false otherwise
+   */
   bool has_table(const std::string &name);
 
 private:

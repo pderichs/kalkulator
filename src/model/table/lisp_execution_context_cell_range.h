@@ -27,6 +27,9 @@
 #include <any>
 #include <sstream>
 
+/**
+ * Provides the implementation of the table specific cell-range function.
+ */
 class LispExecutionContextCellRange : public LispFunctionExecutionContext {
 public:
   explicit LispExecutionContextCellRange(TableWorkbookDocumentPtr document)

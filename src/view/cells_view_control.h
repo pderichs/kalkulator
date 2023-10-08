@@ -20,7 +20,6 @@
 #ifndef CELLS_VIEW_CONTROL_INCLUDED
 #define CELLS_VIEW_CONTROL_INCLUDED
 
-#include "../model/table/table_cell_orientation.h"
 #include "kalkulator_system_colors.h"
 #include "table_sheet_view.h"
 

@@ -24,6 +24,9 @@
 #include "model/lisp/lisp_execution_context.h"
 #include "model/lisp/lisp_function_execution_context.h"
 
+/**
+ * Provides the implementation of the message-box function.
+ */
 class LispExecutionContextMessageBox : public LispFunctionExecutionContext {
 public:
   LispExecutionContextMessageBox(EventSink *event_sink)

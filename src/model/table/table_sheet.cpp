@@ -21,7 +21,6 @@
 #include "table_change_history.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
-#include "table_selections.h"
 #include <iostream>
 #include <memory>
 #include <queue>
@@ -34,7 +33,7 @@ const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
 TableSheet::TableSheet(const std::string &param_name)
     : _column_definitions(), _row_definitions(), _rows(), _name(param_name),
-      _selections(), _current_cell(0, 0), _change_history() {
+      _current_cell(0, 0), _change_history() {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     _column_definitions.push_back(std::make_shared<TableColumnDefinition>());
   }

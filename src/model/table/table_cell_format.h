@@ -22,6 +22,9 @@
 #include "table_cell_color.h"
 #include <optional>
 
+/**
+ * Combines the formatting settings of a cell including colors and font.
+ */
 struct TableCellFormat {
   // Font
   std::optional<size_t> font_size;

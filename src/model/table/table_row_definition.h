@@ -25,6 +25,9 @@
 
 #define DEFAULT_ROW_HEIGHT 30
 
+/**
+ * Represents the caption and height of a row within the table sheet.
+ */
 struct TableRowDefinition {
   std::string caption;
   size_t height;

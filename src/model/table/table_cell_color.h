@@ -19,6 +19,10 @@
 #ifndef TABLE_CELL_COLOR_INCLUDED
 #define TABLE_CELL_COLOR_INCLUDED
 
+/**
+ * Simple and framework-independent RGB representation to be used within
+ * table format.
+ */
 struct TableCellColor {
   TableCellColor(): r(0), g(0), b(0) {}
 

@@ -29,6 +29,9 @@
 #include <any>
 #include <sstream>
 
+/**
+ * Provides the implementation of the table specific cell function.
+ */
 class LispExecutionContextCellReference : public LispFunctionExecutionContext {
 public:
   explicit LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook)

@@ -526,13 +526,11 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
       auto cell = _document->get_cell(location);
 
       if (cell) {
-        auto unwrapped_cell = *cell;
-
         // Update formula text
-        std::string formula = unwrapped_cell->get_formula_content();
+        std::string formula = cell->get_formula_content();
         _text_control_formula->SetValue(formula);
 
-        _table_control->SetCurrentCell(unwrapped_cell->location());
+        _table_control->SetCurrentCell(cell->location());
         _table_control->Refresh();
       }
 

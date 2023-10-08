@@ -118,9 +118,8 @@ bool TableWorkbookDocument::move_cursor_right() {
   return false;
 }
 
-std::optional<TableCellPtr>
-TableWorkbookDocument::get_cell(const Location &location,
-                                const std::string &sheet_name) const {
+TableCellPtr TableWorkbookDocument::get_cell(const Location &location,
+                                             const std::string &sheet_name) const {
   TableSheetPtr sheet;
 
   if (sheet_name.empty()) {
@@ -253,7 +252,7 @@ TableCellPtrVector TableWorkbookDocument::get_range(const Location &from,
         continue;
       }
 
-      result.push_back(*opt_cell);
+      result.push_back(opt_cell);
     }
   }
 
@@ -388,13 +387,8 @@ void TableWorkbookDocument::set_current_row_height(size_t height) {
   _event_sink->send_event(ROW_HEIGHT_UPDATED, {});
 }
 
-std::optional<Location>
-TableWorkbookDocument::current_sheet_selected_cell() const {
-  if (_current_sheet) {
-    return _current_sheet->current_cell();
-  }
-
-  return {};
+Location TableWorkbookDocument::current_sheet_selected_cell() const {
+  return _current_sheet->current_cell();
 }
 
 void TableWorkbookDocument::set_current_cell_format(
@@ -489,12 +483,5 @@ void TableWorkbookDocument::trigger_listeners(const TableCellLocation &location,
 }
 
 TableCellPtr TableWorkbookDocument::get_cell_by_location(const TableCellLocation &location) const {
-  TableCellPtr result;
-
-  auto sheet = table_sheet_by_name(location.sheet());
-  if (!sheet) {
-    return {};
-  }
-
-  return sheet->get_cell_by_location(location.location());
+  return get_cell(location.location(), location.sheet());
 }

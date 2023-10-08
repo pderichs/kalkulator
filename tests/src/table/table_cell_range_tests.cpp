@@ -49,9 +49,7 @@ TEST(TableCellRangeTests, CellRangeTest1) {
   document->select_cell(Location(1, 0));
   document->update_content_current_cell("=(+ (cell_range 0 0 5 0))");
 
-  const auto &opt_cell = document->get_cell(Location(1, 0));
-  EXPECT_TRUE(opt_cell);
-  const auto &cell = *opt_cell;
+  const auto &cell = document->get_cell(Location(1, 0));
   EXPECT_TRUE(cell);
   LispValuePtr value = cell->lisp_value();
   EXPECT_TRUE(value->is_function());
@@ -88,9 +86,7 @@ TEST(TableCellRangeTests, RangeEqualityTest1) {
       "=(= (cell_range 0 0 4 10) (cell_range 0 20 1 21))");
 
   // Cell content must match source cell 1
-  const auto &opt_cell = document->get_cell(Location(0, 50));
-  EXPECT_TRUE(opt_cell);
-  const auto &cell = *opt_cell;
+  const auto &cell = document->get_cell(Location(0, 50));
   EXPECT_EQ(cell->visible_content(), "TRUE");
 
   // Change one cell

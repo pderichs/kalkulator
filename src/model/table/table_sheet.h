@@ -25,7 +25,6 @@
 #include "table_change_history.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
-#include "table_selections.h"
 #include "model/lisp/update_id.h"
 #include <cstddef>
 #include <map>
@@ -95,7 +94,6 @@ private:
   TableRowDefinitions _row_definitions;
   TableRows _rows;
   std::string _name;
-  TableSelections _selections;
   Location _current_cell;
   TableSheetChangeHistory _change_history;
 };

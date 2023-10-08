@@ -21,9 +21,13 @@
 
 #include <stdexcept>
 
+/**
+ * Specific exception class for workbook file errors.
+ */
 class TableWorkbookFileError : public std::runtime_error {
 public:
-  explicit TableWorkbookFileError(const std::string &msg) : std::runtime_error(msg) {}
+  explicit TableWorkbookFileError(const std::string &msg) : std::runtime_error(
+      msg) {}
 };
 
 #endif

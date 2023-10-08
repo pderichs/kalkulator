@@ -38,9 +38,7 @@ TEST(TableCellTests, CellTest1) {
   document->select_cell(Location(0, 1));
   document->update_content_current_cell("=(cell 0 0)");
 
-  const auto &opt_cell = document->get_cell(Location(0, 1));
-  EXPECT_TRUE(opt_cell);
-  const auto &cell = *opt_cell;
+  const auto &cell = document->get_cell(Location(0, 1));
   EXPECT_TRUE(cell);
   LispValuePtr value = cell->lisp_value();
   EXPECT_TRUE(value->is_function());
@@ -75,9 +73,7 @@ TEST(TableCellTests, NestedReferenceTest1) {
       "=(cell (cell 0 0) (cell 1 0))"); // Spalte
 
   // Cell content must match source cell 1
-  const auto &opt_cell = document->get_cell(Location(0, 2));
-  EXPECT_TRUE(opt_cell);
-  const auto &cell = *opt_cell;
+  const auto &cell = document->get_cell(Location(0, 2));
   EXPECT_EQ(cell->visible_content(), "Cell 1");
 
   // Now update cell reference coordinate cell
@@ -102,9 +98,7 @@ TEST(TableCellTests, CallToCellWithStringParameterAsRow) {
   document->update_content_current_cell("=(cell hello 1)");
 
   // Cell content must match source cell 1
-  const auto &opt_cell = document->get_cell(Location(0, 0));
-  EXPECT_TRUE(opt_cell);
-  const auto &cell = *opt_cell;
+  const auto &cell = document->get_cell(Location(0, 0));
   EXPECT_EQ(cell->visible_content(), "#PARAMERR");
 }
 
@@ -122,9 +116,7 @@ TEST(TableCellTests, CallToCellWithStringParameterAsColumn) {
   document->update_content_current_cell("=(cell 2 hello)");
 
   // Cell content must match source cell 1
-  const auto &opt_cell = document->get_cell(Location(0, 0));
-  EXPECT_TRUE(opt_cell);
-  const auto &cell = *opt_cell;
+  const auto &cell = document->get_cell(Location(0, 0));
   EXPECT_EQ(cell->visible_content(), "#PARAMERR");
 }
 
@@ -149,8 +141,6 @@ TEST(TableCellTests, CellReferenceToOtherSheet) {
   document->update_content_current_cell("=(cell \"Testsheet\" 1 0)");
 
   // Cell content must match source cell
-  const auto &opt_cell = document->get_cell(Location(0, 0));
-  EXPECT_TRUE(opt_cell);
-  const auto &cell = *opt_cell;
+  const auto &cell = document->get_cell(Location(0, 0));
   EXPECT_EQ(cell->visible_content(), "42");
 }

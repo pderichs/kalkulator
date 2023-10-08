@@ -22,6 +22,9 @@
 #include "table_sheet.h"
 #include "tools.h"
 
+/**
+ * Represents a search result.
+ */
 struct TableSearchResultItem {
   TableSheetPtr sheet;
   Location location;
