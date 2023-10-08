@@ -435,8 +435,8 @@ void TableWorkbookFile::execute_sql(const std::string &sql) {
 void TableWorkbookFile::save_cells(int id, const TableSheetPtr &sheet) {
   std::stringstream ss;
 
-  size_t rows = sheet->num_rows();
-  size_t cols = sheet->num_cols();
+  size_t rows = sheet->row_count();
+  size_t cols = sheet->col_count();
 
   for (size_t r = 0; r < rows; r++) {
     for (size_t c = 0; c < cols; c++) {

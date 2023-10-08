@@ -33,7 +33,7 @@ typedef std::vector<TableCellPtr> TableCellPtrVector;
 typedef std::map<TableCellLocation, TableCellLocationSet> TableCellListenerMap;
 
 /**
- * Represents a workbook within the spread sheet calculation model.
+ * Represents a workbook within the spread sheet application model.
  *
  * It contains all sheets and functions to access the current sheet and cell
  * states.

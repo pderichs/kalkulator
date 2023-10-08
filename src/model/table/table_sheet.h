@@ -34,59 +34,224 @@
 
 typedef std::vector<TableRowPtr> TableRows;
 
+/**
+ * Represents one sheet within the spread sheet application model.
+ */
 class TableSheet {
 public:
   TableSheet(const std::string &name);
 
-  size_t row_count() const;
-  size_t col_count() const;
+  /**
+   * Request a pointer to the cell object at row and col.
+   *
+   * @param row Row coordinate of the cell within the sheet
+   * @param col Column coordinate of the cell within the sheet
+   * @return A pointer to the cell on location row / col
+   */
   TableCellPtr get_cell(size_t row, size_t col) const;
-  TableCellPtr get_cell_by_location(const Location &location) const;
+
+  /**
+   * Request a pointer to the cell object at given location.
+   *
+   * @param location Location of the cell
+   * @return A pointer to the cell on location
+   */
+  TableCellPtr get_cell(const Location &location) const;
+
+  /**
+   * @return A pointer to the current active cell
+   */
   TableCellPtr get_current_cell() const;
+
+  /**
+   * Retrieves the definitions for the current location
+   * @param location Location to query definitions for
+   * @return A pair of row and column definition data
+   */
   std::pair<TableRowDefinitionPtr, TableColumnDefinitionPtr>
   get_definitions_for_location(const Location &location) const;
 
-  size_t num_rows() const;
-  size_t num_cols() const;
+  /**
+   * @return the current row count
+   */
+  size_t row_count() const;
 
+  /**
+   * @return the current column count
+   */
+  size_t col_count() const;
+
+  /**
+   * Moves the cursor left
+   *
+   * @return true if cursor was moved, false otherwise
+   */
   bool move_cursor_left();
+
+  /**
+   * Moves the cursor right
+   *
+   * @return true if cursor was moved, false otherwise
+   */
   bool move_cursor_right();
+
+  /**
+   * Moves the cursor down
+   *
+   * @return true if cursor was moved, false otherwise
+   */
   bool move_cursor_down();
+
+  /**
+   * Moves the cursor up
+   *
+   * @return true if cursor was moved, false otherwise
+   */
   bool move_cursor_up();
+
+  /**
+   * Moves the cursor one page up
+   *
+   * @return true if cursor was moved, false otherwise
+   */
   bool move_cursor_page_up();
+
+  /**
+   * Moves the cursor one page down
+   *
+   * @return true if cursor was moved, false otherwise
+   */
   bool move_cursor_page_down();
 
+  /**
+   * Selects the cell on the given location
+   *
+   * @param cell Location to select
+   * @return true if cell was selected, false otherwise
+   */
   bool select_cell(const Location &cell);
 
+  /**
+   * Checks whether the given location is in bounds within the sheet
+   *
+   * @param cell Location to be checked
+   * @return true if location is in bounds, false otherwise
+   */
   bool is_in_bounds(const Location &cell) const;
 
+  /**
+   * Clears the current cell
+   */
   void clear_current_cell();
 
+  /**
+   * @return the maximum row coordinate
+   */
   size_t get_max_row() const;
+
+  /**
+   * @return the maximum column coordinate
+   */
   size_t get_max_col() const;
 
+  /**
+   * Updates the content of the cell
+   *
+   * @param cell_location Cell to be updated
+   * @param content Content to be assigned
+   * @param update_id Id of the current operation
+   * @return true if content was updated, false otherwise
+   */
   bool update_content(const Location &cell_location,
                       const std::string &content, UpdateIdType update_id);
 
+  /**
+   * @return the next state for an undo operation on this sheet
+   */
   StateHistoryItemPtr undo();
+
+  /**
+   * @return the next state for a redo operation on this sheet
+   */
   StateHistoryItemPtr redo();
 
+  /**
+   * @return the current column width
+   */
   size_t get_current_column_width() const;
+
+  /**
+   * @return the current row height
+   */
   size_t get_current_row_height() const;
 
+  /**
+   * Updates the column width
+   *
+   * @param idx Index of the column to update
+   * @param width New width to assign
+   */
   void set_column_width(size_t idx, size_t width);
+
+  /**
+   * Updates the row height
+   *
+   * @param idx Index of the row to update
+   * @param height New height to assign
+   */
   void set_row_height(size_t idx, size_t height);
+
+  /**
+   * Updates the current column width
+   *
+   * @param width New width to assign
+   */
   void set_current_column_width(size_t width);
+
+  /**
+   * Updates the current row height
+   * @param height New height to assign
+   */
   void set_current_row_height(size_t height);
 
+  /**
+   * Updates the current cell format
+   *
+   * @param format Format to assign
+   */
   void set_current_cell_format(const TableCellFormat &format) const;
+
+  /**
+   * @return the format of the current cell
+   */
   std::optional<TableCellFormat> get_current_cell_format() const;
 
+  /**
+   * Searches this sheet for a given string
+   *
+   * @param search_term Term to search for
+   * @return A set of locations matching the search
+   */
   LocationSet search(const std::string &search_term) const;
 
+  /**
+   * @return location of the current active cell
+   */
   Location current_cell() const { return _current_cell; }
+
+  /**
+   * @return the name of the current sheet
+   */
   std::string name() const { return _name; }
+
+  /**
+   * @return the row definitions
+   */
   TableRowDefinitions row_definitions() const { return _row_definitions; }
+
+  /**
+   * @return the column definitions
+   */
   TableColumnDefinitions column_definitions() const { return _column_definitions; }
 
   /**

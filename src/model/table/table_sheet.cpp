@@ -55,10 +55,6 @@ TableSheet::TableSheet(const std::string &param_name)
   }
 }
 
-size_t TableSheet::row_count() const { return INITIAL_ROW_COUNT; }
-
-size_t TableSheet::col_count() const { return INITIAL_COL_COUNT; }
-
 TableCellPtr TableSheet::get_cell(size_t row, size_t col) const {
   if (row < _rows.size()) {
     auto &table_row = _rows[row];
@@ -118,12 +114,12 @@ bool TableSheet::move_cursor_up() {
   return true;
 }
 
-size_t TableSheet::num_rows() const { return _row_definitions.size(); }
+size_t TableSheet::row_count() const { return _row_definitions.size(); }
 
-size_t TableSheet::num_cols() const { return _column_definitions.size(); }
+size_t TableSheet::col_count() const { return _column_definitions.size(); }
 
 TableCellPtr TableSheet::get_current_cell() const {
-  auto cell = get_cell_by_location(_current_cell);
+  auto cell = get_cell(_current_cell);
 
   // assert(cell);
   if (!cell) {
@@ -136,7 +132,7 @@ TableCellPtr TableSheet::get_current_cell() const {
   return cell;
 }
 
-TableCellPtr TableSheet::get_cell_by_location(const Location &location) const {
+TableCellPtr TableSheet::get_cell(const Location &location) const {
   return get_cell(location.y(), location.x());
 }
 
@@ -172,8 +168,8 @@ bool TableSheet::move_cursor_page_down() {
 }
 
 bool TableSheet::is_in_bounds(const Location &cell) const {
-  return cell.x() >= 0 && (size_t)cell.x() < num_cols() && cell.y() >= 0 &&
-      (size_t)cell.y() < num_rows();
+  return cell.x() >= 0 && (size_t)cell.x() < col_count() && cell.y() >= 0 &&
+      (size_t)cell.y() < row_count();
 }
 
 bool TableSheet::select_cell(const Location &cell) {
@@ -199,7 +195,7 @@ void TableSheet::clear_current_cell() {
 bool TableSheet::update_content(const Location &cell_location,
                                 const std::string &content,
                                 UpdateIdType update_id) {
-  auto cell = get_cell_by_location(cell_location);
+  auto cell = get_cell(cell_location);
 
   std::string previous_content = cell->get_formula_content();
 
@@ -279,8 +275,8 @@ std::optional<TableCellFormat> TableSheet::get_current_cell_format() const {
 LocationSet TableSheet::search(const std::string &search_term) const {
   LocationSet result;
 
-  for (size_t row = 0; row < num_rows(); row++) {
-    for (size_t col = 0; col < num_cols(); col++) {
+  for (size_t row = 0; row < row_count(); row++) {
+    for (size_t col = 0; col < col_count(); col++) {
       const auto &cell = get_cell(row, col);
       if (cell->has_content()) {
         std::string content = cell->visible_content();

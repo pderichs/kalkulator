@@ -52,7 +52,7 @@ void TableSearchResultsDlg::Initialize(const TableSearchResult &results) {
     long index = _lst_results->InsertItem(0, result.sheet->name());
     _lst_results->SetItem(index, 1, pdtools::locationToString(result.location));
 
-    auto cell = result.sheet->get_cell_by_location(result.location);
+    auto cell = result.sheet->get_cell(result.location);
     _lst_results->SetItem(index, 2, cell->visible_content());
   }
 }

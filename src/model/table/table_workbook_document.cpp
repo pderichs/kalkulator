@@ -128,7 +128,7 @@ TableCellPtr TableWorkbookDocument::get_cell(const Location &location,
     sheet = table_sheet_by_name(sheet_name);
   }
 
-  return sheet->get_cell_by_location(location);
+  return sheet->get_cell(location);
 }
 
 TableCellPtr TableWorkbookDocument::get_current_cell() const {
