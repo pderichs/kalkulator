@@ -21,6 +21,10 @@
 
 #include <any>
 
+/**
+ * Each event used within the event sink context has a specific id
+ * defined by this enum.
+ */
 enum TableEvent {
   FORMULA_UPDATE = 0,
   CELL_UPDATED,
@@ -36,11 +40,20 @@ enum TableEvent {
   EDIT_CELL,
 };
 
+/**
+ * Base class for an event sink provider.
+ */
 class EventSink {
 public:
   EventSink() = default;
   virtual ~EventSink() = default;
 
+  /**
+   * Sends an event to the sink.
+   *
+   * @param event_id Id of the event
+   * @param param Event payload - type and data is dependent on event_id
+   */
   virtual void send_event(TableEvent event_id, std::any param) = 0;
 };
 

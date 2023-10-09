@@ -29,6 +29,9 @@
 
 #include "lisp_value_ptr.h"
 
+/**
+ * Each lisp value has a type defined by this enum.
+ */
 enum LispValueType {
   LVT_NONE = 0,
   LVT_STRING = 1,
@@ -41,11 +44,18 @@ enum LispValueType {
   LVT_ERROR = 8,
 };
 
+/**
+ * A boolean representation.
+ */
 enum LispBool {
   LISP_BOOL_FALSE = 0,
   LISP_BOOL_TRUE = 1,
 };
 
+/**
+ * Combines a type with its content. The content type and data is dependent
+ * on the type id.
+ */
 class LispValue {
 private:
   LispValueType _type;

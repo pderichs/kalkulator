@@ -31,6 +31,10 @@
 #include <wx/wx.h>
 #endif
 
+/**
+ * Provides the main frame functionality of the application.
+ * It also serves as the main event sink.
+ */
 class KalkulatorMainFrame : public wxFrame, public EventSink {
 public:
   KalkulatorMainFrame();

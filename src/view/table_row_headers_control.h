@@ -23,6 +23,9 @@
 #include "table_sheet_view.h"
 #include <wx/wx.h>
 
+/**
+ * Custom control for the row headers.
+ */
 class TableRowHeadersControl : public TableSheetView {
 public:
   TableRowHeadersControl(KalkulatorSystemColorsPtr sys_colors,

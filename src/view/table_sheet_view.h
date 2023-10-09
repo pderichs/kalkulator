@@ -23,6 +23,9 @@
 #include "tools.h"
 #include <wx/wx.h>
 
+/**
+ * Base class for the header controls to provide some common functionality.
+ */
 class TableSheetView : public wxScrolledWindow {
 public:
   TableSheetView(TableWorkbookDocumentPtr document, EventSink *event_sink,

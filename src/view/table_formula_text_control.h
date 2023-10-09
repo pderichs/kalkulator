@@ -23,6 +23,9 @@
 
 #include "../model/event_sink.h"
 
+/**
+ * This provides a specialized text control for the formula.
+ */
 class TableFormulaTextControl : public wxTextCtrl {
 public:
   TableFormulaTextControl(EventSink *event_sink, wxWindow *parent,

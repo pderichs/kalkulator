@@ -26,6 +26,9 @@
 #include <wx/listctrl.h>
 #include <wx/wx.h>
 
+/**
+ * Implementation of the search dialog.
+ */
 class TableSearchResultsDlg : public wxFrame {
 public:
   TableSearchResultsDlg(wxWindow *parent, EventSink *event_sink,

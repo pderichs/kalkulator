@@ -40,6 +40,9 @@
 
 #include "../model/table/table_cell_format.h"
 
+/**
+ * Provides the dialog to update a cell's format.
+ */
 class TableCellFormatDlg : public wxDialog {
 protected:
   wxCheckBox *m_chkBold;

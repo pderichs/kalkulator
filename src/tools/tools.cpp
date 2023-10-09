@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "tools.h"
 #include <algorithm>
 #include <random>
@@ -66,15 +65,6 @@ std::string locationToString(const Location &l) {
   std::stringstream oss;
 
   oss << "(x: " << l.x() << ", y: " << l.y() << ")";
-
-  return oss.str();
-}
-
-std::string rectangleToString(const Rectangle &rect) {
-  std::stringstream oss;
-
-  oss << "(t:" << rect.top() << ", l:" << rect.left() << ", b:" << rect.bottom()
-      << ", r:" << rect.right() << ")";
 
   return oss.str();
 }

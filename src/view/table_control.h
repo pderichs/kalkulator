@@ -30,6 +30,9 @@
 #include "table_column_headers_control.h"
 #include "table_row_headers_control.h"
 
+/**
+ * The table control combines the controls to visualize the table sheet.
+ */
 class TableControl : public wxWindow {
 public:
   TableControl(KalkulatorSystemColorsPtr sys_colors,

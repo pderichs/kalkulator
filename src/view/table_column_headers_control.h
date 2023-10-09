@@ -22,6 +22,9 @@
 #include "kalkulator_system_colors.h"
 #include "table_sheet_view.h"
 
+/**
+ * Implementation of the column headers control.
+ */
 class TableColumnHeadersControl : public TableSheetView {
 public:
   TableColumnHeadersControl(KalkulatorSystemColorsPtr sys_colors,

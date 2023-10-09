@@ -31,6 +31,9 @@ enum CellWindowLocation {
   CELL_WINDOW_LOCATION_CENTER
 };
 
+/**
+ * This is a custom UI control providing the cell view of a sheet.
+ */
 class CellsViewControl : public TableSheetView {
 public:
   CellsViewControl(KalkulatorSystemColorsPtr sys_colors,

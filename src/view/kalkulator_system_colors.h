@@ -25,6 +25,9 @@
 typedef std::shared_ptr<wxPen> wxPenPtr;
 typedef std::shared_ptr<wxBrush> wxBrushPtr;
 
+/**
+ * Contains the used colors for the (custom) UI controls.
+ */
 struct KalkulatorSystemColors {
   KalkulatorSystemColors()
       : caption_grid_pen(), grid_pen(), current_cell_pen(), window_brush(),

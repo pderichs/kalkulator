@@ -19,7 +19,7 @@
 #ifndef TOOLS_H_INCLUDED
 #define TOOLS_H_INCLUDED
 
-#include "rectangle.h"
+#include "location.h"
 #include <deque>
 #include <iostream>
 #include <optional>
@@ -60,7 +60,6 @@ std::vector<std::string> split(const std::string &s, char delim);
 std::string stringVectorToString(const StringVector &v);
 std::string intVectorToString(const IntVector &v);
 std::string locationToString(const Location &l);
-std::string rectangleToString(const Rectangle &rect);
 int generate_random_int_in_range(int min, int max);
 
 template <typename T>

@@ -24,6 +24,9 @@
 #include "lisp_value_ptr.h"
 #include <memory>
 
+/**
+ * Handles the creation of LispValues.
+ */
 class LispValueFactory {
 private:
   static LispValuePtr new_value_ptr(LispValueType type,
