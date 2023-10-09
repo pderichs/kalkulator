@@ -23,6 +23,10 @@
 #include <ostream>
 #include <vector>
 
+/**
+ * Each token has a specific id. The tokenizer implements the logic to
+ * identify these.
+ */
 enum TokenID {
   OPEN_BRACKET,
   CLOSE_BRACKET,
@@ -33,6 +37,9 @@ enum TokenID {
   SPACE
 };
 
+/**
+ * Combines a token id with the actual content from the string.
+ */
 struct LispToken {
   TokenID id;
   std::any content;
@@ -46,15 +53,6 @@ struct LispToken {
   bool is_closed_bracket() const { return id == CLOSE_BRACKET; }
 };
 
-class LispTokens : public std::vector<LispToken> {
-public:
-  LispTokens() = default;
-  ~LispTokens() = default;
-
-  void debug_print(std::ostream &oss) const;
-};
-
-std::string token_id_to_string(TokenID token_id);
-std::string printable_content_of_token(const LispToken &token);
+typedef std::vector<LispToken> LispTokens;
 
 #endif

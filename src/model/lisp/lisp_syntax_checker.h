@@ -16,12 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LISP_SYNTAX_CHECKER_INCLUDED
 #define LISP_SYNTAX_CHECKER_INCLUDED
 
 #include "lisp_tokens.h"
 
+/**
+ * Performs a few additional syntax checks based on a set of tokens.
+ */
 class LispSyntaxChecker {
 public:
   explicit LispSyntaxChecker(const LispTokens &tokens);

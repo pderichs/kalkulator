@@ -47,6 +47,7 @@ public:
 
   /**
    * Executes a lisp value. It returns the value if it is not a function.
+   *
    * @param value Value to be executed or returned.
    * @param context_param Generic parameter which will be simple provided to each function execution handler
    * @param update_id Identifies the current update operation
@@ -58,6 +59,7 @@ public:
 
   /**
    * Executes a lisp function.
+   *
    * @param func The lisp list which represents the function to be executed
    * @param context_param Generic parameter which will be simple provided to each function execution handler
    * @param update_id Identifies the current update operation
@@ -69,6 +71,7 @@ public:
 
   /**
    * Adds a function to this execution context.
+   *
    * @param identifier Identifier for this function
    * @param func Native function execution context for this function
    */
@@ -78,6 +81,7 @@ public:
 
   /**
    * Adds a variable to the scope of this context.
+   *
    * @param name Name of the variable
    * @param value Initial value of the variable, default is none
    */
@@ -86,6 +90,7 @@ public:
 
   /**
    * Extracts the variable names within the provided lisp list
+   *
    * @param params Defined scope variables within this list will be expanded
    * @return List with expanded variable values
    */
@@ -93,6 +98,7 @@ public:
 
   /**
    * Returns the defined variable within this context
+   *
    * @param name Name of the variable
    * @return The value of the variable
    */

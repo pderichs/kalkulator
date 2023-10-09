@@ -22,6 +22,9 @@
 
 #include <stdexcept>
 
+/**
+ * Specialized exception class for parser errors.
+ */
 class LispParserError : public std::runtime_error {
 public:
   explicit LispParserError(const std::string &msg)

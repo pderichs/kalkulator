@@ -24,6 +24,9 @@
 #include <cstddef>
 #include <string>
 
+/**
+ * Handles all the logic to convert a string to a set of tokens (Tokenizer).
+ */
 class LispParser {
 public:
   explicit LispParser(const std::string &lisp);

@@ -25,8 +25,10 @@
 #include "lisp_value_ptr.h"
 #include "tools.h"
 
-// Used for function definitions and closure definitions.
-// If used for closure definitions, name is empty.
+/**
+ * Used for function definitions and closure definitions.
+ * If used for closure definitions, name is empty.
+ */
 struct LispFunctionDefinition {
   std::string name;
   std::string comment;
