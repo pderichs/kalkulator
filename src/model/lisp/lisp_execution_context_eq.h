@@ -42,7 +42,10 @@ public:
           params, execution_context, context_param, update_id);
     } else {
       params =
-          execute_functions(params, execution_context, context_param, update_id);
+          execute_functions(params,
+                            execution_context,
+                            context_param,
+                            update_id);
     }
 
     LispValuePtr last;

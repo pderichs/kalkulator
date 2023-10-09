@@ -29,7 +29,7 @@ struct TableSearchResultItem {
   TableSheetPtr sheet;
   Location location;
 
-  TableSearchResultItem(): sheet(), location() {}
+  TableSearchResultItem() : sheet(), location() {}
 };
 
 typedef std::vector<TableSearchResultItem> TableSearchResult;

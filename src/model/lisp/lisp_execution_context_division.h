@@ -45,7 +45,10 @@ public:
     const auto &first_param = params[0];
 
     LispValuePtr base_value(
-        expect_number(first_param, execution_context, context_param, update_id));
+        expect_number(first_param,
+                      execution_context,
+                      context_param,
+                      update_id));
 
     // First parameter of subtraction is base value
     result = base_value->to_double();

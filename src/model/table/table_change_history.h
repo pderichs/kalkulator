@@ -129,7 +129,9 @@ public:
   explicit TableSheetChangeHistory(size_t max_items = 50)
       : _undo_queue(max_items), _redo_queue(max_items) {}
 
-  void push_state(const StateHistoryItemPtr &state) { _undo_queue.push_state(state); }
+  void push_state(const StateHistoryItemPtr &state) {
+    _undo_queue.push_state(state);
+  }
 
   StateHistoryItemPtr undo() { return pop_and_swap(_undo_queue, _redo_queue); }
   StateHistoryItemPtr redo() { return pop_and_swap(_redo_queue, _undo_queue); }

@@ -24,7 +24,7 @@
  * table format.
  */
 struct TableCellColor {
-  TableCellColor(): r(0), g(0), b(0) {}
+  TableCellColor() : r(0), g(0), b(0) {}
 
   unsigned char r;
   unsigned char g;

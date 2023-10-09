@@ -23,7 +23,8 @@
 
 class ValueConversionError : public std::runtime_error {
 public:
-  explicit ValueConversionError(const std::string &msg) : std::runtime_error(msg) {}
+  explicit ValueConversionError(const std::string &msg)
+      : std::runtime_error(msg) {}
 };
 
 #endif
