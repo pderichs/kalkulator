@@ -53,6 +53,7 @@
 #include "lisp_value_ptr.h"
 #include "lisp_execution_context_set_var.h"
 #include "lisp_execution_context_defun.h"
+#include "lisp_execution_context_round.h"
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -100,6 +101,7 @@ LispExecutionContext::LispExecutionContext() : _scope(), _functions() {
   _functions["pow"] = std::make_shared<LispExecutionContextPow>();
   _functions["log"] = std::make_shared<LispExecutionContextLog>();
   _functions["is-none"] = std::make_shared<LispExecutionContextIsNone>();
+  _functions["round"] = std::make_shared<LispExecutionContextRound>();
   // SetVar needs writable access to execution context to update the scope.
   _functions["set-var"] = std::make_shared<LispExecutionContextSetVar>(this);
   _functions["defun"] = std::make_shared<LispExecutionContextDefun>(this);
