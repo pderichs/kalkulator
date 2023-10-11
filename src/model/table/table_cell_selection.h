@@ -21,6 +21,11 @@
 
 #include "location.h"
 
+/**
+ * Represents the selection state model within a sheet.
+ * A selection can consist of one (primary) or more,
+ * additional cell locations.
+ */
 class TableCellSelection {
 public:
   TableCellSelection(): _primary_cell(), _additional_cells() {}
