@@ -71,14 +71,16 @@ void TableWorkbookDocument::update_content_current_cell(
 
   TableSheetPtr sheet = _current_sheet;
 
-  update_cell_content(sheet, sheet->current_cell(), content, update_id);
+  for (auto& location: sheet->selection().all_locations()) {
+    update_cell_content(sheet, location, content, update_id);
+  }
 }
 
 bool TableWorkbookDocument::move_cursor_up() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_up()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
-                            sheet->current_cell());
+                            sheet->selection());
     return true;
   }
 
@@ -89,7 +91,7 @@ bool TableWorkbookDocument::move_cursor_down() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_down()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
-                            sheet->current_cell());
+                            sheet->selection());
     return true;
   }
 
@@ -100,7 +102,7 @@ bool TableWorkbookDocument::move_cursor_left() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_left()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
-                            sheet->current_cell());
+                            sheet->selection());
     return true;
   }
 
@@ -111,7 +113,7 @@ bool TableWorkbookDocument::move_cursor_right() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_right()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
-                            sheet->current_cell());
+                            sheet->selection());
     return true;
   }
 
@@ -140,7 +142,7 @@ bool TableWorkbookDocument::move_cursor_page_up() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_page_up()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
-                            sheet->current_cell());
+                            sheet->selection());
     return true;
   }
 
@@ -151,7 +153,7 @@ bool TableWorkbookDocument::move_cursor_page_down() {
   TableSheetPtr sheet = _current_sheet;
   if (sheet->move_cursor_page_down()) {
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
-                            sheet->current_cell());
+                            sheet->selection());
     return true;
   }
 
@@ -199,7 +201,7 @@ void TableWorkbookDocument::select_cell(const Location &cell) {
   if (_current_sheet->select_cell(cell)) {
     _changed = true;
     _event_sink->send_event(CURRENT_CELL_LOCATION_UPDATED,
-                            _current_sheet->current_cell());
+                            _current_sheet->selection());
   }
 }
 
@@ -314,7 +316,7 @@ void TableWorkbookDocument::clear_current_cell() {
 
   _changed = true;
 
-  std::any param = _current_sheet->current_cell();
+  std::any param = _current_sheet->selection();
   _event_sink->send_event(CELL_UPDATED, param);
 }
 
@@ -388,7 +390,7 @@ void TableWorkbookDocument::set_current_row_height(size_t height) {
 }
 
 Location TableWorkbookDocument::current_sheet_selected_cell() const {
-  return _current_sheet->current_cell();
+  return _current_sheet->selection().primary();
 }
 
 void TableWorkbookDocument::set_current_cell_format(

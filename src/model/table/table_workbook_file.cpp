@@ -399,7 +399,7 @@ void TableWorkbookFile::save_sheet(int id, const TableSheetPtr &sheet,
          "active) ";
   sql << "VALUES (";
   sql << id << "," << quote(sheet->name()) << ",";
-  sql << sheet->current_cell().y() << "," << sheet->current_cell().x() << ",";
+  sql << sheet->selection().primary_y() << "," << sheet->selection().primary_x() << ",";
 
   if (active) {
     sql << "TRUE";

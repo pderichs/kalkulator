@@ -33,7 +33,7 @@ const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
 TableSheet::TableSheet(const std::string &param_name)
     : _column_definitions(), _row_definitions(), _rows(), _name(param_name),
-      _current_cell(0, 0), _change_history(), _row_top_positions(),
+      _selected_cells(), _change_history(), _row_top_positions(),
       _col_left_positions() {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     _column_definitions.push_back(std::make_shared<TableColumnDefinition>());
@@ -73,21 +73,25 @@ TableSheet::get_definitions_for_location(const Location &location) const {
 }
 
 bool TableSheet::move_cursor_left() {
-  if (_current_cell.x() == 0) {
+  _selected_cells.reduce_selection_to_primary();
+
+  if (_selected_cells.primary_x() == 0) {
     return false;
   }
 
-  _current_cell.moveLeft();
+  _selected_cells.primary_move_left();
 
   return true;
 }
 
 bool TableSheet::move_cursor_right() {
-  if ((size_t)_current_cell.x() >= get_max_col()) {
+  _selected_cells.reduce_selection_to_primary();
+
+  if ((size_t)_selected_cells.primary_x() >= get_max_col()) {
     return false;
   }
 
-  _current_cell.moveRight();
+  _selected_cells.primary_move_right();
 
   return true;
 }
@@ -95,21 +99,25 @@ bool TableSheet::move_cursor_right() {
 size_t TableSheet::get_max_row() const { return _row_definitions.size() - 1; }
 
 bool TableSheet::move_cursor_down() {
-  if ((size_t)_current_cell.y() >= get_max_row()) {
+  _selected_cells.reduce_selection_to_primary();
+
+  if ((size_t)_selected_cells.primary_y() >= get_max_row()) {
     return false;
   }
 
-  _current_cell.moveDown();
+  _selected_cells.primary_move_down();
 
   return true;
 }
 
 bool TableSheet::move_cursor_up() {
-  if (_current_cell.y() == 0) {
+  _selected_cells.reduce_selection_to_primary();
+
+  if (_selected_cells.primary_y() == 0) {
     return false;
   }
 
-  _current_cell.moveUp();
+  _selected_cells.primary_move_up();
 
   return true;
 }
@@ -119,13 +127,13 @@ size_t TableSheet::row_count() const { return _row_definitions.size(); }
 size_t TableSheet::col_count() const { return _column_definitions.size(); }
 
 TableCellPtr TableSheet::get_current_cell() const {
-  auto cell = get_cell(_current_cell);
+  auto cell = get_cell(_selected_cells.primary());
 
   // assert(cell);
   if (!cell) {
     std::stringstream ss;
     ss << "Fatal: Current cell is invalid: ";
-    ss << _current_cell.x() << ", " << _current_cell.y();
+    ss << _selected_cells.primary_x() << ", " << _selected_cells.primary_y();
     throw std::runtime_error(ss.str());
   }
 
@@ -137,33 +145,39 @@ TableCellPtr TableSheet::get_cell(const Location &location) const {
 }
 
 bool TableSheet::move_cursor_page_up() {
-  if (_current_cell.y() == 0) {
+  _selected_cells.reduce_selection_to_primary();
+
+  if (_selected_cells.primary_y() == 0) {
     return false;
   }
 
   int amount = ROW_PAGE_MOVE_AMOUNT;
-  if (_current_cell.y() - amount < 0) {
-    amount = _current_cell.y();
+  if (_selected_cells.primary_y() - amount < 0) {
+    amount = _selected_cells.primary_y();
   }
 
-  _current_cell.moveUp(amount);
+  _selected_cells.primary_move_up(amount);
 
   return true;
 }
 
 bool TableSheet::move_cursor_page_down() {
-  if (static_cast<size_t>(_current_cell.y()) == get_max_row()) {
+  _selected_cells.reduce_selection_to_primary();
+
+  if (static_cast<size_t>(_selected_cells.primary_y()) == get_max_row()) {
     return false;
   }
 
   size_t amount = ROW_PAGE_MOVE_AMOUNT;
-  if (_current_cell.y() + amount > get_max_row()) {
+  if (_selected_cells.primary_y() + amount > get_max_row()) {
     // Move to last row
-    _current_cell = Location(_current_cell.x(), get_max_row());
+    _selected_cells.set_primary(Location(_selected_cells.primary_x(),
+                                         get_max_row()));
     return true;
   }
 
-  _current_cell.moveDown(amount);
+  _selected_cells.primary_move_down(amount);
+
   return true;
 }
 
@@ -177,7 +191,7 @@ bool TableSheet::select_cell(const Location &cell) {
     return false;
   }
 
-  _current_cell = cell;
+  _selected_cells.set_primary(cell);
 
   return true;
 }
@@ -224,12 +238,12 @@ StateHistoryItemPtr TableSheet::redo() {
 }
 
 size_t TableSheet::get_current_column_width() const {
-  TableColumnDefinitionPtr col_def = _column_definitions[_current_cell.x()];
+  TableColumnDefinitionPtr col_def = _column_definitions[_selected_cells.primary_x()];
   return col_def->width;
 }
 
 size_t TableSheet::get_current_row_height() const {
-  TableRowDefinitionPtr row_def = _row_definitions[_current_cell.y()];
+  TableRowDefinitionPtr row_def = _row_definitions[_selected_cells.primary_y()];
   return row_def->height;
 }
 
@@ -250,11 +264,11 @@ void TableSheet::set_row_height(size_t idx, size_t height) {
 }
 
 void TableSheet::set_current_column_width(size_t width) {
-  set_column_width(_current_cell.x(), width);
+  set_column_width(_selected_cells.primary_x(), width);
 }
 
 void TableSheet::set_current_row_height(size_t height) {
-  set_row_height(_current_cell.y(), height);
+  set_row_height(_selected_cells.primary_y(), height);
 }
 
 void TableSheet::set_current_cell_format(const TableCellFormat &format) const {

@@ -26,6 +26,7 @@
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include "model/lisp/update_id.h"
+#include "table_cell_selection.h"
 #include <cstddef>
 #include <map>
 #include <memory>
@@ -237,7 +238,7 @@ public:
   /**
    * @return location of the current active cell
    */
-  Location current_cell() const { return _current_cell; }
+  TableCellSelection selection() const { return _selected_cells; }
 
   /**
    * @return the name of the current sheet
@@ -275,7 +276,7 @@ private:
   TableRowDefinitions _row_definitions;
   TableRows _rows;
   std::string _name;
-  Location _current_cell;
+  TableCellSelection _selected_cells;
   TableSheetChangeHistory _change_history;
   std::map<size_t, size_t> _row_top_positions;
   std::map<size_t, size_t> _col_left_positions;

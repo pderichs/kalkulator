@@ -110,7 +110,7 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
                                  int WXUNUSED(width), int WXUNUSED(height),
                                  const TableSheetPtr &sheet) {
   wxRect scrollArea = GetCurrentScrollArea();
-  wxRect current_cell_rect = GetCellRectByLocation(sheet->current_cell());
+  wxRect current_cell_rect = GetCellRectByLocation(sheet->selection().primary()); // TODO Selection
 
   for (size_t r = 0; r < sheet->row_count(); r++) {
 
