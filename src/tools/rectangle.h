@@ -31,7 +31,7 @@ public:
   Rectangle(const Location &topLeft, const Location &bottomRight)
       : topLeft_(topLeft), bottomRight_(bottomRight) {
     if (!(topLeft_ < bottomRight_)) {
-      throw std::runtime_error("This is not a rect");
+      throw std::runtime_error("Invalid rectangle");
     }
   }
 
@@ -67,7 +67,7 @@ public:
 
   int height() const { return bottom() - top(); }
 
-  void enlarge_all_directions(int amount) {
+  void extend_all_directions(int amount) {
     if (amount <= 0) {
       return;
     }
@@ -75,6 +75,22 @@ public:
     topLeft_ = Location(topLeft_.x() - amount, topLeft_.y() - amount);
     bottomRight_ =
         Location(bottomRight_.x() + amount, bottomRight_.y() + amount);
+  }
+
+  void extend_down() {
+    bottomRight_.moveDown();
+  }
+
+  void extend_up() {
+    topLeft_.moveUp();
+  }
+
+  void extend_left() {
+    topLeft_.moveLeft();
+  }
+
+  void extend_right() {
+    bottomRight_.moveRight();
   }
 };
 

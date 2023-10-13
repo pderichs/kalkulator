@@ -52,13 +52,57 @@ TEST(RectangleTests, Contains) {
   EXPECT_FALSE(rect.contains(Location(100, 201)));
 }
 
-TEST(RectangleTests, EnlargeAllDirections) {
+TEST(RectangleTests, ExtendAllDirections) {
   Rectangle rect(Location(5, 7), Location(100, 200));
 
-  rect.enlarge_all_directions(1);
+  rect.extend_all_directions(1);
 
   EXPECT_EQ(rect.top(), 6);
   EXPECT_EQ(rect.bottom(), 201);
   EXPECT_EQ(rect.left(), 4);
+  EXPECT_EQ(rect.right(), 101);
+}
+
+TEST(RectangleTests, ExtendUp) {
+  Rectangle rect(Location(5, 7), Location(100, 200));
+
+  rect.extend_up();
+
+  EXPECT_EQ(rect.top(), 6);
+  EXPECT_EQ(rect.bottom(), 200);
+  EXPECT_EQ(rect.left(), 5);
+  EXPECT_EQ(rect.right(), 100);
+}
+
+TEST(RectangleTests, ExtendDown) {
+  Rectangle rect(Location(5, 7), Location(100, 200));
+
+  rect.extend_down();
+
+  EXPECT_EQ(rect.top(), 7);
+  EXPECT_EQ(rect.bottom(), 201);
+  EXPECT_EQ(rect.left(), 5);
+  EXPECT_EQ(rect.right(), 100);
+}
+
+TEST(RectangleTests, ExtendLeft) {
+  Rectangle rect(Location(5, 7), Location(100, 200));
+
+  rect.extend_left();
+
+  EXPECT_EQ(rect.top(), 7);
+  EXPECT_EQ(rect.bottom(), 200);
+  EXPECT_EQ(rect.left(), 4);
+  EXPECT_EQ(rect.right(), 100);
+}
+
+TEST(RectangleTests, ExtendRight) {
+  Rectangle rect(Location(5, 7), Location(100, 200));
+
+  rect.extend_right();
+
+  EXPECT_EQ(rect.top(), 7);
+  EXPECT_EQ(rect.bottom(), 200);
+  EXPECT_EQ(rect.left(), 5);
   EXPECT_EQ(rect.right(), 101);
 }
