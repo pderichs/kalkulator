@@ -106,3 +106,41 @@ TEST(RectangleTests, ExtendRight) {
   EXPECT_EQ(rect.left(), 5);
   EXPECT_EQ(rect.right(), 101);
 }
+
+TEST(RectangleTests, AllLocations) {
+  Rectangle rect(Location(0, 0), Location(2, 2));
+
+  auto locations = rect.all_locations();
+
+  EXPECT_EQ(locations.size(), 9);
+
+  EXPECT_TRUE(locations.find(Location(0, 0)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(0, 1)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(0, 2)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(1, 0)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(1, 1)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(1, 2)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(2, 0)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(2, 1)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(2, 2)) != locations.end());
+
+  // Also behaves correctly on change
+  rect.extend_right();
+
+  locations = rect.all_locations();
+
+  EXPECT_EQ(locations.size(), 12);
+
+  EXPECT_TRUE(locations.find(Location(0, 0)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(0, 1)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(0, 2)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(1, 0)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(1, 1)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(1, 2)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(2, 0)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(2, 1)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(2, 2)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(3, 0)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(3, 1)) != locations.end());
+  EXPECT_TRUE(locations.find(Location(3, 2)) != locations.end());
+}

@@ -27,6 +27,8 @@ private:
   Location topLeft_;
   Location bottomRight_;
 
+  LocationSet cachedLocations_;
+
 public:
   Rectangle(const Location &topLeft, const Location &bottomRight)
       : topLeft_(topLeft), bottomRight_(bottomRight) {
@@ -75,22 +77,45 @@ public:
     topLeft_ = Location(topLeft_.x() - amount, topLeft_.y() - amount);
     bottomRight_ =
         Location(bottomRight_.x() + amount, bottomRight_.y() + amount);
+    cachedLocations_.clear();
   }
 
   void extend_down() {
     bottomRight_.moveDown();
+    cachedLocations_.clear();
   }
 
   void extend_up() {
     topLeft_.moveUp();
+    cachedLocations_.clear();
   }
 
   void extend_left() {
     topLeft_.moveLeft();
+    cachedLocations_.clear();
   }
 
   void extend_right() {
     bottomRight_.moveRight();
+    cachedLocations_.clear();
+  }
+
+  LocationSet all_locations() {
+    if (!cachedLocations_.empty()) {
+      return cachedLocations_;
+    }
+
+    LocationSet result;
+
+    for (long r = top(); r <= bottom(); r++) {
+      for (long c = left(); c <= right(); c++) {
+        result.insert(Location(c, r));
+      }
+    }
+
+    cachedLocations_ = result;
+
+    return result;
   }
 };
 
