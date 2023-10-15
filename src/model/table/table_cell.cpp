@@ -57,6 +57,7 @@ void TableCell::clear() {
   _lisp_value = {};
   _cached_result = {};
   _last_update = 0;
+  _visible_content.clear();
 }
 
 // Returns true if content changed, false otherwise.

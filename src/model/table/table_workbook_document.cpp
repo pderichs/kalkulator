@@ -60,12 +60,12 @@ void TableWorkbookDocument::update_cell_content(const TableSheetPtr &sheet,
 
     _changed = true;
 
-    std::any param = cell_location;
+    std::any param = location;
     _event_sink->send_event(CELL_UPDATED, param);
   }
 }
 
-void TableWorkbookDocument::update_content_current_cell(
+void TableWorkbookDocument::update_content_current_cells(
     const std::string &content) {
   UpdateIdType update_id = generate_update_id();
 
@@ -307,17 +307,19 @@ void TableWorkbookDocument::initialize() {
   _changed = false;
 }
 
-void TableWorkbookDocument::clear_current_cell() {
+void TableWorkbookDocument::clear_current_cells() {
   if (!_current_sheet) {
     return;
   }
 
-  _current_sheet->clear_current_cell();
+  auto updated_locations = _current_sheet->clear_current_cells();
 
   _changed = true;
 
-  std::any param = _current_sheet->selection();
-  _event_sink->send_event(CELL_UPDATED, param);
+  for (const auto& location: updated_locations) {
+    TableCellLocation cell_location(_current_sheet->name(), location);
+    _event_sink->send_event(CELL_UPDATED, cell_location);
+  }
 }
 
 void TableWorkbookDocument::apply_state_change_item(const StateHistoryItemPtr &state_history_item,
@@ -393,10 +395,10 @@ Location TableWorkbookDocument::current_sheet_selected_cell() const {
   return _current_sheet->selection().primary();
 }
 
-void TableWorkbookDocument::set_current_cell_format(
+void TableWorkbookDocument::set_cell_format(
     const TableCellFormat &format) {
   if (_current_sheet) {
-    _current_sheet->set_current_cell_format(format);
+    _current_sheet->set_cell_format(format);
   }
 }
 

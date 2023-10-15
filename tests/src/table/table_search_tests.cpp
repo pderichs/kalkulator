@@ -32,11 +32,11 @@ TEST(TableSearchTests, TableSearchTest1) {
   document->add_sheet("Testsheet");
   document->select_sheet_by_name("Testsheet");
   document->select_cell(Location(0, 1));
-  document->update_content_current_cell("42");
+  document->update_content_current_cells("42");
 
   document->select_sheet_by_name("Sheet 1");
   document->select_cell(Location(0, 2));
-  document->update_content_current_cell("42");
+  document->update_content_current_cells("42");
 
   auto result = document->search_sheets("42");
 

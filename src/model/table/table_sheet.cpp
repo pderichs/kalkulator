@@ -196,14 +196,24 @@ bool TableSheet::select_cell(const Location &cell) {
   return true;
 }
 
-void TableSheet::clear_current_cell() {
-  auto cell = get_current_cell();
-  std::string previous_content = cell->get_formula_content();
-  cell->clear();
+LocationSet TableSheet::clear_current_cells() {
+  auto locations = _selected_cells.all_locations();
 
-  CellState state{cell->location(), previous_content, ""};
-  StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
+  CellStates states;
+
+  for (const auto &location: locations) {
+    auto cell = get_cell(location);
+    std::string previous_content = cell->get_formula_content();
+    cell->clear();
+
+    CellState state{cell->location(), previous_content, ""};
+    states.push_back(state);
+  }
+
+  StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(states);
   _change_history.push_state(item);
+
+  return locations;
 }
 
 bool TableSheet::update_content(const Location &cell_location,
@@ -271,9 +281,13 @@ void TableSheet::set_current_row_height(size_t height) {
   set_row_height(_selected_cells.primary_y(), height);
 }
 
-void TableSheet::set_current_cell_format(const TableCellFormat &format) const {
-  TableCellPtr cell = get_current_cell();
-  cell->set_format(format);
+void TableSheet::set_cell_format(const TableCellFormat &format) const {
+  auto cell_locations = _selected_cells.all_locations();
+
+  for (const auto& location: cell_locations) {
+    auto cell = get_cell(location);
+    cell->set_format(format);
+  }
 }
 
 std::optional<TableCellFormat> TableSheet::get_current_cell_format() const {

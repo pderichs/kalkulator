@@ -33,7 +33,7 @@ public:
   void set_primary(const Location &location) {
     _primary_cell = location;
 
-    _additional_cells.erase(location);
+    _additional_cells.clear();
   }
 
   Location primary() const { return _primary_cell; }

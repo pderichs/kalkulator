@@ -132,7 +132,7 @@ public:
   /**
    * Clears the current cell and handles the needed updates to the model.
    */
-  void clear_current_cell();
+  void clear_current_cells();
 
   /**
    * Moves the cursor up.
@@ -264,7 +264,7 @@ public:
    * Updates the current cell content within the currently active sheet
    * @param content Content to be assigned to the cell
    */
-  void update_content_current_cell(const std::string &content);
+  void update_content_current_cells(const std::string &content);
 
   /**
    * @return the pixel width of the current sheet
@@ -342,7 +342,7 @@ public:
    *
    * @param format Format to be assigned to the cell
    */
-  void set_current_cell_format(const TableCellFormat &format);
+  void set_cell_format(const TableCellFormat &format);
 
   /**
    * @return An optional cell format of the current cell within the current sheet

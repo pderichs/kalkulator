@@ -77,7 +77,7 @@ void CellsViewControl::OnPaste() {
       wxTextDataObject data;
       wxTheClipboard->GetData(data);
       std::string content(data.GetText());
-      _document->update_content_current_cell(content);
+      _document->update_content_current_cells(content);
     }
 
     wxTheClipboard->Close();
@@ -87,7 +87,7 @@ void CellsViewControl::OnPaste() {
 void CellsViewControl::OnCut() {
   OnCopy();
 
-  _document->clear_current_cell();
+  _document->clear_current_cells();
 }
 
 void CellsViewControl::DrawTable(wxDC *dc, const TableSheetPtr &sheet) {
@@ -306,7 +306,7 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
     cell_selection_moved = _document->move_cursor_page_down();
     break;
   case WXK_DELETE:
-    _document->clear_current_cell();
+    _document->clear_current_cells();
     break;
   case 'Z':
     if (control) {

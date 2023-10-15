@@ -32,11 +32,11 @@ TEST(TableCellTests, CellTest1) {
 
   // Put value in cell 0 0
   document->select_cell(Location(0, 0));
-  document->update_content_current_cell("42");
+  document->update_content_current_cells("42");
 
   // Put cell formula in cell 0 1
   document->select_cell(Location(0, 1));
-  document->update_content_current_cell("=(cell 0 0)");
+  document->update_content_current_cells("=(cell 0 0)");
 
   const auto &cell = document->get_cell(Location(0, 1));
   EXPECT_TRUE(cell);
@@ -56,20 +56,20 @@ TEST(TableCellTests, NestedReferenceTest1) {
 
   // Prepare formulas and cell content
   document->select_cell(Location(0, 0));
-  document->update_content_current_cell("0"); // Zeile
+  document->update_content_current_cells("0"); // Zeile
 
   document->select_cell(Location(0, 1));
-  document->update_content_current_cell("5"); // Spalte
+  document->update_content_current_cells("5"); // Spalte
 
   document->select_cell(Location(5, 0)); // source cell 1
-  document->update_content_current_cell("Cell 1");
+  document->update_content_current_cells("Cell 1");
 
   document->select_cell(Location(6, 0)); // source cell 2
-  document->update_content_current_cell("Cell 2 - hello");
+  document->update_content_current_cells("Cell 2 - hello");
 
   // Formula which contains cell reference defined by other cells.
   document->select_cell(Location(0, 2));
-  document->update_content_current_cell(
+  document->update_content_current_cells(
       "=(cell (cell 0 0) (cell 1 0))"); // Spalte
 
   // Cell content must match source cell 1
@@ -78,7 +78,7 @@ TEST(TableCellTests, NestedReferenceTest1) {
 
   // Now update cell reference coordinate cell
   document->select_cell(Location(0, 1));
-  document->update_content_current_cell("6"); // Spalte
+  document->update_content_current_cells("6"); // Spalte
 
   // Cell content should now match source cell 2
   EXPECT_EQ(cell->visible_content(), "Cell 2 - hello");
@@ -95,7 +95,7 @@ TEST(TableCellTests, CallToCellWithStringParameterAsRow) {
 
   // Prepare formulas and cell content
   document->select_cell(Location(0, 0));
-  document->update_content_current_cell("=(cell hello 1)");
+  document->update_content_current_cells("=(cell hello 1)");
 
   // Cell content must match source cell 1
   const auto &cell = document->get_cell(Location(0, 0));
@@ -113,7 +113,7 @@ TEST(TableCellTests, CallToCellWithStringParameterAsColumn) {
 
   // Prepare formulas and cell content
   document->select_cell(Location(0, 0));
-  document->update_content_current_cell("=(cell 2 hello)");
+  document->update_content_current_cells("=(cell 2 hello)");
 
   // Cell content must match source cell 1
   const auto &cell = document->get_cell(Location(0, 0));
@@ -133,12 +133,12 @@ TEST(TableCellTests, CellReferenceToOtherSheet) {
   document->add_sheet("Testsheet");
   document->select_sheet_by_name("Testsheet");
   document->select_cell(Location(0, 1));
-  document->update_content_current_cell("42");
+  document->update_content_current_cells("42");
 
   // Prepare formulas and cell content
   document->select_sheet_by_name("Sheet 1");
   document->select_cell(Location(0, 0));
-  document->update_content_current_cell("=(cell \"Testsheet\" 1 0)");
+  document->update_content_current_cells("=(cell \"Testsheet\" 1 0)");
 
   // Cell content must match source cell
   const auto &cell = document->get_cell(Location(0, 0));

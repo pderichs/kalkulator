@@ -143,7 +143,7 @@ public:
   /**
    * Clears the current cell
    */
-  void clear_current_cell();
+  LocationSet clear_current_cells();
 
   /**
    * @return the maximum row coordinate
@@ -220,7 +220,7 @@ public:
    *
    * @param format Format to assign
    */
-  void set_current_cell_format(const TableCellFormat &format) const;
+  void set_cell_format(const TableCellFormat &format) const;
 
   /**
    * @return the format of the current cell

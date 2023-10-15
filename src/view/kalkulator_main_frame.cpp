@@ -474,7 +474,7 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
       wxPrintf("  Formula update content: %s\n", new_content);
 
       // Apply new content to cell
-      _document->update_content_current_cell(new_content);
+      _document->update_content_current_cells(new_content);
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for formula update. Event will be "
                "ignored.\n");
@@ -507,11 +507,11 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
   case CELL_UPDATED:
     try {
-      auto location(std::any_cast<Location>(param));
+      auto location(std::any_cast<TableCellLocation>(param));
 
-      _table_control->OnCellUpdate(location);
+      _table_control->OnCellUpdate(location.location());
 
-      UpdateFormulaBySelectedCell(location);
+      UpdateFormulaBySelectedCell(location.location());
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for cell update. Event will be "
                "ignored.\n");
@@ -692,7 +692,7 @@ void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
 
     TableCellFormat format = format_dialog.GetFormat();
 
-    _document->set_current_cell_format(format);
+    _document->set_cell_format(format);
 
     Refresh();
   }

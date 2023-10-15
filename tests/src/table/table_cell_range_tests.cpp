@@ -38,7 +38,7 @@ TEST(TableCellRangeTests, CellRangeTest1) {
     document->select_cell(Location(0, n));
     std::stringstream ss;
     ss << rand;
-    document->update_content_current_cell(ss.str());
+    document->update_content_current_cells(ss.str());
   }
 
   std::stringstream actual_sum_str;
@@ -47,7 +47,7 @@ TEST(TableCellRangeTests, CellRangeTest1) {
   // Put cell_range formula in cell 0 1 which sums up all values
   // in rows 0 - 5 of first column
   document->select_cell(Location(1, 0));
-  document->update_content_current_cell("=(+ (cell_range 0 0 5 0))");
+  document->update_content_current_cells("=(+ (cell_range 0 0 5 0))");
 
   const auto &cell = document->get_cell(Location(1, 0));
   EXPECT_TRUE(cell);
@@ -69,20 +69,20 @@ TEST(TableCellRangeTests, RangeEqualityTest1) {
   for (int r = 0; r < 5; r++) {
     for (int c = 0; c < 10; c++) {
       document->select_cell(Location(c, r));
-      document->update_content_current_cell("2");
+      document->update_content_current_cells("2");
     }
   }
 
   for (int r = 0; r < 2; r++) {
     for (int c = 20; c < 22; c++) {
       document->select_cell(Location(c, r));
-      document->update_content_current_cell("2");
+      document->update_content_current_cells("2");
     }
   }
 
   // Formula
   document->select_cell(Location(0, 50));
-  document->update_content_current_cell(
+  document->update_content_current_cells(
       "=(= (cell_range 0 0 4 10) (cell_range 0 20 1 21))");
 
   // Cell content must match source cell 1
@@ -91,15 +91,15 @@ TEST(TableCellRangeTests, RangeEqualityTest1) {
 
   // Change one cell
   document->select_cell(Location(0, 0));
-  document->update_content_current_cell("3");
+  document->update_content_current_cells("3");
   EXPECT_EQ(cell->visible_content(), "FALSE");
 
   document->select_cell(Location(0, 0));
-  document->update_content_current_cell("2");
+  document->update_content_current_cells("2");
   EXPECT_EQ(cell->visible_content(), "TRUE");
 
   // Change cell in other range
   document->select_cell(Location(20, 0));
-  document->update_content_current_cell("Hello");
+  document->update_content_current_cells("Hello");
   EXPECT_EQ(cell->visible_content(), "FALSE");
 }
