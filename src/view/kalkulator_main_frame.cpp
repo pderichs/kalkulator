@@ -521,9 +521,9 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
   case CURRENT_CELL_LOCATION_UPDATED:
     try {
-      auto location(std::any_cast<Location>(param));
+      auto location(std::any_cast<TableCellSelection>(param));
 
-      auto cell = _document->get_cell(location);
+      auto cell = _document->get_cell(location.primary());
 
       if (cell) {
         // Update formula text
