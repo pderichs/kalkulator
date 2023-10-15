@@ -88,7 +88,7 @@ void TableRowHeadersControl::DrawHeaders(wxDC *dc, const Location &scrollPos,
     }
 
     if (c == _current_row) {
-      dc->SetBrush(wxColour(*_sys_colors->current_cell_pen->GetColour()));
+      dc->SetBrush(wxColour(*_sys_colors->primary_cell_pen->GetColour()));
     } else {
       dc->SetBrush(*_sys_colors->caption_background_brush);
     }

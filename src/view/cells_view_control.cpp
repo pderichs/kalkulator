@@ -110,7 +110,10 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
                                  int WXUNUSED(width), int WXUNUSED(height),
                                  const TableSheetPtr &sheet) {
   wxRect scrollArea = GetCurrentScrollArea();
-  wxRect current_cell_rect = GetCellRectByLocation(sheet->selection().primary()); // TODO Selection
+  wxRect current_cell_rect =
+      GetCellRectByLocation(sheet->selection().primary()); // TODO Selection
+
+  auto selected_cell_rects = collect_selected_cell_rects(sheet->selection());
 
   for (size_t r = 0; r < sheet->row_count(); r++) {
 
@@ -139,9 +142,14 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
         }
 
         if (cellRect == current_cell_rect) {
-          dc->SetPen(*_sys_colors->current_cell_pen);
+          dc->SetPen(*_sys_colors->primary_cell_pen);
           dc->SetBrush(*_sys_colors->window_brush);
           dc->DrawRectangle(current_cell_rect);
+        } else if (selected_cell_rects.find(cellRect)
+            != selected_cell_rects.end()) {
+          dc->SetPen(*_sys_colors->cell_selection_pen);
+          dc->SetBrush(*_sys_colors->cell_selection_brush);
+          dc->DrawRectangle(cellRect);
         }
 
         if (cell->has_format()) {
@@ -209,7 +217,7 @@ void CellsViewControl::DrawCells(wxDC *dc, const Location &WXUNUSED(scrollPos),
   }
 }
 
-wxRect CellsViewControl::GetCellRectByLocation(const Location &cell) {
+wxRect CellsViewControl::GetCellRectByLocation(const Location &cell) const {
   int x = 1;
   int y = 2;
   int n;
@@ -476,6 +484,8 @@ void CellsViewControl::OnCellUpdate(const Location &location) {
 }
 
 void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
+  bool control = event.RawControlDown();
+
   wxPoint clickPosition = event.GetPosition();
   wxPrintf("Click Position: %d, %d\n", clickPosition.x, clickPosition.y);
 
@@ -497,7 +507,11 @@ void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
   // Calculate the clicked coordinates accounting for the scroll position
   Location cell = GetTableCellByClickPosition(clickPosition);
 
-  _document->select_cell(cell);
+  if (control) {
+    _document->selection_add_cell(cell);
+  } else {
+    _document->select_cell(cell);
+  }
 
   event.Skip();
 }
@@ -522,4 +536,16 @@ wxColour CellsViewControl::fromTableCellColor(const TableCellColor &color) {
 void CellsViewControl::Initialize() {
   SetBackgroundColour(_sys_colors->window_color);
   SetForegroundColour(_sys_colors->window_text_color);
+}
+
+WxRectSet CellsViewControl::collect_selected_cell_rects(
+    const TableCellSelection &selection) const {
+  WxRectSet result;
+
+  for (const auto &cell : selection.additional_cells()) {
+    auto rect = GetCellRectByLocation(cell);
+    result.insert(rect);
+  }
+
+  return result;
 }

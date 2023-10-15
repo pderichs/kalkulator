@@ -347,3 +347,7 @@ size_t TableSheet::get_col_left_position(size_t col) {
 
   return left;
 }
+
+void TableSheet::selection_add_cell(const Location &location) {
+  _selected_cells.add_cell(location);
+}

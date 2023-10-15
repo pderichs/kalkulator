@@ -384,6 +384,13 @@ public:
    */
   size_t get_col_left_position(size_t col);
 
+  /**
+   * Adds a cell to the current sheet's selection.
+   *
+   * @param location Location of cell to be added to selection
+   */
+  void selection_add_cell(const Location &location);
+
 private:
   /**
    * Trigger all cell listeners which are registered for receiving updates on

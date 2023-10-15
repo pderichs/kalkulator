@@ -22,6 +22,19 @@
 #include "kalkulator_system_colors.h"
 #include "table_sheet_view.h"
 
+/**
+ * Less than operator for wxRect usage in std::set
+ */
+const auto wxrect_less_fct = [](const wxRect &r1, const wxRect &r2) -> bool {
+  return r1.GetLeft() < r2.GetLeft()
+      || ((r1.GetLeft() == r2.GetLeft()) && (r1.GetTop() < r2.GetTop()));
+};
+
+/**
+ * Set which contains wxRect
+ */
+typedef std::set<wxRect, decltype(wxrect_less_fct)> WxRectSet;
+
 enum CellWindowLocation {
   CELL_WINDOW_LOCATION_UNSPECIFIED,
   CELL_WINDOW_LOCATION_LEFT,
@@ -66,7 +79,7 @@ public:
 private:
   void DrawCells(wxDC *dc, const Location &scrollPos, int width, int height,
                  const TableSheetPtr &sheet);
-  wxRect GetCellRectByLocation(const Location &cell);
+  wxRect GetCellRectByLocation(const Location &cell) const;
   wxRect GetCurrentScrollArea() const;
 
   Location GetTableCellByClickPosition(const wxPoint &pos) const;
@@ -78,6 +91,9 @@ private:
 
   CellWindowLocation GetCellLocation(const wxRect &cell_rect,
                                      const wxRect &scrollArea) const;
+
+private:
+  WxRectSet collect_selected_cell_rects(const TableCellSelection &selection) const;
 
 private:
   KalkulatorSystemColorsPtr _sys_colors;

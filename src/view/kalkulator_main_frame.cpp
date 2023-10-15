@@ -581,6 +581,11 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     _text_control_formula->SetFocus();
     break;
   }
+
+  case SELECTION_ADDITIONAL_CELLS_UPDATE: {
+    _table_control->Refresh();
+    break;
+  }
   }
 }
 

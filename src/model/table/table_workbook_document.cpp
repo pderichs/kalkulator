@@ -71,7 +71,7 @@ void TableWorkbookDocument::update_content_current_cell(
 
   TableSheetPtr sheet = _current_sheet;
 
-  for (auto& location: sheet->selection().all_locations()) {
+  for (auto &location : sheet->selection().all_locations()) {
     update_cell_content(sheet, location, content, update_id);
   }
 }
@@ -494,4 +494,9 @@ size_t TableWorkbookDocument::get_row_top_position(size_t row) {
 
 size_t TableWorkbookDocument::get_col_left_position(size_t col) {
   return _current_sheet->get_col_left_position(col);
+}
+
+void TableWorkbookDocument::selection_add_cell(const Location &location) {
+  _current_sheet->selection_add_cell(location);
+  _event_sink->send_event(SELECTION_ADDITIONAL_CELLS_UPDATE, {});
 }

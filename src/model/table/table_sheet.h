@@ -271,6 +271,13 @@ public:
    */
   size_t get_col_left_position(size_t col);
 
+  /**
+   * Adds a cell to the current selection of the sheet.
+   *
+   * @param location Location to be added to the selection
+   */
+  void selection_add_cell(const Location &location);
+
 private:
   TableColumnDefinitions _column_definitions;
   TableRowDefinitions _row_definitions;
