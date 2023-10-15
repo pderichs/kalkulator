@@ -276,7 +276,7 @@ public:
    *
    * @param location Location to be added to the selection
    */
-  void selection_add_cell(const Location &location);
+  void selection_toggle_additional_cell(const Location &location);
 
 private:
   TableColumnDefinitions _column_definitions;

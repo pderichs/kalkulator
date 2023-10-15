@@ -508,7 +508,7 @@ void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
   Location cell = GetTableCellByClickPosition(clickPosition);
 
   if (control) {
-    _document->selection_add_cell(cell);
+    _document->selection_toggle_additional_cell(cell);
   } else {
     _document->select_cell(cell);
   }

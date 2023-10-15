@@ -40,9 +40,9 @@ TEST(TableCellSelectionTests, AllLocationsWorks) {
   TableCellSelection selection;
 
   selection.set_primary(Location(42, 383));
-  selection.add_cell(Location(334, 945390));
-  selection.add_cell(Location(12, 1));
-  selection.add_cell(Location(-2442, 1443));
+  selection.toggle_additional_cell(Location(334, 945390));
+  selection.toggle_additional_cell(Location(12, 1));
+  selection.toggle_additional_cell(Location(-2442, 1443));
 
   auto all = selection.all_locations();
 
@@ -57,9 +57,9 @@ TEST(TableCellSelectionTests, ReduceToPrimaryWorks) {
   TableCellSelection selection;
 
   selection.set_primary(Location(42, 383));
-  selection.add_cell(Location(334, 945390));
-  selection.add_cell(Location(12, 1));
-  selection.add_cell(Location(-2442, 1443));
+  selection.toggle_additional_cell(Location(334, 945390));
+  selection.toggle_additional_cell(Location(12, 1));
+  selection.toggle_additional_cell(Location(-2442, 1443));
 
   selection.reduce_selection_to_primary();
 
@@ -73,9 +73,9 @@ TEST(TableCellSelectionTests, PrimaryMoveUpWorks) {
   TableCellSelection selection;
 
   selection.set_primary(Location(42, 383));
-  selection.add_cell(Location(334, 945390));
-  selection.add_cell(Location(12, 1));
-  selection.add_cell(Location(-2442, 1443));
+  selection.toggle_additional_cell(Location(334, 945390));
+  selection.toggle_additional_cell(Location(12, 1));
+  selection.toggle_additional_cell(Location(-2442, 1443));
 
   selection.primary_move_up(2);
 
@@ -92,9 +92,9 @@ TEST(TableCellSelectionTests, PrimaryMoveDownWorks) {
   TableCellSelection selection;
 
   selection.set_primary(Location(42, 383));
-  selection.add_cell(Location(334, 945390));
-  selection.add_cell(Location(12, 1));
-  selection.add_cell(Location(-2442, 1443));
+  selection.toggle_additional_cell(Location(334, 945390));
+  selection.toggle_additional_cell(Location(12, 1));
+  selection.toggle_additional_cell(Location(-2442, 1443));
 
   selection.primary_move_down(2);
 
@@ -111,9 +111,9 @@ TEST(TableCellSelectionTests, PrimaryMoveLeftWorks) {
   TableCellSelection selection;
 
   selection.set_primary(Location(42, 383));
-  selection.add_cell(Location(334, 945390));
-  selection.add_cell(Location(12, 1));
-  selection.add_cell(Location(-2442, 1443));
+  selection.toggle_additional_cell(Location(334, 945390));
+  selection.toggle_additional_cell(Location(12, 1));
+  selection.toggle_additional_cell(Location(-2442, 1443));
 
   selection.primary_move_left();
 
@@ -130,9 +130,9 @@ TEST(TableCellSelectionTests, PrimaryMoveRightWorks) {
   TableCellSelection selection;
 
   selection.set_primary(Location(42, 383));
-  selection.add_cell(Location(334, 945390));
-  selection.add_cell(Location(12, 1));
-  selection.add_cell(Location(-2442, 1443));
+  selection.toggle_additional_cell(Location(334, 945390));
+  selection.toggle_additional_cell(Location(12, 1));
+  selection.toggle_additional_cell(Location(-2442, 1443));
 
   selection.primary_move_right();
 
@@ -143,4 +143,49 @@ TEST(TableCellSelectionTests, PrimaryMoveRightWorks) {
   EXPECT_TRUE(all.find(Location(334, 945390)) != all.end());
   EXPECT_TRUE(all.find(Location(12, 1)) != all.end());
   EXPECT_TRUE(all.find(Location(-2442, 1443)) != all.end());
+}
+
+TEST(TableCellSelectionTests, PreventPrimaryToBeAddedAsAdditionalCell) {
+  TableCellSelection selection;
+
+  selection.set_primary(Location(42, 383));
+  selection.toggle_additional_cell(Location(42, 383));
+
+  auto all = selection.all_locations();
+
+  EXPECT_EQ(all.size(), 1);
+}
+
+TEST(TableCellSelectionTests, TogglingAddsOrRemovesCell) {
+  TableCellSelection selection;
+
+  selection.set_primary(Location(42, 381));
+  selection.toggle_additional_cell(Location(42, 383));
+
+  auto all = selection.all_locations();
+
+  EXPECT_EQ(all.size(), 2);
+
+  selection.toggle_additional_cell(Location(42, 383));
+
+  all = selection.all_locations();
+
+  EXPECT_EQ(all.size(), 1);
+}
+
+TEST(TableCellSelectionTests, PrimaryAssignmentReplacesAdditionalCell) {
+  TableCellSelection selection;
+
+  selection.set_primary(Location(42, 381));
+  selection.toggle_additional_cell(Location(42, 383));
+
+  auto additional = selection.additional_cells();
+
+  EXPECT_EQ(additional.size(), 1);
+
+  selection.set_primary(Location(42, 383));
+
+  additional = selection.additional_cells();
+
+  EXPECT_TRUE(additional.empty());
 }

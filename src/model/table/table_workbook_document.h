@@ -389,7 +389,7 @@ public:
    *
    * @param location Location of cell to be added to selection
    */
-  void selection_add_cell(const Location &location);
+  void selection_toggle_additional_cell(const Location &location);
 
 private:
   /**

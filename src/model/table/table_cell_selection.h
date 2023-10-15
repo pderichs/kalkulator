@@ -30,11 +30,25 @@ class TableCellSelection {
 public:
   TableCellSelection(): _primary_cell(), _additional_cells() {}
 
-  void set_primary(const Location &location) { _primary_cell = location; }
+  void set_primary(const Location &location) {
+    _primary_cell = location;
+
+    _additional_cells.erase(location);
+  }
+
   Location primary() const { return _primary_cell; }
 
-  void add_cell(const Location &location) {
-    _additional_cells.insert(location);
+  void toggle_additional_cell(const Location &location) {
+    if (location == _primary_cell) {
+      return;
+    }
+
+    auto it = _additional_cells.find(location);
+    if (it == _additional_cells.end()) {
+      _additional_cells.insert(location);
+    } else {
+      _additional_cells.erase(it);
+    }
   }
 
   void reduce_selection_to_primary() {

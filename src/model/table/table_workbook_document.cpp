@@ -496,7 +496,7 @@ size_t TableWorkbookDocument::get_col_left_position(size_t col) {
   return _current_sheet->get_col_left_position(col);
 }
 
-void TableWorkbookDocument::selection_add_cell(const Location &location) {
-  _current_sheet->selection_add_cell(location);
+void TableWorkbookDocument::selection_toggle_additional_cell(const Location &location) {
+  _current_sheet->selection_toggle_additional_cell(location);
   _event_sink->send_event(SELECTION_ADDITIONAL_CELLS_UPDATE, {});
 }
