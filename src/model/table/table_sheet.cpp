@@ -201,7 +201,7 @@ LocationSet TableSheet::clear_current_cells() {
 
   CellStates states;
 
-  for (const auto &location: locations) {
+  for (const auto &location : locations) {
     auto cell = get_cell(location);
     std::string previous_content = cell->get_formula_content();
     cell->clear();
@@ -248,7 +248,8 @@ StateHistoryItemPtr TableSheet::redo() {
 }
 
 size_t TableSheet::get_current_column_width() const {
-  TableColumnDefinitionPtr col_def = _column_definitions[_selected_cells.primary_x()];
+  TableColumnDefinitionPtr
+      col_def = _column_definitions[_selected_cells.primary_x()];
   return col_def->width;
 }
 
@@ -284,7 +285,7 @@ void TableSheet::set_current_row_height(size_t height) {
 void TableSheet::set_cell_format(const TableCellFormat &format) const {
   auto cell_locations = _selected_cells.all_locations();
 
-  for (const auto& location: cell_locations) {
+  for (const auto &location : cell_locations) {
     auto cell = get_cell(location);
     cell->set_format(format);
   }

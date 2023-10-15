@@ -316,7 +316,7 @@ void TableWorkbookDocument::clear_current_cells() {
 
   _changed = true;
 
-  for (const auto& location: updated_locations) {
+  for (const auto &location : updated_locations) {
     TableCellLocation cell_location(_current_sheet->name(), location);
     _event_sink->send_event(CELL_UPDATED, cell_location);
   }

@@ -21,18 +21,18 @@
 #include "gtest/gtest.h"
 
 TEST(LispGreaterThanTests, GreaterThanTests1) {
- std::map<std::string, LispValuePtr> tests = {
-     {"(> 1 0)", LispCommonValues::true_value()},
-     {"(> 0 1)", LispCommonValues::false_value()},
-     {"(> (+ 1 2) (+ 2 3))", LispCommonValues::false_value()},
-     {"(> (+ 2 3) (+ 1 0))", LispCommonValues::true_value()},
-     {"(> 1 1)", LispCommonValues::false_value()},
-     {"(> 19 -32 6)", LispCommonValues::error_parameter_count()},
-     {"(> 19)", LispCommonValues::error_parameter_count()},
-     {"(> \"Hello\" 1)", LispCommonValues::error_parameter()},
-     {"(> 1 \"Hello\")", LispCommonValues::error_parameter()},
- };
+  std::map<std::string, LispValuePtr> tests = {
+      {"(> 1 0)", LispCommonValues::true_value()},
+      {"(> 0 1)", LispCommonValues::false_value()},
+      {"(> (+ 1 2) (+ 2 3))", LispCommonValues::false_value()},
+      {"(> (+ 2 3) (+ 1 0))", LispCommonValues::true_value()},
+      {"(> 1 1)", LispCommonValues::false_value()},
+      {"(> 19 -32 6)", LispCommonValues::error_parameter_count()},
+      {"(> 19)", LispCommonValues::error_parameter_count()},
+      {"(> \"Hello\" 1)", LispCommonValues::error_parameter()},
+      {"(> 1 \"Hello\")", LispCommonValues::error_parameter()},
+  };
 
- return execute_lisp_tests(tests, ">");
+  return execute_lisp_tests(tests, ">");
 }
 

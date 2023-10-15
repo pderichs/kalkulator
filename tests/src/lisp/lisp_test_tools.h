@@ -24,6 +24,6 @@
 #include "model/lisp/lisp_value.h"
 
 void execute_lisp_tests(const std::map<std::string, LispValuePtr> &tests,
-                       const std::string &test_name);
+                        const std::string &test_name);
 
 #endif//LISP_TEST_TOOLS_H

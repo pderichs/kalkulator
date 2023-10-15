@@ -28,7 +28,7 @@
  */
 class TableCellSelection {
 public:
-  TableCellSelection(): _primary_cell(), _additional_cells() {}
+  TableCellSelection() : _primary_cell(), _additional_cells() {}
 
   void set_primary(const Location &location) {
     _primary_cell = location;
