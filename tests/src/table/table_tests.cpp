@@ -108,3 +108,28 @@ TEST(TableTests,
 
   EXPECT_EQ(fct->calls(), 1);
 }
+
+TEST(TableTests, UpdateWorksOnAllSelectedCells) {
+  // Test setup
+  LispExecutionContext execution_context;
+  std::shared_ptr<TestFunctionContext> fct =
+      std::make_shared<TestFunctionContext>();
+  execution_context.add_function("test-function", fct, true);
+
+  TestEventSink sink;
+  ValueConverter::set_execution_context(&execution_context);
+  TableWorkbookDocumentPtr document =
+      std::make_shared<TableWorkbookDocument>(&sink);
+  prepare_execution_context(&execution_context, document);
+
+  // Prepare test sheet data
+  document->select_cell(Location(0, 0));
+  document->selection_toggle_additional_cell(Location(10, 10));
+  document->selection_toggle_additional_cell(Location(3, 2));
+
+  document->update_content_current_cells("foobar", generate_update_id());
+
+  EXPECT_EQ(document->get_cell(Location(0, 0))->visible_content(), "foobar");
+  EXPECT_EQ(document->get_cell(Location(10, 10))->visible_content(), "foobar");
+  EXPECT_EQ(document->get_cell(Location(3, 2))->visible_content(), "foobar");
+}
