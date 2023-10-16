@@ -474,7 +474,8 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
       wxPrintf("  Formula update content: %s\n", new_content);
 
       // Apply new content to cell
-      _document->update_content_current_cells(new_content);
+      _document->update_content_current_cells(new_content,
+                                              generate_update_id());
     } catch (const std::bad_any_cast &e) {
       wxPrintf("*** EVENT: bad any cast for formula update. Event will be "
                "ignored.\n");

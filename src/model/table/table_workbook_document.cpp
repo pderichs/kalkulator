@@ -66,9 +66,7 @@ void TableWorkbookDocument::update_cell_content(const TableSheetPtr &sheet,
 }
 
 void TableWorkbookDocument::update_content_current_cells(
-    const std::string &content) {
-  UpdateIdType update_id = generate_update_id();
-
+    const std::string &content, UpdateIdType update_id) {
   TableSheetPtr sheet = _current_sheet;
 
   for (auto &location : sheet->selection().all_locations()) {
@@ -332,15 +330,13 @@ void TableWorkbookDocument::apply_state_change_item(const StateHistoryItemPtr &s
   }
 }
 
-void TableWorkbookDocument::undo() {
+void TableWorkbookDocument::undo(UpdateIdType update_id) {
   auto state_change = _current_sheet->undo();
-  UpdateIdType update_id = generate_update_id();
   apply_state_change_item(state_change, update_id);
 }
 
-void TableWorkbookDocument::redo() {
+void TableWorkbookDocument::redo(UpdateIdType update_id) {
   auto state_change = _current_sheet->redo();
-  UpdateIdType update_id = generate_update_id();
   apply_state_change_item(state_change, update_id);
 }
 

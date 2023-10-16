@@ -77,7 +77,7 @@ void CellsViewControl::OnPaste() {
       wxTextDataObject data;
       wxTheClipboard->GetData(data);
       std::string content(data.GetText());
-      _document->update_content_current_cells(content);
+      _document->update_content_current_cells(content, generate_update_id());
     }
 
     wxTheClipboard->Close();
@@ -310,12 +310,12 @@ void CellsViewControl::OnKeyPress(wxKeyEvent &event) {
     break;
   case 'Z':
     if (control) {
-      _document->undo();
+      _document->undo(generate_update_id());
     }
     break;
   case 'Y':
     if (control) {
-      _document->redo();
+      _document->redo(generate_update_id());
     }
     break;
 

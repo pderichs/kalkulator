@@ -262,9 +262,12 @@ public:
 
   /**
    * Updates the current cell content within the currently active sheet
+   *
    * @param content Content to be assigned to the cell
+   * @param update_id Id of the current operation
    */
-  void update_content_current_cells(const std::string &content);
+  void update_content_current_cells(const std::string &content,
+                                    UpdateIdType update_id);
 
   /**
    * @return the pixel width of the current sheet
@@ -329,13 +332,17 @@ public:
 
   /**
    * Undo of the last operation in the current sheet
+   *
+   * @param update_id Id of the current operation
    */
-  void undo();
+  void undo(UpdateIdType update_id);
 
   /**
    * Redo of the last operation in the current sheet
+   *
+   * @param update_id Id of the current operation
    */
-  void redo();
+  void redo(UpdateIdType update_id);
 
   /**
    * Updates the cell format of the current cell within the current sheet
