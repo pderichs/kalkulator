@@ -127,6 +127,8 @@ private:
   std::string _file_path;
   sqlite3 *_db;
   StringVector _tables;
+  void save_cell_format(int id, const TableCellPtr &shared_ptr);
+  void save_cell_comment(int id, const TableCellPtr &shared_ptr);
 };
 
 #endif

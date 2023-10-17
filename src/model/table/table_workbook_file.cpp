@@ -364,6 +364,16 @@ void TableWorkbookFile::create_tables() {
       "    REFERENCES sheets (id)"
       "    ON DELETE CASCADE);"
       ""
+      "CREATE TABLE IF NOT EXISTS cell_comments ("
+      "    sheet_id INT NOT NULL,"
+      "    row INT NOT NULL,"
+      "    col INT NOT NULL,"
+      "    comment TEXT,"
+      ""
+      "    FOREIGN KEY (cell_id)"
+      "    REFERENCES cells (id)"
+      "    ON DELETE CASCADE);"
+      ""
       "CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_cells ON cells(sheet_id, "
       "row, col);"
       ""
@@ -376,8 +386,9 @@ void TableWorkbookFile::create_tables() {
       "DELETE FROM cells;"
       "DELETE FROM sheet_sizes;"
       "DELETE FROM cell_formats;"
+      "DELETE FROM cell_comments;"
       ""
-      "INSERT INTO meta (property, value) VALUES ('version', '0.0.2a');";
+      "INSERT INTO meta (property, value) VALUES ('version', '0.0.3a');";
 
   int rc = sqlite3_exec(_db, sql.c_str(), nullptr, nullptr, &err_msg);
 
@@ -450,6 +461,9 @@ void TableWorkbookFile::save_cells(int id, const TableSheetPtr &sheet) {
          << "VALUES (";
       ss << id << ", " << r << ", " << c << ", ";
       ss << quote(cell->get_formula_content()) << ");";
+
+      save_cell_format(id, cell);
+      save_cell_comment(id, cell);
     }
   }
 
@@ -475,4 +489,94 @@ void TableWorkbookFile::read_tables() {
 
 bool TableWorkbookFile::has_table(const std::string &name) {
   return std::find(_tables.begin(), _tables.end(), name) != _tables.end();
+}
+
+void TableWorkbookFile::save_cell_format(int sheet_id,
+                                         const TableCellPtr &cell) {
+  if (!cell->has_format()) {
+    return;
+  }
+
+  const TableCellFormat &format = cell->format();
+
+  std::stringstream sql;
+  sql << "INSERT INTO cell_formats (sheet_id, row, col, "
+         "font_name, font_size, "
+         "bold, italic, underlined, "
+         "background_color_r, background_color_g, background_color_b, "
+         "foreground_color_r, foreground_color_g, foreground_color_b) "
+      << "VALUES (";
+  sql << sheet_id << ", " << cell->row() << ", " << cell->col()
+      << ", ";
+
+  if (format.font_name) {
+    sql << quote(*format.font_name);
+  } else {
+    sql << "NULL";
+  }
+
+  sql << ", ";
+
+  if (format.font_size) {
+    sql << *format.font_size;
+  } else {
+    sql << "NULL";
+  }
+
+  sql << ", ";
+
+  if (format.bold) {
+    sql << (*format.bold ? 1 : 0);
+  } else {
+    sql << "NULL";
+  }
+
+  sql << ", ";
+
+  if (format.italic) {
+    sql << (*format.italic ? 1 : 0);
+  } else {
+    sql << "NULL";
+  }
+
+  sql << ", ";
+
+  if (format.underlined) {
+    sql << (*format.underlined ? 1 : 0);
+  } else {
+    sql << "NULL";
+  }
+
+  sql << ", ";
+
+  if (format.background_color) {
+    sql << static_cast<int>((*format.background_color).r) << ","
+        << static_cast<int>((*format.background_color).g) << ", "
+        << static_cast<int>((*format.background_color).b);
+  } else {
+    sql << "NULL,NULL,NULL";
+  }
+
+  sql << ", ";
+
+  if (format.foreground_color) {
+    sql << static_cast<int>((*format.foreground_color).r) << ","
+        << static_cast<int>((*format.foreground_color).g) << ", "
+        << static_cast<int>((*format.foreground_color).b);
+  } else {
+    sql << "NULL,NULL,NULL";
+  }
+
+  sql << ");";
+
+  std::cerr << "Format SQL: " << sql.str() << std::endl;
+
+  execute_sql(sql.str());
+}
+
+void TableWorkbookFile::save_cell_comment(int sheet_id,
+                                          const TableCellPtr &cell) {
+  // TODO
+  std::ignore = sheet_id;
+  std::ignore = cell;
 }

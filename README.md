@@ -78,8 +78,8 @@ conditions on their websites:
 
 ## TODO List
 
+- FEAT: Cell comments
 - FEAT: Add github action for tests
-- FEAT: Multiple cell selection
 - FEAT: Replace
 - FEAT: Print
 - FEAT: Add repl for lisp
@@ -89,7 +89,6 @@ conditions on their websites:
 - FEAT: Direct editing? (without the need of pressing F2)
 - FEAT: Add application settings (e.g. size of undo steps)
 - DOC: Add explanation of functions (especially behaviour of eq)
-- FEAT: Cell comments
 - FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed
   references, like $ function)
 - BUG: Something (CLion?) is creating a "Testing" folder on the root folder with every build
@@ -99,6 +98,7 @@ conditions on their websites:
 
 ## DONE
 
+- FEAT: Multiple cell selection
 - FEAT: Mark current row/cell in header controls
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
 - FEAT: Extend cell reference function with additional parameter to reference a cell on another sheet
