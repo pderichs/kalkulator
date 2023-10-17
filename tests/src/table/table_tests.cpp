@@ -20,8 +20,6 @@
 #include "gtest/gtest.h"
 #include "mock_function_context.h"
 
-using ::testing::Return;
-
 /**
  * Specialized test function execution context used for the cell reference /
  * cached result test below.
