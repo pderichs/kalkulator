@@ -99,13 +99,6 @@ private:
   void save_sheet_sizes(int id, const TableSheetPtr &sheet);
 
   /**
-   * Helper function to quote contents of a string
-   * @param s String to be quoted
-   * @return Quoted string
-   */
-  static std::string quote(const std::string &s);
-
-  /**
    * Executes a SQL statement
    * @param sql Statement to be executed
    */

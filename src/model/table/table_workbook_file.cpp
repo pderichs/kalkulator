@@ -370,16 +370,18 @@ void TableWorkbookFile::create_tables() {
       "    col INT NOT NULL,"
       "    comment TEXT,"
       ""
-      "    FOREIGN KEY (cell_id)"
-      "    REFERENCES cells (id)"
+      "    FOREIGN KEY (sheet_id)"
+      "    REFERENCES sheets (id)"
       "    ON DELETE CASCADE);"
       ""
       "CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_cells ON cells(sheet_id, "
       "row, col);"
       ""
       "CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_cell_formats ON "
-      "cells(sheet_id, "
-      "row, col);"
+      "cell_formats(sheet_id, row, col);"
+      ""
+      "CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_cell_comments ON "
+      "cell_comments(sheet_id, row, col);"
       ""
       "DELETE FROM meta;"
       "DELETE FROM sheets;"
@@ -404,32 +406,32 @@ void TableWorkbookFile::save_sheet(int id, const TableSheetPtr &sheet,
                                    const TableWorkbookDocumentPtr &document) {
   bool active = (sheet == document->current_sheet());
 
-  std::stringstream sql;
+  std::string
+      sql = "INSERT INTO sheets (id, name, current_cell_row, current_cell_col, "
+            "active) VALUES (?, ?, ?, ?, ?);";
 
-  sql << "INSERT INTO sheets (id, name, current_cell_row, current_cell_col, "
-         "active) ";
-  sql << "VALUES (";
-  sql << id << "," << quote(sheet->name()) << ",";
-  sql << sheet->selection().primary_y() << "," << sheet->selection().primary_x()
-      << ",";
-
-  if (active) {
-    sql << "TRUE";
-  } else {
-    sql << "FALSE";
+  sqlite3_stmt *stmt;
+  int rc = sqlite3_prepare_v2(_db, sql.data(), -1, &stmt, NULL);
+  if (rc != SQLITE_OK) {
+    throw TableWorkbookFileError("Unable to prepare statement (format)");
   }
 
-  sql << ");";
+  sqlite3_bind_int(stmt, 1, id);
+  sqlite3_bind_text(stmt, 2, sheet->name().data(), -1, SQLITE_STATIC);
+  sqlite3_bind_int(stmt, 3, sheet->selection().primary_y());
+  sqlite3_bind_int(stmt, 4, sheet->selection().primary_x());
+  sqlite3_bind_int(stmt, 5, active ? 1 : 0);
 
-  execute_sql(sql.str());
+  rc = sqlite3_step(stmt);
+  if (rc != SQLITE_DONE) {
+    sqlite3_finalize(stmt);
+
+    throw TableWorkbookFileError("Unable to write sheet");
+  }
+
+  sqlite3_finalize(stmt);
 
   save_cells(id, sheet);
-}
-
-std::string TableWorkbookFile::quote(const std::string &s) {
-  std::stringstream ss;
-  ss << "'" << s << "'";
-  return ss.str();
 }
 
 void TableWorkbookFile::execute_sql(const std::string &sql) {
@@ -450,6 +452,11 @@ void TableWorkbookFile::save_cells(int id, const TableSheetPtr &sheet) {
   size_t rows = sheet->row_count();
   size_t cols = sheet->col_count();
 
+  std::string sql = "INSERT INTO cells (sheet_id, row, col, content) "
+                    "VALUES (?, ?, ?, ?);";
+
+  sqlite3_stmt *stmt;
+
   for (size_t r = 0; r < rows; r++) {
     for (size_t c = 0; c < cols; c++) {
       const auto &cell = sheet->get_cell(r, c);
@@ -457,17 +464,33 @@ void TableWorkbookFile::save_cells(int id, const TableSheetPtr &sheet) {
         continue;
       }
 
-      ss << "INSERT INTO cells (sheet_id, row, col, content) "
-         << "VALUES (";
-      ss << id << ", " << r << ", " << c << ", ";
-      ss << quote(cell->get_formula_content()) << ");";
+      int rc = sqlite3_prepare_v2(_db, sql.data(), -1, &stmt, NULL);
+      if (rc != SQLITE_OK) {
+        throw TableWorkbookFileError("Unable to prepare statement (save cells)");
+      }
+
+      sqlite3_bind_int(stmt, 1, id);
+      sqlite3_bind_int(stmt, 2, r);
+      sqlite3_bind_int(stmt, 3, c);
+      sqlite3_bind_text(stmt,
+                        4,
+                        cell->get_formula_content().data(),
+                        -1,
+                        SQLITE_STATIC);
+
+      rc = sqlite3_step(stmt);
+      if (rc != SQLITE_DONE) {
+        sqlite3_finalize(stmt);
+
+        throw TableWorkbookFileError("Unable to write cell");
+      }
+
+      sqlite3_finalize(stmt);
 
       save_cell_format(id, cell);
       save_cell_comment(id, cell);
     }
   }
-
-  execute_sql(ss.str());
 }
 
 void TableWorkbookFile::read_tables() {
@@ -499,79 +522,85 @@ void TableWorkbookFile::save_cell_format(int sheet_id,
 
   const TableCellFormat &format = cell->format();
 
-  std::stringstream sql;
-  sql << "INSERT INTO cell_formats (sheet_id, row, col, "
-         "font_name, font_size, "
-         "bold, italic, underlined, "
-         "background_color_r, background_color_g, background_color_b, "
-         "foreground_color_r, foreground_color_g, foreground_color_b) "
-      << "VALUES (";
-  sql << sheet_id << ", " << cell->row() << ", " << cell->col()
-      << ", ";
+  std::string sql = "INSERT INTO cell_formats (sheet_id, row, col, "
+                    "font_name, font_size, "
+                    "bold, italic, underlined, "
+                    "background_color_r, background_color_g, background_color_b, "
+                    "foreground_color_r, foreground_color_g, foreground_color_b) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+  sqlite3_stmt *stmt;
+  int rc = sqlite3_prepare_v2(_db, sql.data(), -1, &stmt, NULL);
+  if (rc != SQLITE_OK) {
+    sqlite3_finalize(stmt);
+
+    throw TableWorkbookFileError("Unable to prepare statement (format)");
+  }
+
+  sqlite3_bind_int(stmt, 1, sheet_id);
+  sqlite3_bind_int(stmt, 2, cell->row());
+  sqlite3_bind_int(stmt, 3, cell->col());
 
   if (format.font_name) {
-    sql << quote(*format.font_name);
+    sqlite3_bind_text(stmt, 4, (*format.font_name).data(), -1, SQLITE_STATIC);
   } else {
-    sql << "NULL";
+    sqlite3_bind_null(stmt, 4);
   }
-
-  sql << ", ";
 
   if (format.font_size) {
-    sql << *format.font_size;
+    sqlite3_bind_int(stmt, 5, *format.font_size);
   } else {
-    sql << "NULL";
+    sqlite3_bind_null(stmt, 5);
   }
-
-  sql << ", ";
 
   if (format.bold) {
-    sql << (*format.bold ? 1 : 0);
+    sqlite3_bind_int(stmt, 6, (*format.bold) ? 1 : 0);
   } else {
-    sql << "NULL";
+    sqlite3_bind_null(stmt, 6);
   }
-
-  sql << ", ";
 
   if (format.italic) {
-    sql << (*format.italic ? 1 : 0);
+    sqlite3_bind_int(stmt, 7, (*format.italic) ? 1 : 0);
   } else {
-    sql << "NULL";
+    sqlite3_bind_null(stmt, 7);
   }
-
-  sql << ", ";
 
   if (format.underlined) {
-    sql << (*format.underlined ? 1 : 0);
+    sqlite3_bind_int(stmt, 8, (*format.underlined) ? 1 : 0);
   } else {
-    sql << "NULL";
+    sqlite3_bind_null(stmt, 8);
   }
-
-  sql << ", ";
 
   if (format.background_color) {
-    sql << static_cast<int>((*format.background_color).r) << ","
-        << static_cast<int>((*format.background_color).g) << ", "
-        << static_cast<int>((*format.background_color).b);
+    sqlite3_bind_int(stmt, 9, (*format.background_color).r);
+    sqlite3_bind_int(stmt, 10, (*format.background_color).g);
+    sqlite3_bind_int(stmt, 11, (*format.background_color).b);
   } else {
-    sql << "NULL,NULL,NULL";
+    sqlite3_bind_null(stmt, 9);
+    sqlite3_bind_null(stmt, 10);
+    sqlite3_bind_null(stmt, 11);
   }
-
-  sql << ", ";
 
   if (format.foreground_color) {
-    sql << static_cast<int>((*format.foreground_color).r) << ","
-        << static_cast<int>((*format.foreground_color).g) << ", "
-        << static_cast<int>((*format.foreground_color).b);
+    sqlite3_bind_int(stmt, 12, (*format.foreground_color).r);
+    sqlite3_bind_int(stmt, 13, (*format.foreground_color).g);
+    sqlite3_bind_int(stmt, 14, (*format.foreground_color).b);
   } else {
-    sql << "NULL,NULL,NULL";
+    sqlite3_bind_null(stmt, 12);
+    sqlite3_bind_null(stmt, 13);
+    sqlite3_bind_null(stmt, 14);
   }
 
-  sql << ");";
+  rc = sqlite3_step(stmt);
+  if (rc != SQLITE_DONE) {
+    sqlite3_finalize(stmt);
 
-  std::cerr << "Format SQL: " << sql.str() << std::endl;
+    std::cerr << "ERROR: " << rc << std::endl;
 
-  execute_sql(sql.str());
+    throw TableWorkbookFileError("Unable to write format");
+  }
+
+  sqlite3_finalize(stmt);
 }
 
 void TableWorkbookFile::save_cell_comment(int sheet_id,
