@@ -367,7 +367,7 @@ void TableSheet::selection_toggle_additional_cell(const Location &location) {
   _selected_cells.toggle_additional_cell(location);
 }
 
-void TableSheet::set_cell_comment(const std::string& comment) const {
+void TableSheet::set_cell_comment(const std::string &comment) const {
   auto locations = _selected_cells.all_locations();
 
   for (const auto &location : locations) {

@@ -227,7 +227,7 @@ public:
    *
    * @param comment Comment to assign
    */
-  void set_cell_comment(const std::string& comment) const;
+  void set_cell_comment(const std::string &comment) const;
 
   /**
    * @return the format of the current cell

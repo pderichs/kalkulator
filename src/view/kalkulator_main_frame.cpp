@@ -308,7 +308,10 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnResizeRow, this, ID_ResizeRow);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnGotoCell, this, ID_GotoCell);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnFormatCell, this, ID_FormatCell);
-  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnAddCellComment, this, ID_AddCellComment);
+  Bind(wxEVT_MENU,
+       &KalkulatorMainFrame::OnAddCellComment,
+       this,
+       ID_AddCellComment);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnAddSheet, this, ID_AddSheet);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRemoveSheet, this, ID_RemoveSheet);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSearch, this, ID_Search);
@@ -711,7 +714,7 @@ void KalkulatorMainFrame::OnAddCellComment(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  _document->set_cell_comment(static_cast<const char*>(raw_input));
+  _document->set_cell_comment(static_cast<const char *>(raw_input));
 }
 
 void KalkulatorMainFrame::OnAddSheet(wxCommandEvent &WXUNUSED(event)) {

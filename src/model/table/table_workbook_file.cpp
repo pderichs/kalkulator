@@ -240,7 +240,6 @@ static int read_cell_formats_callback(void *data, int argc, char **argv,
       background.b = std::stoi(content);
       background_present = true;
     } else if (col == "foreground_color_r") {
-      if (content.empty())
       foreground.r = std::stoi(content);
       foreground_present = true;
     } else if (col == "foreground_color_g") {

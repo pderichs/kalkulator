@@ -356,7 +356,7 @@ public:
    *
    * @param comment Comment to be assigned to the current cell
    */
-  void set_cell_comment(const std::string& comment);
+  void set_cell_comment(const std::string &comment);
 
   /**
    * @return An optional cell format of the current cell within the current sheet
