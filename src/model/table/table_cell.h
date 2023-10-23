@@ -27,13 +27,14 @@
 
 #include "location.h"
 #include "table_cell_format.h"
+#include "table_cell_comment.h"
 #include "model/lisp/update_id.h"
 
 class TableCell {
 public:
   TableCell(int row, int col)
       : _formula_content(), _visible_content(), _lisp_value(), _cached_result(),
-        _last_update(0), _location(col, row), _format() {}
+        _last_update(0), _location(col, row), _format(), _comment() {}
 
   bool update_content(const std::string &content,
                       const std::string &sheet_name,
@@ -54,6 +55,10 @@ public:
   TableCellFormat format() const { return *_format; }
   void set_format(const TableCellFormat &format) { _format = format; }
 
+  bool has_comment() const { return static_cast<bool>(_comment); }
+  TableCellComment comment() const { return *_comment; }
+  void set_comment(const TableCellComment &comment) { _comment = comment; }
+
   bool recalc(const std::string &sheet_name, UpdateIdType update_id);
 
 private:
@@ -69,6 +74,7 @@ private:
   const Location _location;
 
   std::optional<TableCellFormat> _format;
+  std::optional<TableCellComment> _comment;
 };
 
 typedef std::shared_ptr<TableCell> TableCellPtr;

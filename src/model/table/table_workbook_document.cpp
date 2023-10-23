@@ -265,6 +265,11 @@ void TableWorkbookDocument::clear() {
 }
 
 TableSheetPtr TableWorkbookDocument::add_sheet(const std::string &name) {
+  const auto &sheet = table_sheet_by_name(name);
+  if (sheet) {
+    throw std::runtime_error("A sheet with that name already exists.");
+  }
+
   const auto &result = std::make_shared<TableSheet>(name);
   _sheets.push_back(result);
   _changed = true;

@@ -183,6 +183,126 @@ static int read_cells_callback(void *data, int argc, char **argv,
   return 0;
 }
 
+static int read_cell_formats_callback(void *data, int argc, char **argv,
+                                      char **col_names) {
+  auto param =
+      static_cast<std::tuple<TableWorkbookDocument *, UpdateIdType> *>(data);
+  auto *workbook = std::get<0>(*param);
+
+  std::string curr_sheet;
+  int r = 0;
+  int c = 0;
+  TableSheetPtr sheet;
+
+  TableCellFormat format;
+
+  bool background_present = false;
+  bool foreground_present = false;
+
+  TableCellColor background;
+  TableCellColor foreground;
+
+  for (int i = 0; i < argc; i++) {
+    std::string col(col_names[i]);
+    std::string content;
+
+    if (argv[i]) {
+      content = argv[i];
+    }
+
+    if (content.empty()) {
+      continue;
+    }
+
+    if (col == "name") {
+      sheet = workbook->table_sheet_by_name(content);
+    } else if (col == "row") {
+      r = std::stoi(content);
+    } else if (col == "col") {
+      c = std::stoi(content);
+    } else if (col == "font_name") {
+      format.font_name = content;
+    } else if (col == "font_size") {
+      format.font_size = std::stoul(content);
+    } else if (col == "bold") {
+      format.bold = std::stoi(content) != 0;
+    } else if (col == "italic") {
+      format.italic = std::stoi(content) != 0;
+    } else if (col == "underlined") {
+      format.underlined = std::stoi(content) != 0;
+    } else if (col == "background_color_r") {
+      background.r = std::stoi(content);
+      background_present = true;
+    } else if (col == "background_color_g") {
+      background.g = std::stoi(content);
+      background_present = true;
+    } else if (col == "background_color_b") {
+      background.b = std::stoi(content);
+      background_present = true;
+    } else if (col == "foreground_color_r") {
+      if (content.empty())
+      foreground.r = std::stoi(content);
+      foreground_present = true;
+    } else if (col == "foreground_color_g") {
+      foreground.g = std::stoi(content);
+      foreground_present = true;
+    } else if (col == "foreground_color_b") {
+      foreground.b = std::stoi(content);
+      foreground_present = true;
+    }
+  }
+
+  if (background_present) {
+    format.background_color = background;
+  }
+
+  if (foreground_present) {
+    format.foreground_color = foreground;
+  }
+
+  auto cell = sheet->get_cell(r, c);
+  cell->set_format(format);
+
+  return 0;
+}
+
+static int read_cell_comments_callback(void *data, int argc, char **argv,
+                                       char **col_names) {
+  auto param =
+      static_cast<std::tuple<TableWorkbookDocument *, UpdateIdType> *>(data);
+  auto *workbook = std::get<0>(*param);
+
+  std::string curr_sheet;
+  int r = 0;
+  int c = 0;
+  TableSheetPtr sheet;
+
+  TableCellComment comment;
+
+  for (int i = 0; i < argc; i++) {
+    std::string col(col_names[i]);
+    std::string content;
+
+    if (argv[i]) {
+      content = argv[i];
+    }
+
+    if (col == "name") {
+      sheet = workbook->table_sheet_by_name(content);
+    } else if (col == "row") {
+      r = std::stoi(content);
+    } else if (col == "col") {
+      c = std::stoi(content);
+    } else if (col == "comment") {
+      comment.comment = content;
+    }
+  }
+
+  auto cell = sheet->get_cell(r, c);
+  cell->set_comment(comment);
+
+  return 0;
+}
 TableWorkbookFile::TableWorkbookFile()
     : _file_path(), _db(nullptr), _tables() {}
 
@@ -262,6 +382,48 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
     ss << "Error while reading cells: " << err_msg;
     sqlite3_free(err_msg);
     throw TableWorkbookFileError(ss.str());
+  }
+
+
+
+  // Read formats
+  if (has_table("cell_formats")) {
+    err_msg = nullptr;
+    rc = sqlite3_exec(_db,
+                      "SELECT sheets.name, cell_formats.row, cell_formats.col, "
+                      "cell_formats.font_name,  cell_formats.font_size,  "
+                      "cell_formats.bold,  cell_formats.italic,  cell_formats.underlined, "
+                      "cell_formats.background_color_r, cell_formats.background_color_g, cell_formats.background_color_b, "
+                      "cell_formats.foreground_color_r, cell_formats.foreground_color_g, cell_formats.foreground_color_b "
+                      "FROM cell_formats INNER JOIN sheets ON cell_formats.sheet_id=sheets.id;",
+                      read_cell_formats_callback,
+                      (void *)&cells_param,
+                      &err_msg);
+
+    if (rc != SQLITE_OK) {
+      std::stringstream ss;
+      ss << "Error while reading cell formats: " << err_msg;
+      sqlite3_free(err_msg);
+      throw TableWorkbookFileError(ss.str());
+    }
+  }
+
+  // Read comments
+  if (has_table("cell_comments")) {
+    err_msg = nullptr;
+    rc = sqlite3_exec(_db,
+                      "SELECT sheets.name, cell_comments.row, cell_comments.col, cell_comments.comment "
+                      "FROM cell_comments INNER JOIN sheets ON cell_comments.sheet_id=sheets.id;",
+                      read_cell_comments_callback,
+                      (void *)&cells_param,
+                      &err_msg);
+
+    if (rc != SQLITE_OK) {
+      std::stringstream ss;
+      ss << "Error while reading cell comments: " << err_msg;
+      sqlite3_free(err_msg);
+      throw TableWorkbookFileError(ss.str());
+    }
   }
 }
 
@@ -368,7 +530,7 @@ void TableWorkbookFile::create_tables() {
       "    sheet_id INT NOT NULL,"
       "    row INT NOT NULL,"
       "    col INT NOT NULL,"
-      "    comment TEXT,"
+      "    comment TEXT NOT NULL,"
       ""
       "    FOREIGN KEY (sheet_id)"
       "    REFERENCES sheets (id)"
@@ -605,7 +767,36 @@ void TableWorkbookFile::save_cell_format(int sheet_id,
 
 void TableWorkbookFile::save_cell_comment(int sheet_id,
                                           const TableCellPtr &cell) {
-  // TODO
-  std::ignore = sheet_id;
-  std::ignore = cell;
+  if (!cell->has_comment()) {
+    return;
+  }
+
+  const TableCellComment &comment = cell->comment();
+
+  std::string sql = "INSERT INTO cell_comments (sheet_id, row, col, comment) "
+                    "VALUES (?, ?, ?, ?);";
+
+  sqlite3_stmt *stmt;
+  int rc = sqlite3_prepare_v2(_db, sql.data(), -1, &stmt, NULL);
+  if (rc != SQLITE_OK) {
+    sqlite3_finalize(stmt);
+
+    throw TableWorkbookFileError("Unable to prepare statement (comment)");
+  }
+
+  sqlite3_bind_int(stmt, 1, sheet_id);
+  sqlite3_bind_int(stmt, 2, cell->row());
+  sqlite3_bind_int(stmt, 3, cell->col());
+  sqlite3_bind_text(stmt, 4, (comment.comment).data(), -1, SQLITE_STATIC);
+
+  rc = sqlite3_step(stmt);
+  if (rc != SQLITE_DONE) {
+    sqlite3_finalize(stmt);
+
+    std::cerr << "ERROR: " << rc << std::endl;
+
+    throw TableWorkbookFileError("Unable to write comment");
+  }
+
+  sqlite3_finalize(stmt);
 }
