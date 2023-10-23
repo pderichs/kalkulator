@@ -64,6 +64,7 @@ private:
   void OnAddSheet(wxCommandEvent &WXUNUSED(event));
   void OnRemoveSheet(wxCommandEvent &WXUNUSED(event));
   void OnSearch(wxCommandEvent &WXUNUSED(event));
+  void OnAddCellComment(wxCommandEvent &WXUNUSED(event));
 
   void BindEvents();
   void CreateToolbar();
@@ -124,6 +125,7 @@ enum {
   ID_Copy,
   ID_Paste,
   ID_Search,
+  ID_AddCellComment,
 };
 
 enum { ID_SHEET_SELECTION_CMB = wxID_HIGHEST + 1 };

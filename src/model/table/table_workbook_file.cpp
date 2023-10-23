@@ -384,8 +384,6 @@ void TableWorkbookFile::read(TableWorkbookDocumentPtr &workbook) {
     throw TableWorkbookFileError(ss.str());
   }
 
-
-
   // Read formats
   if (has_table("cell_formats")) {
     err_msg = nullptr;

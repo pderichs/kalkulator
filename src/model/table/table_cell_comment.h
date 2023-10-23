@@ -23,6 +23,7 @@
 
 struct TableCellComment {
   TableCellComment(): comment() {}
+  TableCellComment(const std::string &comment): comment(comment) {}
   ~TableCellComment() = default;
 
   std::string comment;

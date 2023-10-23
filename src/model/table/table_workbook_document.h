@@ -352,6 +352,13 @@ public:
   void set_cell_format(const TableCellFormat &format);
 
   /**
+   * Updates the cell comment of the current cell within the current sheet
+   *
+   * @param comment Comment to be assigned to the current cell
+   */
+  void set_cell_comment(const std::string& comment);
+
+  /**
    * @return An optional cell format of the current cell within the current sheet
    */
   std::optional<TableCellFormat> get_current_cell_format() const;

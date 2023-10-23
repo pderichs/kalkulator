@@ -366,3 +366,13 @@ size_t TableSheet::get_col_left_position(size_t col) {
 void TableSheet::selection_toggle_additional_cell(const Location &location) {
   _selected_cells.toggle_additional_cell(location);
 }
+
+void TableSheet::set_cell_comment(const std::string& comment) const {
+  auto locations = _selected_cells.all_locations();
+
+  for (const auto &location : locations) {
+    auto cell = get_cell(location);
+
+    cell->set_comment(TableCellComment(comment));
+  }
+}

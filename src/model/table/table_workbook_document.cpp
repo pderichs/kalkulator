@@ -503,3 +503,7 @@ void TableWorkbookDocument::selection_toggle_additional_cell(const Location &loc
   _current_sheet->selection_toggle_additional_cell(location);
   _event_sink->send_event(SELECTION_ADDITIONAL_CELLS_UPDATE, {});
 }
+
+void TableWorkbookDocument::set_cell_comment(const std::string& comment) {
+  _current_sheet->set_cell_comment(comment);
+}
