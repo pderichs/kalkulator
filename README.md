@@ -6,7 +6,7 @@ This is a simple and small spreadsheet application which uses a Lisp-like langua
 > This is by no means bug free and / or production ready - **USE AT YOUR OWN RISK**.
 
 I have implemented a similar application in C before ("simplecalc"), but for usability reasons I wanted to create a GUI
-application now. There are of course much more advanced and more sophisticated spread sheet applications out there -
+application now. There are of course much more advanced and more sophisticated spreadsheet applications out there -
 this has just been implemented for learning purpose and fun :)
 
 ## How does it work?
@@ -79,7 +79,7 @@ conditions on their websites:
 ## TODO List
 
 - FEAT: Cell comments
-- FEAT: Add github action for tests
+- FEAT: Add GitHub action for tests
 - FEAT: Replace
 - FEAT: Print
 - FEAT: Add repl for lisp
