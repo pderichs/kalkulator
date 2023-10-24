@@ -364,6 +364,11 @@ public:
   std::optional<TableCellFormat> get_current_cell_format() const;
 
   /**
+   * @return An optional comment of the current cell of the current sheet
+   */
+  std::optional<TableCellComment> get_current_cell_comment() const;
+
+  /**
    * Adds an update listener to a cell
    *
    * @param listener Cell location of the listener cell

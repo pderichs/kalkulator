@@ -226,7 +226,7 @@ void KalkulatorMainFrame::InitializeMenu() {
                         "Edit format options for current cell.");
   menuTable->Append(item);
 
-  item = new wxMenuItem(menuTable, ID_AddCellComment, "Add cell comment...",
+  item = new wxMenuItem(menuTable, ID_AddCellComment, "Add/Edit cell comment...",
                         "Adds a comment to the current cell.");
   menuTable->Append(item);
   auto *menuHelp = new wxMenu();
@@ -707,8 +707,15 @@ void KalkulatorMainFrame::OnFormatCell(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void KalkulatorMainFrame::OnAddCellComment(wxCommandEvent &WXUNUSED(event)) {
+  wxString current;
+
+  auto opt_comment = _document->get_current_cell_comment();
+  if (opt_comment) {
+    current = (*opt_comment).comment;
+  }
+
   wxString raw_input =
-      wxGetTextFromUser(wxT("Comment:"), wxT("Add comment"), "");
+      wxGetTextFromUser(wxT("Comment:"), wxT("Add comment"), current);
 
   if (raw_input.IsEmpty()) {
     return;

@@ -20,7 +20,6 @@
 #include "table_cell.h"
 #include "table_sheet.h"
 #include "model/lisp/value_converter.h"
-#include "model/lisp/update_id.h"
 #include <algorithm>
 #include <memory>
 #include <queue>
@@ -506,4 +505,8 @@ void TableWorkbookDocument::selection_toggle_additional_cell(const Location &loc
 
 void TableWorkbookDocument::set_cell_comment(const std::string &comment) {
   _current_sheet->set_cell_comment(comment);
+}
+
+std::optional<TableCellComment> TableWorkbookDocument::get_current_cell_comment() const {
+  return _current_sheet->get_current_cell_comment();
 }

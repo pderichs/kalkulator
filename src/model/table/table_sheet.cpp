@@ -376,3 +376,13 @@ void TableSheet::set_cell_comment(const std::string &comment) const {
     cell->set_comment(TableCellComment(comment));
   }
 }
+
+std::optional<TableCellComment> TableSheet::get_current_cell_comment() const {
+  auto cell = get_current_cell();
+
+  if (cell->has_comment()) {
+    return cell->comment();
+  }
+
+  return {};
+}

@@ -285,6 +285,13 @@ public:
    */
   void selection_toggle_additional_cell(const Location &location);
 
+  /**
+   * Retrieves the cell comment from the current cell
+   *
+   * @return An optional cell comment of the current cell
+   */
+  std::optional<TableCellComment> get_current_cell_comment() const;
+
 private:
   TableColumnDefinitions _column_definitions;
   TableRowDefinitions _row_definitions;
