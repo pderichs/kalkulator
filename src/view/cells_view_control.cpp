@@ -42,6 +42,7 @@ CellsViewControl::CellsViewControl(KalkulatorSystemColorsPtr sys_colors,
 
   Bind(wxEVT_CHAR_HOOK, &CellsViewControl::OnKeyPress, this);
   Bind(wxEVT_LEFT_DOWN, &CellsViewControl::OnLeftDown, this);
+  Bind(wxEVT_MOTION, &CellsViewControl::OnMouseMove, this);
 
   RefreshScrollbars();
 }
@@ -548,4 +549,16 @@ WxRectSet CellsViewControl::collect_selected_cell_rects(
   }
 
   return result;
+}
+
+void CellsViewControl::OnMouseMove(wxMouseEvent &event) {
+  wxPoint clickPosition = event.GetPosition();
+
+  auto location = GetTableCellByClickPosition(clickPosition);
+  auto cell = _document->get_cell(location);
+  if (cell && cell->has_comment()) {
+    SetToolTip(cell->comment().comment);
+  } else {
+    UnsetToolTip();
+  }
 }

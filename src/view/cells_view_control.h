@@ -63,6 +63,7 @@ public:
   void OnDraw(wxDC &dc) override;
   void OnKeyPress(wxKeyEvent &event);
   void OnLeftDown(wxMouseEvent &event);
+  void OnMouseMove(wxMouseEvent &event);
   void OnCopy();
   void OnCopyFormula();
   void OnPaste();
