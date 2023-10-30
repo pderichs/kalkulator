@@ -58,6 +58,7 @@ void TableCell::clear() {
   _cached_result = {};
   _last_update = 0;
   _visible_content.clear();
+  _formula_content.clear();
 }
 
 // Returns true if content changed, false otherwise.
