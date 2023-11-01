@@ -58,6 +58,7 @@ void TableSearchResultsDlg::Initialize(const TableSearchResult &results) {
 }
 
 void TableSearchResultsDlg::OnClose(wxCommandEvent &WXUNUSED(event)) {
+  // NOTE: This will also delete the dialog.
   Close();
 }
 

@@ -112,11 +112,6 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
     delete _text_control_formula;
     _text_control_formula = nullptr;
   }
-
-  if (_search_results_dlg) {
-    delete _search_results_dlg;
-    _search_results_dlg = nullptr;
-  }
 }
 
 void KalkulatorMainFrame::Initialize() {
@@ -674,7 +669,7 @@ void KalkulatorMainFrame::OnGotoCell(wxCommandEvent &WXUNUSED(event)) {
   std::smatch sm;
 
   if (!std::regex_search(input, sm, exp)) {
-    wxMessageBox("Invalid input. Please enter the coordinates row and col "
+    wxMessageBox("Invalid input. Please enter the coordinates row and column "
                  "separated by space.",
                  "Goto cell error", wxICON_EXCLAMATION);
 
@@ -758,9 +753,8 @@ void KalkulatorMainFrame::OnSearch(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
-  if (!_search_results_dlg) {
-    _search_results_dlg = new TableSearchResultsDlg(this, this, wxID_ANY);
-  }
+  // NOTE: Dialog will be deleted by internal call to Close()
+  _search_results_dlg = new TableSearchResultsDlg(this, this, wxID_ANY);
 
   _search_results_dlg->Initialize(search_result);
   _search_results_dlg->Show();
