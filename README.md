@@ -78,8 +78,6 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Cell comments
-- FEAT: Add GitHub action for tests
 - FEAT: Replace
 - FEAT: Print
 - FEAT: Add repl for lisp
@@ -92,12 +90,14 @@ conditions on their websites:
 - FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed
   references, like $ function)
 - BUG: Something (CLion?) is creating a "Testing" folder on the root folder with every build
+- MAYB: Add GitHub action for tests
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
 - MAYB: Cache function results (see field _func_result on LispValue)
 
 ## DONE
 
+- FEAT: Cell comments
 - FEAT: Multiple cell selection
 - FEAT: Mark current row/cell in header controls
 - FEAT: Search (maybe a non modal dialog which lists the matching cell locations)
