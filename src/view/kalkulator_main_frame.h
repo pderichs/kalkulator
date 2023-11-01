@@ -108,7 +108,6 @@ private:
   wxBitmap *_icon_width;
 
   wxString _last_search_term;
-  TableSearchResultsDlg *_search_results_dlg;
 };
 
 enum {

@@ -62,8 +62,7 @@ KalkulatorMainFrame::KalkulatorMainFrame()
       _execution_context(), _sys_colors(), _toolbar(nullptr),
       _btn_formula_selection(nullptr), _cmb_sheet_selection(nullptr),
       _icon_new(nullptr), _icon_open(nullptr), _icon_save(nullptr),
-      _icon_height(nullptr), _icon_width(nullptr), _last_search_term(),
-      _search_results_dlg(nullptr) {
+      _icon_height(nullptr), _icon_width(nullptr), _last_search_term() {
   InitializeModel();
   InitializeIcons();
   InitializeMenu();
@@ -221,8 +220,9 @@ void KalkulatorMainFrame::InitializeMenu() {
                         "Edit format options for current cell.");
   menuTable->Append(item);
 
-  item = new wxMenuItem(menuTable, ID_AddCellComment, "Add/Edit cell comment...",
-                        "Adds a comment to the current cell.");
+  item =
+      new wxMenuItem(menuTable, ID_AddCellComment, "Add/Edit cell comment...",
+                     "Adds a comment to the current cell.");
   menuTable->Append(item);
   auto *menuHelp = new wxMenu();
   menuHelp->Append(wxID_ABOUT);
@@ -754,8 +754,8 @@ void KalkulatorMainFrame::OnSearch(wxCommandEvent &WXUNUSED(event)) {
   }
 
   // NOTE: Dialog will be deleted by internal call to Close()
-  _search_results_dlg = new TableSearchResultsDlg(this, this, wxID_ANY);
+  auto search_results_dlg = new TableSearchResultsDlg(this, this, wxID_ANY);
 
-  _search_results_dlg->Initialize(search_result);
-  _search_results_dlg->Show();
+  search_results_dlg->Initialize(search_result);
+  search_results_dlg->Show();
 }
