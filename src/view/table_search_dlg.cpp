@@ -41,6 +41,8 @@ TableSearchResultsDlg::TableSearchResultsDlg(
 
   SetSizer(main_sizer);
   main_sizer->Fit(this);
+
+  SetSize(800, 600);
 }
 
 void TableSearchResultsDlg::OnClose(wxCommandEvent &WXUNUSED(event)) {

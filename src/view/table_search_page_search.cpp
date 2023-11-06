@@ -100,8 +100,14 @@ void TableSearchPageSearch::OnSearch(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void TableSearchPageSearch::SearchTerm() {
+  wxString search_term(_txt_search_term->GetValue());
+
+  if (search_term.IsEmpty()) {
+    return;
+  }
+
   TableSearchResult search_result =
-      _document->search_sheets(static_cast<const char *>(_txt_search_term->GetValue()));
+      _document->search_sheets(static_cast<const char *>(search_term));
 
   if (search_result.empty()) {
     wxMessageBox("No occurrences found.", "Search");
