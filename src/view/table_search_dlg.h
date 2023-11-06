@@ -37,7 +37,7 @@ public:
                         EventSink *event_sink,
                         const TableWorkbookDocumentPtr &document,
                         wxWindowID id = wxID_ANY,
-                        const wxString &title = wxT("Search Results"),
+                        const wxString &title = wxT("Search and Replace"),
                         const wxPoint &pos = wxDefaultPosition,
                         const wxSize &size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE);
