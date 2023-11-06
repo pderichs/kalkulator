@@ -16,47 +16,46 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TABLE_SEARCH_RESULTS_DIALOG_H
-#define TABLE_SEARCH_RESULTS_DIALOG_H
+#ifndef TABLE_SEARCH_PAGE_SEARCH_H
+#define TABLE_SEARCH_PAGE_SEARCH_H
 
-#include "model/event_sink.h"
-#include "model/table/table_search_result.h"
-#include "tools.h"
-#include "model/table/table_workbook_document.h"
-#include <wx/image.h>
 #include <wx/listctrl.h>
-#include <wx/notebook.h>
+#include <wx/panel.h>
 #include <wx/wx.h>
+#include "model/table/table_search_result.h"
+#include "model/event_sink.h"
+#include "model/table/table_workbook_document.h"
 
-/**
- * Implementation of the search dialog.
- */
-class TableSearchResultsDlg : public wxFrame {
+class TableSearchPageSearch : public wxPanel {
 public:
-  TableSearchResultsDlg(wxWindow *parent,
-                        EventSink *event_sink,
+  TableSearchPageSearch(wxWindow *parent,
                         const TableWorkbookDocumentPtr &document,
+                        EventSink *event_sink,
                         wxWindowID id = wxID_ANY,
-                        const wxString &title = wxT("Search Results"),
                         const wxPoint &pos = wxDefaultPosition,
                         const wxSize &size = wxDefaultSize,
-                        long style = wxDEFAULT_FRAME_STYLE);
+                        long style = wxTAB_TRAVERSAL,
+                        const wxString &name = wxPanelNameStr);
 
   // Delete copy constructor and assignment operator
-  TableSearchResultsDlg(const TableSearchResultsDlg &other) = delete;
-  TableSearchResultsDlg &operator=(const TableSearchResultsDlg &other) = delete;
+  TableSearchPageSearch(const TableSearchPageSearch &other) = delete;
+  TableSearchPageSearch &operator=(const TableSearchPageSearch &other) = delete;
 
-  void OnClose(wxCommandEvent &event);
+  void OnListItemActivated(wxListEvent &event);
 
-private:
-  wxButton *CreateCloseButton();
-  wxNotebook *CreateNotebookControl();
+  void OnSearch(wxCommandEvent &event);
 
 private:
-  wxButton *_btn_close;
+  wxListCtrl *CreateResultsListView();
+  void SetResults(const TableSearchResult &results);
+
+private:
   EventSink *_event_sink;
-  wxNotebook *_notebook;
+  TableSearchResult _results;
+  wxListCtrl *_lst_results;
+  wxTextCtrl *_txt_search_term;
+  wxButton *_btn_search;
   TableWorkbookDocumentPtr _document;
 };
 
-#endif
+#endif //TABLE_SEARCH_PAGE_SEARCH_H

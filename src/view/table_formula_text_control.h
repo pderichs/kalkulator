@@ -19,14 +19,13 @@
 #ifndef TABLE_FORMULA_TEXT_CONTROL_INCLUDED
 #define TABLE_FORMULA_TEXT_CONTROL_INCLUDED
 
-#include <wx/wx.h>
-
 #include "../model/event_sink.h"
+#include "input_text_control.h"
 
 /**
  * This provides a specialized text control for the formula.
  */
-class TableFormulaTextControl : public wxTextCtrl {
+class TableFormulaTextControl : public InputTextControl {
 public:
   TableFormulaTextControl(EventSink *event_sink, wxWindow *parent,
                           wxWindowID id, const wxString &value = wxEmptyString,
@@ -40,7 +39,8 @@ public:
   TableFormulaTextControl &
   operator=(const TableFormulaTextControl &other) = delete;
 
-  void OnKeyPress(wxKeyEvent &event);
+  void OnEnter(wxKeyEvent &event);
+  void OnEscape(wxKeyEvent &event);
 
 private:
   EventSink *_event_sink;

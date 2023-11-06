@@ -62,7 +62,7 @@ KalkulatorMainFrame::KalkulatorMainFrame()
       _execution_context(), _sys_colors(), _toolbar(nullptr),
       _btn_formula_selection(nullptr), _cmb_sheet_selection(nullptr),
       _icon_new(nullptr), _icon_open(nullptr), _icon_save(nullptr),
-      _icon_height(nullptr), _icon_width(nullptr), _last_search_term() {
+      _icon_height(nullptr), _icon_width(nullptr) {
   InitializeModel();
   InitializeIcons();
   InitializeMenu();
@@ -736,26 +736,8 @@ void KalkulatorMainFrame::OnRemoveSheet(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void KalkulatorMainFrame::OnSearch(wxCommandEvent &WXUNUSED(event)) {
-  wxString raw_input =
-      wxGetTextFromUser(wxT("Search term:"), wxT("Search"), _last_search_term);
-
-  _last_search_term = raw_input;
-
-  if (raw_input.IsEmpty()) {
-    return;
-  }
-
-  TableSearchResult search_result =
-      _document->search_sheets(static_cast<const char *>(raw_input));
-
-  if (search_result.empty()) {
-    wxMessageBox("No occurrences found.", "Search");
-    return;
-  }
-
   // NOTE: Dialog will be deleted by internal call to Close()
-  auto search_results_dlg = new TableSearchResultsDlg(this, this, wxID_ANY);
-
-  search_results_dlg->Initialize(search_result);
+  auto search_results_dlg =
+      new TableSearchResultsDlg(this, this, _document, wxID_ANY);
   search_results_dlg->Show();
 }

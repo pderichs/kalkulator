@@ -1,4 +1,3 @@
-
 /**
  * Kalkulator - a simple and small spread sheet app.
  * Copyright (C) 2023  pderichs (derichs@posteo.de)

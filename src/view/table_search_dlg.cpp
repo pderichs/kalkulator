@@ -17,44 +17,30 @@
  */
 
 #include "table_search_dlg.h"
+#include "table_search_page_search.h"
 
 TableSearchResultsDlg::TableSearchResultsDlg(
-    wxWindow *parent, EventSink *event_sink, wxWindowID id,
-    const wxString &title, const wxPoint &pos, const wxSize &size, long style)
-    : wxFrame(parent, id, title, pos, size, style), _results(),
-      _lst_results(nullptr), _btn_close(nullptr), _event_sink(event_sink) {
-  wxBoxSizer *sizer_1 = new wxBoxSizer(wxVERTICAL);
-  _lst_results =
-      new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                     wxLC_HRULES | wxLC_REPORT | wxLC_VRULES);
-  _lst_results->AppendColumn(wxT("Sheet"), wxLIST_FORMAT_LEFT, -1);
-  _lst_results->AppendColumn(wxT("Location"), wxLIST_FORMAT_LEFT, -1);
-  _lst_results->AppendColumn(wxT("Content"), wxLIST_FORMAT_LEFT, -1);
-  _lst_results->Bind(wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
-                     &TableSearchResultsDlg::OnListItemActivated, this);
-  sizer_1->Add(_lst_results, 1, wxEXPAND, 5);
+    wxWindow *parent,
+    EventSink *event_sink,
+    const TableWorkbookDocumentPtr &document,
+    wxWindowID id,
+    const wxString &title,
+    const wxPoint &pos,
+    const wxSize &size,
+    long style)
+    : wxFrame(parent, id, title, pos, size, style),
+      _btn_close(nullptr), _event_sink(event_sink),
+      _notebook(nullptr), _document(document) {
+  wxBoxSizer *main_sizer = new wxBoxSizer(wxVERTICAL);
 
-  _btn_close = new wxButton(this, wxID_ANY, wxT("Close"));
-  _btn_close->Bind(wxEVT_BUTTON, &TableSearchResultsDlg::OnClose, this);
-  sizer_1->Add(_btn_close, 0, wxALIGN_RIGHT, 5);
+  _notebook = CreateNotebookControl();
+  main_sizer->Add(_notebook, 1, wxEXPAND, 5);
 
-  SetSizer(sizer_1);
-  sizer_1->Fit(this);
-}
+  _btn_close = CreateCloseButton();
+  main_sizer->Add(_btn_close, 0, wxALIGN_RIGHT, 5);
 
-void TableSearchResultsDlg::Initialize(const TableSearchResult &results) {
-  _results = results;
-
-  Layout();
-
-  _lst_results->DeleteAllItems();
-  for (const auto &result : _results) {
-    long index = _lst_results->InsertItem(0, result.sheet->name());
-    _lst_results->SetItem(index, 1, pdtools::locationToString(result.location));
-
-    auto cell = result.sheet->get_cell(result.location);
-    _lst_results->SetItem(index, 2, cell->visible_content());
-  }
+  SetSizer(main_sizer);
+  main_sizer->Fit(this);
 }
 
 void TableSearchResultsDlg::OnClose(wxCommandEvent &WXUNUSED(event)) {
@@ -62,9 +48,18 @@ void TableSearchResultsDlg::OnClose(wxCommandEvent &WXUNUSED(event)) {
   Close();
 }
 
-void TableSearchResultsDlg::OnListItemActivated(wxListEvent &event) {
-  long item_index = event.GetIndex();
-  auto result = _results[item_index];
+wxButton *TableSearchResultsDlg::CreateCloseButton() {
+  auto result = new wxButton(this, wxID_ANY, wxT("Close"));
+  result->Bind(wxEVT_BUTTON, &TableSearchResultsDlg::OnClose, this);
+  return result;
+}
 
-  _event_sink->send_event(NAVIGATE_SEARCH_RESULT_ITEM, result);
+wxNotebook *TableSearchResultsDlg::CreateNotebookControl() {
+  auto result = new wxNotebook(this, wxID_ANY);
+  result->AddPage(new TableSearchPageSearch(result, _document, _event_sink),
+                  "Search",
+                  true);
+  result->AddPage(new wxPanel(result), "Replace"); // TODO
+
+  return result;
 }

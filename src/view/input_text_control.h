@@ -16,22 +16,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "table_formula_text_control.h"
+#ifndef INPUT_TEXT_CONTROL_H
+#define INPUT_TEXT_CONTROL_H
 
-TableFormulaTextControl::TableFormulaTextControl(
-    EventSink *event_sink, wxWindow *parent, wxWindowID id,
-    const wxString &value, const wxPoint &pos, const wxSize &size, long style,
-    const wxValidator &validator, const wxString &name)
-    : InputTextControl(parent, id, value, pos, size, style, validator, name),
-      _event_sink(event_sink) {
-  Bind(wxEVT_CHAR_HOOK, &TableFormulaTextControl::OnKeyPress, this);
-}
+#include <wx/wx.h>
+#include <wx/textctrl.h>
 
-void TableFormulaTextControl::OnEnter(wxKeyEvent &WXUNUSED(event)) {
-  std::string content = (const char *)GetValue();
-  _event_sink->send_event(FORMULA_UPDATE, content);
-}
+class InputTextControl : public wxTextCtrl {
+public:
+  InputTextControl(wxWindow *parent,
+                   wxWindowID id,
+                   const wxString &value,
+                   const wxPoint &pos,
+                   const wxSize &size,
+                   long style,
+                   const wxValidator &validator,
+                   const wxString &name);
 
-void TableFormulaTextControl::OnEscape(wxKeyEvent &WXUNUSED(event)) {
-  _event_sink->send_event(FORMULA_CANCEL, {});
-}
+  void OnKeyPress(wxKeyEvent &event);
+
+  virtual void OnEnter(wxKeyEvent &event) = 0;
+  virtual void OnEscape(wxKeyEvent &event) = 0;
+};
+
+#endif //INPUT_TEXT_CONTROL_H

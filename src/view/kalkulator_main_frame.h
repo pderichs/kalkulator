@@ -106,8 +106,6 @@ private:
   wxBitmap *_icon_save;
   wxBitmap *_icon_height;
   wxBitmap *_icon_width;
-
-  wxString _last_search_term;
 };
 
 enum {
