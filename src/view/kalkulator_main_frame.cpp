@@ -589,6 +589,10 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
     _table_control->Refresh();
     break;
   }
+
+  case SEARCH_TEXT_CONTROL_SEARCH_TERM_COMMAND:
+    // Ignore here.
+    break;
   }
 }
 

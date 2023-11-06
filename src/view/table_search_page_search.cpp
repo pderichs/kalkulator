@@ -17,6 +17,7 @@
  */
 
 #include "table_search_page_search.h"
+#include "search_text_control.h"
 
 TableSearchPageSearch::TableSearchPageSearch(wxWindow *parent,
                                              const TableWorkbookDocumentPtr &document,
@@ -45,7 +46,7 @@ TableSearchPageSearch::TableSearchPageSearch(wxWindow *parent,
                          0,
                          wxALIGN_LEFT | wxALL,
                          5);
-  _txt_search_term = new wxTextCtrl(this, wxID_ANY);
+  _txt_search_term = new SearchTextControl(this, this, wxID_ANY);
   text_search_sizer->Add(_txt_search_term, 1, wxEXPAND | wxALL, 5);
   sizer_1->Add(text_search_sizer, 0, wxEXPAND, 5);
 
@@ -95,6 +96,10 @@ void TableSearchPageSearch::SetResults(const TableSearchResult &results) {
 }
 
 void TableSearchPageSearch::OnSearch(wxCommandEvent &WXUNUSED(event)) {
+  SearchTerm();
+}
+
+void TableSearchPageSearch::SearchTerm() {
   TableSearchResult search_result =
       _document->search_sheets(static_cast<const char *>(_txt_search_term->GetValue()));
 
@@ -104,4 +109,12 @@ void TableSearchPageSearch::OnSearch(wxCommandEvent &WXUNUSED(event)) {
   }
 
   SetResults(search_result);
+}
+
+void TableSearchPageSearch::send_event(TableEvent event_id, std::any param) {
+  std::ignore = param;
+
+  if (event_id == SEARCH_TEXT_CONTROL_SEARCH_TERM_COMMAND) {
+    SearchTerm();
+  }
 }

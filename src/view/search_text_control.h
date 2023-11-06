@@ -16,27 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef INPUT_TEXT_CONTROL_H
-#define INPUT_TEXT_CONTROL_H
+#ifndef SEARCH_TEXT_CONTROL_H
+#define SEARCH_TEXT_CONTROL_H
 
-#include <wx/wx.h>
-#include <wx/textctrl.h>
+#include "input_text_control.h"
+#include "model/event_sink.h"
 
-class InputTextControl : public wxTextCtrl {
+class SearchTextControl: public InputTextControl {
 public:
-  InputTextControl(wxWindow *parent,
+  SearchTextControl(wxWindow *parent,
+                   EventSink *event_sink,
                    wxWindowID id, const wxString &value = wxEmptyString,
                    const wxPoint &pos = wxDefaultPosition,
                    const wxSize &size = wxDefaultSize, long style = 0,
                    const wxValidator &validator = wxDefaultValidator,
                    const wxString &name = wxTextCtrlNameStr);
 
-  void OnKeyPress(wxKeyEvent &event);
+  // Delete copy constructor and assignment operator
+  SearchTextControl(const SearchTextControl &other) = delete;
+  SearchTextControl &operator=(const SearchTextControl &other) = delete;
 
-  virtual void OnEnter(wxKeyEvent &event) = 0;
-  virtual void OnEscape(wxKeyEvent &WXUNUSED(event)) {
-    Clear();
-  }
+  void OnEnter(wxKeyEvent &event);
+
+private:
+  EventSink *_event_sink;
 };
 
-#endif //INPUT_TEXT_CONTROL_H
+#endif //SEARCH_TEXT_CONTROL_H

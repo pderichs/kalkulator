@@ -26,7 +26,7 @@
 #include "model/event_sink.h"
 #include "model/table/table_workbook_document.h"
 
-class TableSearchPageSearch : public wxPanel {
+class TableSearchPageSearch : public wxPanel, public EventSink {
 public:
   TableSearchPageSearch(wxWindow *parent,
                         const TableWorkbookDocumentPtr &document,
@@ -45,9 +45,12 @@ public:
 
   void OnSearch(wxCommandEvent &event);
 
+  void send_event(TableEvent event_id, std::any param) override;
+
 private:
   wxListCtrl *CreateResultsListView();
   void SetResults(const TableSearchResult &results);
+  void SearchTerm();
 
 private:
   EventSink *_event_sink;
