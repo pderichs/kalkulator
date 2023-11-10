@@ -103,6 +103,7 @@ void TableSearchPageSearch::SearchTerm() {
   wxString search_term(_txt_search_term->GetValue());
 
   if (search_term.IsEmpty()) {
+    _txt_search_term->SetFocus();
     return;
   }
 
