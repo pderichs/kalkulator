@@ -311,22 +311,14 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRemoveSheet, this, ID_RemoveSheet);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSearch, this, ID_Search);
 
-  Bind(wxEVT_RIGHT_DOWN, &KalkulatorMainFrame::OnRightDown, this);
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
 
   Bind(wxEVT_COMBOBOX, &KalkulatorMainFrame::OnSheetSelectionCombo, this,
        ID_SHEET_SELECTION_CMB);
 }
 
-void KalkulatorMainFrame::OnRightDown(wxMouseEvent &WXUNUSED(event)) {
-  // int x = event.GetPosition().x;
-  // int y = event.GetPosition().y;
-
-  // TODO
-}
-
 void KalkulatorMainFrame::OnExit(wxCommandEvent &WXUNUSED(event)) {
-  Close(true);
+  Close(false);
 }
 
 void KalkulatorMainFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
