@@ -28,7 +28,6 @@ class LispExecutionContextDefun : public LispFunctionExecutionContext {
 public:
   LispExecutionContextDefun(LispExecutionContext *modifiable_execution_context)
       : _modifiable_execution_context(modifiable_execution_context) {}
-  ~LispExecutionContextDefun() override = default;
 
   // Delete copy constructor and assignment operator
   LispExecutionContextDefun(const LispExecutionContextDefun &other) = delete;

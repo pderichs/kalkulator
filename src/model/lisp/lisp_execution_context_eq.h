@@ -27,7 +27,6 @@ class LispExecutionContextEq : public LispFunctionExecutionContext {
 public:
   explicit LispExecutionContextEq(bool extract_lists) : _extract_lists(
       extract_lists) {}
-  ~LispExecutionContextEq() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,

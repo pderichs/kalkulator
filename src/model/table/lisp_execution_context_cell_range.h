@@ -34,7 +34,6 @@ class LispExecutionContextCellRange : public LispFunctionExecutionContext {
 public:
   explicit LispExecutionContextCellRange(TableWorkbookDocumentPtr document)
       : _document(document) {}
-  ~LispExecutionContextCellRange() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,

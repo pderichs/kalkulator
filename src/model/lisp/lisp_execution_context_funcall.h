@@ -30,9 +30,6 @@
 
 class LispExecutionContextFuncall : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextFuncall() = default;
-  ~LispExecutionContextFuncall() override = default;
-
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param,

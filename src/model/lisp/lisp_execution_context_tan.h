@@ -26,9 +26,6 @@
 
 class LispExecutionContextTan : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextTan() = default;
-  ~LispExecutionContextTan() override = default;
-
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param,

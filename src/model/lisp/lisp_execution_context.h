@@ -43,7 +43,6 @@ typedef std::map<std::string, LispValuePtr> LispScopeMap;
 class LispExecutionContext {
 public:
   LispExecutionContext();
-  ~LispExecutionContext() = default;
 
   /**
    * Executes a lisp value. It returns the value if it is not a function.

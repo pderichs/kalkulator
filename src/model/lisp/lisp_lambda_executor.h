@@ -36,7 +36,6 @@ public:
   LispLambdaExecutor(const LispFunctionDefinition &function_definition,
                      const LispValuePtrVector &params)
       : _definition(function_definition), _params(params) {}
-  ~LispLambdaExecutor() = default;
 
   LispValuePtr value(const LispExecutionContext &execution_context,
                      const std::any &context_param, UpdateIdType update_id) {

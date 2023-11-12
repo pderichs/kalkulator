@@ -25,9 +25,6 @@
 
 class LispExecutionContextRound : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextRound() = default;
-  ~LispExecutionContextRound() = default;
-
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param,

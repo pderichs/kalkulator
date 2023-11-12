@@ -28,7 +28,6 @@ class LispExecutionContextSetVar : public LispFunctionExecutionContext {
 public:
   LispExecutionContextSetVar(LispExecutionContext *modifiable_execution_context)
       : _modifiable_execution_context(modifiable_execution_context) {}
-  ~LispExecutionContextSetVar() override = default;
 
   // Delete copy constructor and assignment operator
   LispExecutionContextSetVar(const LispExecutionContextSetVar &other) = delete;

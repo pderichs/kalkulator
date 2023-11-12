@@ -36,7 +36,6 @@ class LispExecutionContextCellReference : public LispFunctionExecutionContext {
 public:
   explicit LispExecutionContextCellReference(TableWorkbookDocumentPtr workbook)
       : _document(workbook) {}
-  ~LispExecutionContextCellReference() override = default;
 
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,

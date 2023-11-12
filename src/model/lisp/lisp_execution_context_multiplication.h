@@ -26,9 +26,6 @@
 
 class LispExecutionContextMultiplication : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextMultiplication() = default;
-  ~LispExecutionContextMultiplication() override = default;
-
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param,

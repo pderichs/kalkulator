@@ -26,9 +26,6 @@
 
 class LispExecutionContextSin : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextSin() = default;
-  ~LispExecutionContextSin() override = default;
-
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param,

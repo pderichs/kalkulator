@@ -30,7 +30,6 @@
 class LispParser {
 public:
   explicit LispParser(const std::string &lisp);
-  ~LispParser() = default;
 
   LispTokens parse();
 

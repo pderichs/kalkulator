@@ -31,7 +31,6 @@ class LispExecutionContextMessageBox : public LispFunctionExecutionContext {
 public:
   LispExecutionContextMessageBox(EventSink *event_sink)
       : _event_sink(event_sink) {}
-  ~LispExecutionContextMessageBox() override = default;
 
   // Delete copy constructor and assignment operator
   LispExecutionContextMessageBox(const LispExecutionContextMessageBox &other) = delete;

@@ -25,9 +25,6 @@
 
 class LispExecutionContextProgn : public LispFunctionExecutionContext {
 public:
-  LispExecutionContextProgn() = default;
-  ~LispExecutionContextProgn() override = default;
-
   LispValuePtr value(const LispValuePtrVector &func,
                      const LispExecutionContext &execution_context,
                      const std::any &context_param,
