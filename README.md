@@ -79,6 +79,7 @@ conditions on their websites:
 ## TODO List
 
 - FEAT: Replace
+- FEAT: Include option to search for formula content
 - FEAT: Print
 - FEAT: Add repl for lisp
 - FEAT: Add code editor for macros?
@@ -90,7 +91,6 @@ conditions on their websites:
 - FEAT: Make cell reference and cell_range update when dragging a cell downwards or to the right (also add fixed
   references, like $ function)
 - BUG: Something (CLion?) is creating a "Testing" folder on the root folder with every build
-- MAYB: Add GitHub action for tests
 - MAYB: Support cell type currency
 - MAYB: Support high precision decimals and integers? Option: GMP lib: https://gmplib.org/
 - MAYB: Cache function results (see field _func_result on LispValue)
