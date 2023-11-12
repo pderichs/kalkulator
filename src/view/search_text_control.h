@@ -22,15 +22,15 @@
 #include "input_text_control.h"
 #include "model/event_sink.h"
 
-class SearchTextControl: public InputTextControl {
+class SearchTextControl : public InputTextControl {
 public:
   SearchTextControl(wxWindow *parent,
-                   EventSink *event_sink,
-                   wxWindowID id, const wxString &value = wxEmptyString,
-                   const wxPoint &pos = wxDefaultPosition,
-                   const wxSize &size = wxDefaultSize, long style = 0,
-                   const wxValidator &validator = wxDefaultValidator,
-                   const wxString &name = wxTextCtrlNameStr);
+                    EventSink *event_sink,
+                    wxWindowID id, const wxString &value = wxEmptyString,
+                    const wxPoint &pos = wxDefaultPosition,
+                    const wxSize &size = wxDefaultSize, long style = 0,
+                    const wxValidator &validator = wxDefaultValidator,
+                    const wxString &name = wxTextCtrlNameStr);
 
   // Delete copy constructor and assignment operator
   SearchTextControl(const SearchTextControl &other) = delete;
