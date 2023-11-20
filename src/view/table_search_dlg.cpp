@@ -18,6 +18,7 @@
 
 #include "table_search_dlg.h"
 #include "table_search_page_search.h"
+#include "table_search_page_replace.h"
 
 TableSearchResultsDlg::TableSearchResultsDlg(
     wxWindow *parent,
@@ -61,7 +62,8 @@ wxNotebook *TableSearchResultsDlg::CreateNotebookControl() {
   result->AddPage(new TableSearchPageSearch(result, _document, _event_sink),
                   "Search",
                   true);
-  result->AddPage(new wxPanel(result), "Replace"); // TODO
+  result->AddPage(new TableSearchPageReplace(result, _document, _event_sink),
+                  "Replace");
 
   return result;
 }

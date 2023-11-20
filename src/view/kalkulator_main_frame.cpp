@@ -188,7 +188,7 @@ void KalkulatorMainFrame::InitializeMenu() {
                      "Pastes the content of the clipboard to the current cell");
   menuEdit->Append(item);
   menuEdit->AppendSeparator();
-  item = new wxMenuItem(menuEdit, ID_Search, "&Search\tCtrl+F",
+  item = new wxMenuItem(menuEdit, ID_Search, "&Search...\tCtrl+F",
                         "Search for a string");
   menuEdit->Append(item);
 

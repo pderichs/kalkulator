@@ -16,23 +16,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TABLE_SEARCH_PAGE_SEARCH_H
-#define TABLE_SEARCH_PAGE_SEARCH_H
+#ifndef TABLE_SEARCH_PAGE_REPLACE_H
+#define TABLE_SEARCH_PAGE_REPLACE_H
 
 #include "table_search_page.h"
+#include "model/table/table_search_result.h"
 
 /**
- * Basic search page.
+ * Combined search / replace page in search dialog.
  */
-class TableSearchPageSearch : public TableSearchPage {
+class TableSearchPageReplace : public TableSearchPage {
 public:
-  TableSearchPageSearch(wxWindow *parent,
-                        const TableWorkbookDocumentPtr &document,
-                        EventSink *event_sink);
+  TableSearchPageReplace(wxWindow *parent,
+                         const TableWorkbookDocumentPtr &document,
+                         EventSink *event_sink);
 
   // Delete copy constructor and assignment operator
-  TableSearchPageSearch(const TableSearchPageSearch &other) = delete;
-  TableSearchPageSearch &operator=(const TableSearchPageSearch &other) = delete;
+  TableSearchPageReplace(const TableSearchPageReplace &other) = delete;
+  TableSearchPageReplace &operator=(const TableSearchPageReplace &other) = delete;
+
+  void OnReplaceSelected(wxCommandEvent &);
+  void OnReplaceAll(wxCommandEvent &event);
+
+private:
+  void ReplaceItem(long index, UpdateIdType update_id);
+
+private:
+  wxTextCtrl *_txt_replace_term;
+  wxButton *_btn_replace_current;
+  wxButton *_btn_replace_all;
 };
 
-#endif //TABLE_SEARCH_PAGE_SEARCH_H
+#endif //TABLE_SEARCH_PAGE_REPLACE_H

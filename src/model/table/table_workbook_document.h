@@ -410,6 +410,19 @@ public:
    */
   void selection_toggle_additional_cell(const Location &location);
 
+  /**
+   * Replaces the text in the search result item with the replacement text
+   *
+   * @param search_result_item Search result item to operate on
+   * @param text Text to be replaced
+   * @param replacement Replace text
+   * @param update_id Id of the current operation
+   */
+  void replace_search_item(const TableSearchResultItem &search_result_item,
+                           const std::string &text,
+                           const std::string &replacement,
+                           UpdateIdType update_id);
+
 private:
   /**
    * Trigger all cell listeners which are registered for receiving updates on

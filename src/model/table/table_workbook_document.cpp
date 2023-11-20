@@ -510,3 +510,28 @@ void TableWorkbookDocument::set_cell_comment(const std::string &comment) {
 std::optional<TableCellComment> TableWorkbookDocument::get_current_cell_comment() const {
   return _current_sheet->get_current_cell_comment();
 }
+
+void TableWorkbookDocument::replace_search_item(const TableSearchResultItem &search_result_item,
+                                                const std::string &text,
+                                                const std::string &replacement,
+                                                UpdateIdType update_id) {
+  const auto
+      &cell = search_result_item.sheet->get_cell(search_result_item.location);
+
+  std::string search_string(cell->visible_content());
+
+  std::string::size_type pos;
+  while (true) {
+    pos = search_string.find(text);
+    if (pos == search_string.npos) {
+      break;
+    }
+
+    search_string.replace(pos, text.size(), replacement);
+  }
+
+  update_cell_content(search_result_item.sheet,
+                      search_result_item.location,
+                      search_string,
+                      update_id);
+}

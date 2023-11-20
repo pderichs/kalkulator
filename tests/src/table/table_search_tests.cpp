@@ -20,25 +20,31 @@
 #include "gtest/gtest.h"
 #include <any>
 
-TEST(TableSearchTests, TableSearchTest1) {
-  // Test setup
-  TestEventSink sink;
-  LispExecutionContext execution_context;
-  ValueConverter::set_execution_context(&execution_context);
-  TableWorkbookDocumentPtr document =
-      std::make_shared<TableWorkbookDocument>(&sink);
-  prepare_execution_context(&execution_context, document);
+class TableSearchTests : public testing::Test {
+protected:
+  void SetUp() override {
+    ValueConverter::set_execution_context(&_execution_context);
+    _document = std::make_shared<TableWorkbookDocument>(&_sink);
+    prepare_execution_context(&_execution_context, _document);
 
-  document->add_sheet("Testsheet");
-  document->select_sheet_by_name("Testsheet");
-  document->select_cell(Location(0, 1));
-  document->update_content_current_cells("42", generate_update_id());
+    _document->add_sheet("Testsheet");
+    _document->select_sheet_by_name("Testsheet");
+    _document->select_cell(Location(0, 1));
+    _document->update_content_current_cells("42", generate_update_id());
 
-  document->select_sheet_by_name("Sheet 1");
-  document->select_cell(Location(0, 2));
-  document->update_content_current_cells("42", generate_update_id());
+    _document->select_sheet_by_name("Sheet 1");
+    _document->select_cell(Location(0, 2));
+    _document->update_content_current_cells("42", generate_update_id());
+  }
 
-  auto result = document->search_sheets("42");
+protected:
+  TableWorkbookDocumentPtr _document;
+  LispExecutionContext _execution_context;
+  TestEventSink _sink;
+};
+
+TEST_F(TableSearchTests, TableSearchTest1) {
+  auto result = _document->search_sheets("42");
 
   EXPECT_EQ(result.size(), 2);
   TableSearchResultItem item = result[0];
@@ -48,4 +54,16 @@ TEST(TableSearchTests, TableSearchTest1) {
   item = result[1];
   EXPECT_EQ(item.sheet->name(), "Testsheet");
   EXPECT_EQ(item.location, Location(0, 1));
+}
+
+TEST_F(TableSearchTests, TableReplaceTest1) {
+  auto result = _document->search_sheets("42");
+
+  EXPECT_EQ(result.size(), 2);
+  auto item = result[1];
+
+  _document->replace_search_item(item, "42", "hello123", generate_update_id());
+
+  auto cell = item.sheet->get_cell(item.location);
+  EXPECT_EQ(cell->visible_content(), "hello123");
 }
