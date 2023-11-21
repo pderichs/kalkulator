@@ -78,7 +78,6 @@ conditions on their websites:
 
 ## TODO List
 
-- FEAT: Replace
 - FEAT: Include option to search for formula content
 - FEAT: Print
 - FEAT: Add repl for lisp
@@ -97,6 +96,7 @@ conditions on their websites:
 
 ## DONE
 
+- FEAT: Replace
 - FEAT: Cell comments
 - FEAT: Multiple cell selection
 - FEAT: Mark current row/cell in header controls
