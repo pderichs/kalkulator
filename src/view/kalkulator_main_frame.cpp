@@ -456,14 +456,10 @@ void KalkulatorMainFrame::send_event(TableEvent event_id, std::any param) {
 
   switch (event_id) {
   case FORMULA_UPDATE:
-    wxPrintf("FORMULA UPDATE\n");
-
     _table_control->SetFocus();
 
     try {
       new_content = std::any_cast<std::string>(param);
-
-      wxPrintf("  Formula update content: %s\n", new_content);
 
       // Apply new content to cell
       _document->update_content_current_cells(new_content,

@@ -488,15 +488,10 @@ void CellsViewControl::OnLeftDown(wxMouseEvent &event) {
   bool control = event.RawControlDown();
 
   wxPoint clickPosition = event.GetPosition();
-  wxPrintf("Click Position: %d, %d\n", clickPosition.x, clickPosition.y);
-
   Location scrollPos = GetScrollPosition();
-  wxPrintf("scroll pos: %ld,%ld\n", scrollPos.x(), scrollPos.y());
 
   int scrollPixelPerUnitX, scrollPixelPerUnitY;
   GetScrollPixelsPerUnit(&scrollPixelPerUnitX, &scrollPixelPerUnitY);
-  wxPrintf("pixels per unit: %d,%d\n", scrollPixelPerUnitX,
-           scrollPixelPerUnitY);
 
   long scrollPosX, scrollPosY;
   scrollPosX = scrollPos.x() * scrollPixelPerUnitX;
