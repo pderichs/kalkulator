@@ -55,20 +55,15 @@ std::map<std::string, IconPaths> IconDictionary = {
 };
 // clang-format on
 
-KalkulatorMainFrame::KalkulatorMainFrame(const wxString &file_path)
+KalkulatorMainFrame::KalkulatorMainFrame()
     : wxFrame(nullptr, wxID_ANY, "Kalkulator " VERSION),
       _document(std::make_shared<TableWorkbookDocument>(this)),
       _table_control(nullptr), _text_control_formula(nullptr),
       _execution_context(), _sys_colors(), _toolbar(nullptr),
       _btn_formula_selection(nullptr), _cmb_sheet_selection(nullptr),
       _icon_new(nullptr), _icon_open(nullptr), _icon_save(nullptr),
-      _icon_height(nullptr), _icon_width(nullptr), _argument_file_path(file_path) {
-  InitializeModel();
-  InitializeIcons();
-  InitializeMenu();
-  BindEvents();
-  CreateToolbar();
-  SetupUserInterface();
+      _icon_height(nullptr), _icon_width(nullptr), _file_history(),
+      _config(nullptr), _recent_files_pos(0) {
 }
 
 KalkulatorMainFrame::~KalkulatorMainFrame() {
@@ -111,14 +106,29 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
     delete _text_control_formula;
     _text_control_formula = nullptr;
   }
+
+  if (_config) {
+    delete _config;
+    _config = nullptr;
+  }
 }
 
-void KalkulatorMainFrame::Initialize() {
+void KalkulatorMainFrame::Initialize(const wxString &file_path) {
+  _config = new wxConfig("kalkulator");
+  _file_history.Load(*_config);
+
+  InitializeModel();
+  InitializeIcons();
+  InitializeMenu();
+  BindEvents();
+  CreateToolbar();
+  SetupUserInterface();
+
   CreateStatusBar();
   SetStatusText("Welcome to Kalkulator!");
 
-  if (!_argument_file_path.IsEmpty()) {
-    LoadFile(_argument_file_path);
+  if (!file_path.IsEmpty()) {
+    LoadFile(file_path);
   }
 }
 
@@ -181,6 +191,10 @@ void KalkulatorMainFrame::InitializeMenu() {
 
   menuFile->AppendSeparator();
 
+  _recent_files_pos = menuFile->GetMenuItemCount();
+
+  menuFile->AppendSeparator();
+
   menuFile->Append(wxID_EXIT);
 
   auto *menuEdit = new wxMenu();
@@ -238,6 +252,8 @@ void KalkulatorMainFrame::InitializeMenu() {
   menuBar->Append(menuTable, "&Table");
   menuBar->Append(menuHelp, "&Help");
   SetMenuBar(menuBar);
+
+  UpdateFileHistoryMenu();
 }
 
 const char **KalkulatorMainFrame::GetIcon(const std::string &icon_key) const {
@@ -314,6 +330,16 @@ void KalkulatorMainFrame::BindEvents() {
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnAddSheet, this, ID_AddSheet);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRemoveSheet, this, ID_RemoveSheet);
   Bind(wxEVT_MENU, &KalkulatorMainFrame::OnSearch, this, ID_Search);
+
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE1);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE2);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE3);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE4);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE5);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE6);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE7);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE8);
+  Bind(wxEVT_MENU, &KalkulatorMainFrame::OnRecentFile, this, wxID_FILE9);
 
   Bind(wxEVT_CLOSE_WINDOW, &KalkulatorMainFrame::OnClose, this);
 
@@ -409,6 +435,10 @@ void KalkulatorMainFrame::LoadFile(const wxString &user_file_path) {
     file.read(_document);
     _document->clear_changed_flag();
     _document->set_file_path(file_path);
+
+    _file_history.AddFileToHistory(user_file_path);
+    _file_history.Save(*_config);
+    UpdateFileHistoryMenu();
   } catch (TableWorkbookFileError &twfe) {
     wxLogError("Cannot open file '%s'.\n\nMessage: %s",
                user_file_path, twfe.what());
@@ -738,4 +768,45 @@ void KalkulatorMainFrame::OnSearch(wxCommandEvent &WXUNUSED(event)) {
   auto search_results_dlg =
       new TableSearchResultsDlg(this, this, _document, wxID_ANY);
   search_results_dlg->Show();
+}
+
+void KalkulatorMainFrame::OnRecentFile(wxCommandEvent &event) {
+  int recentFileId = event.GetId() - wxID_FILE1;
+  wxString recent_file = _file_history.GetHistoryFile(recentFileId);
+
+  LoadFile(recent_file);
+}
+
+void KalkulatorMainFrame::UpdateFileHistoryMenu() {
+  if (_file_history.GetCount() == 0) {
+    return;
+  }
+
+  auto menu_bar = GetMenuBar();
+
+  auto menu_file_index = menu_bar->FindMenu("&File");
+  if (menu_file_index == wxNOT_FOUND) {
+    return;
+  }
+
+  auto menu_file = menu_bar->GetMenu(menu_file_index);
+
+  // Remove all previous entries from menu
+  for (size_t id = wxID_FILE1; id <= wxID_FILE9; id++) {
+    auto item = menu_file->FindItem(id);
+    if (item) {
+      menu_file->Delete(item);
+    }
+  }
+
+  // Insert new recent file items to file menu at the defined position
+  size_t n = _recent_files_pos;
+  size_t id = wxID_FILE1;
+  size_t index;
+
+  for (index = 0; index < _file_history.GetCount(); index++) {
+    menu_file->Insert(n, id, _file_history.GetHistoryFile(index));
+    n++;
+    id++;
+  }
 }

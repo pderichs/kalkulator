@@ -31,16 +31,19 @@
 #include <wx/wx.h>
 #endif
 
+#include <wx/filehistory.h>
+#include <wx/config.h>
+
 /**
  * Provides the main frame functionality of the application.
  * It also serves as the main event sink.
  */
 class KalkulatorMainFrame : public wxFrame, public EventSink {
 public:
-  KalkulatorMainFrame(const wxString &file_path);
+  KalkulatorMainFrame();
   ~KalkulatorMainFrame() override;
 
-  void Initialize();
+  void Initialize(const wxString &file_path);
 
   // Delete copy constructor and assignment operator
   KalkulatorMainFrame(const KalkulatorMainFrame &other) = delete;
@@ -64,6 +67,7 @@ private:
   void OnRemoveSheet(wxCommandEvent &WXUNUSED(event));
   void OnSearch(wxCommandEvent &WXUNUSED(event));
   void OnAddCellComment(wxCommandEvent &WXUNUSED(event));
+  void OnRecentFile(wxCommandEvent &WXUNUSED(event));
 
   void BindEvents();
   void CreateToolbar();
@@ -91,6 +95,8 @@ private:
 
   void LoadFile(const wxString &user_file_path);
 
+  void UpdateFileHistoryMenu();
+
 private:
   TableWorkbookDocumentPtr _document;
   TableControl *_table_control;
@@ -108,7 +114,11 @@ private:
   wxBitmap *_icon_height;
   wxBitmap *_icon_width;
 
-  wxString _argument_file_path;
+  wxFileHistory _file_history;
+
+  wxConfig *_config;
+
+  size_t _recent_files_pos;
 };
 
 enum {

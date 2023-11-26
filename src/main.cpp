@@ -41,8 +41,8 @@ bool MyApp::OnInit() {
     file_path = argv[1];
   }
 
-  auto *frame = new KalkulatorMainFrame(file_path);
-  frame->Initialize();
+  auto *frame = new KalkulatorMainFrame();
+  frame->Initialize(file_path);
   frame->SetSize(WIDTH, HEIGHT);
   frame->Show();
 
