@@ -36,7 +36,12 @@ wxIMPLEMENT_APP(MyApp);
 bool MyApp::OnInit() {
   srand(static_cast<unsigned>(time(nullptr)));
 
-  auto *frame = new KalkulatorMainFrame();
+  wxString file_path;
+  if (argc > 1) {
+    file_path = argv[1];
+  }
+
+  auto *frame = new KalkulatorMainFrame(file_path);
   frame->Initialize();
   frame->SetSize(WIDTH, HEIGHT);
   frame->Show();

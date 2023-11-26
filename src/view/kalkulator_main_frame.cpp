@@ -55,14 +55,14 @@ std::map<std::string, IconPaths> IconDictionary = {
 };
 // clang-format on
 
-KalkulatorMainFrame::KalkulatorMainFrame()
+KalkulatorMainFrame::KalkulatorMainFrame(const wxString &file_path)
     : wxFrame(nullptr, wxID_ANY, "Kalkulator " VERSION),
       _document(std::make_shared<TableWorkbookDocument>(this)),
       _table_control(nullptr), _text_control_formula(nullptr),
       _execution_context(), _sys_colors(), _toolbar(nullptr),
       _btn_formula_selection(nullptr), _cmb_sheet_selection(nullptr),
       _icon_new(nullptr), _icon_open(nullptr), _icon_save(nullptr),
-      _icon_height(nullptr), _icon_width(nullptr) {
+      _icon_height(nullptr), _icon_width(nullptr), _argument_file_path(file_path) {
   InitializeModel();
   InitializeIcons();
   InitializeMenu();
@@ -116,6 +116,10 @@ KalkulatorMainFrame::~KalkulatorMainFrame() {
 void KalkulatorMainFrame::Initialize() {
   CreateStatusBar();
   SetStatusText("Welcome to Kalkulator!");
+
+  if (!_argument_file_path.IsEmpty()) {
+    LoadFile(_argument_file_path);
+  }
 }
 
 void KalkulatorMainFrame::InitializeIcons() {
@@ -392,10 +396,14 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
     return;
   }
 
+  LoadFile(openFileDialog.GetPath());
+}
+
+void KalkulatorMainFrame::LoadFile(const wxString &user_file_path) {
   TableWorkbookFile file;
 
   try {
-    std::string file_path((const char *)openFileDialog.GetPath());
+    std::string file_path((const char *)user_file_path);
     file.open(file_path);
     _document->set_file_path("");
     file.read(_document);
@@ -403,7 +411,7 @@ void KalkulatorMainFrame::OnOpen(wxCommandEvent &WXUNUSED(event)) {
     _document->set_file_path(file_path);
   } catch (TableWorkbookFileError &twfe) {
     wxLogError("Cannot open file '%s'.\n\nMessage: %s",
-               openFileDialog.GetPath(), twfe.what());
+               user_file_path, twfe.what());
   }
 
   Refresh();

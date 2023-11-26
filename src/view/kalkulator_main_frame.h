@@ -37,7 +37,7 @@
  */
 class KalkulatorMainFrame : public wxFrame, public EventSink {
 public:
-  KalkulatorMainFrame();
+  KalkulatorMainFrame(const wxString &file_path);
   ~KalkulatorMainFrame() override;
 
   void Initialize();
@@ -89,6 +89,8 @@ private:
 
   void UpdateFormulaBySelectedCell(const Location &location);
 
+  void LoadFile(const wxString &user_file_path);
+
 private:
   TableWorkbookDocumentPtr _document;
   TableControl *_table_control;
@@ -105,6 +107,8 @@ private:
   wxBitmap *_icon_save;
   wxBitmap *_icon_height;
   wxBitmap *_icon_width;
+
+  wxString _argument_file_path;
 };
 
 enum {
