@@ -24,10 +24,12 @@
 #include "table_cell.h"
 #include "table_cell_format.h"
 #include "table_search_result.h"
+#include "table_change_history.h"
 #include "table_sheet.h"
 #include <memory>
 #include <string>
 #include <vector>
+#include <functional>
 
 typedef std::vector<TableCellPtr> TableCellPtrVector;
 typedef std::map<TableCellLocation, TableCellLocationSet> TableCellListenerMap;
@@ -123,11 +125,13 @@ public:
    * @param cell_location Location of the cell to be updated
    * @param content New content to be assigned for the cell
    * @param update_id Identifies the current update operation
+   * @param update_change_history Defines whether change history should be updated
    */
   void update_cell_content(const TableSheetPtr &sheet,
                            Location cell_location,
                            const std::string &content,
-                           unsigned long update_id);
+                           unsigned long update_id,
+                           bool update_change_history = true);
 
   /**
    * Clears the current cell and handles the needed updates to the model.
@@ -423,6 +427,14 @@ public:
                            const std::string &replacement,
                            UpdateIdType update_id);
 
+  /**
+   * Wraps an operation which is scoped on selected cells, so that the
+   * change history is updated accordingly
+   *
+   * @param operation Operation to be executed
+   */
+  void execute_undoable_operation_on_selected_cells(std::function<void()> operation);
+
 private:
   /**
    * Trigger all cell listeners which are registered for receiving updates on
@@ -450,6 +462,28 @@ private:
   void apply_state_change_item(const StateHistoryItemPtr &state_history_item,
                                UpdateIdType update_id);
 
+  /**
+   * @return Map containing all selected cell locations of the current sheet
+   * with their formula content
+   */
+  std::map<Location, std::string> get_selected_cell_contents() const;
+
+  /**
+   * Sends cell update events to the cells specified by locations
+   *
+   * @param locations Locations of the cells to send update events for
+   */
+  void send_cell_updated_events(const TableCellLocationSet &locations);
+
+  /**
+   * Sends cell update events to the cells specified by locations in the
+   * current sheet
+   *
+   * @param locations Locations of the cells within the current sheet to send
+   * update events for
+   */
+  void send_cell_updated_events_current_sheet(const LocationSet &locations);
+
 private:
   std::string _path;
   bool _changed;
@@ -457,6 +491,7 @@ private:
   EventSink *_event_sink;
   TableSheetPtr _current_sheet;
   TableCellListenerMap _listeners;
+  TableChangeHistory _change_history;
 };
 
 typedef std::shared_ptr<TableWorkbookDocument> TableWorkbookDocumentPtr;

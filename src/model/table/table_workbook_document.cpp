@@ -19,14 +19,13 @@
 #include "table_workbook_document.h"
 #include "table_cell.h"
 #include "table_sheet.h"
-#include "model/lisp/value_converter.h"
 #include <algorithm>
 #include <memory>
 #include <queue>
 
 TableWorkbookDocument::TableWorkbookDocument(EventSink *event_sink)
     : _path(), _changed(false), _sheets(), _event_sink(event_sink),
-      _current_sheet(), _listeners() {
+      _current_sheet(), _listeners(), _change_history() {
   initialize();
 }
 
@@ -50,11 +49,23 @@ void TableWorkbookDocument::remove_from_update_listeners(const TableCellLocation
 void TableWorkbookDocument::update_cell_content(const TableSheetPtr &sheet,
                                                 Location cell_location,
                                                 const std::string &content,
-                                                unsigned long update_id) {
+                                                unsigned long update_id,
+                                                bool update_change_history) {
+  const auto &cell = sheet->get_cell(cell_location);
+  auto previous_content = cell->get_formula_content();
+
   auto location = TableCellLocation(sheet->name(), cell_location);
   remove_from_update_listeners(location);
 
   if (sheet->update_content(cell_location, content, update_id)) {
+    if (update_change_history) {
+      CellState state
+          {TableCellLocation(sheet->name(), cell_location), previous_content,
+           content};
+      StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
+      _change_history.push_state(item);
+    }
+
     trigger_listeners(location, update_id);
 
     _changed = true;
@@ -66,11 +77,11 @@ void TableWorkbookDocument::update_cell_content(const TableSheetPtr &sheet,
 
 void TableWorkbookDocument::update_content_current_cells(
     const std::string &content, UpdateIdType update_id) {
-  TableSheetPtr sheet = _current_sheet;
-
-  for (auto &location : sheet->selection().all_locations()) {
-    update_cell_content(sheet, location, content, update_id);
-  }
+  execute_undoable_operation_on_selected_cells([&] {
+    for (auto &location : _current_sheet->all_selected_locations()) {
+      update_cell_content(_current_sheet, location, content, update_id, false);
+    }
+  });
 }
 
 bool TableWorkbookDocument::move_cursor_up() {
@@ -314,34 +325,59 @@ void TableWorkbookDocument::clear_current_cells() {
     return;
   }
 
-  auto updated_locations = _current_sheet->clear_current_cells();
+  execute_undoable_operation_on_selected_cells([&] {
+    _current_sheet->clear_current_cells();
+  });
 
   _changed = true;
 
-  for (const auto &location : updated_locations) {
-    TableCellLocation cell_location(_current_sheet->name(), location);
+  send_cell_updated_events_current_sheet(_current_sheet->all_selected_locations());
+}
+
+void TableWorkbookDocument::send_cell_updated_events_current_sheet(const LocationSet &locations) {
+  TableCellLocationSet cell_locations;
+
+  for (const auto &cell_location : locations) {
+    TableCellLocation location{_current_sheet->name(), cell_location};
+    cell_locations.insert(location);
+  }
+
+  send_cell_updated_events(cell_locations);
+}
+
+void TableWorkbookDocument::send_cell_updated_events(const TableCellLocationSet &locations) {
+  for (const auto &cell_location : locations) {
     _event_sink->send_event(CELL_UPDATED, cell_location);
   }
 }
 
 void TableWorkbookDocument::apply_state_change_item(const StateHistoryItemPtr &state_history_item,
                                                     UpdateIdType update_id) {
-  for (auto cell_state : state_history_item->cell_states) {
-    update_cell_content(_current_sheet,
-                        cell_state.location,
-                        cell_state.prev,
-                        update_id);
-  }
+  execute_undoable_operation_on_selected_cells([&] {
+    for (auto cell_state : state_history_item->cell_states) {
+      const auto &sheet = table_sheet_by_name(cell_state.location.sheet());
+      update_cell_content(sheet,
+                          cell_state.location.location(),
+                          cell_state.prev,
+                          update_id,
+                          false);
+
+    }
+  });
 }
 
 void TableWorkbookDocument::undo(UpdateIdType update_id) {
-  auto state_change = _current_sheet->undo();
-  apply_state_change_item(state_change, update_id);
+  auto state_change = _change_history.undo();
+  if (state_change) {
+    apply_state_change_item(state_change, update_id);
+  }
 }
 
 void TableWorkbookDocument::redo(UpdateIdType update_id) {
-  auto state_change = _current_sheet->redo();
-  apply_state_change_item(state_change, update_id);
+  auto state_change = _change_history.redo();
+  if (state_change) {
+    apply_state_change_item(state_change, update_id);
+  }
 }
 
 TableSheetPtr
@@ -534,4 +570,39 @@ void TableWorkbookDocument::replace_search_item(const TableSearchResultItem &sea
                       search_result_item.location,
                       search_string,
                       update_id);
+}
+
+std::map<Location,
+         std::string> TableWorkbookDocument::get_selected_cell_contents() const {
+  std::map<Location, std::string> result;
+
+  auto locations = _current_sheet->all_selected_locations();
+  for (const auto &location : locations) {
+    const auto &cell = _current_sheet->get_cell(location);
+    if (cell) {
+      result[location] = cell->get_formula_content();
+    }
+  }
+
+  return result;
+}
+
+void TableWorkbookDocument::execute_undoable_operation_on_selected_cells(std::function<
+    void()> operation) {
+  std::map<Location, std::string> prev = get_selected_cell_contents();
+  operation();
+  std::map<Location, std::string> after = get_selected_cell_contents();
+
+  std::string sheet(_current_sheet->name());
+
+  // Create history entry
+  CellStates states;
+  for (const auto &it : prev) {
+    CellState state{TableCellLocation(sheet, it.first), it.second,
+                    after[it.first]};
+    states.push_back(state);
+  }
+
+  StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(states);
+  _change_history.push_state(item);
 }

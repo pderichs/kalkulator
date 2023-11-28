@@ -484,6 +484,7 @@ void KalkulatorMainFrame::UpdateFormulaBySelectedCell(
   if (cell && cell->row() == location.y() && cell->col() == location.x()) {
     std::string formula = cell->get_formula_content();
     _text_control_formula->SetValue(formula);
+    _text_control_formula->SetModified(false); // FIXME Suppress additional OnEnter handling
   }
 }
 

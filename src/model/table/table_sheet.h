@@ -22,7 +22,6 @@
 #include "location.h"
 #include "table_cell.h"
 #include "table_cell_format.h"
-#include "table_change_history.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include "model/lisp/update_id.h"
@@ -143,7 +142,7 @@ public:
   /**
    * Clears the current cell
    */
-  LocationSet clear_current_cells();
+  void clear_current_cells();
 
   /**
    * @return the maximum row coordinate
@@ -165,16 +164,6 @@ public:
    */
   bool update_content(const Location &cell_location,
                       const std::string &content, UpdateIdType update_id);
-
-  /**
-   * @return the next state for an undo operation on this sheet
-   */
-  StateHistoryItemPtr undo();
-
-  /**
-   * @return the next state for a redo operation on this sheet
-   */
-  StateHistoryItemPtr redo();
 
   /**
    * @return the current column width
@@ -248,6 +237,11 @@ public:
   TableCellSelection selection() const { return _selected_cells; }
 
   /**
+   * @return a set of all selected cell locations in this sheet
+   */
+  LocationSet all_selected_locations() const { return _selected_cells.all_locations(); }
+
+  /**
    * @return the name of the current sheet
    */
   std::string name() const { return _name; }
@@ -298,7 +292,6 @@ private:
   TableRows _rows;
   std::string _name;
   TableCellSelection _selected_cells;
-  TableSheetChangeHistory _change_history;
   std::map<size_t, size_t> _row_top_positions;
   std::map<size_t, size_t> _col_left_positions;
 };

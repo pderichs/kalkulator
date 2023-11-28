@@ -20,6 +20,7 @@
 #define TABLE_CHANGE_HISTORY_INCLUDED
 
 #include "tools.h"
+#include "table_cell_location.h"
 #include <chrono>
 #include <cstddef>
 #include <deque>
@@ -30,7 +31,7 @@
  * Identifies the state of a cell.
  */
 struct CellState {
-  Location location;
+  TableCellLocation location;
   std::string prev;
   std::string next;
 
@@ -124,9 +125,9 @@ private:
  * Combines two state change queues. One for undo operations, one for redo
  * operations and manages the item handling.
  */
-class TableSheetChangeHistory {
+class TableChangeHistory {
 public:
-  explicit TableSheetChangeHistory(size_t max_items = 50)
+  explicit TableChangeHistory(size_t max_items = 50)
       : _undo_queue(max_items), _redo_queue(max_items) {}
 
   void push_state(const StateHistoryItemPtr &state) {

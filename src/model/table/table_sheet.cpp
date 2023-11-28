@@ -18,7 +18,6 @@
 
 #include "table_sheet.h"
 #include "table_cell.h"
-#include "table_change_history.h"
 #include "table_column_definition.h"
 #include "table_row_definition.h"
 #include <iostream>
@@ -33,7 +32,7 @@ const size_t ROW_PAGE_MOVE_AMOUNT = 10;
 
 TableSheet::TableSheet(const std::string &param_name)
     : _column_definitions(), _row_definitions(), _rows(), _name(param_name),
-      _selected_cells(), _change_history(), _row_top_positions(),
+      _selected_cells(), _row_top_positions(),
       _col_left_positions() {
   for (size_t c = 0; c < INITIAL_COL_COUNT; c++) {
     _column_definitions.push_back(std::make_shared<TableColumnDefinition>());
@@ -196,24 +195,14 @@ bool TableSheet::select_cell(const Location &cell) {
   return true;
 }
 
-LocationSet TableSheet::clear_current_cells() {
+void TableSheet::clear_current_cells() {
   auto locations = _selected_cells.all_locations();
-
-  CellStates states;
 
   for (const auto &location : locations) {
     auto cell = get_cell(location);
     std::string previous_content = cell->get_formula_content();
     cell->clear();
-
-    CellState state{cell->location(), previous_content, ""};
-    states.push_back(state);
   }
-
-  StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(states);
-  _change_history.push_state(item);
-
-  return locations;
 }
 
 bool TableSheet::update_content(const Location &cell_location,
@@ -225,10 +214,6 @@ bool TableSheet::update_content(const Location &cell_location,
 
   // Note: update listeners are applied within the call to update_content
   if (cell->update_content(content, _name, update_id)) {
-    CellState state{cell_location, previous_content, content};
-    StateHistoryItemPtr item = std::make_shared<StateHistoryItem>(state);
-    _change_history.push_state(item);
-
     return true;
   }
 
@@ -237,14 +222,6 @@ bool TableSheet::update_content(const Location &cell_location,
 
 size_t TableSheet::get_max_col() const {
   return _column_definitions.size() - 1;
-}
-
-StateHistoryItemPtr TableSheet::undo() {
-  return _change_history.undo();
-}
-
-StateHistoryItemPtr TableSheet::redo() {
-  return _change_history.redo();
 }
 
 size_t TableSheet::get_current_column_width() const {
