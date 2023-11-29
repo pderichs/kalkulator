@@ -41,17 +41,15 @@ struct CellState {
 typedef std::vector<CellState> CellStates;
 
 /**
- * Combines the state of a sheet at a specific moment in time.
+ * Combines the state of cells at a specific point in time
  */
 struct StateHistoryItem {
   std::chrono::system_clock::time_point time_stamp;
   CellStates cell_states;
 
-  // Constructor for single cell state item
   explicit StateHistoryItem(const CellState &state)
       : time_stamp(std::chrono::system_clock::now()), cell_states({state}) {}
 
-  // Constructor for many cell state items
   explicit StateHistoryItem(const CellStates &states)
       : time_stamp(std::chrono::system_clock::now()), cell_states(states) {}
 
@@ -65,7 +63,7 @@ struct StateHistoryItem {
 typedef std::shared_ptr<StateHistoryItem> StateHistoryItemPtr;
 
 /**
- * Represents the main undo/redo queue mechanism in a table sheet.
+ * Represents the main undo/redo queue mechanism
  */
 class StateChangeQueue {
 public:

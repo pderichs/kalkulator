@@ -353,17 +353,14 @@ void TableWorkbookDocument::send_cell_updated_events(const TableCellLocationSet 
 
 void TableWorkbookDocument::apply_state_change_item(const StateHistoryItemPtr &state_history_item,
                                                     UpdateIdType update_id) {
-  execute_undoable_operation_on_selected_cells([&] {
-    for (auto cell_state : state_history_item->cell_states) {
-      const auto &sheet = table_sheet_by_name(cell_state.location.sheet());
-      update_cell_content(sheet,
-                          cell_state.location.location(),
-                          cell_state.prev,
-                          update_id,
-                          false);
-
-    }
-  });
+  for (auto cell_state : state_history_item->cell_states) {
+    const auto &sheet = table_sheet_by_name(cell_state.location.sheet());
+    update_cell_content(sheet,
+                        cell_state.location.location(),
+                        cell_state.prev,
+                        update_id,
+                        false);
+  }
 }
 
 void TableWorkbookDocument::undo(UpdateIdType update_id) {
