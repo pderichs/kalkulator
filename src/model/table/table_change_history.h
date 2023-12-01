@@ -114,6 +114,10 @@ public:
     return result;
   }
 
+  void clear() {
+    _queue.clear();
+  }
+
 private:
   size_t _max_items;
   std::deque<StateHistoryItemPtr> _queue;
@@ -134,6 +138,11 @@ public:
 
   StateHistoryItemPtr undo() { return pop_and_swap(_undo_queue, _redo_queue); }
   StateHistoryItemPtr redo() { return pop_and_swap(_redo_queue, _undo_queue); }
+
+  void clear() {
+    _undo_queue.clear();
+    _redo_queue.clear();
+  }
 
 private:
   static StateHistoryItemPtr pop_and_swap(StateChangeQueue &source,

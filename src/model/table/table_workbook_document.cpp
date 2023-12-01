@@ -270,8 +270,12 @@ TableCellPtrVector TableWorkbookDocument::get_range(const Location &from,
 }
 
 void TableWorkbookDocument::clear() {
+  _path.clear();
+  _listeners.clear();
+  _changed = false;
   _sheets.clear();
   _current_sheet = {};
+  _change_history.clear();
 }
 
 TableSheetPtr TableWorkbookDocument::add_sheet(const std::string &name) {
