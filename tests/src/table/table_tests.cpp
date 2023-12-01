@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "table_test_tools.h"
 #include "gtest/gtest.h"
 #include "mock_function_context.h"
+#include "table_test.h"
 
 /**
  * Specialized test function execution context used for the cell reference /
@@ -59,75 +59,68 @@ private:
   LispValuePtr _result;
 };
 
-TEST(TableTests,
+class TableTests: public TableTest {
+protected:
+  void SetUp() override {
+    TableTest::SetUp();
+
+    _fct = std::make_shared<TestFunctionContext>();
+    _execution_context.add_function("test-function", _fct, true);
+  }
+
+protected:
+  std::shared_ptr<TestFunctionContext> _fct;
+};
+
+TEST_F(TableTests,
      FunctionsWithCellReferencesAreCalledAsExpectedWithinTheSameUpdateId) {
-  // Test setup
-  LispExecutionContext execution_context;
-  std::shared_ptr<TestFunctionContext> fct =
-      std::make_shared<TestFunctionContext>();
-  execution_context.add_function("test-function", fct, true);
-
-  TestEventSink sink;
-  ValueConverter::set_execution_context(&execution_context);
-  TableWorkbookDocumentPtr document =
-      std::make_shared<TableWorkbookDocument>(&sink);
-  prepare_execution_context(&execution_context, document);
-
   UpdateIdType update_id = generate_update_id();
 
   // Prepare test sheet data
-  document->select_cell(Location(0, 0));
-  document->update_content_current_cells("foo", update_id);
+  _document->select_cell(Location(0, 0));
+  _document->update_content_current_cells("foo", update_id);
 
   // First cell referencing the value
-  document->select_cell(Location(0, 1));
-  document->update_content_current_cells("=(test-function (cell 0 0))",
+  _document->select_cell(Location(0, 1));
+  _document->update_content_current_cells("=(test-function (cell 0 0))",
                                          update_id);
 
   // Another cell references value
-  document->select_cell(Location(0, 2));
-  document->update_content_current_cells("=(cell 1 0)", update_id);
+  _document->select_cell(Location(0, 2));
+  _document->update_content_current_cells("=(cell 1 0)", update_id);
 
-  EXPECT_EQ(fct->calls(), 1);
+  EXPECT_EQ(_fct->calls(), 1);
 
-  fct->reset_calls();
+  _fct->reset_calls();
 
-  auto cell = document->get_cell(Location(0, 1));
+  auto cell = _document->get_cell(Location(0, 1));
   EXPECT_EQ(cell->visible_content(), "foo");
 
-  cell = document->get_cell(Location(0, 2));
+  cell = _document->get_cell(Location(0, 2));
   EXPECT_EQ(cell->visible_content(), "foo");
 
   update_id = generate_update_id();
 
   // Update of value cell should trigger only once with new update_id
-  document->select_cell(Location(0, 0));
-  document->update_content_current_cells("bar", update_id);
+  _document->select_cell(Location(0, 0));
+  _document->update_content_current_cells("bar", update_id);
 
-  EXPECT_EQ(fct->calls(), 1);
+  EXPECT_EQ(_fct->calls(), 1);
 }
 
-TEST(TableTests, UpdateWorksOnAllSelectedCells) {
-  // Test setup
-  LispExecutionContext execution_context;
+TEST_F(TableTests, UpdateWorksOnAllSelectedCells) {
   std::shared_ptr<TestFunctionContext> fct =
       std::make_shared<TestFunctionContext>();
-  execution_context.add_function("test-function", fct, true);
-
-  TestEventSink sink;
-  ValueConverter::set_execution_context(&execution_context);
-  TableWorkbookDocumentPtr document =
-      std::make_shared<TableWorkbookDocument>(&sink);
-  prepare_execution_context(&execution_context, document);
+  _execution_context.add_function("test-function", fct, true);
 
   // Prepare test sheet data
-  document->select_cell(Location(0, 0));
-  document->selection_toggle_additional_cell(Location(10, 10));
-  document->selection_toggle_additional_cell(Location(3, 2));
+  _document->select_cell(Location(0, 0));
+  _document->selection_toggle_additional_cell(Location(10, 10));
+  _document->selection_toggle_additional_cell(Location(3, 2));
 
-  document->update_content_current_cells("foobar", generate_update_id());
+  _document->update_content_current_cells("foobar", generate_update_id());
 
-  EXPECT_EQ(document->get_cell(Location(0, 0))->visible_content(), "foobar");
-  EXPECT_EQ(document->get_cell(Location(10, 10))->visible_content(), "foobar");
-  EXPECT_EQ(document->get_cell(Location(3, 2))->visible_content(), "foobar");
+  EXPECT_EQ(_document->get_cell(Location(0, 0))->visible_content(), "foobar");
+  EXPECT_EQ(_document->get_cell(Location(10, 10))->visible_content(), "foobar");
+  EXPECT_EQ(_document->get_cell(Location(3, 2))->visible_content(), "foobar");
 }

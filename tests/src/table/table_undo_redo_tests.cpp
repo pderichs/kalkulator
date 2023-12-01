@@ -16,22 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "table_test_tools.h"
 #include "gtest/gtest.h"
+#include "table_test.h"
 
-class TableUndoRedoTests : public testing::Test {
-protected:
-  void SetUp() override {
-    ValueConverter::set_execution_context(&_execution_context);
-    _document = std::make_shared<TableWorkbookDocument>(&_sink);
-    prepare_execution_context(&_execution_context, _document);
-  }
-
-protected:
-  TableWorkbookDocumentPtr _document;
-  LispExecutionContext _execution_context;
-  TestEventSink _sink;
-};
+class TableUndoRedoTests : public TableTest {};
 
 TEST_F(TableUndoRedoTests, SingleStepUndoTest) {
   _document->select_cell(Location(0, 1));
