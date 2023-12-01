@@ -175,7 +175,8 @@ static int read_cells_callback(void *data, int argc, char **argv,
         workbook->update_cell_content(sheet,
                                       Location(c, r),
                                       content,
-                                      update_id);
+                                      update_id,
+                                      false);
       }
     }
   }
