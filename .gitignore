@@ -28,3 +28,5 @@ tests/lib/libgtest.a
 tests/lib/libgtest_main.a
 # TODO this folder is created during the build of gtest. Can it be moved to the tests folder?
 lib/
+
+_deps/
