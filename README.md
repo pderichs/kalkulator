@@ -73,8 +73,7 @@ conditions on their websites:
 - [wxWidgets](https://www.wxwidgets.org/)
 - [SQLite](https://www.sqlite.org/index.html)
 - [Google Material Design Icons](https://github.com/google/material-design-icons)
-- [Google Test](https://github.com/google/googletest) (see tests/lib folder, based on
-  commit: `e40661d89b051e9ef4eb8a2420b74bf78b39ef41`)
+- [Google Test](https://github.com/google/googletest) 
 
 ## TODO List
 
