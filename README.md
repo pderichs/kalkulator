@@ -1,8 +1,11 @@
 # Kalkulator
 
+> [!NOTE]
+> This project has been superseded by [KalQlator](https://github.com/pderichs/kalqlator).
+
 This is a simple and small spreadsheet application which uses a Lisp-like language for cell formulas.
 
-> [!WARNING]
+> [!WARNING]-
 > This is by no means bug free and / or production ready - **USE AT YOUR OWN RISK**.
 
 I have implemented a similar application in C before ("simplecalc"), but for usability reasons I wanted to create a GUI
@@ -13,7 +16,7 @@ this has just been implemented for learning purpose and fun :)
 
 Start the application
 
-```sh 
+```sh
   bin/kalkulator
 ```
 
@@ -59,7 +62,7 @@ Install dependencies in Debian:
 
 ### Run Tests
 
-```sh 
+```sh
   bin/kalkulator_tests
 ```
 
@@ -73,7 +76,7 @@ conditions on their websites:
 - [wxWidgets](https://www.wxwidgets.org/)
 - [SQLite](https://www.sqlite.org/index.html)
 - [Google Material Design Icons](https://github.com/google/material-design-icons)
-- [Google Test](https://github.com/google/googletest) 
+- [Google Test](https://github.com/google/googletest)
 
 ## TODO List
 
